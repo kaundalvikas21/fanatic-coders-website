@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.svelte';
+import Services from '../components/Services.svelte';
+import Partners from '../components/Partners.svelte';
+import Portfolio from '../components/Portfolio.svelte';
+import CtaSection from '../components/CtaSection.svelte';
+import CoreValues from '../components/CoreValues.svelte';
+import TerminalAbout from '../components/TerminalAbout.svelte';
+import Testimonials from '../components/Testimonials.svelte';
+import TechStack from '../components/TechStack.svelte';
+import BlogSection from '../components/BlogSection.svelte';
+---
+
+<BaseLayout title="Digital Agency - Web Design, Development & Marketing">
+  <Hero client:load />
+  <Partners client:visible />
+  <TerminalAbout client:visible />
+  <Services client:visible />
+  <Portfolio client:visible />
+  <CtaSection client:visible />
+  <CoreValues client:visible />
+  <Testimonials client:visible />
+  <TechStack client:visible />
+  <BlogSection client:visible />
+</BaseLayout>
