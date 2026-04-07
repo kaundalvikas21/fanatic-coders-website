@@ -12,12 +12,10 @@
       role: 'CTO, TechVision Inc.',
       company: 'TechVision',
       image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop',
-      quote: 'Their expertise in modern web technologies transformed our digital presence. The team\'s attention to detail and innovative solutions exceeded our expectations.',
+      quote: "Their expertise in modern web technologies transformed our digital presence. The team's attention to detail and innovative solutions exceeded our expectations.",
       tags: ['Web Development', 'UI/UX', 'Performance'],
-      metrics: {
-        improvement: '+150%',
-        metric: 'Performance'
-      }
+      metrics: { improvement: '+150%', metric: 'Performance' },
+      accentColor: '#7c3aed',
     },
     {
       id: 2,
@@ -27,10 +25,8 @@
       image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop',
       quote: 'Working with them was a game-changer for our e-commerce platform. The results were immediate: faster load times, better conversion rates, and happier customers.',
       tags: ['E-commerce', 'Optimization', 'SEO'],
-      metrics: {
-        improvement: '+85%',
-        metric: 'Conversion'
-      }
+      metrics: { improvement: '+85%', metric: 'Conversion' },
+      accentColor: '#06b6d4',
     },
     {
       id: 3,
@@ -40,10 +36,8 @@
       image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop',
       quote: 'Their team brought our healthcare application to life with cutting-edge technology while maintaining strict security standards. Truly exceptional work!',
       tags: ['Healthcare', 'Security', 'Mobile Apps'],
-      metrics: {
-        improvement: '100%',
-        metric: 'Security'
-      }
+      metrics: { improvement: '100%', metric: 'Security' },
+      accentColor: '#10b981',
     },
     {
       id: 4,
@@ -51,12 +45,10 @@
       role: 'CEO, FinanceFlow',
       company: 'FinanceFlow',
       image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=200&h=200&auto=format&fit=crop',
-      quote: 'The team\'s deep understanding of fintech requirements and ability to deliver secure, scalable solutions made them the perfect partner for our project.',
+      quote: "The team's deep understanding of fintech requirements and ability to deliver secure, scalable solutions made them the perfect partner for our project.",
       tags: ['Fintech', 'Security', 'Cloud'],
-      metrics: {
-        improvement: '10x',
-        metric: 'Scalability'
-      }
+      metrics: { improvement: '10x', metric: 'Scalability' },
+      accentColor: '#a855f7',
     }
   ];
 
@@ -65,29 +57,29 @@
   let activeIndex = 0;
   let isAutoplayPaused = false;
   let prefersReducedMotion = false;
+  let sectionEl: HTMLElement;
+  let sectionVisible = false;
 
   function handleSlideChange() {
-    if (swiper) {
-      activeIndex = swiper.activeIndex;
-    }
+    if (swiper) activeIndex = swiper.activeIndex;
   }
 
   onMount(() => {
     prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { sectionVisible = true; obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(sectionEl);
+
     swiper = new Swiper(swiperContainer, {
       modules: [Autoplay, EffectFade],
       effect: 'fade',
-      fadeEffect: {
-        crossFade: true
-      },
+      fadeEffect: { crossFade: true },
       speed: 1000,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false
-      },
-      on: {
-        slideChange: handleSlideChange
-      }
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      on: { slideChange: handleSlideChange }
     });
 
     if (prefersReducedMotion) {
@@ -96,9 +88,8 @@
     }
 
     return () => {
-      if (swiper) {
-        swiper.destroy();
-      }
+      obs.disconnect();
+      if (swiper) swiper.destroy();
     };
   });
 
@@ -113,48 +104,43 @@
   }
 </script>
 
-<section class="py-24 relative overflow-hidden">
-  <!-- Spotlights -->
-  <div class="spotlight spotlight-1"></div>
-  <div class="spotlight spotlight-2"></div>
-  <div class="spotlight spotlight-3"></div>
-
-  <!-- Background Elements -->
-  <div class="absolute inset-0 -z-10">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]"></div>
-    <div class="code-grid"></div>
+<section class="testimonials-section py-28 relative overflow-hidden" bind:this={sectionEl} id="testimonials">
+  <!-- Aurora mesh (parallax-ish, subtle) -->
+  <div class="aurora-parallax absolute inset-0 pointer-events-none"></div>
+  <div class="dot-grid absolute inset-0 pointer-events-none opacity-30"
+       style="mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent 70%);">
   </div>
 
   <div class="container mx-auto px-4">
-    <!-- Section Header -->
-    <div class="text-center mb-16">
+    <!-- Header -->
+    <div class="text-center mb-16 reveal" class:visible={sectionVisible}>
       <div class="preheading-code">reviews.module.ts</div>
-      <h2 class="heading-code">
-        client.<span class="text-indigo-400">testimonials</span>()
+      <h2 class="heading-code mt-2">
+        client.<span class="text-aurora-violet-light">testimonials</span>()
       </h2>
-      <p class="subheading-code">
-        // Real stories from our valued clients
-      </p>
+      <p class="subheading-code mt-3">// Real stories from our valued clients</p>
       <button
         type="button"
-        class="mt-6 inline-flex items-center rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-sm text-blue-100/80 transition-colors hover:bg-indigo-500/20"
+        class="mt-6 inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-all duration-200"
+        style="border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.08); color: rgba(255,255,255,0.7);"
         on:click={toggleAutoplay}
         aria-pressed={isAutoplayPaused}
       >
+        <i class="ph {isAutoplayPaused ? 'ph-play' : 'ph-pause'}"></i>
         {isAutoplayPaused ? 'Resume testimonials' : 'Pause testimonials'}
       </button>
     </div>
 
-    <!-- Testimonials Carousel -->
-    <div class="max-w-6xl mx-auto">
-      <div class="glass-card p-8 md:p-12 rounded-2xl relative">
-        <!-- Code Decorations -->
-        <div class="absolute -top-3 left-8 px-4 py-1 rounded-full text-sm font-mono bg-indigo-500/20 border border-indigo-500/30">
-          <span class="text-indigo-400">const</span>
-          <span class="text-pink-400">success</span>
-          <span class="text-white">= reviews.map(</span>
-          <span class="text-blue-400">client</span>
-          <span class="text-white">=> client.story);</span>
+    <!-- Carousel card -->
+    <div class="max-w-6xl mx-auto reveal" class:visible={sectionVisible} style="transition-delay: 100ms">
+      <div class="testimonial-card relative rounded-2xl p-8 md:p-12">
+        <!-- Code decoration top -->
+        <div class="code-badge absolute -top-4 left-8 px-4 py-1.5 rounded-full text-xs font-mono">
+          <span style="color: #a855f7">const</span>
+          <span style="color: #60a5fa"> success</span>
+          <span class="text-white/70"> = reviews.map(</span>
+          <span style="color: #22d3ee">client</span>
+          <span class="text-white/70"> => client.story);</span>
         </div>
 
         <div class="swiper" bind:this={swiperContainer}>
@@ -162,83 +148,72 @@
             {#each testimonials as testimonial (testimonial.id)}
               <div class="swiper-slide">
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
-                  <!-- Left Column: Client Info & Quote -->
+                  <!-- Left: Client + Quote -->
                   <div class="space-y-8">
-                    <!-- Client Info -->
+                    <!-- Client info -->
                     <div class="flex items-center gap-6">
-                      <div class="relative">
-                        <div class="w-20 h-20 rounded-2xl overflow-hidden border-2 border-indigo-500/30 transform rotate-3">
-                          <img 
-                            src={testimonial.image} 
+                      <!-- Aurora ring avatar -->
+                      <div class="avatar-wrap flex-shrink-0" style="--avatar-accent: {testimonial.accentColor}">
+                        <div class="aurora-ring-avatar">
+                          <img
+                            src={testimonial.image}
                             alt={testimonial.name}
                             loading="lazy"
                             decoding="async"
-                            width="200"
-                            height="200"
-                            class="w-full h-full object-cover"
+                            width="80" height="80"
+                            class="w-full h-full object-cover rounded-full"
                           />
                         </div>
-                        <div class="absolute -inset-2 bg-indigo-500/20 rounded-2xl blur-md -z-10 rotate-3"></div>
                       </div>
                       <div>
                         <h3 class="text-xl font-bold text-white mb-1">{testimonial.name}</h3>
-                        <p class="text-blue-100/70 mb-2">{testimonial.role}</p>
-                        <div class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-indigo-500/20 border border-indigo-500/30">
-                          <i class="ph ph-buildings text-indigo-400 mr-2"></i>
-                          {testimonial.company}
-                        </div>
+                        <p class="text-blue-100/60 text-sm mb-2">{testimonial.role}</p>
+                        <span class="company-badge text-xs font-mono px-3 py-1 rounded-full"
+                              style="color: {testimonial.accentColor}; border-color: {testimonial.accentColor}40; background: {testimonial.accentColor}12">
+                          <i class="ph ph-buildings mr-1"></i>{testimonial.company}
+                        </span>
                       </div>
                     </div>
 
                     <!-- Quote -->
                     <div class="relative">
-                      <div class="absolute -left-4 -top-4 text-6xl text-indigo-500/20 font-serif">"</div>
-                      <blockquote class="text-xl text-blue-100/90 leading-relaxed pl-8">
+                      <div class="quote-mark absolute -left-2 -top-4 text-7xl font-serif leading-none"
+                           style="color: {testimonial.accentColor}18">"</div>
+                      <blockquote class="text-lg text-blue-100/85 leading-relaxed pl-6 border-l-2"
+                                  style="border-color: {testimonial.accentColor}40">
                         {testimonial.quote}
                       </blockquote>
-                      <div class="absolute -right-4 bottom-0 text-6xl text-indigo-500/20 font-serif">"</div>
                     </div>
 
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-2">
                       {#each testimonial.tags as tag}
-                        <span class="tech-tag">
-                          <i class="ph ph-hash text-indigo-400 mr-1"></i>
-                          {tag}
+                        <span class="text-xs py-1 px-3 rounded-full font-mono"
+                              style="background: {testimonial.accentColor}12; border: 1px solid {testimonial.accentColor}30; color: {testimonial.accentColor}">
+                          #{tag}
                         </span>
                       {/each}
                     </div>
                   </div>
 
-                  <!-- Right Column: Success Metrics -->
-                  <div class="relative">
-                    <!-- Code-like Decoration -->
-                    <div class="absolute -top-6 left-0 font-mono text-sm text-blue-100/60">
-                      <span class="text-pink-400">function</span>
-                      <span class="text-indigo-400">calculateSuccess</span>
+                  <!-- Right: Metrics -->
+                  <div class="relative pt-6">
+                    <div class="absolute -top-1 left-0 font-mono text-sm text-blue-100/40">
+                      <span style="color: #f472b6">function</span>
+                      <span style="color: #818cf8"> calculateSuccess</span>
                       <span>() {`{`}</span>
                     </div>
-
-                    <!-- Metrics Card -->
-                    <div class="metrics-card p-8 rounded-xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20">
-                      <div class="text-center">
-                        <div class="text-6xl font-bold bg-gradient-text mb-4">
-                          {testimonial.metrics.improvement}
-                        </div>
-                        <div class="text-xl text-blue-100/70">
-                          {testimonial.metrics.metric} Improvement
-                        </div>
+                    <div class="metrics-card rounded-xl p-8 text-center"
+                         style="background: {testimonial.accentColor}0d; border: 1px solid {testimonial.accentColor}28; box-shadow: 0 0 40px {testimonial.accentColor}12">
+                      <div class="text-6xl font-bold mb-3"
+                           style="background: linear-gradient(135deg, #fff, {testimonial.accentColor}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent">
+                        {testimonial.metrics.improvement}
                       </div>
-
-                      <!-- Decorative Code Lines -->
-                      <div class="mt-8 font-mono text-sm space-y-2 text-blue-100/40">
+                      <div class="text-blue-100/60">{testimonial.metrics.metric} Improvement</div>
+                      <div class="mt-6 font-mono text-xs space-y-1 text-blue-100/35 text-left">
                         <div>return {`{`}</div>
-                        <div class="pl-4">
-                          success: <span class="text-indigo-400">true</span>,
-                        </div>
-                        <div class="pl-4">
-                          impact: <span class="text-green-400">'significant'</span>
-                        </div>
+                        <div class="pl-3">success: <span style="color: {testimonial.accentColor}">true</span>,</div>
+                        <div class="pl-3">impact: <span style="color: #34d399">'significant'</span></div>
                         <div>{`}`};</div>
                       </div>
                     </div>
@@ -248,21 +223,19 @@
             {/each}
           </div>
 
-          <!-- Navigation -->
+          <!-- Navigation dots -->
           <div class="flex justify-center items-center gap-4 mt-12">
-            {#each testimonials as _, i}
+            {#each testimonials as t, i}
               <button
                 type="button"
-                class="relative flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300"
-                class:active={activeIndex === i}
+                class="dot-btn relative flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300"
                 aria-label={`Go to testimonial ${i + 1}`}
                 on:click={() => swiper?.slideTo(i)}
               >
-                <span class="absolute h-1 w-5 rounded-full bg-indigo-500/20"></span>
-                <span 
-                  class="absolute h-1 w-5 rounded-full bg-indigo-500 transition-transform duration-300"
-                  style="transform: scaleX({activeIndex === i ? '1' : '0'}); transform-origin: left;"
-                ></span>
+                <span class="absolute h-1 w-5 rounded-full"
+                      style="background: rgba(124,58,237,0.2)"></span>
+                <span class="absolute h-1 w-5 rounded-full transition-transform duration-300"
+                      style="background: #7c3aed; transform: scaleX({activeIndex === i ? '1' : '0'}); transform-origin: left;"></span>
               </button>
             {/each}
           </div>
@@ -273,57 +246,69 @@
 </section>
 
 <style>
-  .glass-card {
-    background: rgba(15, 15, 26, 0.95);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+  .testimonials-section {
+    background: var(--dark-3);
+  }
+
+  .aurora-parallax {
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(124,58,237,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(6,182,212,0.12) 0%, transparent 60%);
+  }
+
+  .testimonial-card {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(124,58,237,0.2);
+    box-shadow: 0 0 60px rgba(124,58,237,0.1), 0 30px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .code-badge {
+    background: rgba(8, 8, 16, 0.95);
+    border: 1px solid rgba(124,58,237,0.25);
     backdrop-filter: blur(12px);
   }
 
-  .tech-tag {
-    @apply inline-flex items-center text-sm py-1 px-3 rounded-full;
-    background: rgba(79, 70, 229, 0.1);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+  /* Aurora ring for avatar */
+  .aurora-ring-avatar {
+    width: 80px;
+    height: 80px;
+    padding: 2px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from var(--border-angle, 0deg),
+      var(--avatar-accent),
+      rgba(6,182,212,0.8),
+      var(--avatar-accent)
+    );
+    animation: borderSpin 4s linear infinite;
   }
 
-  .code-grid {
-    position: absolute;
-    inset: 0;
-    background-image: 
-      linear-gradient(to right, rgba(79, 70, 229, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(79, 70, 229, 0.05) 1px, transparent 1px);
-    background-size: 24px 24px;
-    mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%);
+  @property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
   }
 
-  .bg-gradient-text {
-    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  @keyframes borderSpin {
+    to { --border-angle: 360deg; }
   }
 
-  :global(.swiper) {
-    width: 100%;
-    height: 100%;
+  .company-badge {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid;
   }
 
-  :global(.swiper-slide) {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
+  .text-aurora-violet-light { color: #a855f7; }
 
-  :global(.swiper-slide-active) {
-    opacity: 1;
-  }
+  :global(.swiper) { width: 100%; }
+  :global(.swiper-slide) { opacity: 0; transition: opacity 0.5s ease; }
+  :global(.swiper-slide-active) { opacity: 1; }
+  :global(.swiper-fade .swiper-slide) { pointer-events: none; transition-property: opacity; }
+  :global(.swiper-fade .swiper-slide-active) { pointer-events: auto; }
 
-  /* Fade effect overrides */
-  :global(.swiper-fade .swiper-slide) {
-    pointer-events: none;
-    transition-property: opacity;
-  }
-
-  :global(.swiper-fade .swiper-slide-active) {
-    pointer-events: auto;
+  @media (prefers-reduced-motion: reduce) {
+    .aurora-ring-avatar { animation: none; }
   }
 </style>

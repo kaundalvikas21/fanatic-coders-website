@@ -396,30 +396,59 @@
 
 <style>
   .scrolled {
-    @apply bg-[#0f0f1a]/95 backdrop-blur-lg;
+    background: rgba(8, 8, 16, 0.95);
+    backdrop-filter: blur(24px) saturate(200%);
   }
 
   .glass-nav {
-    background: rgba(15, 15, 26, 0.95);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    backdrop-filter: blur(12px);
+    background: rgba(8, 8, 16, 0.7);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    backdrop-filter: blur(24px) saturate(200%);
     @apply px-6 py-4;
   }
 
   .animated-gradient-text {
-    background: linear-gradient(
-      45deg,
-      #4f46e5,
-      #7c3aed,
-      #2563eb,
-      #4f46e5
-    );
+    background: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4, #7c3aed);
     background-size: 300% 300%;
     animation: gradient 5s ease infinite;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  @keyframes gradient {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Nav item underline animation */
+  .menu-item {
+    @apply px-4 py-2 rounded-lg transition-all duration-200 relative;
+    background: transparent;
+  }
+
+  .menu-item::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: calc(100% - 2rem);
+    height: 2px;
+    background: linear-gradient(90deg, #7c3aed, #06b6d4);
+    border-radius: 1px;
+    transition: transform 0.2s cubic-bezier(.16,1,.3,1);
+    transform-origin: center;
+  }
+
+  .menu-item:hover::after {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .menu-item:hover {
+    background: rgba(124, 58, 237, 0.08);
   }
 
   .mega-menu {
@@ -433,94 +462,58 @@
   }
 
   .mega-menu-content {
-    background: rgba(15, 15, 26, 0.98);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+    background: rgba(8, 8, 16, 0.97);
+    border: 1px solid rgba(124, 58, 237, 0.25);
     border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px);
-  }
-
-  .menu-item {
-    @apply px-4 py-2 rounded-lg transition-all duration-300 relative;
-    background: transparent;
-  }
-
-  .menu-item:hover {
-    @apply bg-indigo-500/10;
+    box-shadow: 0 20px 60px -12px rgba(0,0,0,0.6), 0 0 40px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.04);
+    backdrop-filter: blur(28px) saturate(200%);
   }
 
   .menu-tooltip {
     @apply absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 rounded-lg text-sm;
-    background: rgba(15, 15, 26, 0.98);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+    background: rgba(8, 8, 16, 0.98);
+    border: 1px solid rgba(124, 58, 237, 0.2);
     backdrop-filter: blur(12px);
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
+    transform: translateY(10px) translateX(-50%);
+    transition: all 0.2s ease;
   }
 
   .menu-item:hover .menu-tooltip {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
   }
 
   .service-icon {
     @apply w-10 h-10 rounded-lg flex items-center justify-center text-xl;
-    background: rgba(79, 70, 229, 0.1);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    color: rgba(79, 70, 229, 0.8);
-    transition: all 0.3s ease;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    color: #a855f7;
+    transition: all 0.2s ease;
   }
 
   .tech-tag {
-    @apply inline-flex items-center py-1 px-2 rounded-full;
-    background: rgba(79, 70, 229, 0.1);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+    @apply inline-flex items-center py-1 px-2 rounded-full text-xs;
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.2);
   }
 
-  /* Hamburger Menu */
-  .hamburger {
-    @apply w-6 h-6 relative;
-  }
+  /* Hamburger */
+  .hamburger { @apply w-6 h-6 relative; }
 
   .hamburger span {
     @apply absolute left-0 w-full h-0.5 bg-current transition-all duration-300;
   }
 
-  .hamburger span:nth-child(1) {
-    top: 25%;
-  }
+  .hamburger span:nth-child(1) { top: 25%; }
+  .hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+  .hamburger span:nth-child(3) { bottom: 25%; }
 
-  .hamburger span:nth-child(2) {
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .hamburger span:nth-child(3) {
-    bottom: 25%;
-  }
-
-  .hamburger.active span:nth-child(1) {
-    top: 50%;
-    transform: translateY(-50%) rotate(45deg);
-  }
-
-  .hamburger.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger.active span:nth-child(3) {
-    bottom: 50%;
-    transform: translateY(50%) rotate(-45deg);
-  }
-
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+  .hamburger.active span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { bottom: 50%; transform: translateY(50%) rotate(-45deg); }
 </style>

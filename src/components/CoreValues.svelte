@@ -1,149 +1,245 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { fade, fly } from 'svelte/transition';
 
+  let sectionEl: HTMLElement;
   let visible = false;
 
   onMount(() => {
-    visible = true;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { visible = true; obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(sectionEl);
+    return () => obs.disconnect();
   });
+
+  const values = [
+    {
+      id: 'build',
+      label: 'build()',
+      title: 'Build',
+      icon: 'ph ph-circles-three-plus ph-bold',
+      gradient: 'from-[#f97316] to-[#ec4899]',
+      borderColor: 'rgba(249,115,22,0.3)',
+      glowColor: 'rgba(249,115,22,0.15)',
+      tagColor: 'rgba(249,115,22,0.12)',
+      iconColor: '#fb923c',
+      description: 'With a dedicated team, we build exceptional projects focusing on quality, transparency, efficiency, and innovation to ensure complete client satisfaction.',
+      code: [
+        { keyword: 'const', text: ' approach = {', color: '#fb923c' },
+        { keyword: '', text: '  quality: ', color: '#a3e635', value: "'exceptional'" },
+        { keyword: '', text: '  focus: ', color: '#60a5fa', value: "'innovation'" },
+        { keyword: '', text: '};', color: '' },
+      ],
+      size: 'wide',
+    },
+    {
+      id: 'maintain',
+      label: 'maintain()',
+      title: 'Maintain',
+      icon: 'ph ph-lightbulb ph-bold',
+      gradient: 'from-[#7c3aed] to-[#a855f7]',
+      borderColor: 'rgba(124,58,237,0.35)',
+      glowColor: 'rgba(124,58,237,0.18)',
+      tagColor: 'rgba(124,58,237,0.12)',
+      iconColor: '#a855f7',
+      description: 'We maintain websites and apps with commitment to quality, reliability, and proactive management — ensuring they run smoothly and meet ongoing client needs.',
+      code: [
+        { keyword: 'function', text: ' optimize() {', color: '#818cf8' },
+        { keyword: '', text: '  reliability: ', color: '#a3e635', value: "'99.9%'" },
+        { keyword: '', text: '  support: ', color: '#60a5fa', value: "'24/7'" },
+        { keyword: '', text: '};', color: '' },
+      ],
+      size: 'tall',
+    },
+    {
+      id: 'grow',
+      label: 'grow()',
+      title: 'Grow',
+      icon: 'ph ph-chart-line-up ph-bold',
+      gradient: 'from-[#10b981] to-[#06b6d4]',
+      borderColor: 'rgba(16,185,129,0.3)',
+      glowColor: 'rgba(16,185,129,0.15)',
+      tagColor: 'rgba(16,185,129,0.12)',
+      iconColor: '#34d399',
+      description: 'We help businesses grow by enhancing their digital presence, optimizing performance, and driving engagement and long-term success.',
+      code: [
+        { keyword: 'async', text: ' function scale() {', color: '#34d399' },
+        { keyword: '', text: '  growth: ', color: '#a3e635', value: "'exponential'" },
+        { keyword: '', text: '  success: ', color: '#60a5fa', value: "'guaranteed'" },
+        { keyword: '', text: '};', color: '' },
+      ],
+      size: 'wide',
+    },
+  ];
 </script>
 
-<section class="py-24 relative overflow-hidden">
-  <!-- Spotlights -->
-  <div class="spotlight spotlight-1"></div>
-  <div class="spotlight spotlight-2"></div>
-  <div class="spotlight spotlight-3"></div>
-
-  <!-- Background Elements -->
-  <div class="absolute inset-0 -z-10">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]"></div>
-    <div class="code-grid"></div>
+<section class="py-28 relative overflow-hidden" bind:this={sectionEl} id="values">
+  <!-- Aurora section background -->
+  <div class="absolute inset-0" style="background: var(--dark-2);"></div>
+  <div class="aurora-bg-section absolute inset-0 pointer-events-none"></div>
+  <div class="dot-grid absolute inset-0 pointer-events-none opacity-30"
+       style="mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent 70%);">
   </div>
 
-  <div class="container mx-auto px-4">
-    <!-- Section Header -->
-    {#if visible}
-      <div 
-        class="text-center mb-16"
-        in:fly={{ y: 20, duration: 600, delay: 100 }}
-      >
-        <div class="preheading-code">core.values</div>
-        <h2 class="heading-code">
-          how.<span class="text-indigo-400">weWork</span>()
-        </h2>
-        <p class="subheading-code">
-          // Our approach to delivering exceptional results
-        </p>
-      </div>
-    {/if}
+  <div class="relative z-10 container mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-16 reveal" class:visible>
+      <div class="preheading-code">core.values</div>
+      <h2 class="heading-code mt-2">
+        how.<span style="color: #a855f7">weWork</span>()
+      </h2>
+      <p class="subheading-code mt-3">// Our approach to delivering exceptional results</p>
+    </div>
 
-    <!-- Bento Grid -->
-    <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-      <!-- Build Box -->
-      <div class="glass-card p-8 rounded-2xl hover:transform hover:scale-[1.02] transition-all duration-300">
-        <div class="relative mb-6">
-          <!-- Icon Container -->
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500/20 to-pink-500/20 flex items-center justify-center border border-orange-500/20">
-            <i class="ph ph-circles-three-plus text-3xl text-orange-400"></i>
+    <!-- Asymmetric bento grid -->
+    <div class="values-bento max-w-6xl mx-auto">
+      {#each values as val, i}
+        <div
+          class="value-card rounded-2xl p-8 aurora-border card-lift reveal"
+          class:visible
+          class:cell-wide={val.size === 'wide'}
+          class:cell-tall={val.size === 'tall'}
+          style="
+            --accent-border: {val.borderColor};
+            --accent-glow: 0 0 40px {val.glowColor}, inset 0 1px 0 rgba(255,255,255,0.06);
+            --accent-tag: {val.tagColor};
+            --icon-color: {val.iconColor};
+            transition-delay: {i * 100}ms;
+          "
+        >
+          <!-- AI dot grid texture -->
+          <div class="absolute inset-0 rounded-2xl pointer-events-none"
+               style="background-image: radial-gradient(circle 1px, rgba(255,255,255,0.06) 1px, transparent 0); background-size: 20px 20px;">
           </div>
-          <!-- Decorative Code -->
-          <div class="absolute -top-2 right-0 px-3 py-1 rounded-full text-xs font-mono bg-orange-500/10 border border-orange-500/20">
-            <span class="text-orange-400">build()</span>
+
+          <!-- Header row -->
+          <div class="relative flex items-start justify-between mb-6">
+            <div class="icon-wrap w-14 h-14 rounded-xl flex items-center justify-center"
+                 style="background: {val.tagColor}; border: 1px solid {val.borderColor}">
+              <i class="{val.icon} text-2xl" style="color: {val.iconColor}"></i>
+            </div>
+            <span class="label-badge text-xs font-mono px-3 py-1 rounded-full"
+                  style="background: {val.tagColor}; border: 1px solid {val.borderColor}; color: {val.iconColor}">
+              {val.label}
+            </span>
           </div>
-        </div>
 
-        <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-pink-400 text-transparent bg-clip-text">
-          Build
-        </h3>
+          <!-- Title -->
+          <h3 class="relative text-2xl font-bold mb-3"
+              style="background: linear-gradient(135deg, {val.iconColor}, white 80%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">
+            {val.title}
+          </h3>
 
-        <p class="text-blue-100/70 mb-6">
-          With a dedicated team, we build exceptional projects, focusing on quality, transparency, efficiency management, and innovative solutions to ensure complete client satisfaction and success.
-        </p>
+          <!-- Description -->
+          <p class="relative text-blue-100/65 text-sm leading-relaxed mb-6">
+            {val.description}
+          </p>
 
-        <div class="font-mono text-sm space-y-1 text-blue-100/40">
-          <div><span class="text-orange-400">const</span> approach = {`{`}</div>
-          <div class="pl-4">quality: <span class="text-green-400">'exceptional'</span>,</div>
-          <div class="pl-4">focus: <span class="text-blue-400">'innovation'</span></div>
-          <div>{`}`};</div>
-        </div>
-      </div>
-
-      <!-- Maintain Box -->
-      <div class="glass-card p-8 rounded-2xl hover:transform hover:scale-[1.02] transition-all duration-300">
-        <div class="relative mb-6">
-          <!-- Icon Container -->
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-indigo-500/20">
-            <i class="ph ph-lightbulb text-3xl text-indigo-400"></i>
-          </div>
-          <!-- Decorative Code -->
-          <div class="absolute -top-2 right-0 px-3 py-1 rounded-full text-xs font-mono bg-indigo-500/10 border border-indigo-500/20">
-            <span class="text-indigo-400">maintain()</span>
-          </div>
-        </div>
-
-        <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text">
-          Maintain
-        </h3>
-
-        <p class="text-blue-100/70 mb-6">
-          We maintain websites and apps with a commitment to quality, reliability, and proactive management, ensuring they run smoothly and meet ongoing client needs.
-        </p>
-
-        <div class="font-mono text-sm space-y-1 text-blue-100/40">
-          <div><span class="text-indigo-400">function</span> optimize() {`{`}</div>
-          <div class="pl-4">reliability: <span class="text-green-400">'99.9%'</span>,</div>
-          <div class="pl-4">support: <span class="text-blue-400">'24/7'</span></div>
-          <div>{`}`};</div>
-        </div>
-      </div>
-
-      <!-- Grow Box -->
-      <div class="glass-card p-8 rounded-2xl hover:transform hover:scale-[1.02] transition-all duration-300">
-        <div class="relative mb-6">
-          <!-- Icon Container -->
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500/20 to-teal-500/20 flex items-center justify-center border border-green-500/20">
-            <i class="ph ph-chart-line-up text-3xl text-green-400"></i>
-          </div>
-          <!-- Decorative Code -->
-          <div class="absolute -top-2 right-0 px-3 py-1 rounded-full text-xs font-mono bg-green-500/10 border border-green-500/20">
-            <span class="text-green-400">grow()</span>
+          <!-- Code decoration -->
+          <div class="relative font-mono text-xs space-y-1 text-blue-100/35">
+            {#each val.code as line}
+              {#if line.keyword}
+                <div>
+                  <span style="color: {val.iconColor}">{line.keyword}</span>
+                  <span>{line.text}</span>
+                </div>
+              {:else if line.value}
+                <div class="pl-4">
+                  <span style="color: {line.color}">{line.text}</span>
+                  <span style="color: #a3e635">{line.value}</span>
+                  <span>,</span>
+                </div>
+              {:else}
+                <div><span>{line.text}</span></div>
+              {/if}
+            {/each}
           </div>
         </div>
-
-        <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-green-400 to-teal-400 text-transparent bg-clip-text">
-          Grow
-        </h3>
-
-        <p class="text-blue-100/70 mb-6">
-          We help businesses grow by enhancing their digital presence, optimizing performance, and implementing strategies that drive engagement, conversions, and long-term success.
-        </p>
-
-        <div class="font-mono text-sm space-y-1 text-blue-100/40">
-          <div><span class="text-green-400">async</span> function scale() {`{`}</div>
-          <div class="pl-4">growth: <span class="text-green-400">'exponential'</span>,</div>
-          <div class="pl-4">success: <span class="text-blue-400">'guaranteed'</span></div>
-          <div>{`}`};</div>
-        </div>
-      </div>
+      {/each}
     </div>
   </div>
 </section>
 
 <style>
-  .glass-card {
-    background: rgba(15, 15, 26, 0.95);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    backdrop-filter: blur(12px);
+  .values-bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 12px;
   }
 
-  .code-grid {
+  .value-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--accent-border);
+    box-shadow: var(--accent-glow);
+  }
+
+  /* Animated conic gradient border on hover */
+  .value-card::before {
+    content: '';
     position: absolute;
-    inset: 0;
-    background-image: 
-      linear-gradient(to right, rgba(79, 70, 229, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(79, 70, 229, 0.05) 1px, transparent 1px);
-    background-size: 24px 24px;
-    mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%);
+    inset: -1px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--border-angle, 0deg),
+      var(--accent-border, rgba(124,58,237,0.3)),
+      rgba(6,182,212,0.4),
+      var(--accent-border, rgba(124,58,237,0.3))
+    );
+    animation: borderSpin 4s linear infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .value-card:hover::before {
+    opacity: 1;
+  }
+
+  @property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes borderSpin {
+    to { --border-angle: 360deg; }
+  }
+
+  /* Grid sizing */
+  /* Build — col 1-2, row 1 */
+  .values-bento > .value-card:nth-child(1) {
+    grid-column: 1 / 3;
+  }
+
+  /* Maintain — col 3, row 1-2 (tall) */
+  .values-bento > .value-card:nth-child(2) {
+    grid-column: 3 / 4;
+    grid-row: 1 / 3;
+  }
+
+  /* Grow — col 1-2, row 2 */
+  .values-bento > .value-card:nth-child(3) {
+    grid-column: 1 / 3;
+  }
+
+  @media (max-width: 768px) {
+    .values-bento {
+      grid-template-columns: 1fr;
+    }
+    .values-bento > .value-card:nth-child(1),
+    .values-bento > .value-card:nth-child(2),
+    .values-bento > .value-card:nth-child(3) {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .value-card::before { animation: none !important; }
   }
 </style>

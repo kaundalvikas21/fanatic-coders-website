@@ -358,8 +358,8 @@
           </div>
 
           <!-- Gradient Overlays -->
-          <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0f0f1a] to-transparent z-10"></div>
-          <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0f0f1a] to-transparent z-10"></div>
+          <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#080810] to-transparent z-10"></div>
+          <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#080810] to-transparent z-10"></div>
 
           <!-- Tag Carousel -->
           <div 
@@ -387,58 +387,56 @@
 
 <style>
   .glass-card {
-    background: rgba(15, 15, 26, 0.8);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(124,58,237,0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 0 40px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .tech-tag {
     @apply inline-flex items-center text-sm py-1 px-3 rounded-full;
-    background: rgba(79, 70, 229, 0.1);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.2);
+    color: #a855f7;
   }
 
   .stat-card {
     @apply p-4 rounded-xl text-center;
-    background: rgba(79, 70, 229, 0.1);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.2);
   }
 
   .bg-grid {
-    background-image: 
-      linear-gradient(to right, rgba(79, 70, 229, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(79, 70, 229, 0.1) 1px, transparent 1px);
+    background-image:
+      linear-gradient(to right, rgba(124, 58, 237, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(124, 58, 237, 0.06) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .bg-spotlight {
-    background: radial-gradient(
-      circle at 50% 50%,
-      rgba(79, 70, 229, 0.1) 0%,
-      transparent 50%
-    );
+    background: radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 60%);
   }
 
   .bg-gradient-text {
-    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    background: linear-gradient(135deg, #fff 0%, #c4b5fd 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
   .glass-effect {
-    backdrop-filter: blur(8px);
-    background: rgba(15, 15, 26, 0.9);
-    border: 1px solid rgba(79, 70, 229, 0.3);
+    backdrop-filter: blur(12px);
+    background: rgba(8, 8, 16, 0.9);
+    border: 1px solid rgba(124,58,237,0.25);
+  }
+
+  /* Hover overlay on portfolio images */
+  :global(.portfolio-img-wrap:hover img) {
+    transform: scale(1.05);
+    transition: transform 1s ease;
   }
 
   /* Hide scrollbar */
-  .tag-carousel::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .tag-carousel {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  .tag-carousel::-webkit-scrollbar { display: none; }
+  .tag-carousel { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
