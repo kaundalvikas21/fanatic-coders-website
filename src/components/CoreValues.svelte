@@ -74,7 +74,7 @@
   ];
 </script>
 
-<section class="py-28 relative overflow-hidden" bind:this={sectionEl} id="values">
+<section class="py-24 relative overflow-hidden" bind:this={sectionEl} id="values">
   <!-- Aurora section background -->
   <div class="absolute inset-0" style="background: var(--dark-2);"></div>
   <div class="aurora-bg-section absolute inset-0 pointer-events-none"></div>
@@ -96,7 +96,7 @@
     <div class="values-bento max-w-6xl mx-auto">
       {#each values as val, i}
         <div
-          class="value-card rounded-2xl p-8 aurora-border card-lift reveal"
+          class="value-card rounded-2xl p-8 reveal"
           class:visible
           class:cell-wide={val.size === 'wide'}
           class:cell-tall={val.size === 'tall'}
@@ -175,39 +175,13 @@
     background: rgba(255,255,255,0.04);
     backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--accent-border);
+    box-shadow: none;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .value-card:hover {
     box-shadow: var(--accent-glow);
-  }
-
-  /* Animated conic gradient border on hover */
-  .value-card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background: conic-gradient(
-      from var(--border-angle, 0deg),
-      var(--accent-border, rgba(124,58,237,0.3)),
-      rgba(6,182,212,0.4),
-      var(--accent-border, rgba(124,58,237,0.3))
-    );
-    animation: borderSpin 4s linear infinite;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .value-card:hover::before {
-    opacity: 1;
-  }
-
-  @property --border-angle {
-    syntax: '<angle>';
-    initial-value: 0deg;
-    inherits: false;
-  }
-
-  @keyframes borderSpin {
-    to { --border-angle: 360deg; }
+    transform: translateY(-2px);
   }
 
   /* Grid sizing */
@@ -240,6 +214,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .value-card::before { animation: none !important; }
+    .value-card { transition: none !important; }
   }
 </style>

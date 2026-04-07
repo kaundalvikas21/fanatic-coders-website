@@ -400,6 +400,19 @@
     backdrop-filter: blur(24px) saturate(200%);
   }
 
+  /* Fix DaisyUI navbar centering — start/end default to width:50% which off-centers nav links */
+  nav.glass-nav :global(.navbar-start),
+  nav.glass-nav :global(.navbar-end) {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  nav.glass-nav :global(.navbar-center) {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
   .glass-nav {
     background: rgba(8, 8, 16, 0.7);
     box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
@@ -423,32 +436,62 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Nav item underline animation */
+  /* 1. Kill DaisyUI's hover/focus/active on ALL menu children — prevents double-bg and outline glitch */
+  :global(.navbar-center .menu li > *),
+  :global(.navbar-center .menu li > *:hover),
+  :global(.navbar-center .menu li > *:focus),
+  :global(.navbar-center .menu li > *:active) {
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 2. Single unified hover for both dropdown triggers and plain links */
   .menu-item {
-    @apply px-4 py-2 rounded-lg transition-all duration-200 relative;
+    @apply px-4 py-2 rounded-lg transition-all duration-200;
     background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    outline: none;
+    border: none;
   }
 
-  .menu-item::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%) scaleX(0);
-    width: calc(100% - 2rem);
-    height: 2px;
-    background: linear-gradient(90deg, #7c3aed, #06b6d4);
-    border-radius: 1px;
-    transition: transform 0.2s cubic-bezier(.16,1,.3,1);
-    transform-origin: center;
+  .menu-item:hover,
+  .menu-item:focus-visible {
+    background: rgba(124, 58, 237, 0.1);
+    color: rgba(255, 255, 255, 1);
+    outline: none;
   }
 
-  .menu-item:hover::after {
-    transform: translateX(-50%) scaleX(1);
+  /* Bottom border on hover — mega menu inner links only */
+  :global(.mega-menu-content) .menu-item {
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, background 0.3s ease, color 0.3s ease;
   }
 
-  .menu-item:hover {
-    background: rgba(124, 58, 237, 0.08);
+  :global(.mega-menu-content) .menu-item:hover {
+    border-bottom-color: rgba(124, 58, 237, 0.45);
+  }
+
+  /* Icon rotate on hover */
+  :global(.mega-menu-content) .service-icon {
+    transition: transform 0.25s cubic-bezier(.16,1,.3,1);
+  }
+
+  :global(.mega-menu-content) .menu-item:hover .service-icon {
+    transform: rotate(12deg);
+  }
+
+  /* Normalize li height so div-wrapped and a-wrapped items align identically */
+  :global(.navbar-center .menu li) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mega-menu-trigger {
+    display: flex;
+    align-items: center;
+    position: relative;
   }
 
   .mega-menu {
