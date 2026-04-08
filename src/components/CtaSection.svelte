@@ -1,12 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import GradientButton from './ui/GradientButton.svelte';
 
-  type CodeElement = {
-    node: HTMLElement;
-    x: number;
-    y: number;
-  };
+  type CodeElement = { node: HTMLElement; x: number; y: number; };
 
   let container: HTMLElement;
   let codeElements: CodeElement[] = [];
@@ -14,22 +9,13 @@
   let pointerX = 0;
   let pointerY = 0;
   let prefersReducedMotion = false;
-  
+  let sectionEl: HTMLElement;
+  let visible = false;
+
   const codeSnippets = [
-    'async connect()',
-    'import future',
-    'export success',
-    'await response',
-    'new Project()',
-    'git commit',
-    'deploy()',
-    'function init()',
-    'const future =',
-    '=> success',
-    'class Dream',
-    'build()',
-    'render()',
-    'start()',
+    'async connect()', 'import future', 'export success', 'await response',
+    'new Project()', 'git commit', 'deploy()', 'function init()',
+    'const future =', '=> success', 'class Dream', 'build()', 'start()',
   ];
 
   function createCodeElement(x: number, y: number, snippet: string) {
@@ -48,23 +34,15 @@
       const deltaY = pointerY - y;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
       const maxDistance = 300;
-
       if (distance < maxDistance) {
         const scale = 1 - (distance / maxDistance);
         const angle = Math.atan2(deltaY, deltaX);
         const push = 40 * scale;
-        
-        node.style.transform = `
-          translate(
-            ${-Math.cos(angle) * push}px,
-            ${-Math.sin(angle) * push}px
-          )
-          scale(${1 + scale * 0.2})
-        `;
-        node.style.opacity = (0.3 + scale * 0.7).toString();
+        node.style.transform = `translate(${-Math.cos(angle) * push}px, ${-Math.sin(angle) * push}px) scale(${1 + scale * 0.2})`;
+        node.style.opacity = (0.2 + scale * 0.5).toString();
       } else {
         node.style.transform = 'translate(0, 0) scale(1)';
-        node.style.opacity = '0.3';
+        node.style.opacity = '0.15';
       }
     });
   }
@@ -80,19 +58,25 @@
 
   onMount(() => {
     prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { visible = true; obs.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    obs.observe(sectionEl);
+
     const gridSize = 15;
     const spacing = container.offsetWidth / gridSize;
-
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
         if (Math.random() > 0.85) {
-          const codeElement = createCodeElement(
+          const el = createCodeElement(
             i * spacing + Math.random() * 20,
             j * spacing + Math.random() * 20,
             codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
           );
-          container.appendChild(codeElement.node);
-          codeElements.push(codeElement);
+          container.appendChild(el.node);
+          codeElements.push(el);
         }
       }
     }
@@ -102,65 +86,67 @@
     }
 
     return () => {
+      obs.disconnect();
       container.removeEventListener('mousemove', handleMouseMove);
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId);
-      }
+      if (frameId !== null) cancelAnimationFrame(frameId);
     };
   });
 </script>
 
-<section class="py-24 relative overflow-hidden">
-  <!-- Interactive Background -->
-  <div 
+<section class="cta-section py-28 relative overflow-hidden" bind:this={sectionEl} id="contact">
+  <!-- Peak aurora mesh — most saturated on the page -->
+  <div class="aurora-cta-bg absolute inset-0"></div>
+
+  <!-- Particle/star field (CSS only) -->
+  <div class="star-field absolute inset-0 pointer-events-none"></div>
+
+  <!-- Interactive code elements -->
+  <div
     bind:this={container}
-    class="absolute inset-0 overflow-hidden opacity-30"
-  >
-  </div>
+    class="absolute inset-0 overflow-hidden"
+  ></div>
 
-  <!-- Gradient Overlays -->
-  <div class="absolute inset-0 bg-gradient-radial"></div>
-  <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]"></div>
-
-  <div class="container mx-auto px-4 relative z-10">
+  <div class="relative z-10 container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
-      <!-- Terminal-style Card -->
-      <div class="terminal-card">
-        <!-- Title Bar -->
-        <div class="terminal-title-bar">
-          <div class="window-controls">
-            <span class="control close"></span>
-            <span class="control minimize"></span>
-            <span class="control maximize"></span>
+
+      <!-- Terminal card -->
+      <div class="terminal-card reveal" class:visible>
+        <!-- Title bar -->
+        <div class="terminal-bar">
+          <div class="flex items-center gap-2">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
           </div>
-          <div class="terminal-title">new-project.sh</div>
+          <span class="terminal-title text-xs font-mono text-white/50 ml-3">new-project.sh</span>
         </div>
 
         <!-- Content -->
-        <div class="p-8 md:p-12 text-center">
-          <div class="inline-flex items-center justify-center px-4 py-1 rounded-full text-sm font-mono mb-6 gradient-border">
-            <span class="text-indigo-400 mr-2">$</span>
-            <span class="text-blue-300">./start-collaboration.sh</span>
+        <div class="p-8 md:p-14 text-center">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-mono mb-8 badge-aurora">
+            <span style="color: #a855f7">$</span>
+            <span class="text-blue-200/80">./start-collaboration.sh</span>
           </div>
 
-          <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-text">
+          <!-- Heading with kinetic gradient -->
+          <h2 class="cta-heading text-4xl md:text-5xl font-bold mb-6 tracking-tight reveal" class:visible style="transition-delay: 100ms">
             Ready to Build Something Amazing?
           </h2>
 
-          <p class="text-xl text-blue-100/70 mb-12 max-w-2xl mx-auto">
+          <p class="text-lg text-blue-100/65 mb-12 max-w-2xl mx-auto reveal" class:visible style="transition-delay: 200ms">
             Let's transform your ideas into reality. Our team of expert developers is ready to bring your vision to life.
           </p>
 
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <GradientButton href="/contact">
-              dropUsALine
-              <i class="ph ph-paper-plane-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-            </GradientButton>
-
-            <GradientButton href="/services" variant="secondary">
-              exploreServices
-              <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-            </GradientButton>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center reveal" class:visible style="transition-delay: 300ms">
+            <a href="/contact" class="btn-aurora-solid group">
+              <span>dropUsALine</span>
+              <i class="ph ph-paper-plane-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <a href="/services" class="btn-aurora group">
+              <span>exploreServices</span>
+              <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -169,80 +155,132 @@
 </section>
 
 <style>
+  .cta-section {
+    background: var(--dark-1);
+  }
+
+  .aurora-cta-bg {
+    background:
+      radial-gradient(ellipse 140% 100% at 50% 50%, rgba(79,70,229,0.55) 0%, rgba(124,58,237,0.35) 35%, transparent 65%);
+    animation: ctaPulse 6s ease-in-out infinite alternate;
+  }
+
+  @keyframes ctaPulse {
+    0%   { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 1;   transform: scale(1.04); }
+  }
+
+  /* CSS-only star field */
+  .star-field {
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 75%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 55%, rgba(255,255,255,0.2) 0%, transparent 100%);
+  }
+
   .terminal-card {
-    background: rgba(15, 15, 26, 0.95);
+    background: rgba(8, 8, 16, 0.75);
+    backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(124,58,237,0.3);
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    backdrop-filter: blur(12px);
+    box-shadow: 0 0 80px rgba(124,58,237,0.25), 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
   }
 
-  .terminal-title-bar {
-    background: rgba(35, 35, 45, 0.95);
-    padding: 0.75rem;
+  .terminal-bar {
+    background: rgba(20, 20, 35, 0.9);
+    padding: 0.75rem 1rem;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid rgba(79, 70, 229, 0.2);
+    border-bottom: 1px solid rgba(124,58,237,0.2);
   }
 
-  .window-controls {
-    display: flex;
-    gap: 0.5rem;
-    margin-right: 1rem;
-  }
-
-  .control {
+  .dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
   }
+  .dot-red    { background: #ff5f56; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green  { background: #27c93f; }
 
-  .close {
-    background: #ff5f56;
+  .badge-aurora {
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(124,58,237,0.3);
+    backdrop-filter: blur(8px);
   }
 
-  .minimize {
-    background: #ffbd2e;
-  }
-
-  .maximize {
-    background: #27c93f;
-  }
-
-  .terminal-title {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.875rem;
-    font-family: monospace;
-  }
-
-  .gradient-border {
-    background: rgba(79, 70, 229, 0.1);
-    border: 1px solid rgba(79, 70, 229, 0.3);
+  .cta-heading {
+    background: linear-gradient(135deg, #fff 0%, #c4b5fd 50%, #93c5fd 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 
   .code-element {
-    color: rgba(79, 70, 229, 0.3);
-    padding: 0.5rem 1rem;
+    color: rgba(124, 58, 237, 0.2);
+    padding: 0.4rem 0.8rem;
     border-radius: 0.5rem;
-    background: rgba(79, 70, 229, 0.05);
-    border: 1px solid rgba(79, 70, 229, 0.1);
+    background: rgba(124, 58, 237, 0.05);
+    border: 1px solid rgba(124, 58, 237, 0.1);
     cursor: default;
     user-select: none;
   }
 
-  .bg-gradient-text {
-    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  /* Button styles */
+  .btn-aurora-solid {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, #7c3aed, #2563eb);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(124,58,237,0.45);
+    transition: filter 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    text-decoration: none;
   }
 
-  .bg-gradient-radial {
-    background: radial-gradient(
-      circle at center,
-      transparent 0%,
-      rgba(15, 15, 26, 0.8) 100%
-    );
+  .btn-aurora-solid:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(124,58,237,0.6);
+  }
+
+  .btn-aurora {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    backdrop-filter: blur(12px);
+    text-decoration: none;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .btn-aurora:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora-cta-bg { animation: none; }
   }
 </style>

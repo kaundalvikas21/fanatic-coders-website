@@ -77,17 +77,16 @@
   });
 </script>
 
-<footer class="relative overflow-hidden pt-24 pb-12">
+<footer class="footer-root relative overflow-hidden pt-24 pb-12">
+  <!-- OLED black base + aurora top fade -->
+  <div class="aurora-top-fade absolute top-0 left-0 right-0 h-32 pointer-events-none"></div>
+
   <!-- Code Background -->
-  <div 
+  <div
     bind:this={container}
-    class="absolute inset-0 overflow-hidden opacity-10"
+    class="absolute inset-0 overflow-hidden opacity-[0.08]"
   >
   </div>
-
-  <!-- Gradient Overlays -->
-  <div class="absolute inset-0 bg-gradient-radial"></div>
-  <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]"></div>
 
   <div class="container mx-auto px-4 relative">
     <!-- Footer Top Section -->
@@ -214,30 +213,38 @@
 </footer>
 
 <style>
+  .footer-root {
+    background: #000000;
+  }
+
+  .aurora-top-fade {
+    background: linear-gradient(
+      to bottom,
+      rgba(79, 70, 229, 0.18) 0%,
+      rgba(124, 58, 237, 0.08) 50%,
+      transparent 100%
+    );
+  }
+
   .glass-card {
-    background: rgba(15, 15, 26, 0.95);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(124,58,237,0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 0 40px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .code-element {
-    color: rgba(79, 70, 229, 0.3);
-    padding: 0.5rem 1rem;
+    color: rgba(124, 58, 237, 0.2);
+    padding: 0.4rem 0.8rem;
     border-radius: 0.5rem;
-    background: rgba(79, 70, 229, 0.05);
-    border: 1px solid rgba(79, 70, 229, 0.1);
+    background: rgba(124, 58, 237, 0.04);
+    border: 1px solid rgba(124, 58, 237, 0.1);
     cursor: default;
     user-select: none;
   }
 
   .animated-gradient-text {
-    background: linear-gradient(
-      45deg,
-      #4f46e5,
-      #7c3aed,
-      #2563eb,
-      #4f46e5
-    );
+    background: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4, #7c3aed);
     background-size: 300% 300%;
     animation: gradient 5s ease infinite;
     -webkit-background-clip: text;
@@ -245,17 +252,9 @@
     background-clip: text;
   }
 
-  .bg-gradient-radial {
-    background: radial-gradient(
-      circle at center,
-      transparent 0%,
-      rgba(15, 15, 26, 0.8) 100%
-    );
-  }
-
   @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
 </style>

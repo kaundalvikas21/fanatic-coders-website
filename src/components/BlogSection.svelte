@@ -148,6 +148,11 @@
     background: rgba(15, 15, 26, 0.95);
     border: 1px solid rgba(79, 70, 229, 0.2);
     backdrop-filter: blur(12px);
+    box-shadow: none;
+  }
+
+  .glass-card:hover {
+    box-shadow: var(--glass-glow);
   }
 
   .tech-tag {
