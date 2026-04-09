@@ -89,7 +89,7 @@
 
 <section class="techstack-section py-24 relative overflow-hidden" bind:this={sectionEl} id="tech-stack">
   <!-- Background -->
-  <div class="absolute inset-0" style="background: var(--dark-2);"></div>
+  <div class="absolute inset-0" style="background: var(--dark-3);"></div>
   <div class="aurora-bg-section absolute inset-0 pointer-events-none"></div>
   <div class="dot-grid absolute inset-0 pointer-events-none opacity-35"
        style="mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent 70%);">

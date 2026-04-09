@@ -93,10 +93,7 @@
   });
 </script>
 
-<section class="cta-section py-28 relative overflow-hidden" bind:this={sectionEl} id="contact">
-  <!-- Peak aurora mesh — most saturated on the page -->
-  <div class="aurora-cta-bg absolute inset-0"></div>
-
+<section class="cta-section py-24 relative overflow-hidden" bind:this={sectionEl} id="contact">
   <!-- Particle/star field (CSS only) -->
   <div class="star-field absolute inset-0 pointer-events-none"></div>
 
@@ -159,17 +156,6 @@
     background: var(--dark-1);
   }
 
-  .aurora-cta-bg {
-    background:
-      radial-gradient(ellipse 140% 100% at 50% 50%, rgba(79,70,229,0.55) 0%, rgba(124,58,237,0.35) 35%, transparent 65%);
-    animation: ctaPulse 6s ease-in-out infinite alternate;
-  }
-
-  @keyframes ctaPulse {
-    0%   { opacity: 0.8; transform: scale(1); }
-    100% { opacity: 1;   transform: scale(1.04); }
-  }
-
   /* CSS-only star field */
   .star-field {
     background-image:
@@ -190,7 +176,7 @@
     border: 1px solid rgba(124,58,237,0.3);
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 0 80px rgba(124,58,237,0.25), 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+    box-shadow: 0 0 32px rgba(124,58,237,0.12), 0 20px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .terminal-bar {
@@ -235,6 +221,6 @@
   }
 
 @media (prefers-reduced-motion: reduce) {
-    .aurora-cta-bg { animation: none; }
+    .terminal-card { transition: none; }
   }
 </style>

@@ -104,7 +104,7 @@
   }
 </script>
 
-<section class="testimonials-section py-28 relative overflow-hidden" bind:this={sectionEl} id="testimonials">
+<section class="testimonials-section py-24 relative overflow-hidden" bind:this={sectionEl} id="testimonials">
   <!-- Aurora mesh (parallax-ish, subtle) -->
   <div class="aurora-parallax absolute inset-0 pointer-events-none"></div>
   <div class="dot-grid absolute inset-0 pointer-events-none opacity-30"
@@ -204,7 +204,7 @@
                       <span>() {`{`}</span>
                     </div>
                     <div class="metrics-card rounded-xl p-8 text-center"
-                         style="background: {testimonial.accentColor}0d; border: 1px solid {testimonial.accentColor}28; box-shadow: 0 0 40px {testimonial.accentColor}12">
+                         style="background: {testimonial.accentColor}0a; border: 1px solid {testimonial.accentColor}22; box-shadow: 0 0 16px {testimonial.accentColor}0d">
                       <div class="text-6xl font-bold mb-3"
                            style="background: linear-gradient(135deg, #fff, {testimonial.accentColor}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent">
                         {testimonial.metrics.improvement}
@@ -247,20 +247,20 @@
 
 <style>
   .testimonials-section {
-    background: var(--dark-3);
+    background: var(--dark-1);
   }
 
   .aurora-parallax {
     background:
-      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(124,58,237,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(6,182,212,0.12) 0%, transparent 60%);
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(124,58,237,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(6,182,212,0.06) 0%, transparent 60%);
   }
 
   .testimonial-card {
     background: rgba(255,255,255,0.04);
     backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(124,58,237,0.2);
-    box-shadow: 0 0 60px rgba(124,58,237,0.1), 0 30px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid rgba(124,58,237,0.18);
+    box-shadow: 0 0 24px rgba(124,58,237,0.07), 0 20px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
   .code-badge {

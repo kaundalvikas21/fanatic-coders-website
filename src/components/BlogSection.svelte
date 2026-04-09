@@ -36,15 +36,9 @@
 
 </script>
 
-<section class="py-24 relative overflow-hidden">
-  <!-- Spotlights -->
-  <div class="spotlight spotlight-1"></div>
-  <div class="spotlight spotlight-2"></div>
-  <div class="spotlight spotlight-3"></div>
-
-  <!-- Background Elements -->
+<section class="py-24 relative overflow-hidden" style="background: var(--dark-1)">
+  <!-- Background: subtle code-grid only -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]"></div>
     <div class="code-grid"></div>
   </div>
 

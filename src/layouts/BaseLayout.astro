@@ -27,8 +27,9 @@ const { title, description = "Professional web design, development, and digital 
     <title>{title} | fanaticCoders</title>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <Header client:load />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <Footer client:visible />

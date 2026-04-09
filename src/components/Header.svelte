@@ -136,9 +136,9 @@
             on:mouseleave={closeMegaMenu}
             on:click={() => isMegaMenuOpen = !isMegaMenuOpen}
           >
-            <i class={megaMenu.icon}></i>
+            <i class={megaMenu.icon} aria-hidden="true"></i>
             <span>{megaMenu.title}</span>
-            <i class="ph ph-caret-down caret" class:caret--open={isMegaMenuOpen}></i>
+            <i class="ph ph-caret-down caret" class:caret--open={isMegaMenuOpen} aria-hidden="true"></i>
           </button>
         </li>
 
@@ -146,7 +146,7 @@
         {#each navLinks as link}
           <li>
             <a href={link.href} class="nav-link">
-              <i class={link.icon}></i>
+              <i class={link.icon} aria-hidden="true"></i>
               <span>{link.label}</span>
             </a>
           </li>
@@ -158,7 +158,7 @@
         <div class="hidden sm:block">
           <GradientButton href="/contact">
             startProject
-            <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true"></i>
           </GradientButton>
         </div>
 
@@ -179,8 +179,8 @@
       {#if isMegaMenuOpen}
         <div
           class="mega-panel"
-          role="dialog"
-          aria-label="Services menu"
+          role="region"
+          aria-label="Services navigation"
           transition:fly={{ y: -10, duration: 220, opacity: 0 }}
           on:mouseenter={cancelClose}
           on:mouseleave={closeMegaMenu}
@@ -193,7 +193,7 @@
                 <div class="mega-col">
                   <!-- Column heading -->
                   <div class="col-head">
-                    <i class={col.icon}></i>
+                    <i class={col.icon} aria-hidden="true"></i>
                     {col.heading}
                   </div>
 
@@ -207,13 +207,13 @@
                           on:click={() => isMegaMenuOpen = false}
                         >
                           <span class="item-icon">
-                            <i class={item.icon}></i>
+                            <i class={item.icon} aria-hidden="true"></i>
                           </span>
                           <span class="item-body">
                             <span class="item-name">{item.name}</span>
                             <span class="item-desc">{item.description}</span>
                           </span>
-                          <i class="ph ph-arrow-right item-arrow"></i>
+                          <i class="ph ph-arrow-right item-arrow" aria-hidden="true"></i>
                         </a>
                       </li>
                     {/each}
@@ -243,7 +243,7 @@
               <div class="mt-auto">
                 <GradientButton href={megaMenu.featured.href}>
                   {megaMenu.featured.cta}
-                  <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                  <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true"></i>
                 </GradientButton>
               </div>
             </div>
@@ -273,7 +273,7 @@
                 <i class="{megaMenu.icon} text-violet-400"></i>
                 {megaMenu.title}
               </span>
-              <i class="ph ph-caret-down transition-transform duration-300" class:rotate-180={mobileServicesOpen}></i>
+              <i class="ph ph-caret-down transition-transform duration-300" class:rotate-180={mobileServicesOpen} aria-hidden="true"></i>
             </button>
 
             {#if mobileServicesOpen}
@@ -283,7 +283,7 @@
                     <p class="mobile-col-head">{col.heading}</p>
                     {#each col.items as item}
                       <a href={item.href} class="mobile-item" on:click={closeMobileMenu}>
-                        <i class="{item.icon} text-violet-400 text-base shrink-0"></i>
+                        <i class="{item.icon} text-violet-400 text-base shrink-0" aria-hidden="true"></i>
                         <span>{item.name}</span>
                       </a>
                     {/each}
@@ -296,7 +296,7 @@
             {#each navLinks as link}
               <a href={link.href} class="mobile-row" on:click={closeMobileMenu}>
                 <span class="flex items-center gap-2.5">
-                  <i class="{link.icon} text-violet-400 text-lg"></i>
+                  <i class="{link.icon} text-violet-400 text-lg" aria-hidden="true"></i>
                   {link.label}
                 </span>
               </a>
@@ -305,7 +305,7 @@
             <div class="pt-2">
               <GradientButton href="/contact" class="w-full justify-center">
                 startProject
-                <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true"></i>
               </GradientButton>
             </div>
 
@@ -360,11 +360,11 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.4rem 0.85rem;
+    padding: 0.6rem 0.85rem;
     border-radius: 0.5rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: rgba(255,255,255,0.62);
+    color: rgba(255,255,255,0.75);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -390,7 +390,7 @@
     top: calc(100% + 0.625rem);
     left: 50%;
     transform: translateX(-50%);
-    width: 1180px;
+    width: min(1180px, calc(100vw - 2rem));
     z-index: 60;
     /* Prevent clipping outside the nav's overflow */
     pointer-events: auto;
@@ -417,9 +417,9 @@
     border: 1px solid rgba(124, 58, 237, 0.2);
     border-radius: 1rem;
     box-shadow:
-      0 28px 72px -12px rgba(0,0,0,0.75),
-      0 0 60px rgba(124, 58, 237, 0.07),
-      inset 0 1px 0 rgba(255,255,255,0.05);
+      0 20px 48px -8px rgba(0,0,0,0.6),
+      0 0 24px rgba(124, 58, 237, 0.05),
+      inset 0 1px 0 rgba(255,255,255,0.04);
     backdrop-filter: blur(32px) saturate(200%);
     overflow: hidden;
   }
@@ -445,7 +445,7 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.68rem;
+    font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.09em;
     text-transform: uppercase;
@@ -551,7 +551,7 @@
 
   .item-desc {
     font-size: 0.72rem;
-    color: rgba(255,255,255,0.38);
+    color: rgba(255,255,255,0.55);
     line-height: 1.2;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -623,7 +623,7 @@
 
   .featured-body {
     font-size: 0.75rem;
-    color: rgba(255,255,255,0.42);
+    color: rgba(255,255,255,0.55);
     line-height: 1.55;
     margin-bottom: 1.25rem;
   }
@@ -654,7 +654,7 @@
 
   .stat-label {
     font-size: 0.68rem;
-    color: rgba(255,255,255,0.42);
+    color: rgba(255,255,255,0.55);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
@@ -693,7 +693,7 @@
     display: flex;
     align-items: center;
     gap: 0.625rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem 0.75rem;
     border-radius: 0.375rem;
     font-size: 0.85rem;
     color: rgba(255,255,255,0.7);

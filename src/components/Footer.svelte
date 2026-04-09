@@ -220,17 +220,16 @@
   .aurora-top-fade {
     background: linear-gradient(
       to bottom,
-      rgba(79, 70, 229, 0.18) 0%,
-      rgba(124, 58, 237, 0.08) 50%,
-      transparent 100%
+      rgba(79, 70, 229, 0.05) 0%,
+      transparent 60%
     );
   }
 
   .glass-card {
     background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.16);
     backdrop-filter: blur(20px) saturate(180%);
-    box-shadow: 0 0 40px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+    box-shadow: 0 0 16px rgba(124,58,237,0.07), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
   .code-element {
