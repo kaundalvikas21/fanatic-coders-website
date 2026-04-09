@@ -69,28 +69,28 @@
 
   const accentMap: Record<AccentKey, { border: string; icon: string; glow: string; tag: string }> = {
     violet: {
-      border: 'rgba(124,58,237,0.3)',
-      icon: 'rgba(124,58,237,0.15)',
-      glow: '0 0 32px rgba(124,58,237,0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
-      tag: 'rgba(124,58,237,0.1)',
+      border: 'rgba(124,58,237,0.22)',
+      icon: 'rgba(124,58,237,0.10)',
+      glow: '0 0 18px rgba(124,58,237,0.09), inset 0 1px 0 rgba(255,255,255,0.05)',
+      tag: 'rgba(124,58,237,0.08)',
     },
     blue: {
-      border: 'rgba(37,99,235,0.3)',
-      icon: 'rgba(37,99,235,0.15)',
-      glow: '0 0 32px rgba(37,99,235,0.15), inset 0 1px 0 rgba(255,255,255,0.06)',
-      tag: 'rgba(37,99,235,0.1)',
+      border: 'rgba(37,99,235,0.22)',
+      icon: 'rgba(37,99,235,0.10)',
+      glow: '0 0 18px rgba(37,99,235,0.08), inset 0 1px 0 rgba(255,255,255,0.05)',
+      tag: 'rgba(37,99,235,0.08)',
     },
     cyan: {
-      border: 'rgba(6,182,212,0.3)',
-      icon: 'rgba(6,182,212,0.15)',
-      glow: '0 0 32px rgba(6,182,212,0.15), inset 0 1px 0 rgba(255,255,255,0.06)',
-      tag: 'rgba(6,182,212,0.1)',
+      border: 'rgba(6,182,212,0.22)',
+      icon: 'rgba(6,182,212,0.10)',
+      glow: '0 0 18px rgba(6,182,212,0.08), inset 0 1px 0 rgba(255,255,255,0.05)',
+      tag: 'rgba(6,182,212,0.08)',
     },
     green: {
-      border: 'rgba(16,185,129,0.3)',
-      icon: 'rgba(16,185,129,0.15)',
-      glow: '0 0 32px rgba(16,185,129,0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
-      tag: 'rgba(16,185,129,0.1)',
+      border: 'rgba(16,185,129,0.22)',
+      icon: 'rgba(16,185,129,0.10)',
+      glow: '0 0 18px rgba(16,185,129,0.09), inset 0 1px 0 rgba(255,255,255,0.05)',
+      tag: 'rgba(16,185,129,0.08)',
     },
   };
 
@@ -232,7 +232,7 @@
 </section>
 
 <style>
-  .services-section { background: var(--dark-2); }
+  .services-section { background: var(--dark-1); }
 
   /* 4 cols, 2 rows, NO row-span */
   .services-bento {

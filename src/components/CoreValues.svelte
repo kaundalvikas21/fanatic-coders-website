@@ -21,7 +21,7 @@
       icon: 'ph ph-circles-three-plus ph-bold',
       gradient: 'from-[#f97316] to-[#ec4899]',
       borderColor: 'rgba(249,115,22,0.3)',
-      glowColor: 'rgba(249,115,22,0.15)',
+      glowColor: 'rgba(249,115,22,0.07)',
       tagColor: 'rgba(249,115,22,0.12)',
       iconColor: '#fb923c',
       description: 'With a dedicated team, we build exceptional projects focusing on quality, transparency, efficiency, and innovation to ensure complete client satisfaction.',
@@ -40,7 +40,7 @@
       icon: 'ph ph-lightbulb ph-bold',
       gradient: 'from-[#7c3aed] to-[#a855f7]',
       borderColor: 'rgba(124,58,237,0.35)',
-      glowColor: 'rgba(124,58,237,0.18)',
+      glowColor: 'rgba(124,58,237,0.09)',
       tagColor: 'rgba(124,58,237,0.12)',
       iconColor: '#a855f7',
       description: 'We maintain websites and apps with commitment to quality, reliability, and proactive management — ensuring they run smoothly and meet ongoing client needs.',
@@ -59,7 +59,7 @@
       icon: 'ph ph-chart-line-up ph-bold',
       gradient: 'from-[#10b981] to-[#06b6d4]',
       borderColor: 'rgba(16,185,129,0.3)',
-      glowColor: 'rgba(16,185,129,0.15)',
+      glowColor: 'rgba(16,185,129,0.07)',
       tagColor: 'rgba(16,185,129,0.12)',
       iconColor: '#34d399',
       description: 'We help businesses grow by enhancing their digital presence, optimizing performance, and driving engagement and long-term success.',
@@ -76,7 +76,7 @@
 
 <section class="py-24 relative overflow-hidden" bind:this={sectionEl} id="values">
   <!-- Aurora section background -->
-  <div class="absolute inset-0" style="background: var(--dark-2);"></div>
+  <div class="absolute inset-0" style="background: var(--dark-3);"></div>
   <div class="aurora-bg-section absolute inset-0 pointer-events-none"></div>
   <div class="dot-grid absolute inset-0 pointer-events-none opacity-30"
        style="mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent 70%);">
@@ -102,7 +102,7 @@
           class:cell-tall={val.size === 'tall'}
           style="
             --accent-border: {val.borderColor};
-            --accent-glow: 0 0 40px {val.glowColor}, inset 0 1px 0 rgba(255,255,255,0.06);
+            --accent-glow: 0 0 20px {val.glowColor}, inset 0 1px 0 rgba(255,255,255,0.05);
             --accent-tag: {val.tagColor};
             --icon-color: {val.iconColor};
             transition-delay: {i * 100}ms;

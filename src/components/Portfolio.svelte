@@ -62,24 +62,12 @@
     }
   ];
 
-  const tags = [
-    'React', 'Node.js', 'TypeScript', 'MongoDB', 'WebSocket', 'AWS',
-    'Vue.js', 'Laravel', 'PostgreSQL', 'ElasticSearch', 'Docker',
-    'Next.js', 'GraphQL', 'WebRTC', 'Azure', 'Python',
-    'Angular', 'TensorFlow', 'IoT', 'Kubernetes', 'Svelte'
-  ];
-  
   let currentIndex = 0;
   let currentProject = projects[currentIndex];
   let visible = false;
   let autoplayInterval: NodeJS.Timeout;
-  let scrollContainer: HTMLElement;
-  let autoScrollInterval: NodeJS.Timeout;
-  let scrollWidth = 0;
-  let containerWidth = 0;
   let isAutoplayPaused = false;
   let isInteractionPaused = false;
-  let isTagScrollPaused = false;
   let prefersReducedMotion = false;
   
   function nextProject() {
@@ -131,77 +119,22 @@
     }
   }
 
-  function setupCarousel() {
-    if (!scrollContainer) return;
-    
-    const tagElements = scrollContainer.querySelectorAll('.tech-tag');
-    scrollWidth = Array.from(tagElements).reduce((total, el) => {
-      const style = window.getComputedStyle(el);
-      const margin = parseFloat(style.marginRight) + parseFloat(style.marginLeft);
-      return total + el.offsetWidth + margin;
-    }, 0);
-
-    containerWidth = scrollContainer.offsetWidth;
-    
-    let scrollPos = 0;
-    
-    if (autoScrollInterval) {
-      clearInterval(autoScrollInterval);
-    }
-
-    autoScrollInterval = setInterval(() => {
-      if (prefersReducedMotion || isTagScrollPaused) return;
-      if (!scrollContainer) return;
-      
-      scrollPos = (scrollPos + 1) % scrollWidth;
-      scrollContainer.scrollLeft = scrollPos;
-      
-      if (scrollPos >= scrollWidth - containerWidth) {
-        scrollPos = 0;
-        scrollContainer.scrollLeft = 0;
-      }
-    }, 20);
-  }
-
   onMount(() => {
     prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     visible = true;
     if (!prefersReducedMotion) {
       resetAutoplay();
-      setTimeout(setupCarousel, 100);
     }
-    
-    const handleResize = () => {
-      if (scrollContainer) {
-        containerWidth = scrollContainer.offsetWidth;
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
     return () => {
-      if (autoplayInterval) {
-        clearInterval(autoplayInterval);
-      }
-      if (autoScrollInterval) {
-        clearInterval(autoScrollInterval);
-      }
-      window.removeEventListener('resize', handleResize);
+      if (autoplayInterval) clearInterval(autoplayInterval);
     };
   });
 </script>
 
-<section class="min-h-screen pb-24 relative overflow-hidden section-bg" id="portfolio">
-  <!-- Spotlights -->
-  <div class="spotlight spotlight-1"></div>
-  <div class="spotlight spotlight-2"></div>
-  <div class="spotlight spotlight-3"></div>
-
-  <!-- Animated Background -->
+<section class="min-h-screen py-24 relative overflow-hidden" id="portfolio" style="background: var(--dark-3)">
+  <!-- Background: grid texture + very subtle centre radial -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]"></div>
-    <div class="absolute inset-0 bg-grid opacity-20"></div>
-    <div class="absolute inset-0 bg-spotlight"></div>
+    <div class="absolute inset-0 bg-grid opacity-10"></div>
   </div>
 
   <div class="container mx-auto px-4">
@@ -233,7 +166,7 @@
     <div class="max-w-6xl mx-auto">
       {#if visible && currentProject}
         <div
-          class="grid md:grid-cols-2 gap-8 items-center"
+          class="relative grid md:grid-cols-2 gap-8 items-center"
           on:mouseenter={() => isInteractionPaused = true}
           on:mouseleave={() => {
             if (!prefersReducedMotion) {
@@ -244,19 +177,19 @@
           on:focusin={() => isInteractionPaused = true}
           on:focusout={handleShowcaseFocusOut}
         >
-          <!-- Project Navigation Buttons -->
-          <button 
+          <!-- Project Navigation Buttons (flanking the 2-col layout) -->
+          <button
             type="button"
-            class="absolute left-4 top-1/2 -translate-y-1/2 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors"
+            class="absolute top-1/2 -translate-y-1/2 -translate-x-full -left-4 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors border border-indigo-500/30 backdrop-blur-sm"
             aria-label="Previous featured project"
             on:click={previousProject}
           >
             <i class="ph ph-arrow-left text-2xl"></i>
           </button>
-          
-          <button 
+
+          <button
             type="button"
-            class="absolute right-4 top-1/2 -translate-y-1/2 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors"
+            class="absolute top-1/2 -translate-y-1/2 translate-x-full -right-4 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors border border-indigo-500/30 backdrop-blur-sm"
             aria-label="Next featured project"
             on:click={nextProject}
           >
@@ -347,38 +280,12 @@
           {/each}
         </div>
 
-        <!-- Integrated Tag Carousel -->
-        <div class="mt-12 relative">
-          <!-- View All Projects Button -->
-          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-            <GradientButton href="/portfolio" variant="secondary" class="glass-effect">
-              viewAllProjects
-              <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-            </GradientButton>
-          </div>
-
-          <!-- Gradient Overlays -->
-          <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#080810] to-transparent z-10"></div>
-          <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#080810] to-transparent z-10"></div>
-
-          <!-- Tag Carousel -->
-          <div 
-            bind:this={scrollContainer}
-            class="tag-carousel overflow-hidden select-none relative opacity-20"
-            on:mouseenter={() => isTagScrollPaused = true}
-            on:mouseleave={() => isTagScrollPaused = false}
-            on:focusin={() => isTagScrollPaused = true}
-            on:focusout={() => isTagScrollPaused = false}
-          >
-            <div class="flex gap-6 py-4 items-center">
-              {#each [...tags, ...tags] as tag}
-                <div class="tech-tag flex-none">
-                  <i class="ph ph-code ph-bold text-indigo-400 mr-2"></i>
-                  <span class="whitespace-nowrap">{tag}</span>
-                </div>
-              {/each}
-            </div>
-          </div>
+        <!-- View All Projects -->
+        <div class="mt-10 flex justify-center">
+          <GradientButton href="/portfolio" variant="secondary">
+            viewAllProjects
+            <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+          </GradientButton>
         </div>
       {/if}
     </div>
@@ -387,10 +294,10 @@
 
 <style>
   .glass-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(124,58,237,0.2);
+    background: rgba(8, 8, 22, 0.85);
+    border: 1px solid rgba(124,58,237,0.28);
     backdrop-filter: blur(20px) saturate(180%);
-    box-shadow: 0 0 40px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+    box-shadow: 0 0 16px rgba(124,58,237,0.09), inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .tech-tag {
@@ -424,19 +331,9 @@
     color: transparent;
   }
 
-  .glass-effect {
-    backdrop-filter: blur(12px);
-    background: rgba(8, 8, 16, 0.9);
-    border: 1px solid rgba(124,58,237,0.25);
-  }
-
   /* Hover overlay on portfolio images */
   :global(.portfolio-img-wrap:hover img) {
     transform: scale(1.05);
     transition: transform 1s ease;
   }
-
-  /* Hide scrollbar */
-  .tag-carousel::-webkit-scrollbar { display: none; }
-  .tag-carousel { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
