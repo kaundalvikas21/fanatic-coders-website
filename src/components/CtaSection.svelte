@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import GradientButton from './ui/GradientButton.svelte';
 
   type CodeElement = { node: HTMLElement; x: number; y: number; };
 
@@ -13,9 +14,8 @@
   let visible = false;
 
   const codeSnippets = [
-    'async connect()', 'import future', 'export success', 'await response',
-    'new Project()', 'git commit', 'deploy()', 'function init()',
-    'const future =', '=> success', 'class Dream', 'build()', 'start()',
+    '{ code }', '<dev/>', 'npm run', 'git push', 'async()',
+    '.then()', 'useState', '[...arr]', '${var}', '=> func',
   ];
 
   function createCodeElement(x: number, y: number, snippet: string) {
@@ -65,21 +65,21 @@
     );
     obs.observe(sectionEl);
 
-    const gridSize = 15;
-    const spacing = container.offsetWidth / gridSize;
-    for (let i = 0; i < gridSize; i++) {
-      for (let j = 0; j < gridSize; j++) {
-        if (Math.random() > 0.85) {
-          const el = createCodeElement(
-            i * spacing + Math.random() * 20,
-            j * spacing + Math.random() * 20,
-            codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
-          );
-          container.appendChild(el.node);
-          codeElements.push(el);
-        }
-      }
-    }
+    // Place exactly 10 snippets in a 5×2 grid — one per zone, no overlaps
+    const cols = 5;
+    const rows = 2;
+    const cellW = container.offsetWidth / cols;
+    const cellH = container.offsetHeight / rows;
+
+    codeSnippets.forEach((snippet, idx) => {
+      const col = idx % cols;
+      const row = Math.floor(idx / cols);
+      const x = col * cellW + cellW * 0.2 + Math.random() * cellW * 0.6;
+      const y = row * cellH + cellH * 0.2 + Math.random() * cellH * 0.6;
+      const el = createCodeElement(x, y, snippet);
+      container.appendChild(el.node);
+      codeElements.push(el);
+    });
 
     if (!prefersReducedMotion) {
       container.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -139,14 +139,14 @@
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4 justify-center reveal" class:visible style="transition-delay: 300ms">
-            <a href="/contact" class="btn-aurora-solid group">
-              <span>dropUsALine</span>
-              <i class="ph ph-paper-plane-right group-hover:translate-x-1 transition-transform"></i>
-            </a>
-            <a href="/services" class="btn-aurora group">
-              <span>exploreServices</span>
-              <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
-            </a>
+            <GradientButton href="/contact">
+              dropUsALine
+              <i class="ph ph-paper-plane-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            </GradientButton>
+            <GradientButton href="/services" variant="secondary">
+              exploreServices
+              <i class="ph ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            </GradientButton>
           </div>
         </div>
       </div>
@@ -234,53 +234,7 @@
     user-select: none;
   }
 
-  /* Button styles */
-  .btn-aurora-solid {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 32px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 0.9375rem;
-    letter-spacing: -0.01em;
-    background: linear-gradient(135deg, #7c3aed, #2563eb);
-    color: #fff;
-    box-shadow: 0 8px 32px rgba(124,58,237,0.45);
-    transition: filter 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    text-decoration: none;
-  }
-
-  .btn-aurora-solid:hover {
-    filter: brightness(1.15);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(124,58,237,0.6);
-  }
-
-  .btn-aurora {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 28px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    letter-spacing: -0.01em;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #fff;
-    backdrop-filter: blur(12px);
-    text-decoration: none;
-    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-  }
-
-  .btn-aurora:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.25);
-    transform: translateY(-2px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
     .aurora-cta-bg { animation: none; }
   }
 </style>
