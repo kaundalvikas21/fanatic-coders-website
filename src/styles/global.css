@@ -225,8 +225,10 @@ body {
 }
 
 .heading-code {
-  @apply text-4xl md:text-5xl font-bold mb-4 font-mono;
+  @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-mono;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .heading-code .function {
@@ -238,7 +240,7 @@ body {
 }
 
 .subheading-code {
-  @apply text-xl text-blue-100/60 max-w-2xl mx-auto font-mono;
+  @apply text-sm sm:text-base md:text-lg lg:text-xl text-blue-100/60 max-w-2xl mx-auto font-mono;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 

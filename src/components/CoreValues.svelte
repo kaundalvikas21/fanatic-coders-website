@@ -126,7 +126,7 @@
           </div>
 
           <!-- Title -->
-          <h3 class="relative text-2xl font-bold mb-3"
+          <h3 class="relative text-lg sm:text-xl md:text-2xl font-bold mb-3"
               style="background: linear-gradient(135deg, {val.iconColor}, white 80%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">
             {val.title}
           </h3>

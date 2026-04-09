@@ -167,7 +167,7 @@
                     featured
                   </span>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-2.5 leading-tight">{service.title}</h3>
+                <h3 class="text-base sm:text-lg md:text-xl font-bold text-white mb-2.5 leading-tight">{service.title}</h3>
                 <p class="text-blue-100/60 text-sm leading-relaxed mb-5">{service.description}</p>
                 <div class="flex flex-wrap gap-2 mb-5">
                   {#each service.features as feature}
@@ -213,7 +213,7 @@
               <div class="icon-box w-10 h-10 rounded-xl flex items-center justify-center mb-4">
                 <i class="{service.icon} text-base" style="color: {iconColor}"></i>
               </div>
-              <h3 class="text-[15px] font-bold text-white mb-2 leading-snug">{service.title}</h3>
+              <h3 class="text-sm sm:text-[15px] font-bold text-white mb-2 leading-snug">{service.title}</h3>
               <p class="text-blue-100/55 text-xs leading-relaxed mb-4 flex-1">{service.description}</p>
               <div class="flex flex-wrap gap-1.5">
                 {#each service.features as feature}

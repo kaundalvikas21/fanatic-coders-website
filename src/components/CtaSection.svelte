@@ -127,7 +127,7 @@
           </div>
 
           <!-- Heading with kinetic gradient -->
-          <h2 class="cta-heading text-4xl md:text-5xl font-bold mb-6 tracking-tight reveal" class:visible style="transition-delay: 100ms">
+          <h2 class="cta-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight reveal" class:visible style="transition-delay: 100ms">
             Ready to Build Something Amazing?
           </h2>
 

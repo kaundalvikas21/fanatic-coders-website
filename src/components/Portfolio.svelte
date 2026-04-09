@@ -196,8 +196,8 @@
             <i class="ph ph-arrow-right text-2xl"></i>
           </button>
 
-          <!-- Project Image -->
-          <div class="relative overflow-hidden rounded-2xl group h-[500px]">
+          <!-- Project Image (hidden on mobile — info card shown full-width instead) -->
+          <div class="hidden md:block relative overflow-hidden rounded-2xl group h-[500px]">
             <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent z-10"></div>
             {#key currentProject.id}
               <img
@@ -225,14 +225,14 @@
                     {currentProject.category}
                   </span>
                 </div>
-                <h3 class="text-3xl font-bold bg-gradient-text">{currentProject.title}</h3>
+                <h3 class="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-text">{currentProject.title}</h3>
                 <p class="text-blue-100/70 leading-relaxed">{currentProject.description}</p>
 
                 <!-- Project Stats -->
                 <div class="grid grid-cols-3 gap-4">
                   {#each Object.entries(currentProject.stats) as [key, value]}
                     <div class="stat-card">
-                      <div class="text-xl font-bold text-indigo-400">{value}</div>
+                      <div class="text-base sm:text-lg md:text-xl font-bold text-indigo-400">{value}</div>
                       <div class="text-sm text-blue-100/60 capitalize">{key}</div>
                     </div>
                   {/each}

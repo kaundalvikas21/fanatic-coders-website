@@ -93,7 +93,7 @@
             </div>
 
             <!-- Title -->
-            <h3 class="text-xl font-bold leading-tight hover:text-indigo-400 transition-colors">
+            <h3 class="text-base sm:text-lg md:text-xl font-bold leading-tight hover:text-indigo-400 transition-colors">
               <a href={`/blog/${post.id}`} class="block">
                 {post.title}
               </a>
