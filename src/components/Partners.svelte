@@ -9,12 +9,12 @@
   ];
 </script>
 
-<section class="py-24 relative overflow-hidden" style="background: var(--dark-1)" id="partners">
+<section class="py-16 md:py-24 relative overflow-hidden" style="background: var(--dark-1)" id="partners">
   <!-- Subtle centre glow -->
   <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(79,70,229,0.05),transparent_60%)]"></div>
 
   <div class="container mx-auto px-4">
-    <div class="text-center mb-16">
+    <div class="text-center mb-10 md:mb-16">
       <div class="preheading-code">trusted.partners</div>
       <h2 class="heading-code">
         <span class="function">collaborate</span>(<span class="params">industry.leaders</span>)
@@ -99,8 +99,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.875rem 2.25rem;
-    margin-right: 1.25rem;
+    padding: 0.75rem 1.5rem;
+    margin-right: 1rem;
     border-radius: 0.75rem;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(124, 58, 237, 0.12);
@@ -113,7 +113,7 @@
   }
 
   .partner-logo {
-    height: 2.5rem;
+    height: 2rem;
     width: auto;
     opacity: 0.45;
     filter: grayscale(100%) brightness(1.4);

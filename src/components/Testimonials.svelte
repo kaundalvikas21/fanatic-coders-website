@@ -147,7 +147,7 @@
           <div class="swiper-wrapper">
             {#each testimonials as testimonial (testimonial.id)}
               <div class="swiper-slide">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                   <!-- Left: Client + Quote -->
                   <div class="space-y-8">
                     <!-- Client info -->
@@ -166,7 +166,7 @@
                         </div>
                       </div>
                       <div>
-                        <h3 class="text-xl font-bold text-white mb-1">{testimonial.name}</h3>
+                        <h3 class="text-base sm:text-lg md:text-xl font-bold text-white mb-1">{testimonial.name}</h3>
                         <p class="text-blue-100/60 text-sm mb-2">{testimonial.role}</p>
                         <span class="company-badge text-xs font-mono px-3 py-1 rounded-full"
                               style="color: {testimonial.accentColor}; border-color: {testimonial.accentColor}40; background: {testimonial.accentColor}12">
@@ -179,7 +179,7 @@
                     <div class="relative">
                       <div class="quote-mark absolute -left-2 -top-4 text-7xl font-serif leading-none"
                            style="color: {testimonial.accentColor}18">"</div>
-                      <blockquote class="text-lg text-blue-100/85 leading-relaxed pl-6 border-l-2"
+                      <blockquote class="text-sm sm:text-base md:text-lg text-blue-100/85 leading-relaxed pl-6 border-l-2"
                                   style="border-color: {testimonial.accentColor}40">
                         {testimonial.quote}
                       </blockquote>
@@ -205,7 +205,7 @@
                     </div>
                     <div class="metrics-card rounded-xl p-8 text-center"
                          style="background: {testimonial.accentColor}0a; border: 1px solid {testimonial.accentColor}22; box-shadow: 0 0 16px {testimonial.accentColor}0d">
-                      <div class="text-6xl font-bold mb-3"
+                      <div class="text-4xl lg:text-6xl font-bold mb-3"
                            style="background: linear-gradient(135deg, #fff, {testimonial.accentColor}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent">
                         {testimonial.metrics.improvement}
                       </div>

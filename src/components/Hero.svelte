@@ -183,7 +183,7 @@
       </div>
 
       <!-- Kinetic heading -->
-      <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
         {#each headingWords as word, i}
           <span
             class="word-reveal inline-block mr-[0.25em]"
@@ -200,7 +200,7 @@
       </h1>
 
       <p
-        class="text-xl md:text-2xl text-blue-100/70 mb-12 max-w-2xl mx-auto subheading-reveal"
+        class="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100/70 mb-12 max-w-2xl mx-auto subheading-reveal"
         class:visible={headingVisible}
       >
         Expert web design, development, and digital marketing solutions that drive growth and deliver exceptional results.
