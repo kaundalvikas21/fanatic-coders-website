@@ -1,78 +1,36 @@
-# Agency Website (Astro + Svelte)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Marketing/agency website built with Astro, Svelte components, and Tailwind.
+## Getting Started
 
-## Prerequisites
-
-- Node.js 22 recommended (`.nvmrc` is included)
-- npm 10+
-
-## Local Development
-
-1. Install dependencies:
-
-```bash
-npm ci
-```
-
-2. Validate local setup:
-
-```bash
-npm run check:setup
-```
-
-3. Start development server:
+First, run the development server:
 
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-By default Astro serves at `http://localhost:4321`.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Build and Preview
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Build production output:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-```bash
-npm run build
-```
+## Learn More
 
-Preview the built site locally:
+To learn more about Next.js, take a look at the following resources:
 
-```bash
-npm run preview
-```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Useful Scripts
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-- `npm run check:setup` - Validates Node/npm range and Astro CLI availability
-- `npm run dev` - Starts local dev server
-- `npm run build` - Creates production build in `dist/`
-- `npm run preview` - Serves production build locally
+## Deploy on Vercel
 
-## Troubleshooting
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-### `astro: not found`
-
-Dependencies are missing or incomplete. Reinstall:
-
-```bash
-rm -rf node_modules
-npm ci
-```
-
-### `npm ci` fails with network errors (for example `EAI_AGAIN`)
-
-This is a network/DNS issue on the machine, not an app code issue.
-
-- Check internet connectivity
-- Check DNS resolver settings
-- Retry `npm ci`
-
-### Port already in use
-
-Run on a different port:
-
-```bash
-npm run dev -- --port 4322
-```
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
