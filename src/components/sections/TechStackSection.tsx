@@ -3,16 +3,25 @@
 import { useEffect, useRef, useState } from "react"
 import {
   Code2, Database, Brain, TrendingUp,
-  LayoutGrid, Hexagon, Shield, Infinity, ArrowRight, Braces, Wind, Paintbrush,
-  Settings2, FileCode2, Leaf, Flame, Layers, Network, Zap, Workflow,
-  ScatterChart, Bot, Table2, FunctionSquare, BookOpen,
-  Target, BarChart2, Share2, Mail, Filter, Search, Link, LineChart,
+  Bot, Link, LineChart,
 } from "lucide-react"
 import type { ElementType } from "react"
+import type { SimpleIcon } from "simple-icons"
+import {
+  siReact, siVuedotjs, siAngular, siSvelte, siNextdotjs, siTypescript,
+  siTailwindcss, siSass,
+  siNodedotjs, siPython, siDjango, siLaravel, siPostgresql, siMongodb,
+  siGraphql, siRedis,
+  siTensorflow, siPytorch, siScikitlearn, siKeras, siPandas, siNumpy,
+  siJupyter,
+  siGoogleads, siGoogleanalytics, siMeta, siMailchimp, siHubspot, siSemrush,
+} from "simple-icons"
+import TechLogo from "@/components/ui/TechLogo"
 
 interface Tech {
   name: string
-  Icon: ElementType
+  brandIcon: SimpleIcon | null
+  FallbackIcon?: ElementType
 }
 
 interface Category {
@@ -30,14 +39,14 @@ const categories: Category[] = [
     Icon: Code2,
     accent: "#7c3aed",
     technologies: [
-      { name: "React",        Icon: LayoutGrid   },
-      { name: "Vue.js",       Icon: Hexagon      },
-      { name: "Angular",      Icon: Shield       },
-      { name: "Svelte",       Icon: Infinity     },
-      { name: "Next.js",      Icon: ArrowRight   },
-      { name: "TypeScript",   Icon: Braces       },
-      { name: "Tailwind CSS", Icon: Wind         },
-      { name: "SASS",         Icon: Paintbrush   },
+      { name: "React",        brandIcon: siReact        },
+      { name: "Vue.js",       brandIcon: siVuedotjs     },
+      { name: "Angular",      brandIcon: siAngular      },
+      { name: "Svelte",       brandIcon: siSvelte       },
+      { name: "Next.js",      brandIcon: siNextdotjs    },
+      { name: "TypeScript",   brandIcon: siTypescript   },
+      { name: "Tailwind CSS", brandIcon: siTailwindcss  },
+      { name: "SASS",         brandIcon: siSass         },
     ],
   },
   {
@@ -46,14 +55,14 @@ const categories: Category[] = [
     Icon: Database,
     accent: "#2563eb",
     technologies: [
-      { name: "Node.js",    Icon: Settings2   },
-      { name: "Python",     Icon: FileCode2   },
-      { name: "Django",     Icon: Leaf        },
-      { name: "Laravel",    Icon: Flame       },
-      { name: "PostgreSQL", Icon: Database    },
-      { name: "MongoDB",    Icon: Layers      },
-      { name: "GraphQL",    Icon: Network     },
-      { name: "Redis",      Icon: Zap         },
+      { name: "Node.js",    brandIcon: siNodedotjs   },
+      { name: "Python",     brandIcon: siPython      },
+      { name: "Django",     brandIcon: siDjango      },
+      { name: "Laravel",    brandIcon: siLaravel     },
+      { name: "PostgreSQL", brandIcon: siPostgresql  },
+      { name: "MongoDB",    brandIcon: siMongodb     },
+      { name: "GraphQL",    brandIcon: siGraphql     },
+      { name: "Redis",      brandIcon: siRedis       },
     ],
   },
   {
@@ -62,14 +71,14 @@ const categories: Category[] = [
     Icon: Brain,
     accent: "#06b6d4",
     technologies: [
-      { name: "TensorFlow",   Icon: Workflow        },
-      { name: "PyTorch",      Icon: Flame           },
-      { name: "Scikit-learn", Icon: ScatterChart    },
-      { name: "OpenAI",       Icon: Bot             },
-      { name: "Keras",        Icon: Brain           },
-      { name: "Pandas",       Icon: Table2          },
-      { name: "NumPy",        Icon: FunctionSquare  },
-      { name: "Jupyter",      Icon: BookOpen        },
+      { name: "TensorFlow",   brandIcon: siTensorflow   },
+      { name: "PyTorch",      brandIcon: siPytorch      },
+      { name: "Scikit-learn", brandIcon: siScikitlearn  },
+      { name: "OpenAI",       brandIcon: null, FallbackIcon: Bot       },
+      { name: "Keras",        brandIcon: siKeras        },
+      { name: "Pandas",       brandIcon: siPandas       },
+      { name: "NumPy",        brandIcon: siNumpy        },
+      { name: "Jupyter",      brandIcon: siJupyter      },
     ],
   },
   {
@@ -78,14 +87,14 @@ const categories: Category[] = [
     Icon: TrendingUp,
     accent: "#10b981",
     technologies: [
-      { name: "Google Ads",       Icon: Target    },
-      { name: "Google Analytics", Icon: BarChart2 },
-      { name: "Meta Ads",         Icon: Share2    },
-      { name: "Mailchimp",        Icon: Mail      },
-      { name: "HubSpot",          Icon: Filter    },
-      { name: "Semrush",          Icon: Search    },
-      { name: "Ahrefs",           Icon: Link      },
-      { name: "Moz",              Icon: LineChart },
+      { name: "Google Ads",       brandIcon: siGoogleads       },
+      { name: "Google Analytics", brandIcon: siGoogleanalytics },
+      { name: "Meta Ads",         brandIcon: siMeta            },
+      { name: "Mailchimp",        brandIcon: siMailchimp       },
+      { name: "HubSpot",          brandIcon: siHubspot         },
+      { name: "Semrush",          brandIcon: siSemrush         },
+      { name: "Ahrefs",           brandIcon: null, FallbackIcon: Link      },
+      { name: "Moz",              brandIcon: null, FallbackIcon: LineChart },
     ],
   },
 ]
@@ -167,23 +176,27 @@ export default function TechStackSection() {
           role="tabpanel"
         >
           {activeCat.technologies.map((tech, i) => (
-            <div
-              key={tech.name}
-              className="tech-card group rounded-xl p-5"
-              style={{
-                "--tech-accent": activeCat.accent,
-                transitionDelay: `${i * 30}ms`,
-              } as React.CSSProperties}
-            >
-              <div className="flex flex-col items-center gap-3">
-                <div className="tech-icon w-14 h-14 rounded-xl flex items-center justify-center">
-                  <tech.Icon size={28} style={{ color: activeCat.accent }} aria-hidden />
+              <div
+                key={tech.name}
+                className="tech-card group rounded-xl p-5"
+                style={{
+                  "--tech-accent": activeCat.accent,
+                  transitionDelay: `${i * 30}ms`,
+                } as React.CSSProperties}
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <div className="tech-icon w-14 h-14 rounded-xl flex items-center justify-center">
+                    {tech.brandIcon ? (
+                      <TechLogo icon={tech.brandIcon} size={28} />
+                    ) : tech.FallbackIcon ? (
+                      <tech.FallbackIcon size={28} style={{ color: activeCat.accent }} aria-hidden />
+                    ) : null}
+                  </div>
+                  <span className="text-sm text-blue-100/60 group-hover:text-white transition-colors text-center font-mono">
+                    {tech.name}
+                  </span>
                 </div>
-                <span className="text-sm text-blue-100/60 group-hover:text-white transition-colors text-center font-mono">
-                  {tech.name}
-                </span>
               </div>
-            </div>
           ))}
         </div>
 
