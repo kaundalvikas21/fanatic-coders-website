@@ -131,7 +131,7 @@
   });
 </script>
 
-<section class="min-h-screen py-24 relative overflow-hidden" id="portfolio" style="background: var(--dark-3)">
+<section class="min-h-screen py-12 md:py-24 relative overflow-hidden" id="portfolio" style="background: var(--dark-3)">
   <!-- Background: grid texture + very subtle centre radial -->
   <div class="absolute inset-0 -z-10">
     <div class="absolute inset-0 bg-grid opacity-10"></div>
@@ -180,7 +180,7 @@
           <!-- Project Navigation Buttons (flanking the 2-col layout) -->
           <button
             type="button"
-            class="absolute top-1/2 -translate-y-1/2 -translate-x-full -left-4 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors border border-indigo-500/30 backdrop-blur-sm"
+            class="hidden md:flex items-center justify-center absolute top-1/2 -translate-y-1/2 -translate-x-full -left-4 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors border border-indigo-500/30 backdrop-blur-sm"
             aria-label="Previous featured project"
             on:click={previousProject}
           >
@@ -189,7 +189,7 @@
 
           <button
             type="button"
-            class="absolute top-1/2 -translate-y-1/2 translate-x-full -right-4 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors border border-indigo-500/30 backdrop-blur-sm"
+            class="hidden md:flex items-center justify-center absolute top-1/2 -translate-y-1/2 translate-x-full -right-4 z-10 min-h-11 min-w-11 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors border border-indigo-500/30 backdrop-blur-sm"
             aria-label="Next featured project"
             on:click={nextProject}
           >
@@ -214,11 +214,11 @@
           </div>
 
           <!-- Project Info -->
-          <div class="glass-card p-8 rounded-2xl">
+          <div class="glass-card p-4 sm:p-8 rounded-2xl">
             {#key currentProject.id}
-              <div 
+              <div
                 in:fly={{ x: 50, duration: 800 }}
-                class="space-y-6"
+                class="space-y-4 sm:space-y-6"
               >
                 <div class="flex items-center gap-3">
                   <span class="px-3 py-1 rounded-full text-sm font-mono bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
@@ -229,11 +229,11 @@
                 <p class="text-blue-100/70 leading-relaxed">{currentProject.description}</p>
 
                 <!-- Project Stats -->
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-3 gap-2 sm:gap-4">
                   {#each Object.entries(currentProject.stats) as [key, value]}
                     <div class="stat-card">
-                      <div class="text-base sm:text-lg md:text-xl font-bold text-indigo-400">{value}</div>
-                      <div class="text-sm text-blue-100/60 capitalize">{key}</div>
+                      <div class="text-sm sm:text-lg md:text-xl font-bold text-indigo-400">{value}</div>
+                      <div class="text-xs sm:text-sm text-blue-100/60 capitalize">{key}</div>
                     </div>
                   {/each}
                 </div>
@@ -261,8 +261,44 @@
           </div>
         </div>
 
-        <!-- Progress Indicator -->
-        <div class="mt-12 flex justify-center items-center gap-4">
+        <!-- Mobile controls: prev / dots / next (hidden on md+) -->
+        <div class="mt-6 flex md:hidden items-center justify-between gap-2">
+          <button
+            type="button"
+            on:click={previousProject}
+            class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 transition-colors hover:bg-indigo-500/30"
+            aria-label="Previous featured project"
+          >
+            <i class="ph ph-arrow-left text-xl"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            {#each projects as project, i}
+              <button
+                type="button"
+                class="relative flex h-8 w-8 items-center justify-center rounded-full"
+                aria-label="Go to featured project {i + 1}"
+                on:click={() => setProject(i)}
+              >
+                <span class="absolute h-1 w-5 rounded-full bg-indigo-500/20"></span>
+                <span
+                  class="absolute h-1 w-5 rounded-full bg-indigo-500 transition-transform duration-300"
+                  style="transform: scaleX({currentIndex === i ? '1' : '0'}); transform-origin: left;"
+                ></span>
+              </button>
+            {/each}
+          </div>
+          <button
+            type="button"
+            on:click={nextProject}
+            class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 transition-colors hover:bg-indigo-500/30"
+            aria-label="Next featured project"
+          >
+            <i class="ph ph-arrow-right text-xl"></i>
+          </button>
+        </div>
+
+        <!-- Progress Indicator (desktop only) -->
+        <div class="mt-12 hidden md:flex justify-center items-center gap-4">
           {#each projects as project, i}
             <button
               type="button"
@@ -308,7 +344,7 @@
   }
 
   .stat-card {
-    @apply p-4 rounded-xl text-center;
+    @apply p-2 sm:p-4 rounded-xl text-center;
     background: rgba(124,58,237,0.08);
     border: 1px solid rgba(124,58,237,0.2);
   }
