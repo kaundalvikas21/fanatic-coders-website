@@ -47,3 +47,6 @@ next-env.d.ts
 .mcp.json
 .serena/
 .settings.json/
+
+#project PRD
+fcop-prd-v1.md
