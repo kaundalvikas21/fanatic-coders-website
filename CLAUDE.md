@@ -71,7 +71,8 @@ When writing Next.js code, **ALWAYS** use these skills together:
 - Follow existing shadcn/ui patterns with radix-nova style
 - Check `src/components/ui/` for existing component patterns
 - Use `cn()` utility for conditional className merging
-- All sections follow similar patterns in `src/components/sections/`
+- Home page sections currently live in `src/components/pages/home/`
+- Keep future page-specific components in `src/components/pages/<page>/`
 
 ### 9. Supabase Integration (FOR FUTURE USE)
 - When using Supabase MCP server, **ALWAYS** use `supabase-postgres-best-practices` skill
@@ -129,170 +130,85 @@ Visit `http://localhost:3000` to see the application.
 
 ```
 src/
-├── app/                      # Next.js App Router
-│   ├── layout.tsx           # Root layout (Header/Footer wrapper)
-│   ├── page.tsx             # Home page with all sections
-│   ├── globals.css          # Tailwind v4 + theme variables
-│   └── favicon.ico
+├── app/                       # Next.js App Router
+│   ├── layout.tsx             # Root layout
+│   ├── page.tsx               # Current home route
+│   ├── globals.css            # Tailwind v4 + theme variables
+│   ├── favicon.ico
+│   └── (frontend)/            # Route group directories (currently placeholders)
+│       ├── about/
+│       ├── blog/
+│       │   └── [slug]/
+│       ├── careers/
+│       ├── case-studies/
+│       ├── case-study/
+│       │   └── [slug]/
+│       ├── contact/
+│       ├── docs/
+│       ├── open-source/
+│       ├── portfolio/
+│       │   └── [slug]/
+│       ├── privacy/
+│       ├── services/
+│       │   └── [slug]/
+│       └── terms/
 ├── components/
-│   ├── layout/              # Layout components
-│   │   ├── Header.tsx       # Navigation with mega menu
-│   │   └── Footer.tsx       # Footer with links
-│   ├── sections/            # Page sections (12 components)
-│   │   ├── HeroSection.tsx
-│   │   ├── PartnersSection.tsx
-│   │   ├── TerminalAboutSection.tsx
-│   │   ├── ServicesSection.tsx
-│   │   ├── ServiceCarousel.tsx
-│   │   ├── PortfolioSection.tsx
-│   │   ├── CtaSection.tsx
-│   │   ├── CoreValuesSection.tsx
-│   │   ├── TestimonialsSection.tsx
-│   │   ├── TechStackSection.tsx
-│   │   ├── FAQSection.tsx
-│   │   └── BlogSection.tsx
-│   └── ui/                  # shadcn/ui components
-│       ├── button.tsx       # shadcn button
-│       ├── accordion.tsx    # shadcn accordion
+│   ├── layout/                # Layout components
+│   │   ├── Header.tsx
+│   │   └── Footer.tsx
+│   ├── pages/
+│   │   └── home/              # Current home page section components
+│   │       ├── HeroSection.tsx
+│   │       ├── PartnersSection.tsx
+│   │       ├── TerminalAboutSection.tsx
+│   │       ├── ServicesSection.tsx
+│   │       ├── ServiceCarousel.tsx
+│   │       ├── PortfolioSection.tsx
+│   │       ├── CtaSection.tsx
+│   │       ├── CoreValuesSection.tsx
+│   │       ├── TestimonialsSection.tsx
+│   │       ├── TechStackSection.tsx
+│   │       ├── FAQSection.tsx
+│   │       └── BlogSection.tsx
+│   └── ui/                    # shadcn/ui components
+│       ├── button.tsx
+│       ├── accordion.tsx
 │       ├── GradientButton.tsx  # Custom gradient button
-│       └── TechLogo.tsx     # Custom tech logo component
+│       └── TechLogo.tsx
+├── data/                     # Reserved for static/content data (currently empty)
 ├── lib/
-│   ├── utils.ts             # cn() helper with tailwind-merge
-│   └── animations.ts        # GSAP animation helpers
+│   ├── utils.ts              # cn() helper with tailwind-merge
+│   └── animations.ts         # GSAP animation helpers
 ├── hooks/
-│   └── useScrollReveal.ts   # Intersection observer hook
+│   └── useScrollReveal.ts
 └── types/
-    └── index.ts             # TypeScript interfaces
+    └── index.ts
 ```
 
-## Future Project Structure (When Scaling)
+## Scalable Pattern For Future Pages
 
-The following structure should be implemented when adding multiple pages, authentication, and dashboard functionality:
+When adding a new page, use this pattern:
 
 ```
 src/
-├── app/                      # Next.js App Router
-│   ├── (frontend)/           # Public pages route group
-│   │   ├── layout.tsx        # Frontend layout (header/footer)
-│   │   ├── page.tsx          # Landing page (current home)
-│   │   ├── about/
-│   │   │   └── page.tsx      # About page
-│   │   ├── portfolio/
-│   │   │   ├── page.tsx      # Portfolio listing
-│   │   │   └── [slug]/
-│   │   │       └── page.tsx  # Individual project pages
-│   │   ├── blog/
-│   │   │   ├── page.tsx      # Blog listing
-│   │   │   └── [slug]/
-│   │   │       └── page.tsx  # Blog post pages
-│   │   └── contact/
-│   │       └── page.tsx      # Contact page
-│   ├── (auth)/               # Authentication route group
-│   │   ├── layout.tsx        # Auth layout (minimal header)
-│   │   ├── login/
-│   │   │   └── page.tsx      # Login page
-│   │   ├── signup/
-│   │   │   └── page.tsx      # Signup page
-│   │   └── forgot-password/
-│   │       └── page.tsx      # Password reset
-│   ├── (dashboard)/          # Protected dashboard route group
-│   │   ├── layout.tsx        # Dashboard layout (sidebar + header)
-│   │   ├── page.tsx          # Dashboard home
-│   │   ├── profile/
-│   │   │   └── page.tsx      # User profile
-│   │   ├── projects/
-│   │   │   ├── page.tsx      # Projects listing
-│   │   │   └── [id]/
-│   │   │       └── page.tsx  # Project details
-│   │   └── settings/
-│   │       └── page.tsx      # Settings page
-│   ├── api/                  # API routes
-│   │   ├── auth/
-│   │   │   └── [...nextauth] # Auth endpoints
-│   │   ├── projects/
-│   │   │   └── route.ts      # Projects CRUD
-│   │   └── analytics/
-│   │       └── route.ts      # Analytics data
-│   ├── layout.tsx            # Root layout (fonts, providers)
-│   ├── page.tsx              # Home page with all sections
-│   └── globals.css           # Tailwind v4 + theme variables
-├── components/
-│   ├── layout/               # Layout components (existing)
-│   ├── sections/             # Homepage sections (existing)
-│   ├── auth/                 # Authentication components (new)
-│   │   ├── LoginForm.tsx
-│   │   ├── SignupForm.tsx
-│   │   ├── ForgotPasswordForm.tsx
-│   │   ├── SocialLogin.tsx
-│   │   └── AuthGuard.tsx
-│   ├── dashboard/            # Dashboard components (new)
-│   │   ├── Sidebar.tsx
-│   │   ├── DashboardHeader.tsx
-│   │   ├── UserMenu.tsx
-│   │   ├── StatCard.tsx
-│   │   └── SettingsForm.tsx
-│   ├── blog/                 # Blog components (new)
-│   │   ├── BlogCard.tsx
-│   │   ├── BlogList.tsx
-│   │   └── BlogPost.tsx
-│   ├── portfolio/            # Portfolio components (new)
-│   │   ├── ProjectCard.tsx
-│   │   ├── ProjectGrid.tsx
-│   │   └── ProjectFilter.tsx
-│   └── ui/                   # shadcn/ui components (existing)
-├── lib/
-│   ├── utils.ts              # cn() helper (existing)
-│   ├── animations.ts         # GSAP helpers (existing)
-│   ├── supabase/             # Supabase client (new)
-│   │   ├── client.ts
-│   │   ├── server.ts
-│   │   └── middleware.ts
-│   └── api/                  # API utilities (new)
-│       ├── response.ts
-│       ├── error.ts
-│       └── validation.ts
-├── contexts/                 # React contexts (new)
-│   ├── AuthContext.tsx
-│   ├── ThemeContext.tsx
-│   └── NotificationContext.tsx
-├── hooks/                    # Custom React hooks (existing + new)
-│   ├── useScrollReveal.ts    # Existing
-│   ├── useAuth.ts            # New - Auth state
-│   ├── useUser.ts            # New - User data
-│   ├── useProjects.ts        # New - Projects CRUD
-│   └── useDebounce.ts        # New - Debounce values
-└── types/
-    ├── index.ts              # Existing types
-    ├── auth.ts               # Auth types (new)
-    ├── dashboard.ts          # Dashboard types (new)
-    └── api.ts                # API response types (new)
+├── app/
+│   └── <route>/
+│       └── page.tsx                   # Thin route entrypoint
+└── components/
+    └── pages/
+        └── <page>/
+            ├── <PageName>Page.tsx     # Optional page composer
+            ├── index.ts               # Optional barrel export
+            ├── SectionA.tsx
+            ├── SectionB.tsx
+            └── ...
 ```
 
-### Key Implementation Notes:
+### Pattern Rules
 
-**Route Groups:**
-- `(frontend)`: Public pages with shared header/footer
-- `(auth)`: Authentication pages with minimal layout
-- `(dashboard)`: Protected pages with sidebar navigation
-- Each route group can have its own layout
-
-**Migration Strategy:**
-1. Move current `app/layout.tsx` to `app/(frontend)/layout.tsx`
-2. Move current `app/page.tsx` to `app/(frontend)/page.tsx`
-3. Create new `app/layout.tsx` with only root providers
-4. Add route groups incrementally as needed
-
-**Authentication Flow:**
-- Use Supabase for authentication
-- Implement `AuthGuard` component for protected routes
-- Create `AuthContext` for global auth state
-- Build login/signup forms in `(auth)` route group
-
-**Dashboard Architecture:**
-- Protected by `AuthGuard` component
-- Sidebar navigation for dashboard sections
-- Separate components for dashboard-specific UI
-- API routes for data operations
+1. Keep route files thin: `src/app/<route>/page.tsx` should mainly compose/import page modules.
+2. Keep page-specific UI in `src/components/pages/<page>/`.
+3. Do not put page-specific UI under `src/components/ui/` (reserve `ui/` for reusable primitives).
 
 ---
 
@@ -342,9 +258,9 @@ const { ref, isInView } = useScrollReveal()
 
 ### Section Components
 
-All sections follow these patterns:
+Page sections follow these patterns:
 - Named with "Section" suffix
-- Located in `src/components/sections/`
+- Located in `src/components/pages/<page>/`
 - Use scroll reveal hook for entrance animations
 - Follow responsive mobile-first design
 - Keep focused and under ~200 lines
@@ -402,10 +318,10 @@ export function ComponentName({ ... }: Props) {
 
 ### Adding a New Section
 
-1. Create component in `src/components/sections/NewSection.tsx`
-2. Add to `src/app/page.tsx` in appropriate position
+1. Create component in `src/components/pages/<page>/NewSection.tsx`
+2. Add it to the page composition for that route (or directly import in route `page.tsx`)
 3. Follow existing section patterns (scroll reveal, responsive design)
-4. Export from `src/app/page.tsx` or import directly
+4. Keep route files thin and focused on composition
 
 ### Adding New shadcn/ui Components
 
