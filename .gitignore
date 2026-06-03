@@ -48,5 +48,13 @@ next-env.d.ts
 .serena/
 .settings.json/
 
-#project PRD
+#project PRD (internal — kept local; distilled map lives in graphify-out/wiki)
 fcop-prd-v1.md
+fcop-prd-v1.pdf
+FCOP-PRD-MD-FILES/
+
+# graphify — local-only state (machine paths, mtimes, extraction cache)
+graphify-out/.graphify_python
+graphify-out/cache/
+graphify-out/cost.json
+graphify-out/manifest.json
