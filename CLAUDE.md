@@ -119,7 +119,7 @@ When writing Next.js code, **ALWAYS** use these skills together:
 | Lucide React | 1.8.0 | Icon library |
 | Simple Icons | 16.15.0 | Brand icons |
 | tw-animate-css | 1.4.0 | Simple CSS animations |
-| Fonts | Inter, Plus Jakarta Sans | Typography via @fontsource |
+| Fonts | Plus Jakarta Sans + JetBrains Mono (both via @fontsource) | Sans for body/headings; JetBrains Mono for code/terminal motifs. |
 
 ## Getting Started
 
@@ -532,6 +532,15 @@ Before marking any task complete:
 - Tailwind classes not working: Verify `globals.css` imports Tailwind v4
 - shadcn components unstyled: Check `components.json` configuration
 - Theme: Site is dark-first (no toggle). `body` is hardcoded to `#080810` in `globals.css`; light-mode OKLCH tokens exist in `:root` but the site always presents dark. See `DESIGN.md`.
+
+## Known Issues (documented, not yet fixed)
+
+Surfaced during the `DESIGN.md` verification. Treat as follow-ups.
+
+- **`.dark` token block is dead.** `globals.css:159-191` is never applied (`<html>` has no `.dark`), so shadcn primitives (`button.tsx`, `accordion.tsx`) using semantic tokens resolve to LIGHT `:root` values on the dark surface. Prefer the custom aurora/glass components, or fix by applying `.dark` on `<html>` / remapping the tokens.
+- **`--font-sans` circular.** `globals.css:29` `--font-sans: var(--font-sans)`; harmless today (utility unused, headings inherit body Plus Jakarta Sans) but should be removed.
+
+_Fixed: shipped **JetBrains Mono** (`@fontsource/jetbrains-mono` 400/600/700) and pointed `--font-mono` at it (system `ui-monospace` stack stays as fallback); all mono surfaces route through `var(--font-mono)`. Removed the unused `@fontsource/inter` dependency._
 
 ---
 

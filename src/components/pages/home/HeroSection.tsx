@@ -225,7 +225,7 @@ export default function HeroSection() {
                 style={{ "--stagger": i } as React.CSSProperties}
               >
                 <stat.Icon size={28} className="mb-3 mx-auto text-aurora-violet-icon" aria-hidden />
-                <div className="text-3xl font-bold mb-1 text-aurora-sweep">{stat.number}</div>
+                <div className="text-3xl font-bold mb-1 text-aurora-sweep font-mono tracking-tight tabular-nums">{stat.number}</div>
                 <div className="text-blue-100/55 text-sm">{stat.label}</div>
               </div>
             ))}
