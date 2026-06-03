@@ -184,7 +184,7 @@ export default function TestimonialsSection() {
                 {/* Quote */}
                 <div className="relative">
                   <div
-                    className="absolute -left-2 -top-4 text-7xl font-serif leading-none select-none pointer-events-none"
+                    className="absolute -left-2 -top-4 text-7xl font-mono leading-none select-none pointer-events-none"
                     style={{ color: `${t.accentColor}18` }}
                     aria-hidden
                   >&quot;</div>
@@ -230,7 +230,7 @@ export default function TestimonialsSection() {
                   }}
                 >
                   <div
-                    className="text-4xl lg:text-6xl font-bold mb-3"
+                    className="text-4xl lg:text-6xl font-bold mb-3 font-mono tracking-tight tabular-nums"
                     style={{
                       backgroundImage: `linear-gradient(135deg, #fff, ${t.accentColor})`,
                       WebkitBackgroundClip: "text",
