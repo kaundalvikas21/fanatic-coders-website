@@ -19,6 +19,27 @@ The `impeccable` skill reads these automatically. Update them via `/impeccable t
 
 ---
 
+## Knowledge Graph (token-cheap PRD/codebase navigation)
+
+A graphify knowledge graph of this repo lives in `graphify-out/`. **Use it before loading
+the raw `FCOP-PRD-MD-FILES/` set** (~25k words / ~34k tokens) — querying the graph is ~12x
+cheaper per question.
+
+For planning or understanding FCOP product scope:
+1. Read `graphify-out/wiki/index.md` (entry point — communities by size, `[[wikilinks]]`).
+2. Open only the relevant community article, then drill into its god-node article:
+   - `wiki/FCOP_Data_Model_&_Entities.md` → `wiki/Shared_Data_Model_Overview.md`
+   - `wiki/FCOP_Modules_&_Personas.md`, `wiki/Feature_0x_*.md` (per-feature detail)
+   - `wiki/Non-Functional_Requirements_&_Security.md`, `wiki/Open_Questions_&_Rollout.md`, `wiki/FCOP_Vision_&_Goals.md`
+3. Pointed questions: `/graphify query "<question>"` (BFS traversal, cites source files).
+
+Other outputs: `graphify-out/graph.html` (interactive), `graph.json` (raw), `GRAPH_REPORT.md`
+(god nodes, surprising connections). After editing PRD/source files, refresh with
+`/graphify --update`, then rebuild the wiki. PRD docs and React code are currently separate
+graph halves (no edges between them) — expected until FCOP features get built.
+
+---
+
 ## File Line-Count Recommendations
 
 Recommended guidelines to keep code maintainable and focused.
