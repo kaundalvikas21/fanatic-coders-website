@@ -6,6 +6,19 @@ A modern digital agency website built with the latest technologies (April 2026).
 
 ---
 
+## Design Context (impeccable)
+
+Strategic and visual ground-truth live at the project root. Read both before any design
+or UI work:
+
+- **`PRODUCT.md`** — register (`brand`), users, purpose, brand personality, anti-references, design principles, accessibility (WCAG 2.2 AA).
+- **`DESIGN.md`** — Aurora design system captured from `globals.css`: dark-first theme, violet/blue/cyan palette, Plus Jakarta Sans + Inter typography, glass surfaces, motion tokens, bento layouts.
+
+The `impeccable` skill reads these automatically. Update them via `/impeccable teach`
+(PRODUCT) and `/impeccable document` (DESIGN); do not hand-edit out of sync with code.
+
+---
+
 ## File Line-Count Recommendations
 
 Recommended guidelines to keep code maintainable and focused.
@@ -518,7 +531,7 @@ Before marking any task complete:
 
 - Tailwind classes not working: Verify `globals.css` imports Tailwind v4
 - shadcn components unstyled: Check `components.json` configuration
-- Dark mode issues: Project uses light mode by default (no dark mode toggle)
+- Theme: Site is dark-first (no toggle). `body` is hardcoded to `#080810` in `globals.css`; light-mode OKLCH tokens exist in `:root` but the site always presents dark. See `DESIGN.md`.
 
 ---
 
