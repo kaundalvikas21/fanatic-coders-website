@@ -42,7 +42,8 @@ next-env.d.ts
 
 
 # Claude and Agents
-.claude/
+.claude/*
+!.claude/settings.json
 .agents/
 .mcp.json
 .serena/
