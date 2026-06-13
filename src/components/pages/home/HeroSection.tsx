@@ -200,8 +200,7 @@ export default function HeroSection() {
           <p
             className={`text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100/70 mb-12 max-w-2xl mx-auto subheading-reveal${headingVisible ? " visible" : ""}`}
           >
-            Expert web design, development, and digital marketing solutions that drive growth and
-            deliver exceptional results.
+            Web design, development, and digital marketing that helps your business grow.
           </p>
 
           {/* CTAs */}

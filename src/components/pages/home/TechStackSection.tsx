@@ -141,7 +141,7 @@ export default function TechStackSection() {
             our.<span style={{ color: "#a855f7" }}>technologies</span>()
           </h2>
           <p className="subheading-code mt-3">
-            {"// Tools and technologies we use to build amazing solutions"}
+            {"// the tools we reach for to build and ship"}
           </p>
         </div>
 
@@ -207,8 +207,8 @@ export default function TechStackSection() {
             <span style={{ color: "#818cf8" }}> function</span>
             <span> buildAmazing() {"{"}</span>
           </div>
-          <div className="pl-4">tools: <span style={{ color: "#34d399" }}>&apos;cutting-edge&apos;</span>,</div>
-          <div className="pl-4">results: <span style={{ color: "#60a5fa" }}>&apos;exceptional&apos;</span></div>
+          <div className="pl-4">tools: <span style={{ color: "#34d399" }}>&apos;modern&apos;</span>,</div>
+          <div className="pl-4">results: <span style={{ color: "#60a5fa" }}>&apos;measurable&apos;</span></div>
           <div>{"}"}</div>
         </div>
       </div>

@@ -76,7 +76,7 @@ const megaMenu = {
   featured: {
     href: "/contact",
     cta: "startProject",
-    description: "Tell us your vision — we'll respond within 24 hours.",
+    description: "Tell us your vision and we'll respond within 24 hours.",
     stats: [
       { number: "150+", label: "Projects"     },
       { number: "98%",  label: "Satisfaction" },

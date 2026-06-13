@@ -610,6 +610,73 @@ body {
   box-shadow: 0 20px 60px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
+/* Team card: spinning gradient border on hover (drawn on top of the image) */
+.team-card-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    var(--aurora-violet), var(--aurora-cyan), var(--aurora-blue), var(--aurora-violet)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask-composite: exclude;
+  animation: borderSpin 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.team-card-glow:hover::after,
+.team-card-glow:focus-within::after { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .team-card-glow::after { animation: none; }
+}
+
+/* Process step number: faint watermark that fills with aurora color on card hover.
+   A tall gradient (faint-white top half, aurora bottom half) clipped to the glyph;
+   sliding background-position wipes the color upward for a smooth fill. */
+.process-num {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(255, 255, 255, 0.10) 50%,
+    var(--aurora-cyan) 50%,
+    var(--aurora-violet) 100%
+  );
+  background-size: 100% 200%;
+  background-position: 0% 0%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: background-position var(--duration-slow) var(--ease-smooth),
+              filter var(--duration-base) var(--ease-smooth);
+}
+.group:hover .process-num {
+  background-position: 0% 100%;
+  filter: drop-shadow(0 0 14px rgba(124, 58, 237, 0.35));
+}
+@media (prefers-reduced-motion: reduce) {
+  .process-num { transition: none; }
+}
+
+/* Keep Chrome/Safari autofill on the dark surface instead of the default white repaint. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.05) inset;
+  caret-color: #fff;
+  transition: background-color 9999s ease-out 0s;
+}
+
 /* ═══════════════════════════════════════════════════
    FADE-IN SCROLL REVEALS
    ═══════════════════════════════════════════════════ */

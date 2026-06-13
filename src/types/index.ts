@@ -11,6 +11,7 @@ export interface BlogPost {
   readTime: string
   category: string
   slug: string
+  coverUrl?: string
 }
 
 export interface Service {
@@ -68,4 +69,13 @@ export interface CoreValue {
 export interface Partner {
   name: string
   logoPath: string
+}
+
+export interface TeamMember {
+  id: string
+  name: string
+  role: string
+  bio: string
+  avatarUrl: string
+  socials?: { github?: string; linkedin?: string; twitter?: string }
 }

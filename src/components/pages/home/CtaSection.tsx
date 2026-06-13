@@ -133,15 +133,15 @@ export default function CtaSection() {
                 className={`cta-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight reveal ${v}`}
                 style={{ transitionDelay: "100ms" }}
               >
-                Ready to Build Something Amazing?
+                Ready to start your build?
               </h2>
 
               <p
                 className={`text-lg text-blue-100/65 mb-12 max-w-2xl mx-auto reveal ${v}`}
                 style={{ transitionDelay: "200ms" }}
               >
-                Let&apos;s transform your ideas into reality. Our team of expert developers is ready
-                to bring your vision to life.
+                Tell us what you want to build. Our senior team will bring a clear plan and ship it
+                with you.
               </p>
 
               <div

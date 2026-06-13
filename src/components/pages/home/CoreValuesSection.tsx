@@ -37,10 +37,10 @@ const values: CoreValue[] = [
     tagColor: "rgba(249,115,22,0.12)",
     iconColor: "#fb923c",
     description:
-      "With a dedicated team, we build exceptional projects focusing on quality, transparency, efficiency, and innovation to ensure complete client satisfaction.",
+      "A small senior team builds your project with a focus on quality and transparency, so clients know where things stand.",
     code: [
       { keyword: "const", text: " approach = {",  color: "#fb923c" },
-      { keyword: "",      text: "  quality: ",    color: "#a3e635", value: "'exceptional'" },
+      { keyword: "",      text: "  quality: ",    color: "#a3e635", value: "'high'" },
       { keyword: "",      text: "  focus: ",      color: "#60a5fa", value: "'innovation'" },
       { keyword: "",      text: "};",             color: "" },
     ],
@@ -56,7 +56,7 @@ const values: CoreValue[] = [
     tagColor: "rgba(124,58,237,0.12)",
     iconColor: "#a855f7",
     description:
-      "We maintain websites and apps with commitment to quality, reliability, and proactive management — ensuring they run smoothly and meet ongoing client needs.",
+      "We maintain websites and apps with steady, proactive management so they keep running well and meet ongoing client needs.",
     code: [
       { keyword: "function", text: " optimize() {", color: "#818cf8" },
       { keyword: "",         text: "  reliability: ", color: "#a3e635", value: "'99.9%'" },
@@ -119,7 +119,7 @@ export default function CoreValuesSection() {
           <h2 className="heading-code mt-2">
             how.<span style={{ color: "#a855f7" }}>weWork</span>()
           </h2>
-          <p className="subheading-code mt-3">{"// Our approach to delivering exceptional results"}</p>
+          <p className="subheading-code mt-3">{"// how we approach the work"}</p>
         </div>
 
         {/* Asymmetric bento grid */}

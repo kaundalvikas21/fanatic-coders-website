@@ -1,0 +1,5 @@
+export { ContactHeroSection } from "./ContactHeroSection"
+export { ContactSection } from "./ContactSection"
+export { ContactReasonsSection } from "./ContactReasonsSection"
+export { ContactProcessSection } from "./ContactProcessSection"
+export { ContactFaqSection } from "./ContactFaqSection"

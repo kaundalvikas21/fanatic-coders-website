@@ -10,10 +10,10 @@ const aboutContent = [
     output: [
       "# About DevAgency",
       "",
-      "We are a team of passionate developers, designers, and digital craftsmen who believe in creating exceptional digital experiences.",
+      "We're a team of developers and designers who like building software that works well and lasts.",
       "",
       "## Our Mission",
-      "To transform innovative ideas into powerful digital solutions that drive real business growth.",
+      "To turn good ideas into software that helps the business grow.",
       "",
       "## Core Values",
       "- Innovation First",
@@ -138,7 +138,7 @@ export default function TerminalAboutSection() {
                 <span className="about-control about-minimize" />
                 <span className="about-control about-maximize" />
               </div>
-              <div className="about-terminal-title">about-us — zsh</div>
+              <div className="about-terminal-title">about-us · zsh</div>
             </div>
 
             {/* Terminal content */}

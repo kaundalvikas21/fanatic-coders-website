@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     q: "How long does a typical project take from start to launch?",
-    a: "Timelines vary by scope. A landing page or MVP typically takes 2–4 weeks. A full web application or e-commerce platform is usually 6–12 weeks. We provide a detailed timeline during the discovery phase.",
+    a: "Timelines vary by scope. A landing page or MVP typically takes 2 to 4 weeks. A full web application or e-commerce platform is usually 6 to 12 weeks. We provide a detailed timeline during the discovery phase.",
   },
   {
     q: "Do you work with startups and early-stage teams?",

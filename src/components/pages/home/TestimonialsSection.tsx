@@ -12,7 +12,7 @@ const testimonials = [
     company: "TechVision",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop",
     quote:
-      "Their expertise in modern web technologies transformed our digital presence. The team's attention to detail and innovative solutions exceeded our expectations.",
+      "They rebuilt our marketing site and dashboard in eight weeks. Page loads dropped from four seconds to under one, and the team sweated every detail along the way.",
     tags: ["Web Development", "UI/UX", "Performance"],
     metrics: { improvement: "+150%", metric: "Performance" },
     accentColor: "#7c3aed",
@@ -24,7 +24,7 @@ const testimonials = [
     company: "EcoTech Solutions",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop",
     quote:
-      "Working with them was a game-changer for our e-commerce platform. The results were immediate: faster load times, better conversion rates, and happier customers.",
+      "They reworked our checkout and the numbers moved fast. Load times dropped, conversion went up, and support tickets about the cart basically stopped.",
     tags: ["E-commerce", "Optimization", "SEO"],
     metrics: { improvement: "+85%", metric: "Conversion" },
     accentColor: "#06b6d4",
@@ -36,7 +36,7 @@ const testimonials = [
     company: "HealthTech Global",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop",
     quote:
-      "Their team brought our healthcare application to life with cutting-edge technology while maintaining strict security standards. Truly exceptional work!",
+      "They shipped our healthcare app on time and passed our security review on the first pass. We trusted them with the hard parts and they delivered.",
     tags: ["Healthcare", "Security", "Mobile Apps"],
     metrics: { improvement: "100%", metric: "Security" },
     accentColor: "#10b981",
@@ -48,7 +48,7 @@ const testimonials = [
     company: "FinanceFlow",
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=200&h=200&auto=format&fit=crop",
     quote:
-      "The team's deep understanding of fintech requirements and ability to deliver secure, scalable solutions made them the perfect partner for our project.",
+      "They understood our fintech constraints from day one and built something that scaled cleanly as we grew. Easy team to work with.",
     tags: ["Fintech", "Security", "Cloud"],
     metrics: { improvement: "10x", metric: "Scalability" },
     accentColor: "#a855f7",

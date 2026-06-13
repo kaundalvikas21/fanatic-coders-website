@@ -36,12 +36,14 @@ function IconInstagram({ size = 18 }: { size?: number }) {
 import GradientButton from "@/components/ui/GradientButton"
 
 const footerLinks = {
+  // TODO: point each to its `/services/<slug>` detail route once those pages exist.
+  // For now all land on the /services hub so footer links don't 404.
   services: [
-    { name: "Web Development", href: "/services/web-development" },
-    { name: "E-Commerce",       href: "/services/ecommerce"       },
-    { name: "Mobile Apps",      href: "/services/mobile-apps"     },
-    { name: "UI/UX Design",     href: "/services/ui-ux"           },
-    { name: "Cloud Solutions",  href: "/services/cloud"           },
+    { name: "Web Development", href: "/services" },
+    { name: "E-Commerce",       href: "/services" },
+    { name: "Mobile Apps",      href: "/services" },
+    { name: "UI/UX Design",     href: "/services" },
+    { name: "Cloud Solutions",  href: "/services" },
   ],
   company: [
     { name: "About Us", href: "/about"   },
@@ -113,7 +115,7 @@ export default function Footer() {
             <div>
               <h3 className="text-3xl font-bold mb-4">Ready to Start Your Project?</h3>
               <p className="text-blue-100/70 mb-6">
-                Let&apos;s create something extraordinary together. Our team is ready to bring your vision to life.
+                Tell us what you&apos;re building and we&apos;ll bring the team to make it real.
               </p>
               <GradientButton href="/contact">
                 startConversation
@@ -142,7 +144,7 @@ export default function Footer() {
               <span className="text-white">{"}"}</span>
             </Link>
             <p className="text-blue-100/70">
-              Crafting exceptional digital experiences with cutting-edge technology and innovative solutions.
+              We design and build digital products with modern technology.
             </p>
             <div className="flex gap-4">
               {footerLinks.social.map(({ name, Icon, href }) => (
@@ -166,7 +168,7 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-6">Services</h4>
             <ul className="space-y-4 list-none m-0 p-0">
               {footerLinks.services.map(link => (
-                <li key={link.href}>
+                <li key={link.name}>
                   <Link href={link.href} className="text-blue-100/70 hover:text-white transition-colors flex items-center group no-underline">
                     <ChevronRight size={14} className="text-indigo-400 mr-2 opacity-0 group-hover:opacity-100 transition-all" aria-hidden />
                     {link.name}

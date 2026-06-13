@@ -12,7 +12,7 @@ import Footer from "@/components/layout/Footer"
 export const metadata: Metadata = {
   title: "fanaticCoders | Digital Agency",
   description:
-    "Professional web design, development & digital marketing — crafting exceptional digital experiences with cutting-edge technology.",
+    "Professional web design, development, and digital marketing. We build digital products with modern technology.",
 }
 
 export default function RootLayout({

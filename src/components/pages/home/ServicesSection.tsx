@@ -48,10 +48,10 @@ const services: Service[] = [
     ],
   },
   { id: "web-design",       title: "Web Design & Development",    description: "Modern, responsive websites that perform beautifully on every device.", Icon: LayoutGrid,   features: ["UI Design","Responsive","Performance","SEO"],              accent: "blue",   size: "normal" },
-  { id: "ecommerce",        title: "E-Commerce",                  description: "Custom stores built to convert — from product listing to checkout.",   Icon: ShoppingCart, features: ["Custom Stores","Payments","Inventory","Analytics"],         accent: "cyan",   size: "normal" },
+  { id: "ecommerce",        title: "E-Commerce",                  description: "Custom stores built to convert, from product listing to checkout.",   Icon: ShoppingCart, features: ["Custom Stores","Payments","Inventory","Analytics"],         accent: "cyan",   size: "normal" },
   { id: "digital-branding", title: "Digital Branding & Marketing",description: "Data-driven brand strategy and campaigns that connect and convert.",    Icon: TrendingUp,   features: ["Brand Strategy","Social Media","Content","Analytics"],      accent: "green",  size: "normal" },
   { id: "seo-ppc",          title: "SEO & PPC",                   description: "Organic and paid strategies that drive the right traffic to your site.",Icon: BarChart2,    features: ["Technical SEO","Content SEO","Ad Campaigns","Analytics"],  accent: "violet", size: "normal" },
-  { id: "open-source",      title: "Open Source",                 description: "Leverage open-source power with custom plugins, integrations, and security.", Icon: Code2,   features: ["Custom Plugins","API Integration","Performance","Security"], accent: "blue",   size: "normal" },
+  { id: "open-source",      title: "Open Source",                 description: "Build on open source with custom plugins, integrations, and security.", Icon: Code2,   features: ["Custom Plugins","API Integration","Performance","Security"], accent: "blue",   size: "normal" },
 ]
 
 export default function ServicesSection() {

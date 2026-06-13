@@ -1,0 +1,6 @@
+export { ServicesHeroSection } from "./ServicesHeroSection"
+export { ServicesGroupsSection } from "./ServicesGroupsSection"
+export { ServicesProcessSection } from "./ServicesProcessSection"
+export { ServicesEngagementSection } from "./ServicesEngagementSection"
+export { ServicesWhySection } from "./ServicesWhySection"
+export { ServicesCtaSection } from "./ServicesCtaSection"
