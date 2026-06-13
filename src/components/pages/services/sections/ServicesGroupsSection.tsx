@@ -1,59 +1,9 @@
 import Link from "next/link"
-import {
-  Code2, Smartphone, ShoppingCart, Cloud, Palette, PenTool,
-  Film, TrendingUp, Search, Settings, ArrowRight,
-} from "lucide-react"
-import type { ElementType } from "react"
+import { ArrowRight } from "lucide-react"
 import { SectionHeading } from "@/components/ui/SectionHeading"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { RevealSection } from "@/components/ui/RevealSection"
-
-type Accent = "violet" | "cyan" | "green"
-
-interface ServiceItem {
-  title: string
-  description: string
-  slug: string
-  Icon: ElementType
-}
-
-interface Group {
-  key: string
-  label: string
-  blurb: string
-  accent: Accent
-  items: ServiceItem[]
-}
-
-const iconColor: Record<Accent, string> = { violet: "#a855f7", cyan: "#22d3ee", green: "#34d399" }
-
-const groups: Group[] = [
-  {
-    key: "build", label: "build", blurb: "Ship reliable products and platforms", accent: "violet",
-    items: [
-      { title: "Web Development", description: "Fast, accessible web apps on Next.js, React, and a typed backend.", slug: "web-development", Icon: Code2 },
-      { title: "Mobile Apps", description: "Native-quality iOS and Android from one cross-platform codebase.", slug: "mobile-apps", Icon: Smartphone },
-      { title: "E-Commerce", description: "Custom storefronts and checkouts built to convert and scale.", slug: "ecommerce", Icon: ShoppingCart },
-      { title: "Cloud Solutions", description: "Resilient infrastructure, APIs, and data pipelines in the cloud.", slug: "cloud", Icon: Cloud },
-    ],
-  },
-  {
-    key: "design", label: "design", blurb: "Make it clear, distinctive, and a joy to use", accent: "cyan",
-    items: [
-      { title: "UI/UX Design", description: "Research-led flows and polished interfaces in your design system.", slug: "design", Icon: Palette },
-      { title: "Brand Identity", description: "Logos, systems, and guidelines that make you instantly recognizable.", slug: "brand", Icon: PenTool },
-      { title: "Motion Design", description: "Purposeful animation that guides attention and adds delight.", slug: "motion", Icon: Film },
-    ],
-  },
-  {
-    key: "grow", label: "grow", blurb: "Reach the right people and keep shipping", accent: "green",
-    items: [
-      { title: "Digital Marketing", description: "Data-driven campaigns across the channels your users actually use.", slug: "marketing", Icon: TrendingUp },
-      { title: "SEO & Content", description: "Technical SEO and content that earns durable organic traffic.", slug: "seo", Icon: Search },
-      { title: "DevOps & Consulting", description: "CI/CD, observability, and the architecture advice to scale safely.", slug: "devops", Icon: Settings },
-    ],
-  },
-]
+import { groups, iconColor } from "../data"
 
 export function ServicesGroupsSection() {
   return (
@@ -81,8 +31,7 @@ export function ServicesGroupsSection() {
 
               <RevealSection stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {group.items.map((item) => (
-                  // TODO: link to `/services/${item.slug}` once detail routes exist; hub for now to avoid 404.
-                  <Link key={item.slug} href="/services" className="no-underline group/card">
+                  <Link key={item.slug} href={`/services/${item.slug}`} className="no-underline group/card">
                     <GlassCard accent={group.accent} lift className="h-full p-6">
                       <div
                         className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"

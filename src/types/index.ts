@@ -12,6 +12,14 @@ export interface BlogPost {
   category: string
   slug: string
   coverUrl?: string
+  author?: string
+  authorRole?: string
+  authorAvatar?: string
+  tags?: string[]
+  /** Article body as headed sections (each id anchors the table of contents). */
+  sections?: Array<{ id: string; heading: string; paragraphs: string[] }>
+  /** Short scannable summary points. */
+  takeaways?: string[]
 }
 
 export interface Service {
@@ -57,6 +65,19 @@ export interface PortfolioProject {
   tags: string[]
   stats: Array<{ label: string; value: string }>
   imageUrl?: string
+  client?: string
+  year?: string
+  industry?: string
+  duration?: string
+  services?: string[]
+  overview?: string
+  /** Case-study body blocks (e.g. Challenge / Approach / Result). */
+  sections?: Array<{ heading: string; body: string }>
+  /** Concrete "what we did" bullets for the approach section. */
+  approach?: string[]
+  tech?: string[]
+  quote?: { text: string; author: string; role: string }
+  gallery?: string[]
 }
 
 export interface CoreValue {

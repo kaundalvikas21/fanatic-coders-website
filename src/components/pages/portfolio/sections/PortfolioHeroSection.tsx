@@ -4,7 +4,7 @@ import { RevealSection } from "@/components/ui/RevealSection"
 
 export function PortfolioHeroSection() {
   return (
-    <section id="portfolio-hero" className="relative overflow-hidden pt-44 pb-22">
+    <section id="portfolio-hero" className="relative overflow-hidden pt-[184px] md:pt-[196px] pb-20">
       <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
       <div
         className="dot-grid absolute inset-0 pointer-events-none opacity-30"

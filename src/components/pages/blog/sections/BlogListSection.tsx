@@ -41,8 +41,7 @@ export function BlogListSection() {
         {/* Featured lead (only when not filtering) */}
         {!isFiltering && (
           <RevealSection>
-            {/* TODO: link to `/blog/${featured.slug}` once post pages exist; hub for now to avoid 404. */}
-            <Link href="/blog" className="no-underline group/feat block">
+            <Link href={`/blog/${featured.slug}`} className="no-underline group/feat block">
               <GlassCard accent="violet" lift className="grid md:grid-cols-2 overflow-hidden">
                 <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[320px]">
                   <Image src={featured.coverUrl!} alt={featured.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" priority />
@@ -67,8 +66,7 @@ export function BlogListSection() {
         {/* Post grid */}
         <RevealSection className={`${isFiltering ? "" : "mt-10"} grid sm:grid-cols-2 lg:grid-cols-3 gap-6`}>
           {grid.map((post) => (
-            // TODO: link to `/blog/${post.slug}` once post pages exist; hub for now to avoid 404.
-            <Link key={post.id} href="/blog" className="no-underline group/card">
+            <Link key={post.id} href={`/blog/${post.slug}`} className="no-underline group/card">
               <GlassCard lift className="h-full overflow-hidden flex flex-col">
                 <div className="relative aspect-[16/10]">
                   <Image src={post.coverUrl!} alt={post.title} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />

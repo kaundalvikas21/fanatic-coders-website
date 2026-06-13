@@ -26,8 +26,7 @@ export function BlogPopularSection() {
 
         <RevealSection stagger className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {popular.map((post) => (
-            // TODO: link to `/blog/${post.slug}` once post pages exist; hub for now to avoid 404.
-            <Link key={post.slug} href="/blog" className="no-underline group/card">
+            <Link key={post.slug} href={`/blog/${post.slug}`} className="no-underline group/card">
               <GlassCard lift className="h-full overflow-hidden flex flex-col transition-shadow group-hover/card:ring-1 group-hover/card:ring-indigo-400/30">
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Image

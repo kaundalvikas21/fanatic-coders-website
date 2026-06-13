@@ -36,14 +36,12 @@ function IconInstagram({ size = 18 }: { size?: number }) {
 import GradientButton from "@/components/ui/GradientButton"
 
 const footerLinks = {
-  // TODO: point each to its `/services/<slug>` detail route once those pages exist.
-  // For now all land on the /services hub so footer links don't 404.
   services: [
-    { name: "Web Development", href: "/services" },
-    { name: "E-Commerce",       href: "/services" },
-    { name: "Mobile Apps",      href: "/services" },
-    { name: "UI/UX Design",     href: "/services" },
-    { name: "Cloud Solutions",  href: "/services" },
+    { name: "Web Development", href: "/services/web-development" },
+    { name: "E-Commerce",       href: "/services/ecommerce"       },
+    { name: "Mobile Apps",      href: "/services/mobile-apps"     },
+    { name: "UI/UX Design",     href: "/services/design"          },
+    { name: "Cloud Solutions",  href: "/services/cloud"           },
   ],
   company: [
     { name: "About Us", href: "/about"   },
