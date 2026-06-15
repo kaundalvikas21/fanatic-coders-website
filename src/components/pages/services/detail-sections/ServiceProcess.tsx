@@ -9,7 +9,7 @@ export function ServiceProcess() {
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>
           <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-            how.<span className="text-indigo-400">weDeliver</span>()
+            how.<span style={{ color: "var(--aurora-violet-light)" }}>weDeliver</span>()
           </h2>
           <p className="mt-4 text-base text-blue-100/60 leading-relaxed max-w-[55ch]">
             The same predictable path on every engagement, from first call to launch.

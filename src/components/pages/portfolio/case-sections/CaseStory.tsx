@@ -6,7 +6,7 @@ import { RevealSection } from "@/components/ui/RevealSection"
 function CodeHeading({ fn }: { fn: string }) {
   return (
     <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-      the.<span className="text-indigo-400">{fn}</span>()
+      the.<span style={{ color: "var(--aurora-violet-light)" }}>{fn}</span>()
     </h2>
   )
 }
@@ -61,7 +61,7 @@ export function CaseStory({ project }: { project: PortfolioProject }) {
         {project.tech && project.tech.length > 0 && (
           <RevealSection>
             <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-              built.<span className="text-indigo-400">with</span>()
+              built.<span style={{ color: "var(--aurora-violet-light)" }}>with</span>()
             </h2>
             <div className="mt-6 flex flex-wrap gap-2.5">
               {project.tech.map((t) => (

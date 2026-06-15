@@ -388,7 +388,7 @@ body {
 }
 
 .heading-code .function {
-  @apply text-indigo-400;
+  color: var(--aurora-violet-light);
 }
 
 .heading-code .params {

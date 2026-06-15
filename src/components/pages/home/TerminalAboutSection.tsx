@@ -123,7 +123,7 @@ export default function TerminalAboutSection() {
         <div className="text-center mb-16">
           <div className="preheading-code">about.module</div>
           <h2 className="heading-code">
-            cat <span className="text-indigo-400">./about-us</span>
+            cat <span className="function">./about-us</span>
           </h2>
           <p className="subheading-code">{"// Get to know our story"}</p>
         </div>

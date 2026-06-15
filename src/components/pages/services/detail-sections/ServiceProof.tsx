@@ -16,7 +16,7 @@ export function ServiceProof({ service }: { service: ServiceItem }) {
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>
           <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-            proof.<span className="text-indigo-400">inProduction</span>()
+            proof.<span style={{ color: "var(--aurora-violet-light)" }}>inProduction</span>()
           </h2>
           <p className="mt-4 text-base text-blue-100/60 leading-relaxed max-w-[55ch]">
             Real projects where this work moved the numbers that mattered.

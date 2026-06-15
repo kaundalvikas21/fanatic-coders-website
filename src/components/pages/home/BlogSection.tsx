@@ -52,7 +52,7 @@ export default function BlogSection() {
         <div className="text-center mb-16">
           <div className="preheading-code">blog.module.ts</div>
           <h2 className="heading-code">
-            tech.<span className="text-indigo-400">insights</span>()
+            tech.<span className="function">insights</span>()
           </h2>
           <p className="subheading-code">{"// Latest updates from our tech universe"}</p>
         </div>

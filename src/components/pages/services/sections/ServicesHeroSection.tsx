@@ -13,15 +13,14 @@ export function ServicesHeroSection() {
 
       <div className="relative z-10 container mx-auto px-4">
         <RevealSection className="max-w-3xl mx-auto text-center">
-          <div className="preheading-code">services.module</div>
-          <h1 className="heading-code mt-3">
-            we.<span className="function">build</span>()
+          <div className="preheading-code">services</div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mt-3 leading-[1.05] tracking-tight">
+            We design and build software that <span className="text-aurora-sweep">ships</span>
           </h1>
-          <p className="subheading-code mt-3">{"// from first sketch to production scale"}</p>
 
           <p className="mt-6 text-base sm:text-lg text-blue-100/70 max-w-2xl mx-auto leading-relaxed">
-            One senior team across the whole product lifecycle: engineering, design, and growth.
-            Pick a single capability or hand us the entire build. The craft stays the same.
+            Web, mobile, commerce, and cloud work from one team. We scope it honestly,
+            build in short cycles, and stay on after launch.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">

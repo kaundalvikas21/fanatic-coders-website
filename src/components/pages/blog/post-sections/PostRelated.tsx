@@ -21,7 +21,7 @@ export function PostRelated({ post }: { post: BlogPost }) {
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>
           <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-            keep.<span className="text-indigo-400">reading</span>()
+            keep.<span style={{ color: "var(--aurora-violet-light)" }}>reading</span>()
           </h2>
         </RevealSection>
 

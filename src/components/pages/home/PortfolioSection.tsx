@@ -91,7 +91,7 @@ export default function PortfolioSection() {
         <div className="text-center mb-16">
           <div className="preheading-code">portfolio.showcase</div>
           <h2 className="heading-code">
-            case_studies.<span className="text-indigo-400">featured</span>()
+            case_studies.<span className="function">featured</span>()
           </h2>
           <p className="subheading-code">{"// Transforming challenges into digital success stories"}</p>
           <button

@@ -1,4 +1,4 @@
-import { Search, PenTool, Code2, Rocket } from "lucide-react"
+import { Search, PenTool, Code2, Rocket, LifeBuoy } from "lucide-react"
 import type { ElementType } from "react"
 import { SectionHeading } from "@/components/ui/SectionHeading"
 import { GlassCard } from "@/components/ui/GlassCard"
@@ -15,7 +15,8 @@ const steps: Step[] = [
   { n: "01", title: "Discover", description: "We pin down goals, users, and constraints, then turn them into a sharp, prioritized scope.", Icon: Search },
   { n: "02", title: "Design", description: "Flows, wireframes, and polished UI in your design system, validated before we build.", Icon: PenTool },
   { n: "03", title: "Build", description: "Senior engineers ship weekly increments with demos, tests, and CI from day one.", Icon: Code2 },
-  { n: "04", title: "Launch & iterate", description: "We deploy, measure, and refine, and stay on as partners well past go-live.", Icon: Rocket },
+  { n: "04", title: "Ship", description: "Release with tests, monitoring, and a rollback plan.", Icon: Rocket },
+  { n: "05", title: "Support", description: "We stay on after launch and hand over clean docs.", Icon: LifeBuoy },
 ]
 
 export function ServicesProcessSection() {
@@ -28,11 +29,11 @@ export function ServicesProcessSection() {
           <SectionHeading
             badge="process.flow"
             title={<>how.<span className="function">weWork</span>()</>}
-            comment="// a predictable path from idea to launch"
+            comment="// five steps, from first call to long-term support"
           />
         </RevealSection>
 
-        <RevealSection stagger className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
+        <RevealSection stagger className="mt-14 grid sm:grid-cols-2 lg:grid-cols-5 gap-5 max-w-6xl mx-auto">
           {steps.map((step) => (
             <GlassCard key={step.n} lift className="group p-7">
               <div className="flex items-center justify-between">

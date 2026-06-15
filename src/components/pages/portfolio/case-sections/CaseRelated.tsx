@@ -16,7 +16,7 @@ export function CaseRelated({ project }: { project: PortfolioProject }) {
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>
           <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-            more.<span className="text-indigo-400">work</span>()
+            more.<span style={{ color: "var(--aurora-violet-light)" }}>work</span>()
           </h2>
         </RevealSection>
         <RevealSection stagger className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
