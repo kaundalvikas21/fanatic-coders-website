@@ -706,6 +706,8 @@ textarea:-webkit-autofill {
 .reveal-stagger.visible > *:nth-child(4) { transition-delay: 180ms; opacity: 1; transform: none; }
 .reveal-stagger.visible > *:nth-child(5) { transition-delay: 240ms; opacity: 1; transform: none; }
 .reveal-stagger.visible > *:nth-child(6) { transition-delay: 300ms; opacity: 1; transform: none; }
+/* Any children past the 6th (e.g. a 3x3 capabilities grid) reveal together so they never stay hidden. */
+.reveal-stagger.visible > *:nth-child(n+7) { transition-delay: 360ms; opacity: 1; transform: none; }
 
 /* ═══════════════════════════════════════════════════
    KINETIC TYPOGRAPHY
@@ -1543,6 +1545,9 @@ textarea:-webkit-autofill {
   transform: translateY(-3px);
   box-shadow: var(--accent-glow);
 }
+
+/* Capabilities cards pop harder on hover (scoped to the service detail section). */
+.bento-card.cap-card:hover { transform: translateY(-6px) scale(1.03); }
 
 .featured-inner {
   display: flex;

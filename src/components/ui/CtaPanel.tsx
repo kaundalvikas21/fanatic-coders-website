@@ -46,8 +46,14 @@ export function CtaPanel({ sectionId, badge, heading, body, background = "var(--
             }}
           >
             <div
-              className="dot-grid absolute inset-0 pointer-events-none opacity-[0.12]"
-              style={{ maskImage: "radial-gradient(ellipse 70% 70% at 50% 60%, black, transparent 78%)" }}
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)",
+                backgroundSize: "40px 40px",
+                maskImage: "radial-gradient(ellipse 75% 75% at 50% 50%, black 35%, transparent 80%)",
+                WebkitMaskImage: "radial-gradient(ellipse 75% 75% at 50% 50%, black 35%, transparent 80%)",
+              }}
             />
 
             <div className="terminal-bar relative z-[1]">
