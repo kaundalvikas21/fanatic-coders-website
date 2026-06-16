@@ -66,7 +66,7 @@ export function CtaPanel({ sectionId, badge, heading, body, background = "var(--
             </div>
 
             <div className={`relative z-[1] px-8 text-center ${muted ? "py-10 md:py-12 md:px-16" : "py-14 md:px-16 md:py-16"}`}>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-mono font-bold text-white mb-4 tracking-tight">
                 {heading}
               </h2>
               <p className="text-base sm:text-lg text-blue-100/60 mb-9 max-w-xl mx-auto leading-relaxed">

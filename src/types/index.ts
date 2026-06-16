@@ -63,7 +63,7 @@ export interface PortfolioProject {
   title: string
   description: string
   tags: string[]
-  stats: Array<{ label: string; value: string }>
+  stats: Array<{ label: string; value: string; caption?: string; icon?: string }>
   imageUrl?: string
   client?: string
   year?: string
@@ -73,8 +73,8 @@ export interface PortfolioProject {
   overview?: string
   /** Case-study body blocks (e.g. Challenge / Approach / Result). */
   sections?: Array<{ heading: string; body: string }>
-  /** Concrete "what we did" bullets for the approach section. */
-  approach?: string[]
+  /** Delivery steps for the case study: short title, rough duration, what we did. */
+  approach?: Array<{ title: string; duration: string; desc: string }>
   tech?: string[]
   quote?: { text: string; author: string; role: string }
   gallery?: string[]
