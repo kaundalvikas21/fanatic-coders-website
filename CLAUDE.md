@@ -179,10 +179,17 @@ Visit `http://localhost:3000` to see the application.
 ```
 src/
 ├── app/                      # Next.js App Router
-│   ├── layout.tsx           # Root layout (Header/Footer wrapper)
-│   ├── page.tsx             # Home route entrypoint (renders HomePage)
+│   ├── layout.tsx           # Root layout (html/body, fonts, globals, default metadata)
 │   ├── globals.css          # Tailwind v4 + theme variables
-│   └── favicon.ico
+│   ├── favicon.ico
+│   └── (frontend)/          # Public pages route group (URL-transparent)
+│       ├── layout.tsx       # Frontend chrome: skip-link, Header, <main>, Footer
+│       ├── page.tsx         # Home route entrypoint (renders home sections) -> /
+│       ├── about/page.tsx
+│       ├── blog/page.tsx + [slug]/page.tsx
+│       ├── contact/page.tsx
+│       ├── portfolio/page.tsx + [id]/page.tsx
+│       └── services/page.tsx + [slug]/page.tsx
 ├── components/
 │   ├── layout/              # Layout components
 │   │   ├── Header.tsx       # Navigation with mega menu
