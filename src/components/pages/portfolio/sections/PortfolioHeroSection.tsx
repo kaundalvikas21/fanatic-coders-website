@@ -13,15 +13,14 @@ export function PortfolioHeroSection() {
 
       <div className="relative z-10 container mx-auto px-4">
         <RevealSection className="max-w-3xl mx-auto text-center">
-          <div className="preheading-code">portfolio.module</div>
-          <h1 className="heading-code mt-3">
-            we.<span className="function">shipped</span>()
+          <div className="preheading-code">portfolio</div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mt-3 leading-[1.05] tracking-tight">
+            Work we have <span className="text-aurora-sweep">shipped</span>
           </h1>
-          <p className="subheading-code mt-3">{"// selected work, real outcomes"}</p>
 
           <p className="mt-6 text-base sm:text-lg text-blue-100/70 max-w-2xl mx-auto leading-relaxed">
-            A look at products we&apos;ve designed and built, and the measurable results they
-            delivered for the teams behind them.
+            Products we built with clients in fintech, healthcare, retail, logistics, and SaaS.
+            Filter by service or industry to see the work that fits what you need.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">

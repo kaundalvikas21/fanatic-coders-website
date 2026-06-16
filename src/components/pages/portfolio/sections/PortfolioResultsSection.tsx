@@ -25,7 +25,7 @@ export function PortfolioResultsSection() {
         <RevealSection stagger className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-5 max-w-5xl mx-auto">
           {metrics.map((metric) => (
             <div key={metric.label} className="glass-card rounded-2xl p-6 text-center">
-              <div className="text-3xl md:text-4xl font-bold font-mono text-white tabular-nums">{metric.value}</div>
+              <div className="text-3xl md:text-4xl font-bold font-mono text-aurora-sweep tabular-nums">{metric.value}</div>
               <div className="mt-2 text-xs font-mono text-blue-100/55">{metric.label}</div>
             </div>
           ))}
