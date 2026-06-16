@@ -1,6 +1,7 @@
 import PartnersSection from "@/components/pages/home/PartnersSection"
 import {
   AboutHeroSection,
+  StorySection,
   MissionSection,
   AboutValuesSection,
   AboutStatsSection,
@@ -13,9 +14,10 @@ export function AboutPage() {
   return (
     <>
       <AboutHeroSection />
+      <StorySection />
       <MissionSection />
-      <AboutValuesSection />
       <AboutStatsSection />
+      <AboutValuesSection />
       <TeamSection />
       <ProcessSection />
       <PartnersSection />

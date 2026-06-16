@@ -1435,6 +1435,10 @@ textarea:-webkit-autofill {
 .answer-panel.is-exiting { animation: panelExit 200ms cubic-bezier(0.4,0,1,1) forwards; }
 .answer-panel.is-entering { animation: panelEnter 520ms cubic-bezier(0.16,1,0.3,1) forwards; }
 
+/* About "our story" timeline panel — reuses the FAQ panel keyframes */
+.story-panel.is-exiting { animation: panelExit 200ms cubic-bezier(0.4,0,1,1) forwards; }
+.story-panel.is-entering { animation: panelEnter 520ms cubic-bezier(0.16,1,0.3,1) forwards; }
+
 .answer-question {
   font-size: 1.25rem;
   font-weight: 700;
@@ -1487,6 +1491,7 @@ textarea:-webkit-autofill {
 
 @media (prefers-reduced-motion: reduce) {
   .answer-panel.is-exiting, .answer-panel.is-entering { animation: none; }
+  .story-panel.is-exiting, .story-panel.is-entering { animation: none; }
   .faq-row, .row-arrow { transition: none; }
 }
 
