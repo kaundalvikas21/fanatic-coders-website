@@ -5,9 +5,10 @@ import { ServiceHero } from "./detail-sections/ServiceHero"
 import { ServiceIncluded } from "./detail-sections/ServiceIncluded"
 import { ServiceCapabilities } from "./detail-sections/ServiceCapabilities"
 import { ServiceProcess } from "./detail-sections/ServiceProcess"
+import { ServiceDeliverables } from "./detail-sections/ServiceDeliverables"
 import { ServiceProof } from "./detail-sections/ServiceProof"
+import { ServiceEngagement } from "./detail-sections/ServiceEngagement"
 import { ServiceFaq } from "./detail-sections/ServiceFaq"
-import { ServiceRelated } from "./detail-sections/ServiceRelated"
 
 export function ServiceDetailPage({ service, group }: { service: ServiceItem; group: ServiceGroup }) {
   return (
@@ -19,10 +20,11 @@ export function ServiceDetailPage({ service, group }: { service: ServiceItem; gr
         <ServiceIncluded service={service} group={group} />
       )}
       <ServiceProcess />
+      <ServiceDeliverables group={group} />
       <TechStackSection />
-      <ServiceProof service={service} />
+      <ServiceProof service={service} group={group} />
+      <ServiceEngagement />
       <ServiceFaq service={service} />
-      <ServiceRelated service={service} group={group} />
       <CtaBand
         title="Ready to start?"
         subtitle="Tell us the problem and we'll bring the right team to build it."

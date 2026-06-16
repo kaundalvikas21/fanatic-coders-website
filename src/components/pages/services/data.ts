@@ -11,6 +11,7 @@ import {
   Target, Mail, FlaskConical, Users, Megaphone,
   FileText, Link2, KeyRound,
   GitBranch, ClipboardList,
+  Repeat,
 } from "lucide-react"
 import type { ElementType } from "react"
 
@@ -67,6 +68,50 @@ export const serviceProcess = [
   { n: "05", title: "QA", duration: "1 to 2 weeks", desc: "Automated tests, manual passes, and accessibility checks." },
   { n: "06", title: "Launch", duration: "2 to 4 days", desc: "Deploy with monitoring in place and a rollback plan ready." },
   { n: "07", title: "Support", duration: "ongoing", desc: "We stay on, fix what surfaces in real use, and hand over docs." },
+]
+
+/** Shared handover artifacts, the same at the end of every engagement. */
+export const serviceDeliverables: Capability[] = [
+  { Icon: GitBranch,   title: "Source files and assets", description: "Everything we produce, editable and owned by you." },
+  { Icon: BookOpen,    title: "Documentation",           description: "Clear docs so your team can run and extend the work." },
+  { Icon: Users,       title: "Handover session",        description: "A live walkthrough with the people who did the work." },
+  { Icon: ShieldCheck, title: "Quality checks",          description: "The work tested and reviewed before it ships." },
+  { Icon: Rocket,      title: "Launch support",          description: "Help through go-live and the first weeks after." },
+  { Icon: KeyRound,    title: "Full ownership",          description: "All rights and access, no lock-in to us." },
+]
+
+/** A way to bring us in. Shared across every service line. */
+export interface EngagementModel {
+  label: string
+  title: string
+  tagline: string
+  suits: string
+  included: string[]
+  Icon: ElementType
+  accent: Accent
+  primary?: boolean
+}
+
+/** Shared engagement models, the same for every service. */
+export const engagementModels: EngagementModel[] = [
+  {
+    label: "project", title: "Project", tagline: "Fixed scope, clear deadline.",
+    suits: "Work with defined requirements.",
+    included: ["Scoped statement of work", "Fixed timeline", "Dedicated team", "Weekly demos"],
+    Icon: Package, accent: "violet",
+  },
+  {
+    label: "retainer", title: "Retainer", tagline: "Ongoing monthly capacity.",
+    suits: "Continuous product work.",
+    included: ["Reserved hours each month", "Priority queue", "Monthly planning", "One point of contact"],
+    Icon: Repeat, accent: "cyan", primary: true,
+  },
+  {
+    label: "team augmentation", title: "Team Augmentation", tagline: "Our people in your team.",
+    suits: "Scaling an existing team.",
+    included: ["Senior specialists", "Your tools and process", "Flexible ramp up", "Knowledge transfer"],
+    Icon: Users, accent: "green",
+  },
 ]
 
 export const groups: ServiceGroup[] = [

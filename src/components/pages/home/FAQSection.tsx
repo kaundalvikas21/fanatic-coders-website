@@ -1,6 +1,4 @@
-"use client"
-
-import { useEffect, useRef, useState } from "react"
+import { FaqInteractive } from "@/components/ui/FaqInteractive"
 
 const faqs = [
   {
@@ -33,46 +31,13 @@ const faqs = [
   },
 ]
 
-type Phase = "idle" | "exiting" | "entering"
-
 export default function FAQSection() {
-  const sectionRef   = useRef<HTMLElement>(null)
-  const [visible, setVisible]           = useState(false)
-  const [activeIndex, setActiveIndex]   = useState(0)
-  const [displayIndex, setDisplayIndex] = useState(0)
-  const [phase, setPhase]               = useState<Phase>("idle")
-
-  // Scroll reveal
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.1 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
-  function selectFaq(i: number) {
-    if (i === activeIndex || phase !== "idle") return
-    setActiveIndex(i)
-    setPhase("exiting")
-    setTimeout(() => {
-      setDisplayIndex(i)
-      setPhase("entering")
-      setTimeout(() => setPhase("idle"), 420)
-    }, 180)
-  }
-
-  const v = visible ? "visible" : ""
-
   return (
-    <section ref={sectionRef} className="faq-section py-24 relative overflow-hidden">
+    <section className="faq-section py-24 relative overflow-hidden">
       <div className="container mx-auto px-4 max-w-6xl">
 
         {/* Header */}
-        <div className={`text-center mb-16 reveal ${v}`}>
+        <div className="text-center mb-16">
           <div className="preheading-code">faq.support</div>
           <h2 className="heading-code mt-2">
             Got Questions?{" "}
@@ -83,65 +48,7 @@ export default function FAQSection() {
           </p>
         </div>
 
-        {/* Two-column layout */}
-        <div className={`faq-layout reveal ${v}`} style={{ transitionDelay: "180ms" }}>
-
-          {/* Left: Question list */}
-          <div className="question-list" role="tablist" aria-label="FAQ questions">
-            {faqs.map((faq, i) => (
-              <div
-                key={i}
-                className={`faq-item${activeIndex === i ? " active" : ""}`}
-              >
-                <button
-                  type="button"
-                  className={`faq-row${activeIndex === i ? " active" : ""}`}
-                  role="tab"
-                  aria-selected={activeIndex === i}
-                  aria-controls="faq-panel"
-                  id={`faq-tab-${i}`}
-                  onClick={() => selectFaq(i)}
-                >
-                  <span className="faq-q-text">{faq.q}</span>
-                  <svg
-                    className={`row-arrow${activeIndex === i ? " active" : ""}`}
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-
-                {/* Mobile-only inline accordion */}
-                <div className={`mobile-answer${activeIndex === i ? " open" : ""}`}>
-                  <div className="mobile-answer-inner">
-                    <p className="mobile-answer-text">{faq.a}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Right: Animated answer panel (desktop only) */}
-          <div
-            id="faq-panel"
-            className={`answer-panel glass-card-md${phase === "exiting" ? " is-exiting" : ""}${phase === "entering" ? " is-entering" : ""}`}
-            role="tabpanel"
-            aria-labelledby={`faq-tab-${activeIndex}`}
-          >
-            <p className="answer-question">{faqs[displayIndex].q}</p>
-            <p className="answer-text">{faqs[displayIndex].a}</p>
-          </div>
-
-        </div>
+        <FaqInteractive items={faqs} />
       </div>
     </section>
   )
