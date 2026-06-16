@@ -6,8 +6,6 @@ import "@fontsource/jetbrains-mono/400.css"
 import "@fontsource/jetbrains-mono/600.css"
 import "@fontsource/jetbrains-mono/700.css"
 import "./globals.css"
-import Header from "@/components/layout/Header"
-import Footer from "@/components/layout/Footer"
 
 export const metadata: Metadata = {
   title: "fanaticCoders | Digital Agency",
@@ -22,14 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body>
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
-        <Header />
-        <main id="main-content">{children}</main>
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
