@@ -1,5 +1,3 @@
-import TestimonialsSection from "@/components/pages/home/TestimonialsSection"
-import PartnersSection from "@/components/pages/home/PartnersSection"
 import {
   ContactHeroSection,
   ContactSection,
@@ -15,8 +13,6 @@ export function ContactPage() {
       <ContactSection />
       <ContactReasonsSection />
       <ContactProcessSection />
-      <TestimonialsSection />
-      <PartnersSection />
       <ContactFaqSection />
     </>
   )
