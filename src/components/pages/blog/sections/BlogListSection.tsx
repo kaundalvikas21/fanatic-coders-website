@@ -9,11 +9,12 @@ import { RevealSection } from "@/components/ui/RevealSection"
 import { SectionHeading } from "@/components/ui/SectionHeading"
 import { posts } from "../data"
 import { useBlogFilter } from "../BlogFilterContext"
+import { categoryColor } from "@/lib/categoryColor"
 
 export function BlogListSection() {
-  const { query, category } = useBlogFilter()
+  const { query, category, tag } = useBlogFilter()
   const q = query.trim().toLowerCase()
-  const isFiltering = category !== "All" || q !== ""
+  const isFiltering = category !== "All" || q !== "" || tag !== ""
 
   const featured = posts[0]
   const grid = useMemo(() => {
@@ -21,9 +22,10 @@ export function BlogListSection() {
     return pool.filter((p) => {
       const matchesCat = category === "All" || p.category === category
       const matchesQ = q === "" || `${p.title} ${p.excerpt}`.toLowerCase().includes(q)
-      return matchesCat && matchesQ
+      const matchesTag = tag === "" || Boolean(p.tags?.includes(tag))
+      return matchesCat && matchesQ && matchesTag
     })
-  }, [category, q, isFiltering])
+  }, [category, q, tag, isFiltering])
 
   return (
     <section id="blog-list" className="py-20 md:py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
@@ -95,7 +97,7 @@ export function BlogListSection() {
 
 function CategoryTag({ category }: { category: string }) {
   return (
-    <span className="inline-flex w-fit items-center rounded-full bg-indigo-500/12 px-2.5 py-0.5 text-[11px] font-mono text-indigo-300">
+    <span className={`inline-flex w-fit items-center rounded-full px-2.5 py-0.5 text-[11px] font-mono ring-1 ${categoryColor(category).chip}`}>
       {category}
     </span>
   )

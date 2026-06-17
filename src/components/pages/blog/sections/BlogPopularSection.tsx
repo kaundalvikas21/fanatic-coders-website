@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { RevealSection } from "@/components/ui/RevealSection"
 import { posts, popularSlugs } from "../data"
+import { categoryColor } from "@/lib/categoryColor"
 
 const popular = popularSlugs
   .map((slug) => posts.find((p) => p.slug === slug))
@@ -37,7 +38,7 @@ export function BlogPopularSection() {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-                  <span className="absolute left-3 top-3 rounded-full bg-indigo-500/20 px-2.5 py-1 text-[11px] font-mono text-indigo-200 ring-1 ring-indigo-400/30 backdrop-blur-sm">
+                  <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-mono ring-1 backdrop-blur-sm ${categoryColor(post.category).chip}`}>
                     {post.category}
                   </span>
                 </div>

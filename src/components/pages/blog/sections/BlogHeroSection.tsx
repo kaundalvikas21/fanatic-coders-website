@@ -1,12 +1,12 @@
 "use client"
 
-import { Search } from "lucide-react"
+import { Search, X } from "lucide-react"
 import { RevealSection } from "@/components/ui/RevealSection"
 import { categories } from "../data"
 import { useBlogFilter } from "../BlogFilterContext"
 
 export function BlogHeroSection() {
-  const { query, setQuery, category, setCategory } = useBlogFilter()
+  const { query, setQuery, category, setCategory, tag, setTag } = useBlogFilter()
 
   return (
     <section id="blog-hero" className="relative overflow-hidden pt-[184px] md:pt-[196px] pb-20">
@@ -17,14 +17,13 @@ export function BlogHeroSection() {
       />
 
       <div className="relative z-10 container mx-auto px-4">
-        <RevealSection className="max-w-2xl mx-auto text-center">
+        <RevealSection className="max-w-3xl mx-auto text-center">
           <div className="preheading-code">blog.module</div>
-          <h1 className="heading-code mt-3">
-            we.<span className="function">write</span>()
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mt-3 leading-[1.05] tracking-tight">
+            Notes from the people who <span className="text-aurora-sweep">ship</span>
           </h1>
-          <p className="subheading-code mt-3">{"// field notes on building software that lasts"}</p>
 
-          <p className="mt-6 text-base sm:text-lg text-blue-100/70 leading-relaxed">
+          <p className="mt-6 text-base sm:text-lg text-blue-100/70 leading-relaxed max-w-2xl mx-auto">
             Practical writing from the team on architecture decisions, design craft, and the
             lessons we learn shipping real products.
           </p>
@@ -65,6 +64,21 @@ export function BlogHeroSection() {
               )
             })}
           </div>
+
+          {/* Active tag filter */}
+          {tag !== "" && (
+            <div className="mt-4 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setTag("")}
+                aria-label={`Clear tag filter ${tag}`}
+                className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/20 px-3 py-1.5 text-sm font-mono text-indigo-200 border border-indigo-400/40 transition-colors hover:bg-indigo-500/30 hover:text-white"
+              >
+                #{tag}
+                <X size={13} aria-hidden />
+              </button>
+            </div>
+          )}
         </RevealSection>
       </div>
     </section>

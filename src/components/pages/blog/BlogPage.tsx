@@ -6,9 +6,9 @@ import {
   BlogNewsletterSection,
 } from "./sections"
 
-export function BlogPage() {
+export function BlogPage({ initialTag }: { initialTag?: string }) {
   return (
-    <BlogFilterProvider>
+    <BlogFilterProvider initialTag={initialTag}>
       <BlogHeroSection />
       <BlogListSection />
       <BlogPopularSection />

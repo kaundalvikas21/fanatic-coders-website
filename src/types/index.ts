@@ -17,10 +17,17 @@ export interface BlogPost {
   authorAvatar?: string
   tags?: string[]
   /** Article body as headed sections (each id anchors the table of contents). */
-  sections?: Array<{ id: string; heading: string; paragraphs: string[] }>
+  sections?: Array<{ id: string; heading: string; paragraphs?: string[]; blocks?: ArticleBlock[] }>
   /** Short scannable summary points. */
   takeaways?: string[]
 }
+
+/** A rich content block inside an article section. Renders when `blocks` is set; otherwise the section falls back to `paragraphs`. */
+export type ArticleBlock =
+  | { type: "p"; text: string }
+  | { type: "code"; lang?: string; code: string }
+  | { type: "list"; ordered?: boolean; items: string[] }
+  | { type: "quote"; text: string; cite?: string }
 
 export interface Service {
   id: string

@@ -7,6 +7,12 @@ export const metadata: Metadata = {
     "Field notes from the fanaticCoders team: architecture decisions, design craft, and lessons from shipping real software.",
 }
 
-export default function Page() {
-  return <BlogPage />
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string | string[] }>
+}) {
+  const { tag } = await searchParams
+  const initialTag = Array.isArray(tag) ? tag[0] : tag
+  return <BlogPage initialTag={initialTag} />
 }

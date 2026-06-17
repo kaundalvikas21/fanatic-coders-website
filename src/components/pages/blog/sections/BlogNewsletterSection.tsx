@@ -15,7 +15,7 @@ export function BlogNewsletterSection() {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!EMAIL_RE.test(email.trim())) {
-      setError("Please enter a valid email.")
+      setError("Enter a valid email, like name@company.com.")
       return
     }
     setError(null)
@@ -37,7 +37,7 @@ export function BlogNewsletterSection() {
       {done ? (
         <div className="inline-flex items-center gap-2 rounded-lg bg-green-500/15 px-5 py-3 text-sm text-green-300">
           <Check size={16} aria-hidden />
-          Your email app should open, hit send to confirm your signup.
+          Your email app should open. Send the message to finish subscribing.
         </div>
       ) : (
         <form onSubmit={handleSubmit} noValidate className="mx-auto flex w-full max-w-md flex-col sm:flex-row gap-3">
@@ -49,9 +49,11 @@ export function BlogNewsletterSection() {
               value={email}
               onChange={(e) => { setEmail(e.target.value); if (error) setError(null) }}
               placeholder="you@company.com"
-              className={`w-full rounded-lg bg-white/5 px-4 py-3 text-sm text-white placeholder:text-blue-100/35 border outline-none transition-colors focus:border-indigo-400/60 ${error ? "border-red-400/60" : "border-white/10"}`}
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? "newsletter-email-error" : undefined}
+              className={`w-full rounded-lg bg-white/5 px-4 py-3 text-sm text-white placeholder:text-blue-100/50 border outline-none transition-colors focus:border-indigo-400/60 ${error ? "border-red-400/60" : "border-white/10"}`}
             />
-            {error && <p className="mt-1.5 text-xs text-red-300">{error}</p>}
+            {error && <p id="newsletter-email-error" role="alert" className="mt-1.5 text-xs text-red-300">{error}</p>}
           </div>
           <GradientButton type="submit">
             subscribe

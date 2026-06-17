@@ -71,6 +71,9 @@
    AURORA DESIGN SYSTEM — Fanatic Coders
    ═══════════════════════════════════════════════════ */
 :root {
+  /* Offset below the fixed header (116px) for anchor landing + sticky rails. */
+  --header-offset: 8.5rem;
+
   /* Shadcn/ui light mode defaults */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -196,6 +199,12 @@
   }
   html {
     @apply font-sans;
+  }
+  /* Clickable controls signal it: native buttons default to the arrow cursor. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
   }
 }
 
@@ -486,7 +495,7 @@ body {
 }
 
 .text-aurora-sweep {
-  background: linear-gradient(135deg, var(--aurora-violet), var(--aurora-blue), var(--aurora-cyan), var(--aurora-violet));
+  background: linear-gradient(135deg, var(--aurora-violet-light), var(--aurora-blue-light), var(--aurora-cyan-light), var(--aurora-violet-light));
   background-size: 300% 300%;
   animation: gradient 5s ease infinite;
   -webkit-background-clip: text;
@@ -636,6 +645,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .team-card-glow::after { animation: none; }
+  .text-aurora-sweep { animation: none; }
 }
 
 /* Process step number: faint watermark that fills with aurora color on card hover.
@@ -708,6 +718,16 @@ textarea:-webkit-autofill {
 .reveal-stagger.visible > *:nth-child(6) { transition-delay: 300ms; opacity: 1; transform: none; }
 /* Any children past the 6th (e.g. a 3x3 capabilities grid) reveal together so they never stay hidden. */
 .reveal-stagger.visible > *:nth-child(n+7) { transition-delay: 360ms; opacity: 1; transform: none; }
+
+/* Motion-sensitive users get the content instantly, no fade/slide. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* ═══════════════════════════════════════════════════
    KINETIC TYPOGRAPHY
@@ -1837,6 +1857,12 @@ textarea:-webkit-autofill {
 
 /* Violet icon colour for stats */
 .text-aurora-violet-icon { color: #a855f7; }
+
+/* Skip render work for below-fold sections; reserve height so CLS stays ~0. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .word-reveal, .subheading-reveal, .stats-card {
