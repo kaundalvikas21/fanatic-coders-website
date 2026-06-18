@@ -10,7 +10,7 @@ export function ServiceHero({ service, group }: { service: ServiceItem; group: S
   const { Icon } = service
 
   return (
-    <section className="relative overflow-hidden pt-[184px] md:pt-[196px] pb-20">
+    <section className="relative overflow-hidden hero-shell pb-20">
       <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>

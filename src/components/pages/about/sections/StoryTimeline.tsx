@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type KeyboardEvent } from "react"
 import { cn } from "@/lib/utils"
 
 type Phase = "idle" | "exiting" | "entering"
@@ -23,17 +23,20 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
   const [displayIndex, setDisplayIndex] = useState(0)
   const [phase, setPhase] = useState<Phase>("idle")
   const reduced = useRef(false)
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   useEffect(() => {
     reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches
   }, [])
 
-  function select(i: number) {
-    if (i === activeIndex || phase !== "idle") return
+  // Returns true when the selection actually moved, so keyboard nav only shifts
+  // focus on a real change (not when a mid-animation press is ignored).
+  function select(i: number): boolean {
+    if (i === activeIndex || phase !== "idle") return false
     setActiveIndex(i)
     if (reduced.current) {
       setDisplayIndex(i)
-      return
+      return true
     }
     setPhase("exiting")
     setTimeout(() => {
@@ -41,6 +44,34 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
       setPhase("entering")
       setTimeout(() => setPhase("idle"), 420)
     }, 180)
+    return true
+  }
+
+  // Roving arrow-key navigation for the tablist (both axes, since the rail is
+  // vertical on desktop and horizontal on mobile). Home/End jump to the ends.
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    const count = items.length
+    let next = -1
+    switch (e.key) {
+      case "ArrowDown":
+      case "ArrowRight":
+        next = (activeIndex + 1) % count
+        break
+      case "ArrowUp":
+      case "ArrowLeft":
+        next = (activeIndex - 1 + count) % count
+        break
+      case "Home":
+        next = 0
+        break
+      case "End":
+        next = count - 1
+        break
+      default:
+        return
+    }
+    e.preventDefault()
+    if (select(next)) tabRefs.current[next]?.focus()
   }
 
   if (items.length === 0) return null
@@ -52,7 +83,9 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
       <div
         role="tablist"
         aria-label="Company timeline"
-        className="relative flex flex-row gap-2 overflow-x-auto pb-2 lg:flex-col lg:gap-0 lg:overflow-visible lg:pb-0"
+        aria-orientation="vertical"
+        onKeyDown={onKeyDown}
+        className="relative flex flex-row flex-wrap gap-2 lg:flex-col lg:flex-nowrap lg:gap-0 lg:overflow-visible"
       >
         {/* Desktop connector spine */}
         <span
@@ -64,13 +97,23 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
           return (
             <button
               key={m.year}
+              ref={(el) => { tabRefs.current[i] = el }}
               type="button"
               role="tab"
               id={`story-tab-${i}`}
               aria-selected={isActive}
               aria-controls="story-panel"
+              tabIndex={isActive ? 0 : -1}
               onClick={() => select(i)}
-              className="group relative flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors lg:shrink lg:py-3.5 lg:pl-0 lg:pr-3"
+              className={cn(
+                // Mobile: a self-contained tappable chip (years wrap, no swipe).
+                // Desktop (lg): plain rail row beside the connector spine.
+                "group relative flex min-h-[44px] shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-left ring-1 transition-colors",
+                "lg:gap-3 lg:shrink lg:rounded-lg lg:bg-transparent lg:px-0 lg:py-3.5 lg:pr-3 lg:ring-0",
+                isActive
+                  ? "bg-[var(--aurora-violet-light)]/12 ring-[var(--aurora-violet-light)]/40"
+                  : "bg-white/[0.04] ring-white/10 hover:bg-white/[0.06]"
+              )}
             >
               <span
                 aria-hidden
@@ -85,15 +128,15 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
                 <span
                   className={cn(
                     "font-mono text-base font-bold tabular-nums transition-colors",
-                    isActive ? "text-white" : "text-blue-100/55 group-hover:text-blue-100/80"
+                    isActive ? "text-white" : "text-blue-100/75 group-hover:text-white"
                   )}
                 >
                   {m.year}
                 </span>
                 <span
                   className={cn(
-                    "text-xs transition-colors",
-                    isActive ? "text-[var(--aurora-violet-light)]" : "text-blue-100/40 group-hover:text-blue-100/60"
+                    "hidden text-xs transition-colors md:block",
+                    isActive ? "text-[var(--aurora-violet-light)]" : "text-blue-100/65 group-hover:text-blue-100/85"
                   )}
                 >
                   {m.label}
@@ -108,7 +151,8 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
       <div
         id="story-panel"
         role="tabpanel"
-        aria-labelledby={`story-tab-${activeIndex}`}
+        aria-labelledby={`story-tab-${displayIndex}`}
+        tabIndex={0}
         className="terminal-card mt-6 lg:mt-0"
       >
         <div className="terminal-bar">
@@ -130,13 +174,16 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
           <p className="font-mono text-sm text-white/35" aria-hidden>
             {">"} cat story/{active.year}.log
           </p>
-          <p className="mt-5 font-mono text-sm text-[#a855f7]">
+          <p className="mt-5 font-mono text-sm text-[var(--aurora-violet-light)]">
             # {active.year} · {active.label}
           </p>
-          <h3 className="mt-2 text-2xl font-bold leading-tight md:text-3xl">
+          <h3 className="mt-2 text-2xl font-bold leading-tight md:text-3xl lg:text-4xl">
             <span className="text-aurora-sweep">{active.title}</span>
           </h3>
           <p className="mt-4 text-base leading-relaxed text-blue-100/70 md:text-lg">{active.body}</p>
+          <p className="mt-6 font-mono text-sm text-white/30" aria-hidden>
+            {">"} <span className="about-cursor" />
+          </p>
         </div>
       </div>
     </div>

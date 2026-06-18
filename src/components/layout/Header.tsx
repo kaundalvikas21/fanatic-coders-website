@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { SITE_STATS } from "@/lib/site-stats"
 import {
   LayoutGrid,
   Code2,
@@ -78,9 +79,9 @@ const megaMenu = {
     cta: "startProject",
     description: "Tell us your vision and we'll respond within 24 hours.",
     stats: [
-      { number: "150+", label: "Projects"     },
-      { number: "98%",  label: "Satisfaction" },
-      { number: "10+",  label: "Years Exp."   },
+      { number: SITE_STATS.projectsDelivered, label: "Projects"     },
+      { number: SITE_STATS.clientRetention,   label: "Satisfaction" },
+      { number: SITE_STATS.yearsShipping,     label: "Years Exp."   },
     ],
   },
 }

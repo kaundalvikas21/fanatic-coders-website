@@ -32,7 +32,7 @@ export function CaseHero({ project }: { project: PortfolioProject }) {
   const titleHead = titleWords.join(" ")
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col overflow-hidden pt-[184px] md:pt-[196px] pb-16">
+    <section className="relative flex min-h-[100svh] flex-col overflow-hidden hero-shell pb-16">
       {/* Background */}
       {hasImage ? (
         <>

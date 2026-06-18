@@ -1,21 +1,43 @@
 import { RevealSection } from "@/components/ui/RevealSection"
+import { CountUp } from "@/components/ui/CountUp"
+import { SITE_STATS } from "@/lib/site-stats"
 
+// About carries the company cut (who we are). Project/impact numbers live on Portfolio.
 const stats: { value: string; label: string }[] = [
-  { value: "8+", label: "years_shipping" },
-  { value: "120+", label: "projects_delivered" },
-  { value: "40+", label: "team_members" },
-  { value: "98%", label: "client_retention" },
+  { value: SITE_STATS.yearsShipping, label: "years_shipping" },
+  { value: SITE_STATS.teamMembers, label: "team_members" },
+  { value: SITE_STATS.clientRetention, label: "client_retention" },
 ]
 
 export function AboutStatsSection() {
   return (
-    <section id="impact" className="py-20 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
+    <section
+      id="impact"
+      aria-labelledby="impact-heading"
+      className="scroll-mt-28 py-20 relative overflow-hidden"
+      style={{ background: "var(--dark-1)" }}
+    >
       <div className="relative z-10 container mx-auto px-4">
-        <RevealSection stagger className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-5xl mx-auto">
+        <h2 id="impact-heading" className="sr-only">
+          fanaticCoders by the numbers
+        </h2>
+
+        {/* Borderless divided row, not a card grid: thin rules separate the figures,
+            dark space carries the rest. dl/dt/dd ties each label to its number. */}
+        <RevealSection
+          as="dl"
+          stagger
+          className="mx-auto flex max-w-4xl flex-col divide-y divide-white/10 sm:flex-row sm:divide-x sm:divide-y-0"
+        >
           {stats.map((stat) => (
-            <div key={stat.label} className="glass-card rounded-2xl p-6 text-center">
-              <div className="text-3xl md:text-4xl font-bold font-mono text-aurora-sweep tabular-nums">{stat.value}</div>
-              <div className="mt-2 text-xs font-mono text-blue-100/55">{stat.label}</div>
+            <div
+              key={stat.label}
+              className="flex flex-1 flex-col-reverse items-center gap-2 px-6 py-6 text-center sm:py-3"
+            >
+              <dt className="font-mono text-xs tracking-wider text-blue-100/55">{stat.label}</dt>
+              <dd className="font-mono text-4xl font-bold tabular-nums text-aurora-sweep md:text-5xl lg:text-6xl">
+                <CountUp value={stat.value} />
+              </dd>
             </div>
           ))}
         </RevealSection>

@@ -10,20 +10,20 @@ const principles = [
 ]
 
 const codeLines: { text: string; cls: string }[] = [
-  { text: "const mission = {", cls: "text-[#a855f7]" },
-  { text: "  craft: 'production-grade',", cls: "text-blue-100/55" },
-  { text: "  speed: 'weeks not quarters',", cls: "text-blue-100/55" },
-  { text: "  partners: true,", cls: "text-blue-100/55" },
-  { text: "}", cls: "text-[#a855f7]" },
+  { text: "const mission = {", cls: "text-[var(--aurora-violet-light)]" },
+  { text: "  craft: 'production-grade',", cls: "text-blue-100/65" },
+  { text: "  speed: 'weeks not quarters',", cls: "text-blue-100/65" },
+  { text: "  partners: true,", cls: "text-blue-100/65" },
+  { text: "}", cls: "text-[var(--aurora-violet-light)]" },
 ]
 
 export function MissionSection() {
   return (
-    <section id="mission" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
+    <section id="mission" className="scroll-mt-28 py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
           {/* Left: copy */}
           <RevealSection>
             <SectionHeading
@@ -32,12 +32,12 @@ export function MissionSection() {
               title={<>why.<span className="function">weExist</span>()</>}
               comment="// build software teams wish they had written"
             />
-            <p className="mt-6 text-blue-100/70 leading-relaxed">
+            <p className="mt-6 text-base sm:text-lg text-blue-100/70 leading-relaxed">
               We started fanaticCoders because too much software ships slow and brittle. Our
               answer is small senior teams and tight feedback loops, with the product actually
               working for real users as the thing we measure.
             </p>
-            <ul className="mt-6 space-y-3">
+            <ul className="mt-8 space-y-3">
               {principles.map((p) => (
                 <li key={p} className="flex items-start gap-3 text-sm text-blue-100/75">
                   <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500/15">

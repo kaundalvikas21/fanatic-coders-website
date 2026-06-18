@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Users, ArrowRight } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
+import { SITE_STATS } from "@/lib/site-stats"
 
 const aboutContent = [
   {
@@ -26,10 +27,10 @@ const aboutContent = [
     command: "cat team/stats.json",
     output: [
       "{",
-      '  "team_size": 50,',
-      '  "years_experience": 10,',
-      '  "projects_completed": 500,',
-      '  "happy_clients": "98%"',
+      `  "team_size": ${parseInt(SITE_STATS.teamMembers, 10)},`,
+      `  "years_experience": ${parseInt(SITE_STATS.yearsShipping, 10)},`,
+      `  "projects_completed": ${parseInt(SITE_STATS.projectsDelivered, 10)},`,
+      `  "happy_clients": "${SITE_STATS.clientRetention}"`,
       "}",
     ],
   },

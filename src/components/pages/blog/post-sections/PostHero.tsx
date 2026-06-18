@@ -26,7 +26,7 @@ export function PostHero({ post }: { post: BlogPost }) {
   const titleLast = lastSpace === -1 ? trimmedTitle : trimmedTitle.slice(lastSpace + 1)
 
   return (
-    <section className="relative overflow-hidden pt-[184px] md:pt-[196px] pb-20">
+    <section className="relative overflow-hidden hero-shell pb-20">
       {/* Background */}
       {hasImage ? (
         <>
@@ -47,7 +47,7 @@ export function PostHero({ post }: { post: BlogPost }) {
           <div className="mt-8 flex justify-center">
             <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-mono uppercase tracking-[0.12em] ring-1 backdrop-blur-sm ${categoryColor(post.category).chip}`}><CatIcon size={12} aria-hidden />{post.category}</span>
           </div>
-          <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-[1.05] tracking-tight">
+          <h1 className="hero-h1 mt-5 text-white">
             {titleHead && <>{titleHead} </>}<span className="text-[var(--aurora-violet-light)]">{titleLast}</span>
           </h1>
           <p className="mt-5 text-lg md:text-xl text-blue-100/85 text-pretty leading-relaxed max-w-[58ch] mx-auto">{post.excerpt}</p>

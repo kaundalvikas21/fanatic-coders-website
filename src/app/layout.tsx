@@ -20,6 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        {/* Without JS the IntersectionObserver never runs, so reveal wrappers would
+            stay at opacity:0. Force them visible for no-JS users and crawlers. */}
+        <noscript>
+          <style>{`.reveal,.reveal-stagger>*{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body>{children}</body>
     </html>
   )

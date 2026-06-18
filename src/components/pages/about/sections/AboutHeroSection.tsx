@@ -20,7 +20,7 @@ export function AboutHeroSection() {
   return (
     <section
       id="about-hero"
-      className="relative flex min-h-[100svh] flex-col overflow-hidden pt-[184px] md:pt-[196px] pb-16"
+      className="hero-shell relative flex min-h-[100svh] flex-col overflow-hidden pb-16"
     >
       <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
       <div
@@ -31,14 +31,14 @@ export function AboutHeroSection() {
       <div className="relative z-10 container mx-auto px-4 flex flex-1 flex-col justify-center">
         <RevealSection className="max-w-3xl mx-auto text-center">
           <div className="preheading-code">about.module</div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mt-3 leading-[1.05] tracking-tight">
+          <h1 className="hero-h1 mt-3">
             We build software that <span className="text-aurora-sweep">earns its keep</span>
           </h1>
 
           <p className="mt-6 text-base sm:text-lg text-blue-100/70 max-w-2xl mx-auto leading-relaxed">
             fanaticCoders is a small senior team. We design and build web and mobile products,
-            then stay on to keep them fast and useful. No layers, no handoffs to junior staff,
-            just the people who wrote the code answering for it.
+            then stay on to keep them fast and useful. The people who write your code are the
+            ones who answer for it. No junior handoffs.
           </p>
         </RevealSection>
 
@@ -55,11 +55,11 @@ export function AboutHeroSection() {
         </RevealSection>
 
         <RevealSection className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <GradientButton href="/contact">
+          <GradientButton href="/contact" className="w-full sm:w-auto">
             startAProject
             <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
           </GradientButton>
-          <GradientButton href="/portfolio" variant="secondary">
+          <GradientButton href="/portfolio" variant="secondary" className="w-full sm:w-auto">
             seeOurWork
           </GradientButton>
         </RevealSection>

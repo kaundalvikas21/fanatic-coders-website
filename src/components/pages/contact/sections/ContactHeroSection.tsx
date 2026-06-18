@@ -2,7 +2,7 @@ import { RevealSection } from "@/components/ui/RevealSection"
 
 export function ContactHeroSection() {
   return (
-    <section id="contact-hero" className="relative overflow-hidden pt-[184px] md:pt-[196px] pb-20">
+    <section id="contact-hero" className="relative overflow-hidden hero-shell pb-20">
       <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
       <div
         className="dot-grid absolute inset-0 pointer-events-none opacity-30"
@@ -12,7 +12,7 @@ export function ContactHeroSection() {
       <div className="relative z-10 container mx-auto px-4">
         <RevealSection className="max-w-3xl mx-auto text-center">
           <div className="preheading-code">contact.module</div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mt-3 leading-[1.05] tracking-tight">
+          <h1 className="hero-h1 mt-3">
             Tell us what you&apos;re <span className="text-aurora-sweep">building</span>
           </h1>
 

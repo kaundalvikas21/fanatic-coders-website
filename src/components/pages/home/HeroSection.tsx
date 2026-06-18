@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, startTransition } from "react"
 import { BarChart2, Target, Zap, Wrench, ArrowRight } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
+import { SITE_STATS } from "@/lib/site-stats"
 
 const impactfulTexts = [
   "npm create digital-excellence",
@@ -12,10 +13,10 @@ const impactfulTexts = [
 ]
 
 const stats = [
-  { number: "150+", label: "Projects Completed",  Icon: BarChart2 },
-  { number: "98%",  label: "Client Satisfaction", Icon: Target    },
-  { number: "10+",  label: "Years Experience",     Icon: Zap       },
-  { number: "24/7", label: "Support Available",    Icon: Wrench    },
+  { number: SITE_STATS.projectsDelivered, label: "Projects Completed",  Icon: BarChart2 },
+  { number: SITE_STATS.clientRetention,   label: "Client Satisfaction", Icon: Target    },
+  { number: SITE_STATS.yearsShipping,     label: "Years Experience",    Icon: Zap       },
+  { number: "24/7",                       label: "Support Available",   Icon: Wrench    },
 ]
 
 const headingWords = ["We", "Create", "Digital", "Experiences", "That", "Matter"]

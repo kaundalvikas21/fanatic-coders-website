@@ -107,7 +107,7 @@ export function TeamSection() {
   }, [paused, hovered, reduced, goNext])
 
   return (
-    <section id="team" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
+    <section id="team" className="scroll-mt-28 py-24 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">
@@ -176,25 +176,46 @@ export function TeamSection() {
             </button>
           </div>
 
-          {/* Dots (pill style, page-based) — matches home portfolio */}
-          <div className="mt-10 flex justify-center items-center gap-4" role="tablist" aria-label="Select team slide">
-            {Array.from({ length: pages }).map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                role="tab"
-                aria-selected={active === i}
-                aria-label={`Go to slide ${i + 1}`}
-                onClick={() => goTo(i)}
-                className="relative flex h-8 w-8 items-center justify-center rounded-full"
-              >
-                <span className="absolute h-1 w-5 rounded-full bg-indigo-500/20" />
-                <span
-                  className="absolute h-1 w-5 rounded-full bg-indigo-500 transition-transform duration-300"
-                  style={{ transform: `scaleX(${active === i ? 1 : 0})`, transformOrigin: "left" }}
-                />
-              </button>
-            ))}
+          {/* Pager: dots, with prev/next arrows joining the row on mobile (md+ uses the
+              flanking card arrows instead, so only one arrow pair is ever in the a11y tree). */}
+          <div className="mt-10 flex justify-center items-center gap-2 sm:gap-4">
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Previous team members"
+              className="md:hidden flex shrink-0 items-center justify-center h-11 w-10 rounded-full border border-indigo-500/30 bg-indigo-500/20 text-indigo-300 transition-colors hover:bg-indigo-500/30 hover:text-indigo-200"
+            >
+              <ArrowLeft size={18} aria-hidden />
+            </button>
+
+            <div className="flex items-center gap-2 sm:gap-4" role="tablist" aria-label="Select team slide">
+              {Array.from({ length: pages }).map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={active === i}
+                  aria-label={`Go to slide ${i + 1}`}
+                  onClick={() => goTo(i)}
+                  className="relative flex h-11 w-8 sm:w-11 items-center justify-center rounded-full"
+                >
+                  <span className="absolute h-1 w-5 rounded-full bg-indigo-500/20" />
+                  <span
+                    className="absolute h-1 w-5 rounded-full bg-indigo-500 transition-transform duration-300"
+                    style={{ transform: `scaleX(${active === i ? 1 : 0})`, transformOrigin: "left" }}
+                  />
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Next team members"
+              className="md:hidden flex shrink-0 items-center justify-center h-11 w-10 rounded-full border border-indigo-500/30 bg-indigo-500/20 text-indigo-300 transition-colors hover:bg-indigo-500/30 hover:text-indigo-200"
+            >
+              <ArrowRight size={18} aria-hidden />
+            </button>
           </div>
         </RevealSection>
       </div>
@@ -212,24 +233,31 @@ function TeamCard({ member }: { member: TeamMember }) {
         className="object-cover transition-transform duration-500 group-hover:scale-105"
         sizes="(max-width: 640px) 82vw, (max-width: 1024px) 46vw, 32vw"
       />
-      {/* base + hover scrim */}
+      {/* base gradient; extra scrim is on by default (touch) and hover-gated on desktop */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-      <div className="absolute inset-0 bg-black/45 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100" />
+      <div className="absolute inset-0 bg-black/45 opacity-100 transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100" />
 
-      {/* content pinned to bottom; bio + socials reveal on hover/focus */}
+      {/* content pinned to bottom; bio + socials always show on touch, reveal on hover/focus at lg+ */}
       <div className="absolute inset-x-0 bottom-0 p-5">
-        <h3 className="text-lg font-bold text-white leading-tight">{member.name}</h3>
+        <h3 className="text-xl font-bold text-white leading-tight">{member.name}</h3>
         <p className="mt-1 text-xs font-mono text-indigo-300">{member.role}</p>
 
-        <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-within:grid-rows-[1fr] group-focus-within:opacity-100">
+        <div className="grid grid-rows-[1fr] opacity-100 transition-all duration-300 ease-out lg:grid-rows-[0fr] lg:opacity-0 lg:group-hover:grid-rows-[1fr] lg:group-hover:opacity-100 lg:group-focus-within:grid-rows-[1fr] lg:group-focus-within:opacity-100">
           <div className="overflow-hidden">
             <p className="mt-3 text-sm text-blue-100/85 leading-relaxed">{member.bio}</p>
-            {member.socials && (
-              <div className="mt-4 flex gap-3">
-                {member.socials.github && <SocialLink href={member.socials.github} label={`${member.name} on GitHub`}><IconGithub size={16} /></SocialLink>}
-                {member.socials.linkedin && <SocialLink href={member.socials.linkedin} label={`${member.name} on LinkedIn`}><IconLinkedin size={16} /></SocialLink>}
-              </div>
-            )}
+            {(() => {
+              // Only render a link when the URL is real (placeholder "#" entries are skipped,
+              // so we never ship a focusable link that goes nowhere).
+              const gh = realUrl(member.socials?.github)
+              const li = realUrl(member.socials?.linkedin)
+              if (!gh && !li) return null
+              return (
+                <div className="mt-4 flex gap-3">
+                  {gh && <SocialLink href={gh} label={`${member.name} on GitHub`}><IconGithub size={16} /></SocialLink>}
+                  {li && <SocialLink href={li} label={`${member.name} on LinkedIn`}><IconLinkedin size={16} /></SocialLink>}
+                </div>
+              )
+            })()}
           </div>
         </div>
       </div>
@@ -251,11 +279,18 @@ function useReducedMotion() {
   )
 }
 
+// Treats placeholder "#" (and empty) as "no link" so dead links never render.
+function realUrl(url?: string): string | null {
+  return url && url !== "#" ? url : null
+}
+
 function SocialLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
   return (
     <a
       href={href}
       aria-label={label}
+      target="_blank"
+      rel="noopener noreferrer"
       className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white/80 backdrop-blur-sm transition-colors hover:bg-indigo-500/30 hover:text-white"
     >
       {children}

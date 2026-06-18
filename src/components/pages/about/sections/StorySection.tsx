@@ -13,7 +13,7 @@ const STORY_MILESTONES: StoryMilestone[] = [
   {
     year: "2020",
     label: "First product teams",
-    title: "Past freelance work",
+    title: "From shop to studio",
     body: "We grew into full product teams that design, build, and release in one place. Remote from day one.",
   },
   {
@@ -38,7 +38,7 @@ const STORY_MILESTONES: StoryMilestone[] = [
 
 export function StorySection() {
   return (
-    <section id="story" className="py-24 relative overflow-hidden">
+    <section id="story" className="scroll-mt-28 py-24 relative overflow-hidden">
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">

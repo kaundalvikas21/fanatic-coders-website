@@ -1,11 +1,13 @@
 import { SectionHeading } from "@/components/ui/SectionHeading"
 import { RevealSection } from "@/components/ui/RevealSection"
+import { SITE_STATS } from "@/lib/site-stats"
 
+// Portfolio carries the work cut (what we shipped). Company numbers live on About.
 const metrics: { value: string; label: string }[] = [
-  { value: "120+", label: "projects_shipped" },
-  { value: "2.4M+", label: "users_reached" },
-  { value: "+41%", label: "avg_conversion_lift" },
-  { value: "98%", label: "client_retention" },
+  { value: SITE_STATS.projectsDelivered, label: "projects_shipped" },
+  { value: SITE_STATS.usersReached, label: "users_reached" },
+  { value: SITE_STATS.avgConversionLift, label: "avg_conversion_lift" },
+  { value: SITE_STATS.clientRetention, label: "client_retention" },
 ]
 
 export function PortfolioResultsSection() {
