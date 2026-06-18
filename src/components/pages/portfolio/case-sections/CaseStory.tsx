@@ -16,7 +16,7 @@ function Heading({ children }: { children: string }) {
 
 function Band({ tier, children }: { tier: string; children: ReactNode }) {
   return (
-    <section className="relative overflow-hidden py-20 md:py-28" style={{ background: `var(${tier})` }}>
+    <section className="relative overflow-hidden section-y" style={{ background: `var(${tier})` }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">{children}</div>
     </section>

@@ -77,7 +77,7 @@ export default function PortfolioSection() {
 
   return (
     <section
-      className="min-h-screen py-12 md:py-24 relative overflow-hidden"
+      className="min-h-screen section-y relative overflow-hidden"
       id="portfolio"
       style={{ background: "var(--dark-3)" }}
     >

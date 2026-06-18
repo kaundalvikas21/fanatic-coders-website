@@ -51,7 +51,7 @@ export default function ServiceCarousel() {
   }, [])
 
   return (
-    <section className="py-12 relative overflow-hidden">
+    <section className="section-y relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]" />

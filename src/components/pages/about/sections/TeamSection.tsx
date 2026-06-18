@@ -107,7 +107,7 @@ export function TeamSection() {
   }, [paused, hovered, reduced, goNext])
 
   return (
-    <section id="team" className="scroll-mt-28 py-24 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
+    <section id="team" className="scroll-mt-28 section-y relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">
@@ -159,7 +159,7 @@ export function TeamSection() {
             <div
               ref={trackRef}
               onScroll={onScroll}
-              className="flex-1 min-w-0 flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="flex-1 min-w-0 flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-2 scrollbar-none"
             >
               {team.map((member) => (
                 <TeamCard key={member.id} member={member} />

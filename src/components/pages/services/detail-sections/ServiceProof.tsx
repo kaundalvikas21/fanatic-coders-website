@@ -27,7 +27,7 @@ export function ServiceProof({ service, group }: { service: ServiceItem; group: 
   const chips = (project.services ?? project.tags ?? []).slice(0, 3)
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28" style={{ background: "var(--dark-2)" }}>
+    <section className="relative overflow-hidden section-y" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
       <div
         className="dot-grid absolute inset-0 pointer-events-none opacity-30"

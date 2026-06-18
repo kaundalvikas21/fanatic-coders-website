@@ -24,7 +24,7 @@ interface CtaPanelProps {
 export function CtaPanel({ sectionId, badge, heading, body, background = "var(--dark-2)", variant = "primary", children }: CtaPanelProps) {
   const muted = variant === "muted"
   return (
-    <section id={sectionId} className="py-24 relative overflow-hidden" style={{ background }}>
+    <section id={sectionId} className="section-y relative overflow-hidden" style={{ background }}>
       {!muted && (
         <div
           className="absolute inset-0 pointer-events-none"
@@ -37,7 +37,7 @@ export function CtaPanel({ sectionId, badge, heading, body, background = "var(--
           <div
             className="relative overflow-hidden rounded-2xl border border-white/10"
             style={{
-              background: "#00000063",
+              background: "rgba(12, 10, 22, 0.45)",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
               boxShadow: muted
@@ -62,14 +62,14 @@ export function CtaPanel({ sectionId, badge, heading, body, background = "var(--
                 <span className="dot dot-yellow" />
                 <span className="dot dot-green" />
               </div>
-              <span className="ml-3 text-xs font-mono text-white/50">{badge}</span>
+              <span className="ml-3 text-xs font-mono text-white/70">{badge}</span>
             </div>
 
             <div className={`relative z-[1] px-8 text-center ${muted ? "py-10 md:py-12 md:px-16" : "py-14 md:px-16 md:py-16"}`}>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-mono font-bold text-white mb-4 tracking-tight">
                 {heading}
               </h2>
-              <p className="text-base sm:text-lg text-blue-100/60 mb-9 max-w-xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg text-blue-100/75 mb-9 max-w-xl mx-auto leading-relaxed">
                 {body}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">{children}</div>

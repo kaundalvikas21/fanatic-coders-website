@@ -94,7 +94,7 @@ export default function TestimonialsSection() {
   const v = visible ? "visible" : ""
 
   return (
-    <section ref={sectionRef} className="testimonials-section py-24 relative overflow-hidden" id="testimonials">
+    <section ref={sectionRef} className="testimonials-section section-y relative overflow-hidden" id="testimonials">
       {/* Aurora parallax background */}
       <div className="aurora-parallax absolute inset-0 pointer-events-none" />
       <div

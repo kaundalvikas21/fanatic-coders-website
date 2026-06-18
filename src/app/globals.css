@@ -413,6 +413,12 @@ body {
   padding-top: var(--hero-pt);
 }
 
+/* Unified vertical rhythm for content sections: tight on mobile, full on desktop.
+   Single source of truth — edit here to retune section spacing site-wide. */
+.section-y {
+  padding-block: clamp(3.5rem, 2.5rem + 5vw, 6rem);
+}
+
 .heading-code .function {
   color: var(--aurora-violet-light);
 }
@@ -1082,9 +1088,35 @@ textarea:-webkit-autofill {
 .mobile-item:hover { background: rgba(124,58,237,0.08); color: #fff; }
 
 /* ═══════════════════════════════════════════════════
+   THEMED SCROLLBAR (aurora) — consistent site-wide
+   ═══════════════════════════════════════════════════ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--aurora-violet) 55%, transparent) transparent;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--aurora-violet), var(--aurora-blue));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--aurora-violet-light), var(--aurora-blue-light));
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* Opt-out: containers that should stay scrollbar-free (unlayered, so it beats the
+   global themed bar above; a Tailwind layer-utility hide cannot) */
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* ═══════════════════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════════════════ */
-.footer-root { background: #000000; }
+.footer-root { background: #050509; }
 .aurora-top-fade { background: linear-gradient(to bottom, rgba(79,70,229,0.05) 0%, transparent 60%); }
 .animated-gradient-text {
   background: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4, #7c3aed);
@@ -1094,6 +1126,7 @@ textarea:-webkit-autofill {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 
 /* ═══════════════════════════════════════════════════
    CTA SECTION
@@ -1161,11 +1194,31 @@ textarea:-webkit-autofill {
 
 @media (prefers-reduced-motion: reduce) {
   .terminal-card { transition: none; }
+  /* No hover motion for the signature button under reduced motion (site-wide) */
+  .gradient-btn,
+  .gradient-btn .bg-gradient-1,
+  .gradient-btn .bg-gradient-2,
+  .gradient-btn .bg-gradient-3 { transition: none; }
+  .gradient-btn:hover { transform: none; }
+  .gradient-btn:hover .bg-gradient-1,
+  .gradient-btn:hover .bg-gradient-2,
+  .gradient-btn:hover .bg-gradient-3 { transform: none; }
+  /* Icons passed as button children: kill the hover slide too (site-wide) */
+  .gradient-btn svg { transition: none; }
+  .gradient-btn:hover svg { transform: none !important; }
 }
 
 /* ═══════════════════════════════════════════════════
    PARTNERS MARQUEE
    ═══════════════════════════════════════════════════ */
+/* Centre wash: faint violet to cyan, echoing the aurora sweep (one quiet wash per viewport) */
+.partners-glow {
+  background: radial-gradient(ellipse 60% 40% at 50% 50%,
+    color-mix(in srgb, var(--aurora-violet) 5%, transparent),
+    color-mix(in srgb, var(--aurora-cyan) 3%, transparent) 55%,
+    transparent 75%);
+}
+
 .marquee-viewport {
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
@@ -1200,13 +1253,14 @@ textarea:-webkit-autofill {
   margin-right: 1.5rem;
   border-radius: 0.75rem;
   background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(124,58,237,0.12);
-  transition: border-color 0.25s ease, background 0.25s ease;
+  border: 1px solid color-mix(in srgb, var(--aurora-violet) 12%, transparent);
+  transition: border-color var(--duration-fast) var(--ease-snappy),
+              background var(--duration-fast) var(--ease-snappy);
 }
 
 .partner-card:hover {
-  background: rgba(124,58,237,0.07);
-  border-color: rgba(124,58,237,0.28);
+  background: rgba(255,255,255,0.05);
+  border-color: color-mix(in srgb, var(--aurora-violet) 40%, transparent);
 }
 
 .partner-logo {
@@ -1225,6 +1279,19 @@ textarea:-webkit-autofill {
   filter: grayscale(0%) brightness(1);
 }
 
+/* Phones: tighter cards so logos read at a sensible size on narrow strips */
+@media (max-width: 640px) {
+  .partner-card {
+    width: 11rem;
+    padding: 1rem 1.125rem;
+    margin-right: 1rem;
+  }
+  .partner-logo {
+    height: 2rem;
+    width: 7rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-inner {
     animation: none;
@@ -1238,6 +1305,8 @@ textarea:-webkit-autofill {
     -webkit-mask-image: none;
   }
   .partner-card { margin-right: 0; }
+  /* Static wall: drop the duplicate sets so each logo shows once */
+  .partner-card[aria-hidden="true"] { display: none; }
 }
 
 /* ═══════════════════════════════════════════════════

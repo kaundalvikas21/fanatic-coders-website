@@ -33,7 +33,7 @@ const faqs = [
 
 export default function FAQSection() {
   return (
-    <section className="faq-section py-24 relative overflow-hidden">
+    <section className="faq-section section-y relative overflow-hidden">
       <div className="container mx-auto px-4 max-w-6xl">
 
         {/* Header */}

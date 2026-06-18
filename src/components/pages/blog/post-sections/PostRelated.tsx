@@ -13,7 +13,7 @@ export function PostRelated({ post }: { post: BlogPost }) {
   const related = (sameCategory.length > 0 ? sameCategory : others).slice(0, 3)
 
   return (
-    <section className="cv-auto relative overflow-hidden py-20 md:py-28" style={{ background: "var(--dark-1)" }}>
+    <section className="cv-auto relative overflow-hidden section-y" style={{ background: "var(--dark-1)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>

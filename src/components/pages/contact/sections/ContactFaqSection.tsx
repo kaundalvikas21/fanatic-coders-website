@@ -11,7 +11,7 @@ const faqs: { q: string; a: string }[] = [
 
 export function ContactFaqSection() {
   return (
-    <section id="contact-faq" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
+    <section id="contact-faq" className="section-y relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
       <div className="relative z-10 container mx-auto px-4 max-w-6xl">
         <RevealSection>
           <SectionHeading

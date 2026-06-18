@@ -12,7 +12,7 @@ const faqs: { q: string; a: string }[] = [
 
 export function ServicesFaqSection() {
   return (
-    <section id="services-faq" className="faq-section py-24 relative overflow-hidden">
+    <section id="services-faq" className="faq-section section-y relative overflow-hidden">
       <div className="relative z-10 container mx-auto px-4 max-w-6xl">
         <RevealSection>
           <SectionHeading

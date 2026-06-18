@@ -103,7 +103,7 @@ export default function CoreValuesSection() {
   const v = visible ? "visible" : ""
 
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden" id="values">
+    <section ref={sectionRef} className="section-y relative overflow-hidden" id="values">
       {/* Aurora section background */}
       <div className="absolute inset-0" style={{ background: "var(--dark-3)" }} />
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />

@@ -124,7 +124,7 @@ export default function TechStackSection() {
   const v = visible ? "visible" : ""
 
   return (
-    <section ref={sectionRef} className="techstack-section py-24 relative overflow-hidden" id="tech-stack">
+    <section ref={sectionRef} className="techstack-section section-y relative overflow-hidden" id="tech-stack">
       {/* Background */}
       <div className="absolute inset-0" style={{ background: "var(--dark-3)" }} />
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />

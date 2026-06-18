@@ -72,7 +72,7 @@ export default function ServicesSection() {
   const v = visible ? "visible" : ""
 
   return (
-    <section ref={sectionRef} className="services-section py-24 relative overflow-hidden section-bg" id="services">
+    <section ref={sectionRef} className="services-section section-y relative overflow-hidden section-bg" id="services">
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
       <div
         className="dot-grid absolute inset-0 pointer-events-none opacity-40"

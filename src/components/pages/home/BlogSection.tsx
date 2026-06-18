@@ -41,7 +41,7 @@ const blogPosts = [
 
 export default function BlogSection() {
   return (
-    <section className="py-24 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
+    <section className="section-y relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
       {/* Code-grid background */}
       <div className="absolute inset-0 -z-10">
         <div className="code-grid absolute inset-0" />

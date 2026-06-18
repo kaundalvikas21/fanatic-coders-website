@@ -113,7 +113,7 @@ export default function TerminalAboutSection() {
   }, [lines])
 
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden" id="about" style={{ background: "var(--dark-3)" }}>
+    <section ref={sectionRef} className="section-y relative overflow-hidden" id="about" style={{ background: "var(--dark-3)" }}>
       {/* Code-grid background */}
       <div className="absolute inset-0 -z-10">
         <div className="code-grid absolute inset-0" />

@@ -28,7 +28,7 @@ export function BlogListSection() {
   }, [category, q, tag, isFiltering])
 
   return (
-    <section id="blog-list" className="py-20 md:py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
+    <section id="blog-list" className="section-y relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4 max-w-6xl">

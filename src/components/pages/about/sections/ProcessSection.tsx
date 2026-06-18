@@ -19,7 +19,7 @@ const steps: Step[] = [
 
 export function ProcessSection() {
   return (
-    <section id="process" className="scroll-mt-28 py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
+    <section id="process" className="scroll-mt-28 section-y relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">

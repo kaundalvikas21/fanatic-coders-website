@@ -43,7 +43,7 @@ const cards: CardConfig[] = [
 
 export function ServicesOverviewSection() {
   return (
-    <section id="services-overview" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
+    <section id="services-overview" className="section-y relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
       <div
         className="dot-grid absolute inset-0 pointer-events-none opacity-30"

@@ -13,7 +13,7 @@ const popular = popularSlugs
 
 export function BlogPopularSection() {
   return (
-    <section id="blog-popular" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-3)" }}>
+    <section id="blog-popular" className="section-y relative overflow-hidden" style={{ background: "var(--dark-3)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4 max-w-6xl">

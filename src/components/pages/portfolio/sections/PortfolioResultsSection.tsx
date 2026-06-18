@@ -12,7 +12,7 @@ const metrics: { value: string; label: string }[] = [
 
 export function PortfolioResultsSection() {
   return (
-    <section id="portfolio-results" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
+    <section id="portfolio-results" className="section-y relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">

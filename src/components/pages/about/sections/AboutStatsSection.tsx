@@ -14,7 +14,7 @@ export function AboutStatsSection() {
     <section
       id="impact"
       aria-labelledby="impact-heading"
-      className="scroll-mt-28 py-20 relative overflow-hidden"
+      className="scroll-mt-28 section-y relative overflow-hidden"
       style={{ background: "var(--dark-1)" }}
     >
       <div className="relative z-10 container mx-auto px-4">

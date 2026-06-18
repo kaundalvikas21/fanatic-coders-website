@@ -17,7 +17,7 @@ export function CaseRelated({ project }: { project: PortfolioProject }) {
   if (related.length === 0) return null
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28" style={{ background: "var(--dark-2)" }}>
+    <section className="relative overflow-hidden section-y" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>

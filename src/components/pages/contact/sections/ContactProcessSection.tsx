@@ -20,7 +20,7 @@ const steps: Step[] = [
 
 export function ContactProcessSection() {
   return (
-    <section id="contact-process" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-3)" }}>
+    <section id="contact-process" className="section-y relative overflow-hidden" style={{ background: "var(--dark-3)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">
