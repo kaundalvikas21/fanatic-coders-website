@@ -39,7 +39,7 @@ function FilterRow({
   onSelect: (value: string) => void
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2.5" role="tablist" aria-label={`Filter projects ${label}`}>
+    <div className="flex flex-wrap items-center gap-2.5" role="group" aria-label={`Filter projects ${label}`}>
       <span className="mr-1 text-[0.7rem] font-mono uppercase tracking-[0.18em] text-blue-100/50">{label}</span>
       {options.map((opt) => {
         const isActive = active === opt
@@ -47,8 +47,7 @@ function FilterRow({
           <button
             key={opt}
             type="button"
-            role="tab"
-            aria-selected={isActive}
+            aria-pressed={isActive}
             onClick={() => onSelect(opt)}
             className={`inline-flex items-center min-h-11 rounded-full px-4 py-2 text-[0.8125rem] font-mono border transition-colors ${
               isActive
@@ -105,6 +104,13 @@ export function PortfolioGridSection() {
           <FilterRow label="by service" options={serviceOptions} active={service} onSelect={setService} />
           <FilterRow label="by industry" options={industryOptions} active={industry} onSelect={setIndustry} />
         </div>
+
+        {/* Announces the filtered result count to assistive tech on each change. */}
+        <p className="sr-only" role="status" aria-live="polite">
+          {filtered.length === 0
+            ? `No projects match ${service} and ${industry}.`
+            : `${filtered.length} project${filtered.length === 1 ? "" : "s"} shown.`}
+        </p>
 
         {/* Project grid */}
         <RevealSection className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -178,7 +184,7 @@ export function PortfolioGridSection() {
         </RevealSection>
 
         {filtered.length === 0 && (
-          <p className="mt-10 text-center text-sm font-mono text-blue-100/50">{`// no projects match ${service} + ${industry}`}</p>
+          <p aria-hidden className="mt-10 text-center text-sm font-mono text-blue-100/50">{`// no projects match ${service} + ${industry}`}</p>
         )}
       </div>
     </section>

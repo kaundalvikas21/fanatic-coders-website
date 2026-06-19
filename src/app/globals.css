@@ -361,6 +361,72 @@ body {
   background: var(--dark-0);
 }
 
+/* Darkening scrim over a hero background image so centered white copy stays AA-legible
+   over the artwork's bright spots, and the image fades into the section below. Shared by
+   the portfolio and about heroes (any full-bleed image hero). */
+.hero-bg-scrim {
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 42%, rgba(8, 8, 16, 0.42), rgba(8, 8, 16, 0.72) 100%),
+    linear-gradient(
+      to bottom,
+      rgba(8, 8, 16, 0.82) 0%,
+      rgba(8, 8, 16, 0.3) 22%,
+      rgba(8, 8, 16, 0.48) 66%,
+      var(--dark-1) 100%
+    );
+}
+
+/* Hero image load animation: image fades in and settles from a slight zoom, then a
+   one-shot aurora light band wipes across. Both play on mount (so they replay each
+   reload), composited transform/opacity only, frozen under reduced-motion. */
+@keyframes heroBgReveal {
+  from { opacity: 0; transform: scale(1.12); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.hero-bg-img {
+  animation: heroBgReveal 3s var(--ease-snappy) both;
+  will-change: transform, opacity;
+}
+
+.hero-bg-sweep {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-bg-sweep::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  left: 0;
+  width: 60%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(167, 139, 250, 0) 30%,
+    rgba(167, 139, 250, 0.08) 48%,
+    rgba(34, 211, 238, 0.05) 58%,
+    rgba(167, 139, 250, 0) 70%,
+    transparent 100%
+  );
+  filter: blur(14px);
+  mix-blend-mode: screen;
+  transform: translateX(-180%) rotate(8deg);
+  opacity: 0;
+  animation: heroBgSweep 2.2s var(--ease-smooth) 0.5s both;
+}
+@keyframes heroBgSweep {
+  0%   { transform: translateX(-180%) rotate(8deg); opacity: 0; }
+  18%  { opacity: 0.6; }
+  82%  { opacity: 0.6; }
+  100% { transform: translateX(300%) rotate(8deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-img { animation: none; opacity: 1; transform: none; will-change: auto; }
+  .hero-bg-sweep::before { animation: none; opacity: 0; }
+}
+
 
 /* ═══════════════════════════════════════════════════
    AI-NATIVE DOT GRID TEXTURE
@@ -407,6 +473,12 @@ body {
 
 .hero-shell {
   padding-top: var(--hero-pt);
+}
+
+/* Shared hero subcopy: muted blue-tinted body under the h1. Single source so every
+   page hero's lede color and measure stay aligned (margin stays per-hero in JSX). */
+.hero-subcopy {
+  @apply text-base sm:text-lg text-blue-100/70 max-w-2xl mx-auto leading-relaxed;
 }
 
 /* Unified vertical rhythm for content sections: tight on mobile, full on desktop.
@@ -684,8 +756,8 @@ body {
 .process-num {
   background-image: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.10) 0%,
-    rgba(255, 255, 255, 0.10) 50%,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.34) 50%,
     var(--aurora-cyan) 50%,
     var(--aurora-violet) 100%
   );
@@ -704,6 +776,47 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   .process-num { transition: none; }
+}
+
+/* Connected process flow: sequential steps on a rail (replaces uniform 4-up cards).
+   Equal-width steps; the rail is built from per-step left/right segments so it stays
+   aligned and breaks cleanly at each dot. Horizontal on desktop, stacked on mobile. */
+.process-step { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.process-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--aurora-violet);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--aurora-violet) 20%, transparent),
+    0 0 16px rgba(124, 58, 237, 0.45);
+}
+.process-rail-row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-block: 18px;
+}
+@media (min-width: 1024px) {
+  .process-rail-row::before,
+  .process-rail-row::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--aurora-violet) 55%, transparent),
+      color-mix(in srgb, var(--aurora-cyan) 40%, transparent)
+    );
+    opacity: 0.45;
+  }
+  .process-rail-row::before { left: 0; right: calc(50% + 12px); }
+  .process-rail-row::after  { left: calc(50% + 12px); right: 0; }
+  .process-step:first-child .process-rail-row::before { display: none; }
+  .process-step:last-child  .process-rail-row::after  { display: none; }
 }
 
 /* Keep Chrome/Safari autofill on the dark surface instead of the default white repaint. */

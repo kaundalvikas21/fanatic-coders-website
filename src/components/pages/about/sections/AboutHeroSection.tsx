@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { ArrowRight, Calendar, Users, Gauge, ShieldCheck } from "lucide-react"
 import type { ElementType } from "react"
 import GradientButton from "@/components/ui/GradientButton"
@@ -21,12 +22,19 @@ export function AboutHeroSection() {
     <section
       id="about-hero"
       className="hero-shell relative flex min-h-[100svh] flex-col overflow-hidden pb-16"
+      style={{ background: "var(--dark-1)" }}
     >
-      <div className="aurora-bg-hero absolute -inset-[14%] pointer-events-none" data-parallax="10" />
-      <div
-        className="dot-grid absolute inset-0 pointer-events-none opacity-30"
-        style={{ maskImage: "radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent 70%)" }}
+      <Image
+        src="/about_hero_bg.png"
+        alt=""
+        fill
+        priority
+        aria-hidden
+        sizes="100vw"
+        className="object-cover hero-bg-img"
       />
+      <div className="hero-bg-scrim absolute inset-0 pointer-events-none" aria-hidden="true" />
+      <div className="hero-bg-sweep" aria-hidden="true" />
 
       <div className="relative z-10 container mx-auto px-4 flex flex-1 flex-col justify-center">
         <RevealSection className="max-w-3xl mx-auto text-center">
