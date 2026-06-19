@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Users, ArrowRight } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
+import { RevealSection } from "@/components/ui/RevealSection"
 import { SITE_STATS } from "@/lib/site-stats"
 
 const aboutContent = [
@@ -119,7 +120,7 @@ export default function TerminalAboutSection() {
         <div className="code-grid absolute inset-0" />
       </div>
 
-      <div className="container mx-auto px-4">
+      <RevealSection stagger className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="preheading-code">about.module</div>
@@ -170,7 +171,7 @@ export default function TerminalAboutSection() {
             </GradientButton>
           </div>
         </div>
-      </div>
+      </RevealSection>
     </section>
   )
 }

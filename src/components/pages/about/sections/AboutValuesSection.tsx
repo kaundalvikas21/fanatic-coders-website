@@ -29,7 +29,7 @@ const values: Value[] = [
 export function AboutValuesSection() {
   return (
     <section id="values" className="section-y relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
-      <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
+      <div className="aurora-bg-section absolute -inset-[14%] pointer-events-none" data-parallax="8" />
 
       <div className="relative z-10 container mx-auto px-4">
         <RevealSection>
@@ -58,14 +58,14 @@ export function AboutValuesSection() {
               />
               <span
                 aria-hidden
-                className="mt-0.5 shrink-0 font-mono text-2xl font-bold leading-none tabular-nums transition-[text-shadow] duration-300 group-hover:[text-shadow:0_0_18px_currentColor] md:text-3xl"
+                className="mt-0.5 shrink-0 font-mono text-2xl font-bold leading-none tabular-nums transition-[text-shadow] duration-300 group-hover:[text-shadow:0_0_18px_currentColor] motion-reduce:transition-none md:text-3xl"
                 style={{ color: accentVar[value.accent] }}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div>
-                <h3 className="text-lg font-bold text-white">{value.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-blue-100/70">{value.description}</p>
+                <h3 className="text-lg font-bold text-[var(--color-text-base)]">{value.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">{value.description}</p>
               </div>
             </li>
           ))}

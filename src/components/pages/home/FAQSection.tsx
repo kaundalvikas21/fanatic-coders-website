@@ -1,4 +1,5 @@
 import { FaqInteractive } from "@/components/ui/FaqInteractive"
+import { RevealSection } from "@/components/ui/RevealSection"
 
 const faqs = [
   {
@@ -34,7 +35,7 @@ const faqs = [
 export default function FAQSection() {
   return (
     <section className="faq-section section-y relative overflow-hidden">
-      <div className="container mx-auto px-4 max-w-6xl">
+      <RevealSection stagger className="container mx-auto px-4 max-w-6xl">
 
         {/* Header */}
         <div className="text-center mb-16">
@@ -49,7 +50,7 @@ export default function FAQSection() {
         </div>
 
         <FaqInteractive items={faqs} />
-      </div>
+      </RevealSection>
     </section>
   )
 }

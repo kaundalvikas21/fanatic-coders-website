@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
+import { useScrollReveal } from "@/hooks/useScrollReveal"
 
 type Phase = "idle" | "exiting" | "entering"
 
@@ -15,22 +16,10 @@ export interface FaqEntry {
  * section and the service detail FAQ so both stay visually identical.
  */
 export function FaqInteractive({ items }: { items: FaqEntry[] }) {
-  const layoutRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const layoutRef = useScrollReveal<HTMLDivElement>({ threshold: 0.1 })
   const [activeIndex, setActiveIndex] = useState(0)
   const [displayIndex, setDisplayIndex] = useState(0)
   const [phase, setPhase] = useState<Phase>("idle")
-
-  useEffect(() => {
-    const el = layoutRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.1 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
 
   function selectFaq(i: number) {
     if (i === activeIndex || phase !== "idle") return
@@ -44,10 +33,9 @@ export function FaqInteractive({ items }: { items: FaqEntry[] }) {
   }
 
   if (items.length === 0) return null
-  const v = visible ? "visible" : ""
 
   return (
-    <div ref={layoutRef} className={`faq-layout reveal ${v}`}>
+    <div ref={layoutRef} className="faq-layout reveal">
       {/* Left: question list */}
       <div className="question-list" role="tablist" aria-label="FAQ questions">
         {items.map((faq, i) => (

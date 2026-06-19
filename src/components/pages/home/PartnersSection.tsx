@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { RevealSection } from "@/components/ui/RevealSection"
 
 const partners = [
   { name: "TechCorp",   logo: "/logos/tech-corp.svg"   },
@@ -15,7 +16,7 @@ export default function PartnersSection() {
       {/* Subtle centre wash echoing the aurora sweep */}
       <div className="absolute inset-0 -z-10 partners-glow" />
 
-      <div className="container mx-auto px-4">
+      <RevealSection stagger className="container mx-auto px-4">
         <div className="text-center mb-10 md:mb-16">
           <div className="preheading-code">trusted.partners</div>
           <h2 className="heading-code">
@@ -60,7 +61,7 @@ export default function PartnersSection() {
           </div>
         </div>
 
-      </div>
+      </RevealSection>
     </section>
   )
 }

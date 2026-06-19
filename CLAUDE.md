@@ -378,6 +378,12 @@ src/
 
 ## Animations
 
+**Single source of truth: `ANIMATION.md` + `src/lib/motion.ts`.** Two layers: scroll **reveals**
+use `<RevealSection>` / `useScrollReveal` (CSS + IntersectionObserver, lightweight); **complex
+motion** (count-up, typewriter, parallax) uses GSAP via `useCountUp` / `useTypewriter` / `motion.ts`.
+Never hand-roll `IntersectionObserver`/`rAF` or inline `cubic-bezier`. CSS hover/micro transitions
+reference `var(--ease-*)` / `var(--duration-*)`. Read `ANIMATION.md` before adding motion.
+
 This project uses a hybrid animation approach:
 
 ### GSAP (for complex animations)

@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import {
   Code2, Database, Brain, TrendingUp,
   Bot, Link, LineChart,
 } from "lucide-react"
 import type { ElementType } from "react"
+import { RevealSection } from "@/components/ui/RevealSection"
 import type { SimpleIcon } from "simple-icons"
 import {
   siReact, siVuedotjs, siAngular, siSvelte, siNextdotjs, siTypescript,
@@ -100,31 +101,16 @@ const categories: Category[] = [
 ]
 
 export default function TechStackSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [visible, setVisible]         = useState(false)
   const [activeCat, setActiveCat]     = useState(categories[0])
   const [fadeKey, setFadeKey]         = useState(0)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.1 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
 
   function switchCategory(cat: Category) {
     setActiveCat(cat)
     setFadeKey(k => k + 1)
   }
 
-  const v = visible ? "visible" : ""
-
   return (
-    <section ref={sectionRef} className="techstack-section section-y relative overflow-hidden" id="tech-stack">
+    <section className="techstack-section section-y relative overflow-hidden" id="tech-stack">
       {/* Background */}
       <div className="absolute inset-0" style={{ background: "var(--dark-3)" }} />
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
@@ -135,7 +121,7 @@ export default function TechStackSection() {
 
       <div className="relative z-10 container mx-auto px-4">
         {/* Header */}
-        <div className={`text-center mb-16 reveal ${v}`}>
+        <RevealSection className="text-center mb-16">
           <div className="preheading-code">tech.stack</div>
           <h2 className="heading-code mt-2">
             our.<span style={{ color: "#a855f7" }}>technologies</span>()
@@ -143,11 +129,11 @@ export default function TechStackSection() {
           <p className="subheading-code mt-3">
             {"// the tools we reach for to build and ship"}
           </p>
-        </div>
+        </RevealSection>
 
         {/* Category tabs */}
-        <div
-          className={`flex flex-wrap justify-center gap-3 mb-12 reveal ${v}`}
+        <RevealSection
+          className="flex flex-wrap justify-center gap-3 mb-12"
           role="tablist"
           aria-label="Technology categories"
         >
@@ -166,7 +152,7 @@ export default function TechStackSection() {
               {cat.name}
             </button>
           ))}
-        </div>
+        </RevealSection>
 
         {/* Tech grid — key-based remount triggers CSS fade-in */}
         <div

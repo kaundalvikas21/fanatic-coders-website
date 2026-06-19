@@ -39,7 +39,7 @@ const STORY_MILESTONES: StoryMilestone[] = [
 export function StorySection() {
   return (
     <section id="story" className="scroll-mt-28 section-y relative overflow-hidden">
-      <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
+      <div className="aurora-bg-section absolute -inset-[14%] pointer-events-none" data-parallax="8" />
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
@@ -50,7 +50,7 @@ export function StorySection() {
               title={<>our.<span className="function">story</span>()</>}
               comment="// how we got here, since 2018"
             />
-            <p className="mt-6 text-base sm:text-lg text-blue-100/70 leading-relaxed">
+            <p className="mt-6 text-base sm:text-lg text-[var(--color-text-muted)] leading-relaxed">
               We did not start with a pitch deck. We started with code that had to work, for
               clients who needed it to. Here is the short version of how the team took shape.
             </p>

@@ -20,7 +20,7 @@ const steps: Step[] = [
 export function ProcessSection() {
   return (
     <section id="process" className="scroll-mt-28 section-y relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
-      <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
+      <div className="aurora-bg-section absolute -inset-[14%] pointer-events-none" data-parallax="8" />
 
       <div className="relative z-10 container mx-auto px-4">
         <RevealSection>
@@ -36,7 +36,8 @@ export function ProcessSection() {
         <div className="relative mx-auto mt-14 max-w-6xl">
           <span
             aria-hidden
-            className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-6 h-px bg-white/10"
+            data-draw="connector"
+            className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-6 h-px origin-left bg-white/10"
           />
           <RevealSection
             as="ol"
@@ -50,9 +51,9 @@ export function ProcessSection() {
                 </span>
                 <div className="mt-5 flex items-center justify-center gap-2">
                   <step.Icon size={18} className="shrink-0 text-[var(--aurora-cyan-light)]" aria-hidden />
-                  <h3 className="text-lg font-bold text-white">{step.title}</h3>
+                  <h3 className="text-lg font-bold text-[var(--color-text-base)]">{step.title}</h3>
                 </div>
-                <p className="mt-2 max-w-[28ch] text-sm text-blue-100/70 leading-relaxed">{step.description}</p>
+                <p className="mt-2 max-w-[28ch] text-sm text-[var(--color-text-muted)] leading-relaxed">{step.description}</p>
               </li>
             ))}
           </RevealSection>

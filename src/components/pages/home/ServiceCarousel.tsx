@@ -24,9 +24,33 @@ export default function ServiceCarousel() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (prefersReducedMotion) return
 
+    const SPEED = 60 // px per second (was 1px/frame @60fps; now frame-rate independent)
     let scrollPos = 0
-    let animId: number
+    let animId = 0
     let totalWidth = 0
+    let lastTs = 0
+    let running = false
+
+    function tick(now: number) {
+      const dt = lastTs ? (now - lastTs) / 1000 : 0
+      lastTs = now
+      if (totalWidth > 0) {
+        scrollPos = (scrollPos + SPEED * dt) % totalWidth
+        container!.scrollLeft = scrollPos
+      }
+      animId = requestAnimationFrame(tick)
+    }
+    function start() {
+      if (running) return
+      running = true
+      lastTs = 0
+      animId = requestAnimationFrame(tick)
+    }
+    function stop() {
+      if (!running) return
+      running = false
+      cancelAnimationFrame(animId)
+    }
 
     // Measure after a tick to let layout settle
     const tid = setTimeout(() => {
@@ -35,18 +59,19 @@ export default function ServiceCarousel() {
         const style = window.getComputedStyle(el)
         return sum + el.offsetWidth + parseFloat(style.marginRight || "0") + 24 /* gap-6 = 24px */
       }, 0)
-
-      function tick() {
-        scrollPos = (scrollPos + 1) % totalWidth
-        if (container) container.scrollLeft = scrollPos
-        animId = requestAnimationFrame(tick)
-      }
-      animId = requestAnimationFrame(tick)
     }, 100)
+
+    // Only animate while the strip is on screen.
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) start(); else stop() },
+      { threshold: 0 }
+    )
+    io.observe(container)
 
     return () => {
       clearTimeout(tid)
       cancelAnimationFrame(animId)
+      io.disconnect()
     }
   }, [])
 
@@ -54,7 +79,7 @@ export default function ServiceCarousel() {
     <section className="section-y relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(124,58,237,0.05),transparent_50%)]" />
         <div className="code-grid absolute inset-0" />
       </div>
 
@@ -67,8 +92,8 @@ export default function ServiceCarousel() {
       </div>
 
       {/* Left/right gradient fade overlays */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0f0f1a] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0f0f1a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[var(--dark-1)] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[var(--dark-1)] to-transparent z-10 pointer-events-none" />
 
       {/* Tag carousel */}
       <div
@@ -82,8 +107,8 @@ export default function ServiceCarousel() {
               key={`${tag}-${i}`}
               className="service-tag flex-none px-6 py-3 rounded-lg flex items-center gap-2"
               style={{
-                background: "rgba(79,70,229,0.15)",
-                border: "1px solid rgba(79,70,229,0.3)",
+                background: "rgba(124,58,237,0.15)",
+                border: "1px solid rgba(124,58,237,0.3)",
                 color: "rgba(255,255,255,0.8)",
               }}
             >

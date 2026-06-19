@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Clock, Calendar, ArrowRight, Hash, FileText } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
+import { RevealSection } from "@/components/ui/RevealSection"
 
 const blogPosts = [
   {
@@ -47,7 +48,7 @@ export default function BlogSection() {
         <div className="code-grid absolute inset-0" />
       </div>
 
-      <div className="container mx-auto px-4">
+      <RevealSection stagger className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="preheading-code">blog.module.ts</div>
@@ -140,7 +141,7 @@ export default function BlogSection() {
             <FileText size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
           </GradientButton>
         </div>
-      </div>
+      </RevealSection>
     </section>
   )
 }

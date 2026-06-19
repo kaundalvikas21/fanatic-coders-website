@@ -121,7 +121,7 @@ export function TeamSection() {
           {!reduced && (
             <button
               type="button"
-              className="mt-6 inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-sm text-blue-100/80 transition-colors hover:bg-indigo-500/20"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg border border-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] bg-[color-mix(in_oklab,var(--aurora-violet)_10%,transparent)] px-4 py-2 text-sm text-[var(--color-text-muted)] transition-colors hover:bg-[color-mix(in_oklab,var(--aurora-violet)_20%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-violet-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--dark-1)]"
               onClick={() => setPaused((p) => !p)}
               aria-pressed={paused}
             >
@@ -150,7 +150,7 @@ export function TeamSection() {
               type="button"
               onClick={goPrev}
               aria-label="Previous team members"
-              className="hidden md:flex shrink-0 items-center justify-center h-11 w-11 rounded-full border border-indigo-500/30 bg-indigo-500/20 text-indigo-300 backdrop-blur-sm transition-colors hover:bg-indigo-500/30 hover:text-indigo-200"
+              className="hidden md:flex shrink-0 items-center justify-center h-11 w-11 rounded-full border border-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] bg-[color-mix(in_oklab,var(--aurora-violet)_20%,transparent)] text-[var(--aurora-violet-light)] backdrop-blur-sm transition-colors hover:bg-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] hover:text-[var(--color-text-base)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-violet-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--dark-1)]"
             >
               <ArrowLeft size={22} aria-hidden />
             </button>
@@ -170,7 +170,7 @@ export function TeamSection() {
               type="button"
               onClick={goNext}
               aria-label="Next team members"
-              className="hidden md:flex shrink-0 items-center justify-center h-11 w-11 rounded-full border border-indigo-500/30 bg-indigo-500/20 text-indigo-300 backdrop-blur-sm transition-colors hover:bg-indigo-500/30 hover:text-indigo-200"
+              className="hidden md:flex shrink-0 items-center justify-center h-11 w-11 rounded-full border border-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] bg-[color-mix(in_oklab,var(--aurora-violet)_20%,transparent)] text-[var(--aurora-violet-light)] backdrop-blur-sm transition-colors hover:bg-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] hover:text-[var(--color-text-base)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-violet-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--dark-1)]"
             >
               <ArrowRight size={22} aria-hidden />
             </button>
@@ -183,7 +183,7 @@ export function TeamSection() {
               type="button"
               onClick={goPrev}
               aria-label="Previous team members"
-              className="md:hidden flex shrink-0 items-center justify-center h-11 w-10 rounded-full border border-indigo-500/30 bg-indigo-500/20 text-indigo-300 transition-colors hover:bg-indigo-500/30 hover:text-indigo-200"
+              className="md:hidden flex shrink-0 items-center justify-center h-11 w-11 rounded-full border border-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] bg-[color-mix(in_oklab,var(--aurora-violet)_20%,transparent)] text-[var(--aurora-violet-light)] transition-colors hover:bg-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] hover:text-[var(--color-text-base)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-violet-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--dark-1)]"
             >
               <ArrowLeft size={18} aria-hidden />
             </button>
@@ -197,11 +197,11 @@ export function TeamSection() {
                   aria-selected={active === i}
                   aria-label={`Go to slide ${i + 1}`}
                   onClick={() => goTo(i)}
-                  className="relative flex h-11 w-8 sm:w-11 items-center justify-center rounded-full"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-violet-light)]"
                 >
-                  <span className="absolute h-1 w-5 rounded-full bg-indigo-500/20" />
+                  <span className="absolute h-1 w-5 rounded-full bg-[color-mix(in_oklab,var(--aurora-violet)_20%,transparent)]" />
                   <span
-                    className="absolute h-1 w-5 rounded-full bg-indigo-500 transition-transform duration-300"
+                    className="absolute h-1 w-5 rounded-full bg-[var(--aurora-violet-light)] transition-transform duration-300 motion-reduce:transition-none"
                     style={{ transform: `scaleX(${active === i ? 1 : 0})`, transformOrigin: "left" }}
                   />
                 </button>
@@ -212,7 +212,7 @@ export function TeamSection() {
               type="button"
               onClick={goNext}
               aria-label="Next team members"
-              className="md:hidden flex shrink-0 items-center justify-center h-11 w-10 rounded-full border border-indigo-500/30 bg-indigo-500/20 text-indigo-300 transition-colors hover:bg-indigo-500/30 hover:text-indigo-200"
+              className="md:hidden flex shrink-0 items-center justify-center h-11 w-11 rounded-full border border-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] bg-[color-mix(in_oklab,var(--aurora-violet)_20%,transparent)] text-[var(--aurora-violet-light)] transition-colors hover:bg-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] hover:text-[var(--color-text-base)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-violet-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--dark-1)]"
             >
               <ArrowRight size={18} aria-hidden />
             </button>
@@ -239,12 +239,12 @@ function TeamCard({ member }: { member: TeamMember }) {
 
       {/* content pinned to bottom; bio + socials always show on touch, reveal on hover/focus at lg+ */}
       <div className="absolute inset-x-0 bottom-0 p-5">
-        <h3 className="text-xl font-bold text-white leading-tight">{member.name}</h3>
-        <p className="mt-1 text-xs font-mono text-indigo-300">{member.role}</p>
+        <h3 className="text-xl font-bold text-[var(--color-text-base)] leading-tight">{member.name}</h3>
+        <p className="mt-1 text-xs font-mono text-[var(--aurora-violet-light)]">{member.role}</p>
 
         <div className="grid grid-rows-[1fr] opacity-100 transition-all duration-300 ease-out lg:grid-rows-[0fr] lg:opacity-0 lg:group-hover:grid-rows-[1fr] lg:group-hover:opacity-100 lg:group-focus-within:grid-rows-[1fr] lg:group-focus-within:opacity-100">
           <div className="overflow-hidden">
-            <p className="mt-3 text-sm text-blue-100/85 leading-relaxed">{member.bio}</p>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)] leading-relaxed">{member.bio}</p>
             {(() => {
               // Only render a link when the URL is real (placeholder "#" entries are skipped,
               // so we never ship a focusable link that goes nowhere).
@@ -291,7 +291,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
       aria-label={label}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white/80 backdrop-blur-sm transition-colors hover:bg-indigo-500/30 hover:text-white"
+      className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white/80 backdrop-blur-sm transition-colors hover:bg-[color-mix(in_oklab,var(--aurora-violet)_30%,transparent)] hover:text-white"
     >
       {children}
     </a>

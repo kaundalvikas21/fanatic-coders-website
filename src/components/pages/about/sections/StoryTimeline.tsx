@@ -90,7 +90,8 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
         {/* Desktop connector spine */}
         <span
           aria-hidden
-          className="pointer-events-none absolute left-[7px] top-3 bottom-3 hidden w-px bg-white/10 lg:block"
+          data-draw="spine"
+          className="pointer-events-none absolute left-[7px] top-3 bottom-3 hidden w-px origin-top bg-white/10 lg:block"
         />
         {items.map((m, i) => {
           const isActive = activeIndex === i
@@ -128,7 +129,7 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
                 <span
                   className={cn(
                     "font-mono text-base font-bold tabular-nums transition-colors",
-                    isActive ? "text-white" : "text-blue-100/75 group-hover:text-white"
+                    isActive ? "text-[var(--color-text-base)]" : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-base)]"
                   )}
                 >
                   {m.year}
@@ -136,7 +137,7 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
                 <span
                   className={cn(
                     "hidden text-xs transition-colors md:block",
-                    isActive ? "text-[var(--aurora-violet-light)]" : "text-blue-100/65 group-hover:text-blue-100/85"
+                    isActive ? "text-[var(--aurora-violet-light)]" : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-base)]"
                   )}
                 >
                   {m.label}
@@ -180,7 +181,7 @@ export function StoryTimeline({ items }: { items: StoryMilestone[] }) {
           <h3 className="mt-2 text-2xl font-bold leading-tight md:text-3xl lg:text-4xl">
             <span className="text-aurora-sweep">{active.title}</span>
           </h3>
-          <p className="mt-4 text-base leading-relaxed text-blue-100/70 md:text-lg">{active.body}</p>
+          <p className="mt-4 text-base leading-relaxed text-[var(--color-text-muted)] md:text-lg">{active.body}</p>
           <p className="mt-6 font-mono text-sm text-white/30" aria-hidden>
             {">"} <span className="about-cursor" />
           </p>

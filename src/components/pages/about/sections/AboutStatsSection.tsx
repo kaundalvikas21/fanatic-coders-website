@@ -34,8 +34,8 @@ export function AboutStatsSection() {
               key={stat.label}
               className="flex flex-1 flex-col-reverse items-center gap-2 px-6 py-6 text-center sm:py-3"
             >
-              <dt className="font-mono text-xs tracking-wider text-blue-100/55">{stat.label}</dt>
-              <dd className="font-mono text-4xl font-bold tabular-nums text-aurora-sweep md:text-5xl lg:text-6xl">
+              <dt className="font-mono text-xs tracking-wider text-[var(--color-text-muted)]">{stat.label}</dt>
+              <dd className="font-mono text-4xl font-bold tabular-nums text-[var(--aurora-violet-light)] md:text-5xl lg:text-6xl">
                 <CountUp value={stat.value} />
               </dd>
             </div>

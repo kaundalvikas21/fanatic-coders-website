@@ -22,7 +22,7 @@ export function AboutHeroSection() {
       id="about-hero"
       className="hero-shell relative flex min-h-[100svh] flex-col overflow-hidden pb-16"
     >
-      <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
+      <div className="aurora-bg-hero absolute -inset-[14%] pointer-events-none" data-parallax="10" />
       <div
         className="dot-grid absolute inset-0 pointer-events-none opacity-30"
         style={{ maskImage: "radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent 70%)" }}
@@ -35,7 +35,7 @@ export function AboutHeroSection() {
             We build software that <span className="text-aurora-sweep">earns its keep</span>
           </h1>
 
-          <p className="mt-6 text-base sm:text-lg text-blue-100/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-base sm:text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto leading-relaxed">
             fanaticCoders is a small senior team. We design and build web and mobile products,
             then stay on to keep them fast and useful. The people who write your code are the
             ones who answer for it. No junior handoffs.
@@ -46,9 +46,14 @@ export function AboutHeroSection() {
           {trustChips.map(({ Icon, label, color }) => (
             <span
               key={label}
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.05] px-3.5 py-1.5 text-xs sm:text-sm font-mono text-blue-100/80 ring-1 ring-white/12 backdrop-blur-sm transition-colors hover:bg-white/[0.08] hover:ring-white/20"
+              className="group inline-flex items-center gap-1.5 rounded-full bg-white/[0.05] px-3.5 py-1.5 text-xs sm:text-sm font-mono text-[var(--color-text-muted)] ring-1 ring-white/12 backdrop-blur-sm transition-colors hover:bg-white/[0.08] hover:ring-white/20"
             >
-              <Icon size={15} style={{ color }} className="shrink-0" aria-hidden />
+              <Icon
+                size={15}
+                style={{ color }}
+                className="shrink-0 transition-transform duration-150 ease-out group-hover:-translate-y-0.5 motion-reduce:transform-none"
+                aria-hidden
+              />
               {label}
             </span>
           ))}

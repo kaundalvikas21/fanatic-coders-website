@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { ArrowLeft, ArrowRight, Code2, Play, Pause } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
+import { RevealSection } from "@/components/ui/RevealSection"
 
 const projects = [
   {
@@ -86,7 +87,7 @@ export default function PortfolioSection() {
         <div className="portfolio-bg-grid absolute inset-0 opacity-10" />
       </div>
 
-      <div className="container mx-auto px-4">
+      <RevealSection stagger className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="preheading-code">portfolio.showcase</div>
@@ -266,7 +267,7 @@ export default function PortfolioSection() {
             </GradientButton>
           </div>
         </div>
-      </div>
+      </RevealSection>
     </section>
   )
 }
