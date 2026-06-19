@@ -1418,6 +1418,167 @@ textarea:-webkit-autofill {
   .value-card { transition: none !important; }
 }
 
+/* how.weWork() — build -> maintain -> grow milestone timeline */
+.hww-tl-wrap { position: relative; }
+
+.hww-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Track behind the nodes; the accent fill draws on scroll-in */
+.hww-track {
+  position: absolute;
+  top: 1.5rem; /* node radius (node = 3rem) */
+  left: 16.66%;
+  right: 16.66%;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.hww-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--aurora-violet-light), var(--aurora-blue-light), var(--aurora-green-light));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.hww-tl-wrap.visible .hww-track::after {
+  animation: hwwDraw 2.4s cubic-bezier(0.45, 0, 0.55, 1) 0.15s forwards;
+}
+
+/* Run to node 2, hold ~1s, run to node 3 at the same rhythm. */
+@keyframes hwwDraw {
+  0%   { transform: scaleX(0); }
+  29%  { transform: scaleX(0.5); }
+  71%  { transform: scaleX(0.5); }
+  100% { transform: scaleX(1); }
+}
+@keyframes hwwDrawY {
+  0%   { transform: scaleY(0); }
+  29%  { transform: scaleY(0.5); }
+  71%  { transform: scaleY(0.5); }
+  100% { transform: scaleY(1); }
+}
+
+.hww-ms {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 0.5rem;
+  transition: transform 0.25s var(--ease-snappy);
+}
+.hww-ms:hover { transform: translateY(-3px); }
+
+.hww-ms-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hww-node {
+  position: relative;
+  z-index: 1;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  /* brighten the numeral for AA contrast on the dark fill (glow/border keep base accent) */
+  color: color-mix(in srgb, var(--icon-color) 80%, white);
+  /* opaque accent-tinted fill so the track line never shows through the circle */
+  background: color-mix(in srgb, var(--icon-color) 14%, var(--dark-3));
+  border: 1px solid var(--accent-border);
+  box-shadow: 0 0 0 6px var(--dark-3); /* ring only; the glow lives on the ::after layer */
+  margin-bottom: 1.25rem;
+}
+/* Glow on its own layer so only OPACITY animates (GPU-composited, no per-frame repaint;
+   box-shadow is painted once). opacity:1 base = the lit fallback for no-JS / reduced-motion;
+   the ignite animation's backwards-fill hides it while a node is waiting. */
+.hww-node::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 0 26px color-mix(in srgb, var(--icon-color) 70%, transparent);
+  opacity: 1;
+  pointer-events: none;
+  will-change: opacity;
+}
+.hww-ms:hover .hww-node::after {
+  opacity: 1 !important;
+  box-shadow: 0 0 32px color-mix(in srgb, var(--icon-color) 85%, transparent);
+}
+
+/* Dim by default; when the line reaches a node it ignites (scale pop + glow fade-in)
+   then breathes (scale + glow opacity loop), preserved as later steps run. Only
+   transform (node) and opacity (::after glow) animate -> stays on the compositor.
+   Delays match hwwDraw (n1 0.15s, n2 0.85s, n3 2.55s); breathe starts at delay + 0.7s. */
+@keyframes hwwPop      { 0% { transform: scale(1); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes hwwBreathe  { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes hwwGlowIn   { 0% { opacity: 0; } 60% { opacity: 1; } 100% { opacity: 0.6; } }
+@keyframes hwwGlowLoop { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+.hww-tl-wrap.visible .hww-ms:nth-child(1) .hww-node        { animation: hwwPop 0.7s ease-out 0.15s both, hwwBreathe 2.2s ease-in-out 0.85s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(1) .hww-node::after { animation: hwwGlowIn 0.7s ease-out 0.15s both, hwwGlowLoop 2.2s ease-in-out 0.85s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(2) .hww-node        { animation: hwwPop 0.7s ease-out 0.85s both, hwwBreathe 2.2s ease-in-out 1.55s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(2) .hww-node::after { animation: hwwGlowIn 0.7s ease-out 0.85s both, hwwGlowLoop 2.2s ease-in-out 1.55s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(3) .hww-node        { animation: hwwPop 0.7s ease-out 2.55s both, hwwBreathe 2.2s ease-in-out 3.25s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(3) .hww-node::after { animation: hwwGlowIn 0.7s ease-out 2.55s both, hwwGlowLoop 2.2s ease-in-out 3.25s infinite; }
+
+@media (max-width: 768px) {
+  .hww-timeline { grid-template-columns: 1fr; gap: 1.5rem; }
+  .hww-track {
+    top: 0; bottom: 0; left: 1.5rem; right: auto;
+    width: 2px; height: auto;
+    /* fade the ends so the spine doesn't overshoot the first/last node */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+  }
+  .hww-track::after {
+    background: linear-gradient(to bottom, var(--aurora-violet-light), var(--aurora-blue-light), var(--aurora-green-light));
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  .hww-tl-wrap.visible .hww-track::after { animation-name: hwwDrawY; }
+  .hww-ms {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 1.1rem;
+    padding: 0; /* node centre lands on the spine (left: 1.5rem == node radius) */
+  }
+  .hww-node { margin-bottom: 0; flex-shrink: 0; }
+  .hww-ms-body { align-items: flex-start; flex: 1; min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hww-track::after { animation: none !important; transform: none !important; transition: none !important; }
+  .hww-node { animation: none !important; transform: none !important; }
+  .hww-node::after { animation: none !important; opacity: 1 !important; }
+  .hww-ms, .hww-ms:hover { transform: none; }
+}
+
+/* Soft text link closing the section */
+.hww-link {
+  color: var(--aurora-violet-light);
+  transition: filter var(--duration-fast) var(--ease-smooth);
+}
+.hww-link:hover { filter: brightness(1.2); }
+
 /* ═══════════════════════════════════════════════════
    TESTIMONIALS
    ═══════════════════════════════════════════════════ */
@@ -1436,31 +1597,46 @@ textarea:-webkit-autofill {
   box-shadow: 0 0 24px rgba(124,58,237,0.07), 0 20px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
-.code-badge {
-  background: rgba(8,8,16,0.95);
-  border: 1px solid rgba(124,58,237,0.25);
-  backdrop-filter: blur(12px);
+/* Initials monogram avatar — static accent ring + glow (no per-frame repaint). */
+.testi-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: color-mix(in srgb, var(--accent) 82%, white);
+  background: color-mix(in srgb, var(--accent) 14%, var(--dark-2));
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
-/* Aurora spinning ring around testimonial avatar */
-.aurora-ring-avatar {
-  width: 80px;
-  height: 80px;
-  padding: 2px;
-  border-radius: 50%;
-  background: conic-gradient(
-    from var(--border-angle, 0deg),
-    var(--avatar-accent, #7c3aed),
-    rgba(6,182,212,0.8),
-    var(--avatar-accent, #7c3aed)
-  );
-  animation: borderSpin 4s linear infinite;
+/* Leading quote glyph instead of a colored left-stripe border. */
+.testi-quote::before {
+  content: "\201C";
+  position: absolute;
+  top: -1.6rem;
+  left: -0.4rem;
+  font-family: var(--font-mono);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--accent) 24%, transparent);
+  pointer-events: none;
 }
 
 .company-badge { display: inline-flex; align-items: center; }
 
+/* Cross-fade the slide content on change; min-height steadies the card between
+   quotes of different length so it doesn't jump. */
+.testi-slide { animation: panelEnter 420ms cubic-bezier(0.16, 1, 0.3, 1); }
+@media (min-width: 768px) {
+  .testimonial-card { min-height: 21rem; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .aurora-ring-avatar { animation: none; }
+  .testi-slide { animation: none; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1504,12 +1680,15 @@ textarea:-webkit-autofill {
 }
 
 .tech-icon {
+  /* monochrome logos (currentColor): light/neutral at rest, accent on hover */
+  color: rgba(255,255,255,0.82);
   background: color-mix(in srgb, var(--tech-accent) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--tech-accent) 30%, transparent);
   transition: all 0.2s ease;
 }
 
 .tech-card:hover .tech-icon {
+  color: color-mix(in srgb, var(--tech-accent) 75%, white);
   background: color-mix(in srgb, var(--tech-accent) 22%, transparent);
   transform: scale(1.08);
 }
@@ -1672,7 +1851,7 @@ textarea:-webkit-autofill {
    ═══════════════════════════════════════════════════ */
 .blog-card {
   background: rgba(15,15,26,0.95);
-  border: 1px solid rgba(79,70,229,0.2);
+  border: 1px solid rgba(124,58,237,0.2);
   backdrop-filter: blur(12px);
 }
 .blog-card:hover {

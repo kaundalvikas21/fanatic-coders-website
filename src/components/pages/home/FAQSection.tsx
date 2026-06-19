@@ -4,7 +4,7 @@ import { RevealSection } from "@/components/ui/RevealSection"
 const faqs = [
   {
     q: "What services does Fanatic Coders offer?",
-    a: "We offer full-stack web development, UI/UX design, e-commerce solutions, digital branding, SEO & PPC, and ongoing maintenance & support. From concept to launch, we cover the entire digital product lifecycle.",
+    a: "We offer full-stack web development, UI/UX design, e-commerce solutions, digital branding, SEO & PPC, and ongoing maintenance & support. We cover the whole build, from first idea through launch and the support after it.",
   },
   {
     q: "How long does a typical project take from start to launch?",
@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: "Do you work with startups and early-stage teams?",
-    a: "Absolutely. We love working with early-stage founders. We're comfortable with ambiguity, fast pivots, and shipping iteratively. Whether you have a polished spec or just an idea, we can help you move forward.",
+    a: "Absolutely. We love working with early-stage founders. We're comfortable with ambiguity, fast pivots, and shipping iteratively. A polished spec or a rough idea, either one is enough for us to help you move forward.",
   },
   {
     q: "What does your development process look like?",
@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     q: "Do you provide ongoing support and maintenance after launch?",
-    a: "Yes. We offer retainer-based support plans covering performance monitoring, security updates, content changes, and feature additions. We're a long-term partner, not just a one-time vendor.",
+    a: "Yes. We offer retainer-based support plans covering performance monitoring, security updates, content changes, and feature additions. Most clients stay on as a long-term partner well after launch.",
   },
   {
     q: "What technologies do you specialize in?",
@@ -41,8 +41,7 @@ export default function FAQSection() {
         <div className="text-center mb-16">
           <div className="preheading-code">faq.support</div>
           <h2 className="heading-code mt-2">
-            Got Questions?{" "}
-            <span style={{ color: "#a855f7" }}>Find Answers Here</span>
+            faq.<span style={{ color: "var(--aurora-violet-light)" }}>answers</span>()
           </h2>
           <p className="subheading-code mt-3">
             {"// Everything you need to know before we start building together"}
