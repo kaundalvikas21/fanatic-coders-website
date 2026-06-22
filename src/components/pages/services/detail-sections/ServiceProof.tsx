@@ -5,17 +5,15 @@ import { SectionHeading } from "@/components/ui/SectionHeading"
 import { RevealSection } from "@/components/ui/RevealSection"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { getProject } from "../../portfolio/data"
-import { type Accent, type ServiceGroup, type ServiceItem, iconColor } from "../data"
-
-const accentBorder: Record<Accent, { border: string; glow: string }> = {
-  violet: { border: "rgba(124,58,237,0.28)", glow: "0 0 0 1px rgba(124,58,237,0.30), inset 0 1px 0 rgba(255,255,255,0.04)" },
-  cyan:   { border: "rgba(6,182,212,0.28)",  glow: "0 0 0 1px rgba(6,182,212,0.30), inset 0 1px 0 rgba(255,255,255,0.04)" },
-  green:  { border: "rgba(16,185,129,0.28)", glow: "0 0 0 1px rgba(16,185,129,0.30), inset 0 1px 0 rgba(255,255,255,0.04)" },
-}
+import { type Accent, type ServiceGroup, type ServiceItem, iconColor, accentToken } from "../data"
 
 function statBoxStyle(accent: Accent): CSSProperties {
-  const a = accentBorder[accent]
-  return { border: `1px solid ${a.border}`, boxShadow: a.glow, background: "#00000063" }
+  const c = accentToken[accent]
+  return {
+    border: `1px solid color-mix(in srgb, ${c} 28%, transparent)`,
+    boxShadow: `0 0 0 1px color-mix(in srgb, ${c} 30%, transparent), inset 0 1px 0 rgba(255,255,255,0.04)`,
+    background: "color-mix(in srgb, var(--dark-1) 45%, transparent)",
+  }
 }
 
 export function ServiceProof({ service, group }: { service: ServiceItem; group: ServiceGroup }) {
@@ -45,10 +43,10 @@ export function ServiceProof({ service, group }: { service: ServiceItem; group: 
 
         <RevealSection className="mt-14">
           <Link href={`/portfolio/${project.id}`} className="group/case block no-underline">
-            <GlassCard className="p-8 md:p-10 transform-gpu transition-transform duration-300 ease-out will-change-transform group-hover/case:scale-[1.02]">
+            <GlassCard className="p-8 md:p-10 transition-transform duration-300 ease-out group-hover/case:scale-[1.02]">
             <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-10">
               <div className="flex flex-col">
-                <p className="text-xs font-mono uppercase tracking-wider text-blue-100/45">
+                <p className="text-xs font-mono uppercase tracking-wider text-blue-100/60">
                   {`// ${project.client} ${project.industry}`}
                 </p>
                 <h3 className="mt-4 text-2xl md:text-3xl font-bold text-white leading-snug">{project.title}</h3>
@@ -74,7 +72,7 @@ export function ServiceProof({ service, group }: { service: ServiceItem; group: 
                   <ArrowRight size={14} className="transition-transform group-hover/case:translate-x-1" aria-hidden />
                 </span>
 
-                <p className="mt-auto pt-8 text-xs font-mono text-blue-100/40">
+                <p className="mt-auto pt-8 text-xs font-mono text-blue-100/55">
                   {"// figures are illustrative, shared with client permission on request"}
                 </p>
               </div>
@@ -85,7 +83,7 @@ export function ServiceProof({ service, group }: { service: ServiceItem; group: 
                     <div className="text-2xl md:text-3xl font-bold font-mono tabular-nums" style={{ color }}>
                       {stat.value}
                     </div>
-                    <div className="mt-1.5 text-xs font-mono text-blue-100/50">{stat.label}</div>
+                    <div className="mt-1.5 text-xs font-mono text-blue-100/60">{stat.label}</div>
                   </div>
                 ))}
               </div>

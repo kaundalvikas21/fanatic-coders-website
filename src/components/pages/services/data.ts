@@ -59,6 +59,13 @@ export interface ServiceGroup {
 
 export const iconColor: Record<Accent, string> = { violet: "#a855f7", cyan: "#22d3ee", green: "#34d399" }
 
+/** Per-accent base hue as an aurora CSS token, for `color-mix` tints on detail-section cards. */
+export const accentToken: Record<Accent, string> = {
+  violet: "var(--aurora-violet)",
+  cyan: "var(--aurora-cyan)",
+  green: "var(--aurora-green)",
+}
+
 /** Shared delivery process, the same across every service line. */
 export const serviceProcess = [
   { n: "01", title: "Discovery", duration: "1 to 2 weeks", desc: "We map goals, users, scope, and the risks worth handling early." },

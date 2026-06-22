@@ -21,7 +21,7 @@ export function AboutHeroSection() {
   return (
     <section
       id="about-hero"
-      className="hero-shell relative flex min-h-[100svh] flex-col overflow-hidden pb-16"
+      className="hero-shell [--hero-pt:7.5rem] pb-8 relative flex min-h-[100svh] flex-col overflow-hidden"
       style={{ background: "var(--dark-1)" }}
     >
       <Image

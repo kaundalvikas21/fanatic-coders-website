@@ -1,9 +1,15 @@
+import type { CSSProperties } from "react"
 import { SectionHeading } from "@/components/ui/SectionHeading"
 import { RevealSection } from "@/components/ui/RevealSection"
 import { type ServiceGroup, iconColor, serviceDeliverables } from "../data"
 
 export function ServiceDeliverables({ group }: { group: ServiceGroup }) {
   const color = iconColor[group.accent]
+  // Tint the icon-box to the service group's accent (it defaults to violet otherwise).
+  const tile = {
+    "--accent-icon": `color-mix(in srgb, ${color} 12%, transparent)`,
+    "--accent-border": `color-mix(in srgb, ${color} 28%, transparent)`,
+  } as CSSProperties
 
   return (
     <section className="relative overflow-hidden section-y" style={{ background: "var(--dark-2)" }}>
@@ -22,23 +28,24 @@ export function ServiceDeliverables({ group }: { group: ServiceGroup }) {
           />
         </RevealSection>
 
-        <RevealSection stagger className="mt-14 grid sm:grid-cols-2 gap-4">
+        <RevealSection as="ul" stagger className="mt-14 grid list-none sm:grid-cols-2 gap-4">
           {serviceDeliverables.map((item, i) => (
-            <div
+            <li
               key={item.title}
-              className="flex items-start gap-4 rounded-2xl border border-white/8 bg-white/[0.02] p-5 transform-gpu transition-transform duration-300 ease-out will-change-transform hover:-translate-y-0.5"
+              style={tile}
+              className="deliverable-card flex items-start gap-4 rounded-2xl border border-white/8 bg-white/2 p-5"
             >
               <span className="font-mono text-lg font-bold tabular-nums leading-none pt-1.5" style={{ color }}>
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <div className="icon-box flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl">
+              <div className="icon-box flex h-11 w-11 shrink-0 items-center justify-center rounded-xl">
                 <item.Icon size={20} style={{ color }} aria-hidden />
               </div>
               <div>
                 <h3 className="text-base font-bold text-white">{item.title}</h3>
                 <p className="mt-1 text-sm text-blue-100/60 leading-relaxed">{item.description}</p>
               </div>
-            </div>
+            </li>
           ))}
         </RevealSection>
       </div>

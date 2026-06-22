@@ -137,6 +137,13 @@
   --aurora-green:        #10b981;
   --aurora-green-light:  #34d399;
 
+  /* Web-dev hero robot scene accents. Tuned siblings of the aurora tokens, kept
+     exact to preserve the hand-lit illustration. Single source for the JSX style
+     objects in WebDevHeroVisual.tsx and the .wd-* keyframes below. */
+  --wd-blue:   #5b7cff;
+  --wd-violet: #8b5cf6;
+  --wd-cyan:   #34d2e8;
+
   /* ── Glassmorphism Tokens ── */
   --glass-bg:      rgba(255, 255, 255, 0.04);
   --glass-bg-md:   rgba(255, 255, 255, 0.06);
@@ -487,6 +494,19 @@ body {
   padding-block: clamp(3.5rem, 2.5rem + 5vw, 6rem);
 }
 
+/* Skip render + animation paint for heavy regions while they're off-screen.
+   content-visibility:auto only renders near the viewport; the `auto` intrinsic
+   height caches the real size after first paint so scrolling stays jank-free.
+   Used on backdrop-filter card sections and the hero robot's perpetual keyframes. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+.cv-robot {
+  content-visibility: auto;
+  contain-intrinsic-size: 470px 560px;
+}
+
 .heading-code .function {
   color: var(--aurora-violet-light);
 }
@@ -750,29 +770,50 @@ body {
   .text-aurora-sweep { animation: none; }
 }
 
-/* Process step number: faint watermark that fills with aurora color on card hover.
-   A tall gradient (faint-white top half, aurora bottom half) clipped to the glyph;
-   sliding background-position wipes the color upward for a smooth fill. */
+/* Process step number: faint watermark that brightens to aurora violet on card
+   hover. Solid color (no gradient-clipped text) with a color + glow transition. */
 .process-num {
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.34) 0%,
-    rgba(255, 255, 255, 0.34) 50%,
-    var(--aurora-cyan) 50%,
-    var(--aurora-violet) 100%
-  );
-  background-size: 100% 200%;
-  background-position: 0% 0%;
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  transition: background-position var(--duration-slow) var(--ease-smooth),
+  color: rgba(255, 255, 255, 0.42);
+  transition: color var(--duration-base) var(--ease-smooth),
               filter var(--duration-base) var(--ease-smooth);
 }
 .group:hover .process-num {
-  background-position: 0% 100%;
+  color: var(--aurora-violet-light);
   filter: drop-shadow(0 0 14px rgba(124, 58, 237, 0.35));
+}
+
+/* Process cards pop from center on hover (scale, not the default card-lift upward
+   translate); keeps the card-lift glow. */
+.process-card:hover { transform: scale(1.04); }
+
+/* The Support phase is continuous, not a fixed-length step: a dashed aurora border
+   sets it apart from the seven solid-bordered phases and reads as "ongoing". */
+.process-card-ongoing {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--aurora-violet) 32%, transparent);
+}
+
+/* Deliverable rows: restrained, professional hover. Lift a touch, tint the border
+   to the group accent, deepen the shadow, and glow the icon tile. Accent vars
+   (--accent-border / --accent-icon) are set per row in ServiceDeliverables.tsx. */
+.deliverable-card {
+  transition: transform 0.3s var(--ease-smooth),
+              border-color 0.3s var(--ease-smooth),
+              background-color 0.3s var(--ease-smooth),
+              box-shadow 0.3s var(--ease-smooth);
+}
+.deliverable-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-border);
+  background-color: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--accent-border);
+}
+.deliverable-card:hover .icon-box {
+  box-shadow: 0 0 16px var(--accent-icon);
+}
+@media (prefers-reduced-motion: reduce) {
+  .deliverable-card { transition: none; }
+  .deliverable-card:hover { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .process-num { transition: none; }
@@ -2015,8 +2056,36 @@ textarea:-webkit-autofill {
   box-shadow: var(--accent-glow);
 }
 
-/* Capabilities cards pop harder on hover (scoped to the service detail section). */
-.bento-card.cap-card:hover { transform: translateY(-6px) scale(1.03); }
+/* Capabilities cards (service detail). Solid token surface instead of a per-card
+   backdrop-filter (9 blurs on screen was the section's biggest paint cost). */
+.bento-card.cap-card {
+  background: color-mix(in srgb, var(--dark-1) 90%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
+}
+.bento-card.cap-card:hover { transform: scale(1.04); }
+
+/* Entrance via @keyframes so the stagger timing lives on animation-delay. The
+   shared .reveal-stagger drives entrance through transition-delay, which then
+   lingers on the element and leaks into hover (later cards react ~450ms late).
+   Running the reveal as an animation frees transition/transition-delay for hover;
+   transition-delay:0s clears the leaked stagger delay. Mirrors the home .bento-reveal. */
+.reveal-stagger.visible > .bento-card.cap-card {
+  transition-delay: 0s;
+  animation: capReveal 0.6s var(--ease-snappy) backwards;
+}
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(1) { animation-delay: 0ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(2) { animation-delay: 90ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(3) { animation-delay: 180ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(4) { animation-delay: 270ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(5) { animation-delay: 360ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(6) { animation-delay: 450ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(n+7) { animation-delay: 520ms; }
+@keyframes capReveal {
+  from { opacity: 0; transform: translateY(34px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
 
 .featured-inner {
   display: flex;
@@ -2167,6 +2236,7 @@ textarea:-webkit-autofill {
   .bento-card { transition: none !important; }
   .bento-card.bento-reveal { opacity: 1; }
   .services-bento.visible > .bento-card.bento-reveal { animation: none; will-change: auto; }
+  .reveal-stagger.visible > .bento-card.cap-card { animation: none; }
   .card-link .card-go { opacity: 1; transition: none; }
   .featured-cursor { animation: none; opacity: 1; }
 }
@@ -2518,10 +2588,10 @@ textarea:-webkit-autofill {
 @keyframes wd-dotPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
 @keyframes wd-armSway { 0%,100% { transform: rotate(-43deg); } 50% { transform: rotate(-45.4deg); } }
 @keyframes wd-elbowSway { 0%,100% { transform: rotate(36deg); } 50% { transform: rotate(39deg); } }
-@keyframes wd-coreGlow { 0%,100% { opacity: .6; box-shadow: 0 0 8px #34d2e8, 0 0 2px #34d2e8; } 50% { opacity: 1; box-shadow: 0 0 18px #34d2e8, 0 0 5px #fff; } }
+@keyframes wd-coreGlow { 0%,100% { opacity: .6; box-shadow: 0 0 8px var(--wd-cyan), 0 0 2px var(--wd-cyan); } 50% { opacity: 1; box-shadow: 0 0 18px var(--wd-cyan), 0 0 5px #fff; } }
 @keyframes wd-hudPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
-@keyframes wd-prog { 0% { width: 24%; } 100% { width: 90%; } }
-@keyframes wd-scanP { 0% { top: -4px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: 122px; opacity: 0; } }
+@keyframes wd-prog { 0% { transform: scaleX(.24); } 100% { transform: scaleX(.9); } }
+@keyframes wd-scanP { 0% { transform: translateY(-4px); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(122px); opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   .wd-core, .wd-arm, .wd-elbow, .wd-scan, .wd-tick,

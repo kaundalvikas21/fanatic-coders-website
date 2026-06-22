@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, ChevronDown } from "lucide-react"
 import type { CSSProperties } from "react"
 import { SectionHeading } from "@/components/ui/SectionHeading"
 import { RevealSection } from "@/components/ui/RevealSection"
@@ -39,7 +39,7 @@ function FilterRow({
   onSelect: (value: string) => void
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2.5" role="group" aria-label={`Filter projects ${label}`}>
+    <div className="flex flex-wrap items-center justify-center gap-2.5" role="group" aria-label={`Filter projects ${label}`}>
       <span className="mr-1 text-[0.7rem] font-mono uppercase tracking-[0.18em] text-blue-100/50">{label}</span>
       {options.map((opt) => {
         const isActive = active === opt
@@ -60,6 +60,38 @@ function FilterRow({
         )
       })}
     </div>
+  )
+}
+
+// Mobile filter control: a compact native dropdown (all options, no overflow/cut-off).
+function FilterSelect({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string
+  options: string[]
+  value: string
+  onChange: (value: string) => void
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-[0.7rem] font-mono uppercase tracking-[0.18em] text-blue-100/50">{label}</span>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          aria-label={`Filter projects ${label}`}
+          className="w-full appearance-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 pr-10 text-sm font-mono text-white outline-none transition-colors focus:border-[rgba(124,58,237,0.55)]"
+        >
+          {options.map((opt) => (
+            <option key={opt} value={opt} className="bg-[#0d0d1f] text-white">{opt}</option>
+          ))}
+        </select>
+        <ChevronDown size={16} aria-hidden className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-blue-100/50" />
+      </div>
+    </label>
   )
 }
 
@@ -99,8 +131,14 @@ export function PortfolioGridSection() {
           />
         </RevealSection>
 
-        {/* Two-axis filter */}
-        <div className="mt-12 flex flex-col gap-3 items-center">
+        {/* Mobile: compact dropdowns (all options, no overflow or cut-off chips) */}
+        <div className="mt-10 grid grid-cols-1 gap-3 sm:hidden">
+          <FilterSelect label="by service" options={serviceOptions} value={service} onChange={setService} />
+          <FilterSelect label="by industry" options={industryOptions} value={industry} onChange={setIndustry} />
+        </div>
+
+        {/* sm+: two-axis chip filter */}
+        <div className="mt-12 hidden flex-col gap-4 sm:flex sm:items-center">
           <FilterRow label="by service" options={serviceOptions} active={service} onSelect={setService} />
           <FilterRow label="by industry" options={industryOptions} active={industry} onSelect={setIndustry} />
         </div>

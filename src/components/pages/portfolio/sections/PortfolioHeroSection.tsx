@@ -19,7 +19,7 @@ const heroMeta: { value: string; label: string }[] = [
 export function PortfolioHeroSection() {
   return (
     <section
-      className="relative overflow-hidden hero-shell min-h-[100svh] flex flex-col"
+      className="relative overflow-hidden hero-shell [--hero-pt:7.5rem] pb-8 min-h-[100svh] flex flex-col"
       style={{ background: "var(--dark-1)" }}
     >
       <Image
@@ -34,7 +34,7 @@ export function PortfolioHeroSection() {
       <div className="hero-bg-scrim absolute inset-0 pointer-events-none" aria-hidden="true" />
       <div className="hero-bg-sweep" aria-hidden="true" />
 
-      <div className="relative z-10 flex-1 flex items-center justify-center container mx-auto px-4 pb-24">
+      <div className="relative z-10 flex-1 flex items-center justify-center container mx-auto px-4">
         <RevealSection className="max-w-3xl mx-auto text-center">
           <div className="preheading-code">portfolio</div>
           <h1 className="hero-h1 mt-3">
