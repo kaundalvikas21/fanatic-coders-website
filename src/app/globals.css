@@ -2500,3 +2500,32 @@ textarea:-webkit-autofill {
     animation: none !important;
   }
 }
+
+/* ── Web Development hero robot scene (decorative, md+ only) ────────────── */
+.wd-core { animation: wd-coreGlow 2.4s ease-in-out infinite; }
+.wd-arm { animation: wd-armSway 5.5s ease-in-out infinite; }
+.wd-elbow { animation: wd-elbowSway 5.5s ease-in-out infinite; }
+.wd-scan { animation: wd-scanP 3.4s ease-in-out infinite; }
+.wd-tick { animation: wd-hudPulse 2s ease-in-out infinite; }
+.wd-dot { animation: wd-dotPulse 1.4s ease-in-out infinite; }
+.wd-telemetry { animation: wd-floatA 7s ease-in-out infinite; }
+.wd-prog { animation: wd-prog 3.6s ease-in-out infinite alternate; }
+.wd-chip-a { animation: wd-floatB 6.2s ease-in-out infinite; }
+.wd-chip-b { animation: wd-floatA 7.2s ease-in-out infinite; }
+
+@keyframes wd-floatA { 0% { translate: 0 0; } 50% { translate: 0 -14px; } 100% { translate: 0 0; } }
+@keyframes wd-floatB { 0% { translate: 0 0; } 50% { translate: 0 13px; } 100% { translate: 0 0; } }
+@keyframes wd-dotPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
+@keyframes wd-armSway { 0%,100% { transform: rotate(-43deg); } 50% { transform: rotate(-45.4deg); } }
+@keyframes wd-elbowSway { 0%,100% { transform: rotate(36deg); } 50% { transform: rotate(39deg); } }
+@keyframes wd-coreGlow { 0%,100% { opacity: .6; box-shadow: 0 0 8px #34d2e8, 0 0 2px #34d2e8; } 50% { opacity: 1; box-shadow: 0 0 18px #34d2e8, 0 0 5px #fff; } }
+@keyframes wd-hudPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+@keyframes wd-prog { 0% { width: 24%; } 100% { width: 90%; } }
+@keyframes wd-scanP { 0% { top: -4px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: 122px; opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .wd-core, .wd-arm, .wd-elbow, .wd-scan, .wd-tick,
+  .wd-dot, .wd-telemetry, .wd-prog, .wd-chip-a, .wd-chip-b {
+    animation: none !important;
+  }
+}
