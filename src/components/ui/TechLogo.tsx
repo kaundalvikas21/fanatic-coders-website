@@ -6,14 +6,17 @@ interface TechLogoProps {
   className?: string
 }
 
+// Monochrome: fills with currentColor so logos stay visible on the dark ground
+// and inherit the section's accent (brand hex like #000 vanished). Decorative —
+// the tech name sits in an adjacent label, so the SVG is aria-hidden.
 export default function TechLogo({ icon, size = 28, className }: TechLogoProps) {
   return (
     <svg
-      role="img"
+      aria-hidden
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      fill={`#${icon.hex}`}
+      fill="currentColor"
       className={className}
     >
       <path d={icon.path} />

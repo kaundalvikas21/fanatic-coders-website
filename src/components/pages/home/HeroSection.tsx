@@ -1,153 +1,157 @@
 "use client"
 
 import { useEffect, useRef, useState, startTransition } from "react"
-import { BarChart2, Target, Zap, Wrench, ArrowRight } from "lucide-react"
+import { ArrowRight, BarChart2, ChevronDown, Target, Users, Zap } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
+import HeroTerminal from "./HeroTerminal"
+import HeroStat from "./HeroStat"
+import { SITE_STATS } from "@/lib/site-stats"
 
-const impactfulTexts = [
-  "npm create digital-excellence",
-  "npm create impactful-solutions",
-  "npm create awesome-experiences",
-  "npm create digital-innovation",
+// Two compact, balanced lines; gradient on the two focal words.
+const headingLines = [
+  ["We", "build", "production"],
+  ["software", "that", "ships."],
+]
+const SWEEP_WORDS = new Set(["production", "software"])
+
+const trustStats = [
+  { value: SITE_STATS.projectsDelivered, label: "projects shipped", Icon: BarChart2 },
+  { value: SITE_STATS.clientRetention,   label: "client retention", Icon: Target    },
+  { value: SITE_STATS.usersReached,      label: "users reached",    Icon: Users     },
+  { value: SITE_STATS.yearsShipping,     label: "years building",   Icon: Zap       },
 ]
 
-const stats = [
-  { number: "150+", label: "Projects Completed",  Icon: BarChart2 },
-  { number: "98%",  label: "Client Satisfaction", Icon: Target    },
-  { number: "10+",  label: "Years Experience",     Icon: Zap       },
-  { number: "24/7", label: "Support Available",    Icon: Wrench    },
-]
-
-const headingWords = ["We", "Create", "Digital", "Experiences", "That", "Matter"]
 const codeSnippets = [
   "{ code }", "<dev/>", "npm run", "git push", "async()",
   ".then()", "useState", "[...arr]", "${var}", "=> func",
 ]
 
-export default function HeroSection() {
-  const containerRef  = useRef<HTMLDivElement>(null)
-  const mountedRef    = useRef(false)
-  const cycleTokenRef = useRef(0)
-  const [headingVisible, setHeadingVisible] = useState(false)
-  const [terminalText, setTerminalText]     = useState("")
+type FloatNode = { node: HTMLElement; x: number; y: number; idx: number; ox: number; oy: number }
 
-  // On mount: trigger heading reveal, floating code elements, cycling terminal text
+export default function HeroSection() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [headingVisible, setHeadingVisible] = useState(false)
+  // Gated separately so the number count-up only starts once the strip has
+  // finished revealing (reveal: 100ms class flip + 700ms delay + 500ms ease).
+  const [statsActive, setStatsActive] = useState(false)
+  // Flips after the whole entrance has played so will-change can be released.
+  const [motionSettled, setMotionSettled] = useState(false)
+
   useEffect(() => {
-    mountedRef.current = true
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
     if (prefersReducedMotion) {
       startTransition(() => {
         setHeadingVisible(true)
-        setTerminalText(impactfulTexts[0])
+        setStatsActive(true)
+        setMotionSettled(true)
       })
     } else {
       setTimeout(() => setHeadingVisible(true), 100)
+      setTimeout(() => setStatsActive(true), 1350)
+      setTimeout(() => setMotionSettled(true), 3200)
     }
 
-    // Floating code elements
     const container = containerRef.current
-    if (container) {
-      const elements: { node: HTMLElement; x: number; y: number }[] = []
-      let frameId: number | null = null
-      let pointerX = 0
-      let pointerY = 0
+    if (!container) return
 
-      const cols = 5
-      const rows = 2
-      const cellW = container.offsetWidth / cols
-      const cellH = Math.max(container.offsetHeight, 400) / rows
+    const elements: FloatNode[] = []
+    let frameId: number | null = null
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null
+    let fadeTimer: ReturnType<typeof setTimeout> | null = null
+    let pointerX = 0
+    let pointerY = 0
+    const cols = 5
+    const rows = 2
 
-      codeSnippets.forEach((snippet, idx) => {
-        const col = idx % cols
-        const row = Math.floor(idx / cols)
-        const x = col * cellW + cellW * 0.2 + Math.random() * cellW * 0.6
-        const y = row * cellH + cellH * 0.2 + Math.random() * cellH * 0.6
-        const node = document.createElement("div")
-        node.className = "code-element absolute text-sm font-mono transition-all duration-300"
-        node.style.left = `${x}px`
-        node.style.top  = `${y}px`
-        node.textContent = snippet
-        container.appendChild(node)
-        elements.push({ node, x, y })
+    codeSnippets.forEach((snippet, idx) => {
+      const node = document.createElement("div")
+      node.className = "code-element absolute text-sm font-mono"
+      node.textContent = snippet
+      container.appendChild(node)
+      if (prefersReducedMotion) {
+        node.style.opacity = "0.32"
+      } else {
+        // Wash chips in (0 -> 0.32) on load, staggered, via the .code-element opacity
+        // transition. Part of the same entrance cascade as the content.
+        node.style.opacity = "0"
+        node.style.transitionDelay = `${600 + idx * 60}ms`
+      }
+      // Random offset rolled once per mount: every refresh scatters the chips
+      // differently, but the value is reused on resize so they don't jump mid-session.
+      elements.push({ node, x: 0, y: 0, idx, ox: Math.random(), oy: Math.random() })
+    })
+
+    if (!prefersReducedMotion) {
+      requestAnimationFrame(() => elements.forEach(el => { el.node.style.opacity = "0.32" }))
+      // Once the wash finishes, drop the stagger delay so pointer parallax stays instant.
+      fadeTimer = setTimeout(() => elements.forEach(el => { el.node.style.transitionDelay = "" }), 1500)
+    }
+
+    // Position from current container size. Deterministic per-index offset so a
+    // resize repositions the grid cleanly instead of leaving stale coordinates.
+    function layout() {
+      const cellW = container!.offsetWidth / cols
+      const cellH = Math.max(container!.offsetHeight, 400) / rows
+      elements.forEach(el => {
+        const col = el.idx % cols
+        const row = Math.floor(el.idx / cols)
+        el.x = col * cellW + cellW * (0.2 + el.ox * 0.6)
+        el.y = row * cellH + cellH * (0.2 + el.oy * 0.6)
+        el.node.style.left = `${el.x}px`
+        el.node.style.top = `${el.y}px`
       })
+    }
+    layout()
 
-      function onMouseMove(e: MouseEvent) {
-        const rect = container!.getBoundingClientRect()
-        pointerX = e.clientX - rect.left
-        pointerY = e.clientY - rect.top
-        if (frameId === null) {
-          frameId = requestAnimationFrame(() => {
-            frameId = null
-            elements.forEach(({ node, x, y }) => {
-              const dx = pointerX - x
-              const dy = pointerY - y
-              const dist = Math.sqrt(dx * dx + dy * dy)
-              if (dist < 300) {
-                const scale = 1 - dist / 300
-                const angle = Math.atan2(dy, dx)
-                const push = 40 * scale
-                node.style.transform = `translate(${-Math.cos(angle) * push}px, ${-Math.sin(angle) * push}px) scale(${1 + scale * 0.2})`
-                node.style.opacity = (0.2 + scale * 0.5).toString()
-              } else {
-                node.style.transform = "translate(0,0) scale(1)"
-                node.style.opacity = "0.15"
-              }
-            })
+    function onMouseMove(e: MouseEvent) {
+      const rect = container!.getBoundingClientRect()
+      pointerX = e.clientX - rect.left
+      pointerY = e.clientY - rect.top
+      if (frameId === null) {
+        frameId = requestAnimationFrame(() => {
+          frameId = null
+          elements.forEach(({ node, x, y }) => {
+            const dx = pointerX - x
+            const dy = pointerY - y
+            const dist = Math.sqrt(dx * dx + dy * dy)
+            if (dist < 300) {
+              const scale = 1 - dist / 300
+              const angle = Math.atan2(dy, dx)
+              const push = 40 * scale
+              node.style.transform = `translate(${-Math.cos(angle) * push}px, ${-Math.sin(angle) * push}px) scale(${1 + scale * 0.2})`
+              node.style.opacity = (0.4 + scale * 0.5).toString()
+            } else {
+              node.style.transform = "translate(0,0) scale(1)"
+              node.style.opacity = "0.32"
+            }
           })
-        }
-      }
-
-      if (!prefersReducedMotion) {
-        container.addEventListener("mousemove", onMouseMove, { passive: true })
-      }
-
-      // Terminal text cycling
-      if (!prefersReducedMotion) {
-        const token = ++cycleTokenRef.current
-
-        async function cycleTerminal() {
-          let idx = 0
-          const delay = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
-
-          while (mountedRef.current && token === cycleTokenRef.current) {
-            const text = impactfulTexts[idx]
-            // Type
-            for (let i = 0; i <= text.length; i++) {
-              if (!mountedRef.current || token !== cycleTokenRef.current) return
-              setTerminalText(text.slice(0, i))
-              await delay(50)
-            }
-            await delay(2000)
-            // Delete
-            for (let i = text.length; i >= 0; i--) {
-              if (!mountedRef.current || token !== cycleTokenRef.current) return
-              setTerminalText(text.slice(0, i))
-              await delay(30)
-            }
-            idx = (idx + 1) % impactfulTexts.length
-          }
-        }
-        cycleTerminal()
-      }
-
-      return () => {
-        mountedRef.current = false
-        cycleTokenRef.current += 1
-        container.removeEventListener("mousemove", onMouseMove)
-        if (frameId !== null) cancelAnimationFrame(frameId)
-        elements.forEach(el => el.node.remove())
+        })
       }
     }
+
+    function onResize() {
+      if (resizeTimer) clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(layout, 150)
+    }
+
+    if (!prefersReducedMotion) {
+      container.addEventListener("mousemove", onMouseMove, { passive: true })
+    }
+    window.addEventListener("resize", onResize)
 
     return () => {
-      mountedRef.current = false
-      cycleTokenRef.current += 1
+      container.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("resize", onResize)
+      if (frameId !== null) cancelAnimationFrame(frameId)
+      if (resizeTimer) clearTimeout(resizeTimer)
+      if (fadeTimer) clearTimeout(fadeTimer)
+      elements.forEach(el => el.node.remove())
     }
   }, [])
 
   return (
-    <div className="hero-root relative min-h-screen overflow-hidden">
+    <div className={`hero-root relative min-h-screen overflow-hidden${motionSettled ? " hero-settled" : ""}`}>
       {/* Aurora mesh background */}
       <div className="aurora-mesh-bg absolute inset-0" />
 
@@ -160,52 +164,50 @@ export default function HeroSection() {
         style={{ maskImage: "radial-gradient(circle at 50% 40%, black, transparent 70%)" }}
       />
 
-      {/* Floating code elements */}
+      {/* Floating code elements (decorative) */}
       <div
         ref={containerRef}
+        aria-hidden
         className="absolute inset-0 overflow-hidden"
         style={{ maskImage: "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)" }}
       />
 
       {/* Main content */}
-      <div className="relative z-10 container mx-auto px-4 pt-44 pb-24">
+      <div className="hero-shell relative z-10 container mx-auto px-4 pb-24">
         <div className="max-w-4xl mx-auto text-center">
 
-          {/* Terminal badge */}
-          <div className="mb-8 hero-terminal-float">
-            <div className="hero-terminal-badge inline-flex items-center px-6 py-3 rounded-lg">
-              <span className="text-[#22d3ee] mr-2 font-mono">$</span>
-              <span className="text-blue-300 font-mono text-sm">{terminalText}</span>
-              <span className="hero-cursor" aria-hidden>|</span>
-            </div>
-          </div>
+          {/* Terminal badge (isolated component) */}
+          <HeroTerminal />
 
-          {/* Kinetic heading */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
-            {headingWords.map((word, i) => (
-              <span
-                key={word + i}
-                className={`word-reveal inline-block${headingVisible ? " visible" : ""}`}
-                style={{ animationDelay: `${i * 80}ms`, marginRight: "0.25em" }}
-              >
-                {word === "Digital" || word === "Experiences"
-                  ? <span className="text-aurora-sweep">{word}</span>
-                  : word
-                }
+          {/* Kinetic heading (two compact lines) */}
+          <h1 className="hero-h1 mb-6">
+            {headingLines.map((line, li) => (
+              <span key={li} className="block">
+                {line.map((word, wi) => {
+                  const idx = li * 3 + wi
+                  return (
+                    <span
+                      key={word + idx}
+                      className={`word-reveal inline-block${headingVisible ? " visible" : ""}`}
+                      style={{ animationDelay: `${idx * 80}ms`, marginRight: "0.25em" }}
+                    >
+                      {SWEEP_WORDS.has(word) ? <span className="text-aurora-sweep">{word}</span> : word}
+                    </span>
+                  )
+                })}
               </span>
             ))}
           </h1>
 
           {/* Subheading */}
           <p
-            className={`text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100/70 mb-12 max-w-2xl mx-auto subheading-reveal${headingVisible ? " visible" : ""}`}
+            className={`text-base sm:text-lg md:text-xl lg:text-2xl text-[#f4f6ff] mb-12 max-w-2xl mx-auto subheading-reveal${headingVisible ? " visible" : ""}`}
           >
-            Expert web design, development, and digital marketing solutions that drive growth and
-            deliver exceptional results.
+            Full-stack engineering, design, and growth for FinTech, HealthTech, and SaaS companies.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-24">
+          <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 cta-reveal${headingVisible ? " visible" : ""}`}>
             <GradientButton href="/contact">
               startProject
               <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
@@ -216,23 +218,33 @@ export default function HeroSection() {
             </GradientButton>
           </div>
 
-          {/* Stats grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {stats.map((stat, i) => (
-              <div
+          {/* Credibility strip */}
+          <div
+            className={`hero-trust stats-card glass-card rounded-xl${headingVisible ? " visible" : ""}`}
+            style={{ "--stagger": 0 } as React.CSSProperties}
+          >
+            {trustStats.map(stat => (
+              <HeroStat
                 key={stat.label}
-                className={`stats-card glass-card card-lift rounded-xl p-6 text-center${headingVisible ? " visible" : ""}`}
-                style={{ "--stagger": i } as React.CSSProperties}
-              >
-                <stat.Icon size={28} className="mb-3 mx-auto text-aurora-violet-icon" aria-hidden />
-                <div className="text-3xl font-bold mb-1 text-aurora-sweep font-mono tracking-tight tabular-nums">{stat.number}</div>
-                <div className="text-blue-100/55 text-sm">{stat.label}</div>
-              </div>
+                value={stat.value}
+                label={stat.label}
+                Icon={stat.Icon}
+                active={statsActive}
+              />
             ))}
           </div>
 
         </div>
       </div>
+
+      {/* Scroll cue: hands the hero off to the first section below */}
+      <a
+        href="#services"
+        aria-label="Scroll to services"
+        className={`hero-scroll-cue${headingVisible ? " visible" : ""}`}
+      >
+        <ChevronDown size={22} aria-hidden />
+      </a>
     </div>
   )
 }

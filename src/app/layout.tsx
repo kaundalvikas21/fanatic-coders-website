@@ -6,13 +6,11 @@ import "@fontsource/jetbrains-mono/400.css"
 import "@fontsource/jetbrains-mono/600.css"
 import "@fontsource/jetbrains-mono/700.css"
 import "./globals.css"
-import Header from "@/components/layout/Header"
-import Footer from "@/components/layout/Footer"
 
 export const metadata: Metadata = {
   title: "fanaticCoders | Digital Agency",
   description:
-    "Professional web design, development & digital marketing — crafting exceptional digital experiences with cutting-edge technology.",
+    "Professional web design, development, and digital marketing. We build digital products with modern technology.",
 }
 
 export default function RootLayout({
@@ -22,14 +20,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body>
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
-        <Header />
-        <main id="main-content">{children}</main>
-        <Footer />
-      </body>
+      <head>
+        {/* Without JS the IntersectionObserver never runs, so reveal wrappers would
+            stay at opacity:0. Force them visible for no-JS users and crawlers. */}
+        <noscript>
+          <style>{`.reveal,.reveal-stagger>*,.bento-reveal{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
+      <body>{children}</body>
     </html>
   )
 }

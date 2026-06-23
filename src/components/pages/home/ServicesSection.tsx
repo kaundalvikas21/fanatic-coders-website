@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Layers, LayoutGrid, ShoppingCart, TrendingUp, BarChart2, Code2, ArrowRight } from "lucide-react"
 import type { ElementType } from "react"
+import { RevealSection } from "@/components/ui/RevealSection"
+import { useScrollReveal } from "@/hooks/useScrollReveal"
 
 type AccentKey = "violet" | "blue" | "cyan" | "green"
 
@@ -13,6 +14,7 @@ interface Service {
   id: string
   title: string
   description: string
+  href: string
   Icon: ElementType
   features: string[]
   accent: AccentKey
@@ -34,7 +36,8 @@ const services: Service[] = [
   {
     id: "full-stack",
     title: "Full Stack Development",
-    description: "End-to-end solutions from frontend to backend. We architect, build, and deploy complete digital products using modern tech stacks.",
+    description: "We build the whole product, frontend through backend, and ship it to production.",
+    href: "/services/web-development",
     Icon: Layers,
     features: ["Frontend", "Backend", "APIs", "Cloud"],
     accent: "violet",
@@ -43,36 +46,25 @@ const services: Service[] = [
       { kw: "const", rest: " stack = {",    kwColor: "#a855f7", val: "",          valColor: ""       },
       { kw: "",      rest: "  frontend:",   kwColor: "",        val: " 'React'",   valColor: "#34d399" },
       { kw: "",      rest: "  backend:",    kwColor: "",        val: " 'Node.js'", valColor: "#60a5fa" },
-      { kw: "",      rest: "  deploy:",     kwColor: "",        val: " 'Cloud'",   valColor: "#f97316" },
+      { kw: "",      rest: "  deploy:",     kwColor: "",        val: " 'Cloud'",   valColor: "#22d3ee" },
       { kw: "",      rest: "};",            kwColor: "",        val: "",           valColor: ""        },
     ],
   },
-  { id: "web-design",       title: "Web Design & Development",    description: "Modern, responsive websites that perform beautifully on every device.", Icon: LayoutGrid,   features: ["UI Design","Responsive","Performance","SEO"],              accent: "blue",   size: "normal" },
-  { id: "ecommerce",        title: "E-Commerce",                  description: "Custom stores built to convert — from product listing to checkout.",   Icon: ShoppingCart, features: ["Custom Stores","Payments","Inventory","Analytics"],         accent: "cyan",   size: "normal" },
-  { id: "digital-branding", title: "Digital Branding & Marketing",description: "Data-driven brand strategy and campaigns that connect and convert.",    Icon: TrendingUp,   features: ["Brand Strategy","Social Media","Content","Analytics"],      accent: "green",  size: "normal" },
-  { id: "seo-ppc",          title: "SEO & PPC",                   description: "Organic and paid strategies that drive the right traffic to your site.",Icon: BarChart2,    features: ["Technical SEO","Content SEO","Ad Campaigns","Analytics"],  accent: "violet", size: "normal" },
-  { id: "open-source",      title: "Open Source",                 description: "Leverage open-source power with custom plugins, integrations, and security.", Icon: Code2,   features: ["Custom Plugins","API Integration","Performance","Security"], accent: "blue",   size: "normal" },
+  { id: "web-design",       title: "Web Design & Development",    description: "Responsive sites that load fast and hold up on every screen size.", href: "/services/design",    Icon: LayoutGrid,   features: ["UI Design","Responsive","Performance","SEO"],              accent: "blue",   size: "normal" },
+  { id: "ecommerce",        title: "E-Commerce",                  description: "Custom online stores, from product pages through checkout.",   href: "/services/ecommerce", Icon: ShoppingCart, features: ["Custom Stores","Payments","Inventory","Analytics"],         accent: "cyan",   size: "normal" },
+  { id: "digital-branding", title: "Digital Branding & Marketing",description: "Brand strategy and campaigns backed by real performance data.",    href: "/services/marketing", Icon: TrendingUp,   features: ["Brand Strategy","Social Media","Content","Analytics"],      accent: "green",  size: "normal" },
+  { id: "seo-ppc",          title: "SEO & PPC",                   description: "Organic and paid strategies that drive the right traffic to your site.",href: "/services/seo",       Icon: BarChart2,    features: ["Technical SEO","Content SEO","Ad Campaigns","Analytics"],  accent: "violet", size: "normal" },
+  { id: "open-source",      title: "Open Source",                 description: "Build on open source with custom plugins, integrations, and security.", href: "/services",           Icon: Code2,   features: ["Custom Plugins","API Integration","Performance","Security"], accent: "blue",   size: "normal" },
 ]
 
 export default function ServicesSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.1 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
-  const v = visible ? "visible" : ""
+  // Shared IO primitive toggles `.visible` on the grid; CSS runs the per-card
+  // card-rise keyframe (smooth on glass cards; a plain .reveal-stagger would lose
+  // the transition fight with .bento-card's hover transition).
+  const bentoRef = useScrollReveal<HTMLDivElement>({ threshold: 0.1 })
 
   return (
-    <section ref={sectionRef} className="services-section py-24 relative overflow-hidden section-bg" id="services">
+    <section className="services-section section-y relative overflow-hidden section-bg" id="services">
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
       <div
         className="dot-grid absolute inset-0 pointer-events-none opacity-40"
@@ -81,34 +73,34 @@ export default function ServicesSection() {
 
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className={`text-center mb-14 reveal ${v}`}>
+        <RevealSection className="text-center mb-14">
           <div className="preheading-code">services.module.ts</div>
           <h2 className="heading-code mt-2">
-            export class <span style={{ color: "#a855f7" }}>DigitalServices</span>
+            export class <span style={{ color: "var(--aurora-violet-light)" }}>DigitalServices</span>
           </h2>
-          <p className="subheading-code mt-3">{"// Transforming ideas into digital reality"}</p>
-        </div>
+          <p className="subheading-code mt-3">{"// What we build, and how we ship it"}</p>
+        </RevealSection>
 
         {/* Bento grid */}
-        <div className="services-bento max-w-7xl mx-auto">
+        <div ref={bentoRef} className="services-bento max-w-7xl mx-auto">
           {services.map((service, i) => {
-            const accent    = accentMap[service.accent]
-            const iconColor = iconColorMap[service.accent]
-            return (
-              <div
-                key={service.id}
-                className={`bento-card rounded-2xl reveal ${v}${service.size === "featured" ? " card-featured" : ""}`}
-                style={{
-                  "--accent-border": accent.border,
-                  "--accent-icon":   accent.icon,
-                  "--accent-glow":   accent.glow,
-                  "--accent-tag":    accent.tag,
-                  "--icon-color":    iconColor,
-                  transitionDelay:   `${i * 55}ms`,
-                } as React.CSSProperties}
-              >
-                {service.size === "featured" ? (
-                  /* Featured: horizontal split */
+            const accent     = accentMap[service.accent]
+            const iconColor  = iconColorMap[service.accent]
+            const isFeatured = service.size === "featured"
+            const cardClass  = `bento-card rounded-2xl bento-reveal${isFeatured ? " card-featured" : " card-link"}`
+            const cardStyle  = {
+              "--accent-border": accent.border,
+              "--accent-icon":   accent.icon,
+              "--accent-glow":   accent.glow,
+              "--accent-tag":    accent.tag,
+              "--icon-color":    iconColor,
+              animationDelay:    `${i * 60}ms`,
+            } as React.CSSProperties
+
+            if (isFeatured) {
+              return (
+                <div key={service.id} className={cardClass} style={cardStyle}>
+                  {/* Featured: horizontal split */}
                   <div className="featured-inner">
                     <div className="featured-content">
                       <div className="flex items-center gap-3 mb-5">
@@ -134,7 +126,7 @@ export default function ServicesSection() {
                         ))}
                       </div>
                       <Link
-                        href={`/services/${service.id}`}
+                        href={service.href}
                         className="view-link text-sm font-semibold inline-flex items-center gap-2 no-underline"
                         style={{ color: iconColor }}
                       >
@@ -159,13 +151,25 @@ export default function ServicesSection() {
                               {line.val && <><span style={{ color: line.valColor }}>{line.val}</span><span className="text-blue-100/35">,</span></>}
                             </div>
                           ))}
+                          <span className="featured-cursor" aria-hidden />
                         </div>
                       </div>
                     </div>
                   </div>
-                ) : (
-                  /* Normal card: stacked */
-                  <div className="normal-inner">
+                </div>
+              )
+            }
+
+            return (
+              <Link
+                key={service.id}
+                href={service.href}
+                className={cardClass}
+                style={cardStyle}
+                aria-label={`View ${service.title} service`}
+              >
+                {/* Normal card: stacked */}
+                <div className="normal-inner">
                     <div className="icon-box w-10 h-10 rounded-xl flex items-center justify-center mb-4">
                       <service.Icon size={18} style={{ color: iconColor }} aria-hidden />
                     </div>
@@ -180,9 +184,11 @@ export default function ServicesSection() {
                         >{f}</span>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
+                    <span className="card-go font-mono">
+                      viewService <ArrowRight size={13} aria-hidden />
+                    </span>
+                </div>
+              </Link>
             )
           })}
         </div>

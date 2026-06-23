@@ -34,13 +34,14 @@ function IconInstagram({ size = 18 }: { size?: number }) {
   )
 }
 import GradientButton from "@/components/ui/GradientButton"
+import FooterCodeType from "@/components/layout/FooterCodeType"
 
 const footerLinks = {
   services: [
     { name: "Web Development", href: "/services/web-development" },
     { name: "E-Commerce",       href: "/services/ecommerce"       },
     { name: "Mobile Apps",      href: "/services/mobile-apps"     },
-    { name: "UI/UX Design",     href: "/services/ui-ux"           },
+    { name: "UI/UX Design",     href: "/services/design"          },
     { name: "Cloud Solutions",  href: "/services/cloud"           },
   ],
   company: [
@@ -50,10 +51,8 @@ const footerLinks = {
     { name: "Contact",  href: "/contact" },
   ],
   resources: [
-    { name: "Documentation", href: "/docs"          },
-    { name: "Case Studies",  href: "/case-studies"  },
-    { name: "Open Source",   href: "/open-source"   },
-    { name: "Privacy Policy",href: "/privacy"       },
+    { name: "Case Studies",   href: "/portfolio" },
+    { name: "Privacy Policy", href: "/privacy"   },
   ],
   social: [
     { name: "GitHub",    Icon: IconGithub,    href: "https://github.com"    },
@@ -62,6 +61,12 @@ const footerLinks = {
     { name: "Instagram", Icon: IconInstagram, href: "https://instagram.com" },
   ],
 }
+
+const navColumns = [
+  { label: "Services",  links: footerLinks.services  },
+  { label: "Company",   links: footerLinks.company   },
+  { label: "Resources", links: footerLinks.resources },
+]
 
 const codeSnippets = ["export *","import","const","class","function","return","await","async","let","=>"]
 
@@ -79,7 +84,7 @@ export default function Footer() {
       for (let j = 0; j < gridSize; j++) {
         if (Math.random() > 0.85) {
           const el = document.createElement("div")
-          el.className = "absolute text-sm font-mono transition-all duration-300"
+          el.className = "absolute text-sm font-mono"
           el.style.left = `${i * spacing + Math.random() * 20}px`
           el.style.top  = `${j * spacing + Math.random() * 20}px`
           el.style.color = "rgba(124,58,237,0.2)"
@@ -98,22 +103,28 @@ export default function Footer() {
     return () => elements.forEach(el => el.remove())
   }, [])
 
+  // Console note for the curious (devtools is this audience's natural habitat)
+  useEffect(() => {
+    console.log("%cfanaticCoders", "font:700 16px ui-monospace,monospace;color:#a855f7")
+    console.log("%cReading source in the console? We build the rest too. Start a project: /contact", "color:#8e8e8e")
+  }, [])
+
   return (
     <footer className="footer-root relative overflow-hidden pt-24 pb-12">
       {/* Aurora top fade */}
       <div className="aurora-top-fade absolute top-0 left-0 right-0 h-32 pointer-events-none" />
 
-      {/* Code background */}
-      <div ref={containerRef} className="absolute inset-0 overflow-hidden opacity-[0.08]" />
+      {/* Code background (decorative) */}
+      <div ref={containerRef} aria-hidden="true" className="absolute inset-0 overflow-hidden opacity-[0.08]" />
 
       <div className="container mx-auto px-4 relative">
         {/* CTA card */}
         <div className="glass-card rounded-2xl p-8 md:p-12 mb-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="text-3xl font-bold mb-4">Ready to Start Your Project?</h3>
+              <h3 className="text-2xl md:text-3xl font-mono font-bold tracking-tight mb-4">Got a build in mind? Let&apos;s scope it.</h3>
               <p className="text-blue-100/70 mb-6">
-                Let&apos;s create something extraordinary together. Our team is ready to bring your vision to life.
+                Tell us what you&apos;re building and we&apos;ll bring the team to make it real.
               </p>
               <GradientButton href="/contact">
                 startConversation
@@ -121,19 +132,13 @@ export default function Footer() {
               </GradientButton>
             </div>
             <div className="relative">
-              <div className="code-decoration font-mono text-sm space-y-2 text-blue-100/40">
-                <div><span className="text-pink-400">const</span> <span className="text-indigo-400">project</span> = {"{"}</div>
-                <div className="pl-4">status: <span className="text-green-400">&apos;ready&apos;</span>,</div>
-                <div className="pl-4">team: <span className="text-blue-400">&apos;assembled&apos;</span>,</div>
-                <div className="pl-4">innovation: <span className="text-yellow-400">&apos;unlimited&apos;</span></div>
-                <div>{"}"} ;</div>
-              </div>
+              <FooterCodeType />
             </div>
           </div>
         </div>
 
         {/* Links grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid gap-10 lg:grid-cols-[1.4fr_2.6fr] lg:gap-16 mb-12">
           {/* Brand */}
           <div className="space-y-6">
             <Link href="/" className="text-xl font-bold inline-flex items-center no-underline">
@@ -142,14 +147,14 @@ export default function Footer() {
               <span className="text-white">{"}"}</span>
             </Link>
             <p className="text-blue-100/70">
-              Crafting exceptional digital experiences with cutting-edge technology and innovative solutions.
+              We design and build digital products with modern technology.
             </p>
             <div className="flex gap-4">
               {footerLinks.social.map(({ name, Icon, href }) => (
                 <a
                   key={name}
                   href={href}
-                  className="w-10 h-10 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 flex items-center justify-center text-indigo-400 hover:text-indigo-300 transition-all duration-300 border border-indigo-500/20 hover:border-indigo-500/30"
+                  className="w-11 h-11 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 flex items-center justify-center text-indigo-400 hover:text-indigo-300 transition-all duration-300 border border-indigo-500/20 hover:border-indigo-500/30 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Visit us on ${name}`}
@@ -161,50 +166,24 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services */}
-          <div>
-            <h4 className="text-lg font-semibold mb-6">Services</h4>
-            <ul className="space-y-4 list-none m-0 p-0">
-              {footerLinks.services.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-blue-100/70 hover:text-white transition-colors flex items-center group no-underline">
-                    <ChevronRight size={14} className="text-indigo-400 mr-2 opacity-0 group-hover:opacity-100 transition-all" aria-hidden />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="text-lg font-semibold mb-6">Company</h4>
-            <ul className="space-y-4 list-none m-0 p-0">
-              {footerLinks.company.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-blue-100/70 hover:text-white transition-colors flex items-center group no-underline">
-                    <ChevronRight size={14} className="text-indigo-400 mr-2 opacity-0 group-hover:opacity-100 transition-all" aria-hidden />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h4 className="text-lg font-semibold mb-6">Resources</h4>
-            <ul className="space-y-4 list-none m-0 p-0">
-              {footerLinks.resources.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-blue-100/70 hover:text-white transition-colors flex items-center group no-underline">
-                    <ChevronRight size={14} className="text-indigo-400 mr-2 opacity-0 group-hover:opacity-100 transition-all" aria-hidden />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Nav columns: 2x2 on mobile, 3-across from sm up */}
+          <nav aria-label="Footer" className="grid grid-cols-2 sm:grid-cols-3 gap-8">
+            {navColumns.map(col => (
+              <div key={col.label}>
+                <h4 className="text-sm font-mono font-semibold uppercase tracking-wider text-blue-100/70 mb-5">{col.label}</h4>
+                <ul className="space-y-4 list-none m-0 p-0">
+                  {col.links.map(link => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="relative text-blue-100/70 hover:text-white transition-colors inline-flex items-center group no-underline py-1">
+                        <ChevronRight size={14} className="absolute -left-5 text-indigo-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" aria-hidden />
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
         </div>
 
         {/* Bottom bar */}
@@ -214,9 +193,9 @@ export default function Footer() {
               © {currentYear} fanaticCoders. All rights reserved.
             </div>
             <div className="flex gap-6 text-sm">
-              <Link href="/terms"   className="text-blue-100/60 hover:text-white transition-colors no-underline">Terms of Service</Link>
-              <Link href="/privacy" className="text-blue-100/60 hover:text-white transition-colors no-underline">Privacy Policy</Link>
-              <Link href="/cookies" className="text-blue-100/60 hover:text-white transition-colors no-underline">Cookie Policy</Link>
+              <Link href="/terms"   className="text-blue-100/60 hover:text-white transition-colors no-underline py-1">Terms of Service</Link>
+              <Link href="/privacy" className="text-blue-100/60 hover:text-white transition-colors no-underline py-1">Privacy Policy</Link>
+              <Link href="/cookies" className="text-blue-100/60 hover:text-white transition-colors no-underline py-1">Cookie Policy</Link>
             </div>
           </div>
         </div>

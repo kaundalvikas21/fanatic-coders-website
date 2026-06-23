@@ -1,0 +1,5 @@
+export { PortfolioHeroSection } from "./PortfolioHeroSection"
+export { PortfolioGridSection } from "./PortfolioGridSection"
+export { PortfolioProcessSection } from "./PortfolioProcessSection"
+export { PortfolioResultsSection } from "./PortfolioResultsSection"
+export { PortfolioCtaSection } from "./PortfolioCtaSection"

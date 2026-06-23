@@ -20,6 +20,7 @@ interface LinkProps extends BaseProps {
   href: string
   target?: string
   rel?: string
+  onClick?: () => void
 }
 
 type GradientButtonProps = ButtonProps | LinkProps
@@ -66,9 +67,9 @@ export default function GradientButton(props: GradientButtonProps) {
   )
 
   if (props.href !== undefined) {
-    const { href, target, rel } = props as LinkProps
+    const { href, target, rel, onClick } = props as LinkProps
     return (
-      <Link href={href} target={target} rel={rel} className={baseClass}>
+      <Link href={href} target={target} rel={rel} onClick={onClick} className={baseClass}>
         <Inner variant={variant}>{children}</Inner>
       </Link>
     )

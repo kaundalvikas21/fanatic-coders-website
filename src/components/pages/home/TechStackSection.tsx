@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import {
   Code2, Database, Brain, TrendingUp,
   Bot, Link, LineChart,
 } from "lucide-react"
-import type { ElementType } from "react"
+import type { ElementType, KeyboardEvent } from "react"
+import { RevealSection } from "@/components/ui/RevealSection"
 import type { SimpleIcon } from "simple-icons"
 import {
   siReact, siVuedotjs, siAngular, siSvelte, siNextdotjs, siTypescript,
@@ -100,31 +101,32 @@ const categories: Category[] = [
 ]
 
 export default function TechStackSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [visible, setVisible]         = useState(false)
   const [activeCat, setActiveCat]     = useState(categories[0])
   const [fadeKey, setFadeKey]         = useState(0)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.1 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   function switchCategory(cat: Category) {
     setActiveCat(cat)
     setFadeKey(k => k + 1)
   }
 
-  const v = visible ? "visible" : ""
+  // Roving-tabindex keyboard nav across the category tabs (WAI-ARIA tablist).
+  function onTabsKeyDown(e: KeyboardEvent<HTMLButtonElement>) {
+    const cur = categories.findIndex((c) => c.id === activeCat.id)
+    const last = categories.length - 1
+    let next = cur
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = cur === last ? 0 : cur + 1
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = cur === 0 ? last : cur - 1
+    else if (e.key === "Home") next = 0
+    else if (e.key === "End") next = last
+    else return
+    e.preventDefault()
+    switchCategory(categories[next])
+    tabRefs.current[next]?.focus()
+  }
 
   return (
-    <section ref={sectionRef} className="techstack-section py-24 relative overflow-hidden" id="tech-stack">
+    <section className="techstack-section section-y relative overflow-hidden" id="tech-stack">
       {/* Background */}
       <div className="absolute inset-0" style={{ background: "var(--dark-3)" }} />
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
@@ -135,38 +137,42 @@ export default function TechStackSection() {
 
       <div className="relative z-10 container mx-auto px-4">
         {/* Header */}
-        <div className={`text-center mb-16 reveal ${v}`}>
+        <RevealSection className="text-center mb-16">
           <div className="preheading-code">tech.stack</div>
           <h2 className="heading-code mt-2">
-            our.<span style={{ color: "#a855f7" }}>technologies</span>()
+            our.<span style={{ color: "var(--aurora-violet-light)" }}>technologies</span>()
           </h2>
           <p className="subheading-code mt-3">
-            {"// Tools and technologies we use to build amazing solutions"}
+            {"// the tools we reach for to build and ship"}
           </p>
-        </div>
+        </RevealSection>
 
         {/* Category tabs */}
-        <div
-          className={`flex flex-wrap justify-center gap-3 mb-12 reveal ${v}`}
+        <RevealSection
+          className="flex flex-wrap justify-center gap-3 mb-12"
           role="tablist"
           aria-label="Technology categories"
         >
-          {categories.map(cat => (
+          {categories.map((cat, i) => (
             <button
               key={cat.id}
+              ref={(el) => { tabRefs.current[i] = el }}
               type="button"
+              id={`tech-tab-${cat.id}`}
               className={`cat-tab flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200${activeCat.id === cat.id ? " cat-active" : ""}`}
               style={{ "--cat-accent": cat.accent } as React.CSSProperties}
               role="tab"
               aria-selected={activeCat.id === cat.id}
               aria-controls={`tech-category-${cat.id}`}
+              tabIndex={activeCat.id === cat.id ? 0 : -1}
               onClick={() => switchCategory(cat)}
+              onKeyDown={onTabsKeyDown}
             >
               <cat.Icon size={16} aria-hidden />
               {cat.name}
             </button>
           ))}
-        </div>
+        </RevealSection>
 
         {/* Tech grid — key-based remount triggers CSS fade-in */}
         <div
@@ -174,6 +180,8 @@ export default function TechStackSection() {
           id={`tech-category-${activeCat.id}`}
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto tech-grid-fade"
           role="tabpanel"
+          aria-labelledby={`tech-tab-${activeCat.id}`}
+          tabIndex={0}
         >
           {activeCat.technologies.map((tech, i) => (
               <div
@@ -189,7 +197,7 @@ export default function TechStackSection() {
                     {tech.brandIcon ? (
                       <TechLogo icon={tech.brandIcon} size={28} />
                     ) : tech.FallbackIcon ? (
-                      <tech.FallbackIcon size={28} style={{ color: activeCat.accent }} aria-hidden />
+                      <tech.FallbackIcon size={28} aria-hidden />
                     ) : null}
                   </div>
                   <span className="text-sm text-blue-100/60 group-hover:text-white transition-colors text-center font-mono">
@@ -200,17 +208,10 @@ export default function TechStackSection() {
           ))}
         </div>
 
-        {/* Code decoration */}
-        <div className="mt-14 text-center font-mono text-xs space-y-1 text-blue-100/30">
-          <div>
-            <span style={{ color: "#f472b6" }}>export default</span>
-            <span style={{ color: "#818cf8" }}> function</span>
-            <span> buildAmazing() {"{"}</span>
-          </div>
-          <div className="pl-4">tools: <span style={{ color: "#34d399" }}>&apos;cutting-edge&apos;</span>,</div>
-          <div className="pl-4">results: <span style={{ color: "#60a5fa" }}>&apos;exceptional&apos;</span></div>
-          <div>{"}"}</div>
-        </div>
+        {/* Honest code-voice closer (decorative) */}
+        <p className="mt-14 text-center font-mono text-xs text-blue-100/45" aria-hidden>
+          {"// we pick the right tool for the job, not the trendiest"}
+        </p>
       </div>
     </section>
   )

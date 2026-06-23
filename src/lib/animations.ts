@@ -44,3 +44,55 @@ export async function registerScrollTrigger() {
   gsap.registerPlugin(ScrollTrigger)
   return ScrollTrigger
 }
+
+export type Killable = { kill: () => void }
+
+// A tween created with a scrollTrigger config exposes it here; killing the tween
+// alone leaves the trigger behind, so kill both.
+type TweenWithTrigger = { kill: () => void; scrollTrigger?: { kill: () => void } }
+function killable(tween: TweenWithTrigger): Killable {
+  return {
+    kill() {
+      tween.scrollTrigger?.kill()
+      tween.kill()
+    },
+  }
+}
+
+/**
+ * Scrub the element vertically as its section passes through the viewport, so a
+ * background layer drifts behind the content (parallax depth). GPU transform only.
+ * Returns a handle that kills both the tween and its ScrollTrigger on cleanup.
+ */
+export async function scrollParallax(el: HTMLElement, yPercent = 10): Promise<Killable | undefined> {
+  if (typeof window === "undefined") return
+  const { gsap } = await import("gsap")
+  await registerScrollTrigger()
+  const trigger = el.parentElement ?? el
+  const tween = gsap.to(el, {
+    yPercent,
+    ease: "none",
+    scrollTrigger: { trigger, start: "top bottom", end: "bottom top", scrub: true },
+  })
+  return killable(tween as TweenWithTrigger)
+}
+
+/**
+ * Draw a 1px rule in along one axis as it enters the viewport (scale 0 -> 1).
+ * The start state is only set when this runs, so reduced-motion (where it never
+ * runs) leaves the rule at its natural full size. Returns a handle for cleanup.
+ */
+export async function scrollDraw(el: HTMLElement, axis: "x" | "y"): Promise<Killable | undefined> {
+  if (typeof window === "undefined") return
+  const { gsap } = await import("gsap")
+  await registerScrollTrigger()
+  const from = axis === "x" ? { scaleX: 0 } : { scaleY: 0 }
+  const to = axis === "x" ? { scaleX: 1 } : { scaleY: 1 }
+  const tween = gsap.fromTo(el, from, {
+    ...to,
+    duration: 0.9,
+    ease: "power3.out",
+    scrollTrigger: { trigger: el, start: "top 82%" },
+  })
+  return killable(tween as TweenWithTrigger)
+}

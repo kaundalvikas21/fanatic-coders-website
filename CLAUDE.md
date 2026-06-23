@@ -124,6 +124,20 @@ When writing Next.js code, **ALWAYS** use these skills together:
 - Verify changes work correctly in the browser before completing tasks
 - This ensures consistent testing across all sessions
 
+### 12. Content & Copy Writing (MANDATORY for all section/page text)
+All user-facing copy MUST read as plain, human writing with **no AI signatures**. This applies
+to every new or edited section. Self-check edited copy with the `humanizer` skill.
+- **NO em dashes (—) or en dashes (–) as punctuation.** Use a period, comma, colon, or parentheses.
+- **No AI-marketing vocabulary:** seamless(ly), robust, leverage, elevate, unlock, empower,
+  bespoke, harness, cutting-edge, realm, tapestry, testament, delve, "crafting exceptional",
+  "innovative solutions", "next level", vibrant, groundbreaking, breathtaking.
+- **No AI sentence tells:** rule-of-three flourishes, "not just X but Y", negative parallelism
+  ("it's not X, it's Y"), "whether you … or just …", "-ing" pseudo-depth tails, false ranges
+  ("from X to Y" where X/Y aren't a real scale), vague attributions, inflated superlatives.
+- **Write specific, concrete, short.** Plain verbs and real detail over hype. Vary sentence rhythm.
+- **Scope:** JSX text, data-array strings, `placeholder`, `aria-label`, and `.subheading-code`
+  `// comments`. Source-code comments (explaining code) are exempt.
+
 ---
 
 ## Tech Stack
@@ -165,10 +179,17 @@ Visit `http://localhost:3000` to see the application.
 ```
 src/
 ├── app/                      # Next.js App Router
-│   ├── layout.tsx           # Root layout (Header/Footer wrapper)
-│   ├── page.tsx             # Home route entrypoint (renders HomePage)
+│   ├── layout.tsx           # Root layout (html/body, fonts, globals, default metadata)
 │   ├── globals.css          # Tailwind v4 + theme variables
-│   └── favicon.ico
+│   ├── favicon.ico
+│   └── (frontend)/          # Public pages route group (URL-transparent)
+│       ├── layout.tsx       # Frontend chrome: skip-link, Header, <main>, Footer
+│       ├── page.tsx         # Home route entrypoint (renders home sections) -> /
+│       ├── about/page.tsx
+│       ├── blog/page.tsx + [slug]/page.tsx
+│       ├── contact/page.tsx
+│       ├── portfolio/page.tsx + [id]/page.tsx
+│       └── services/page.tsx + [slug]/page.tsx
 ├── components/
 │   ├── layout/              # Layout components
 │   │   ├── Header.tsx       # Navigation with mega menu
@@ -356,6 +377,12 @@ src/
 ---
 
 ## Animations
+
+**Single source of truth: `ANIMATION.md` + `src/lib/motion.ts`.** Two layers: scroll **reveals**
+use `<RevealSection>` / `useScrollReveal` (CSS + IntersectionObserver, lightweight); **complex
+motion** (count-up, typewriter, parallax) uses GSAP via `useCountUp` / `useTypewriter` / `motion.ts`.
+Never hand-roll `IntersectionObserver`/`rAF` or inline `cubic-bezier`. CSS hover/micro transitions
+reference `var(--ease-*)` / `var(--duration-*)`. Read `ANIMATION.md` before adding motion.
 
 This project uses a hybrid animation approach:
 
