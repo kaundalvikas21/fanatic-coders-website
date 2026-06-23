@@ -21,6 +21,7 @@ import {
   Briefcase,
   Users,
   Newspaper,
+  Mail,
   ArrowRight,
   ChevronDown,
   Menu,
@@ -90,6 +91,7 @@ const navLinks = [
   { label: "Portfolio", href: "/portfolio", Icon: Briefcase  },
   { label: "About",     href: "/about",     Icon: Users      },
   { label: "Blog",      href: "/blog",      Icon: Newspaper  },
+  { label: "Contact",   href: "/contact",   Icon: Mail       },
 ]
 
 export default function Header() {
