@@ -1,13 +1,20 @@
 import type { Metadata } from "next"
-import "@fontsource/plus-jakarta-sans/400.css"
-import "@fontsource/plus-jakarta-sans/600.css"
-import "@fontsource/plus-jakarta-sans/700.css"
-import "@fontsource/jetbrains-mono/400.css"
-import "@fontsource/jetbrains-mono/600.css"
-import "@fontsource/jetbrains-mono/700.css"
+import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-plus-jakarta-sans",
+})
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
+})
 
 export const metadata: Metadata = {
   title: "fanaticCoders | Digital Agency",
@@ -21,7 +28,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" 
+    className={`${plusJakartaSans.variable} ${jetBrainsMono.variable} scroll-smooth`}>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to content
