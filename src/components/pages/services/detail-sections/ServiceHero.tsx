@@ -2,13 +2,11 @@ import { ArrowRight } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
 import { RevealSection } from "@/components/ui/RevealSection"
 import { Breadcrumb } from "@/components/ui/Breadcrumb"
-import WebDevHeroVisual from "./WebDevHeroVisual"
 import { type ServiceGroup, type ServiceItem, iconColor } from "../data"
 
 export function ServiceHero({ service, group }: { service: ServiceItem; group: ServiceGroup }) {
   const accent = iconColor[group.accent]
   const { Icon } = service
-  const hasVisual = service.slug === "web-development"
 
   const intro = (
     <RevealSection className="max-w-3xl">
@@ -46,27 +44,13 @@ export function ServiceHero({ service, group }: { service: ServiceItem; group: S
   return (
     <section className="relative overflow-hidden hero-shell [--hero-pt:7.5rem] pb-8 min-h-[100svh] flex flex-col">
       <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
-      <div className={`relative z-10 container mx-auto px-4 sm:px-6 flex w-full flex-1 flex-col justify-center ${hasVisual ? "max-w-7xl" : "max-w-6xl"}`}>
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 flex w-full max-w-6xl flex-1 flex-col justify-center">
         <RevealSection>
           <Breadcrumb items={[{ label: "home", href: "/" }, { label: "services", href: "/services" }, { label: service.slug }]} />
         </RevealSection>
 
-        {hasVisual ? (
-          <div className="mt-8 grid items-center gap-10 lg:grid-cols-[1.25fr_0.75fr]">
-            <div>
-              {intro}
-              {stats}
-            </div>
-            <RevealSection className="hidden md:flex justify-center">
-              <WebDevHeroVisual />
-            </RevealSection>
-          </div>
-        ) : (
-          <>
-            <div className="mt-8">{intro}</div>
-            {stats}
-          </>
-        )}
+        <div className="mt-8">{intro}</div>
+        {stats}
       </div>
     </section>
   )
