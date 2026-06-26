@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import { Users, ArrowRight } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
+import { RevealSection } from "@/components/ui/RevealSection"
+import { SITE_STATS } from "@/lib/site-stats"
 
 const aboutContent = [
   {
@@ -26,10 +28,10 @@ const aboutContent = [
     command: "cat team/stats.json",
     output: [
       "{",
-      '  "team_size": 50,',
-      '  "years_experience": 10,',
-      '  "projects_completed": 500,',
-      '  "happy_clients": "98%"',
+      `  "team_size": ${parseInt(SITE_STATS.teamMembers, 10)},`,
+      `  "years_experience": ${parseInt(SITE_STATS.yearsShipping, 10)},`,
+      `  "projects_completed": ${parseInt(SITE_STATS.projectsDelivered, 10)},`,
+      `  "happy_clients": "${SITE_STATS.clientRetention}"`,
       "}",
     ],
   },
@@ -112,18 +114,18 @@ export default function TerminalAboutSection() {
   }, [lines])
 
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden" id="about" style={{ background: "var(--dark-3)" }}>
+    <section ref={sectionRef} className="section-y relative overflow-hidden" id="about" style={{ background: "var(--dark-3)" }}>
       {/* Code-grid background */}
       <div className="absolute inset-0 -z-10">
         <div className="code-grid absolute inset-0" />
       </div>
 
-      <div className="container mx-auto px-4">
+      <RevealSection stagger className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="preheading-code">about.module</div>
           <h2 className="heading-code">
-            cat <span className="text-indigo-400">./about-us</span>
+            cat <span className="function">./about-us</span>
           </h2>
           <p className="subheading-code">{"// Get to know our story"}</p>
         </div>
@@ -169,7 +171,7 @@ export default function TerminalAboutSection() {
             </GradientButton>
           </div>
         </div>
-      </div>
+      </RevealSection>
     </section>
   )
 }

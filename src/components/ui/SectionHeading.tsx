@@ -32,7 +32,7 @@ export function SectionHeading({
     <div className={cn(align === "center" ? "text-center" : "text-left", className)}>
       <div className="preheading-code">{badge}</div>
       <h2 className="heading-code mt-2">{title}</h2>
-      {comment && <p className="subheading-code mt-3">{comment}</p>}
+      {comment && <p className={cn("subheading-code mt-3", align === "left" && "!mx-0")}>{comment}</p>}
     </div>
   )
 }

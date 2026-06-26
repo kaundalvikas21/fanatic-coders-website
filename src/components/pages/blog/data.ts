@@ -14,18 +14,28 @@ export const posts: BlogPost[] = [
     author: "Ava Reyes", authorRole: "Founder & Principal Engineer", authorAvatar: AVATARS.ava, tags: ["Process", "Engineering"],
     sections: [
       { id: "cost-of-big-releases", heading: "The cost of big releases", paragraphs: ["A long release cycle hides risk. When weeks of work land at once, every bug, missed requirement, and wrong assumption shows up together, and untangling them takes far longer than building the feature did."] },
-      { id: "how-we-slice-work", heading: "How we slice the work", paragraphs: ["We cut work into slices that ship every week. Each slice goes to a staging link the client can click through, so feedback arrives while the context is still fresh and a change costs an hour instead of a sprint."] },
+      { id: "how-we-slice-work", heading: "How we slice the work", blocks: [
+        { type: "p", text: "We cut work into slices that ship every week. Each slice goes to a staging link the client can click through, so feedback arrives while the context is still fresh and a change costs an hour instead of a sprint." },
+        { type: "list", items: ["A slice is one user-visible change you can demo on Friday.", "Every slice ends on a staging URL the client can click through.", "If a slice will not ship in a week, we split it again."] },
+      ] },
       { id: "protecting-the-team", heading: "Protecting the team", paragraphs: ["The habit also protects the team. Smaller batches mean fewer late nights, clearer ownership, and a demo to be proud of every Friday. Momentum compounds when progress is visible.", "It takes discipline to keep slices small and honest. We track scope in the open and say no early when something will not fit. That trade is easier to make in week one than in week six."] },
     ],
     takeaways: ["Smaller batches surface risk early, while a fix still costs an hour.", "Weekly staging links keep client feedback fresh and cheap to act on.", "Visible progress every week compounds team momentum."],
   },
   {
-    id: "2", title: "Designing dark-first interfaces that don't strain", excerpt: "Contrast, depth, and color in dark UI: the choices that make our Aurora system readable.", date: "May 24, 2026", readTime: "8 min", category: "Design", slug: "dark-first-design", coverUrl: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=1200&h=600&fit=crop",
+    id: "2", title: "Designing dark mode interfaces that don't strain", excerpt: "Contrast, depth, and color in dark UI: the choices that make our Aurora system readable.", date: "May 24, 2026", readTime: "8 min", category: "Design", slug: "dark-first-design", coverUrl: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=1200&h=600&fit=crop",
     author: "Noah Patel", authorRole: "Head of Design", authorAvatar: AVATARS.noah, tags: ["Design", "Accessibility"],
     sections: [
-      { id: "not-a-color-swap", heading: "Dark mode is not a color swap", paragraphs: ["Pure white text on a black panel vibrates and tires the eye, so we set body text a few steps below white and reserve full white for the rare element that needs to lead."] },
+      { id: "not-a-color-swap", heading: "Dark mode is not a color swap", blocks: [
+        { type: "p", text: "Pure white text on a black panel vibrates and tires the eye, so we set body text a few steps below white and reserve full white for the rare element that needs to lead." },
+        { type: "code", lang: "css", code: "body {\n  background: #080810;  /* tinted near-black, never pure #000 */\n  color: #fafafa;       /* body ink, one step below pure white */\n}" },
+      ] },
       { id: "depth-in-the-dark", heading: "Depth carries more weight in the dark", paragraphs: ["Without daylight shadows to separate surfaces, we lean on tonal layers and thin borders so cards read as distinct planes instead of one flat sheet."] },
-      { id: "color-restraint", heading: "Color needs restraint", paragraphs: ["A saturated accent that looks fine on white can glow on a dark field, so we tune the palette against the real background and check every state for contrast that meets WCAG AA.", "The payoff is a screen people can sit with for hours. Readability first, polish second, and the result still feels calm at midnight."] },
+      { id: "color-restraint", heading: "Color needs restraint", blocks: [
+        { type: "p", text: "A saturated accent that looks fine on white can glow on a dark field, so we tune the palette against the real background and check every state for contrast that meets WCAG AA." },
+        { type: "p", text: "The payoff is a screen people can sit with for hours." },
+        { type: "quote", text: "Readability first, polish second. The result still feels calm at midnight.", cite: "Aurora design notes" },
+      ] },
     ],
     takeaways: ["Drop body text below pure white to stop the vibration that tires eyes.", "Use tonal layers and thin borders for depth where shadows cannot help.", "Tune accents against the real dark background and check WCAG AA contrast."],
   },
@@ -33,8 +43,14 @@ export const posts: BlogPost[] = [
     id: "3", title: "A pragmatic guide to Next.js App Router", excerpt: "Server components, data patterns, and the boundaries we actually use in production.", date: "May 15, 2026", readTime: "10 min", category: "Engineering", slug: "app-router-guide", coverUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&h=600&fit=crop",
     author: "Mia Chen", authorRole: "Lead Frontend Engineer", authorAvatar: AVATARS.mia, tags: ["Next.js", "React"],
     sections: [
-      { id: "server-client-split", heading: "The server and client split", paragraphs: ["The App Router rewards a clear split between server and client work. We keep data fetching and rendering on the server by default and only reach for a client component when something needs state or a browser API."] },
-      { id: "skip-the-global-store", heading: "Skip the global store", paragraphs: ["Most pages never need a global store. Fetch where you render, pass plain props down, and let the server cache do the heavy lifting. The result is less code to ship and less to debug."] },
+      { id: "server-client-split", heading: "The server and client split", blocks: [
+        { type: "p", text: "The App Router rewards a clear split between server and client work. We keep data fetching and rendering on the server by default and only reach for a client component when something needs state or a browser API." },
+        { type: "code", lang: "tsx", code: "// Server Component by default: no directive, can be async\nexport default async function Page() {\n  const posts = await getPosts() // runs on the server\n  return <PostList posts={posts} />\n}" },
+      ] },
+      { id: "skip-the-global-store", heading: "Skip the global store", blocks: [
+        { type: "p", text: "Most pages never need a global store. Fetch where you render, pass plain props down, and let the server cache do the heavy lifting. The result is less code to ship and less to debug." },
+        { type: "list", ordered: true, items: ["Fetch in the Server Component that renders the data.", "Pass plain, serializable props to client leaves.", "Reach for context or a store only when state is shared across the tree."] },
+      ] },
       { id: "boundaries-as-design", heading: "Boundaries as a design decision", paragraphs: ["Client boundaries are a design decision, not an afterthought. We push them as far down the tree as possible so an interactive widget does not drag a whole page into the browser bundle.", "None of this is dogma. When a pattern fights the framework, we measure, adjust, and document the call so the next person inherits the reasoning, not just the result."] },
     ],
     takeaways: ["Keep fetching and rendering on the server until something truly needs the client.", "Fetch where you render and skip the global store on most pages.", "Push client boundaries down the tree to keep bundles small."],

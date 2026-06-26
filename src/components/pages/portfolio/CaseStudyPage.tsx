@@ -1,7 +1,6 @@
 import type { PortfolioProject } from "@/types"
 import { CtaBand } from "@/components/ui/CtaBand"
 import { CaseHero } from "./case-sections/CaseHero"
-import { CaseResults } from "./case-sections/CaseResults"
 import { CaseStory } from "./case-sections/CaseStory"
 import { CaseQuote } from "./case-sections/CaseQuote"
 import { CaseRelated } from "./case-sections/CaseRelated"
@@ -10,7 +9,6 @@ export function CaseStudyPage({ project }: { project: PortfolioProject }) {
   return (
     <>
       <CaseHero project={project} />
-      <CaseResults project={project} />
       <CaseStory project={project} />
       <CaseQuote project={project} />
       <CaseRelated project={project} />

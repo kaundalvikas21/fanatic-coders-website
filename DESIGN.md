@@ -172,6 +172,15 @@ tinted near-black; text is `#fafafa`, not white.
 (preheading chips, code-styled heading tokens). They never leak onto UI chrome, buttons,
 or body text, where the aurora set owns color.
 
+**The Gradient-Text Allow-List Rule.** `background-clip: text` is not a free decoration; it
+is restricted to a fixed set of surfaces that already exist in `globals.css`: (1) the
+animated headline/logo sweep (`.text-aurora-sweep`, `.heading-gradient`, `.logo-gradient`,
+`.animated-gradient-text`, `.cta-heading`); (2) the code/preheading chips (`.preheading-code`
+rose to pink, `.preheading-terminal`, `.preheading-comment`); (3) stat and impact numbers
+(`.stat-num`, `.portfolio-gradient-text`); (4) the `.process-num` hover fill. Outside this
+list, use a single solid color. Never a gradient on running body text, and never a colored
+`border-left`/`border-right` stripe as an accent.
+
 ## 3. Typography
 
 **Display / Body Font:** Plus Jakarta Sans (with `ui-sans-serif, system-ui, sans-serif`)
@@ -222,6 +231,18 @@ luminous, not dark drop-shadows; they read as the surface emitting light.
 - **Nav** (`0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)`): The one
   place a darker ambient shadow is allowed, to detach the sticky bar.
 
+### Motion Tokens
+Depth has a partner: choreographed but quiet motion, driven by a small `:root` token set
+that components cite rather than hand-rolling curves.
+- **Easing:** `--ease-snappy` `cubic-bezier(.16,1,.3,1)` (entrances, reveals, hover lifts)
+  and `--ease-smooth` `cubic-bezier(.4,0,.2,1)` (state cross-fades, color shifts). Both are
+  ease-out; no bounce, no elastic.
+- **Duration ladder:** `--duration-micro` 150ms, `--duration-fast` 200ms,
+  `--duration-base` 300ms, `--duration-slow` 600ms, `--duration-reveal` 800ms.
+- **Stagger:** `--stagger-base` 60ms steps the `.reveal-stagger` children (caps at the 6th;
+  the 7th+ reveal together so a last row never stays hidden).
+- Every animated surface collapses to ~0ms under `prefers-reduced-motion`.
+
 ### Named Rules
 **The Glow-Not-Drop Rule.** Elevation is conveyed by colored glow and tonal lift, not by
 heavy black drop-shadows. If a shadow looks gray and hard, it is wrong for this system.
@@ -267,11 +288,57 @@ radii are tight (8px on controls, 14px on cards); focus is always a visible auro
 > set explicit dark styles, until the theming is fixed. See CLAUDE.md Known Issues.
 
 ### Signature: Terminal & Code Chips
-- Terminal panels (`rgba(8,8,16,0.x)` chrome, mono 0.875rem) render animated command lines.
-- `.preheading-code` chips wrap a mono label in `<` and `/>` as an inline code tag, styled
-  as a rose-to-pink gradient-text label (`rgb(244,63,94)` to `rgb(236,72,153)`) with a faint
-  rose border. This is the one sanctioned `background-clip: text` gradient besides the
-  headline sweep.
+- Terminal surfaces share one chrome language: `rgba(8,8,16,0.7–0.95)` panel, 1px aurora
+  border, a row of traffic-light dots (12px on `.terminal-card` / `.about-terminal-window`,
+  7px `.svc-dot-*` inside the featured service code window), mono 0.875rem body, and a
+  blinking cursor (`.hero-cursor` 2px, `.about-cursor` 8px; `blink 1s step-end`). The hero
+  uses a floating glass badge variant (`.hero-terminal-badge`, `heroFloat 6s`).
+- **Preheading chip family** (mono label, 1px tinted border, gradient-text fill, glow
+  `text-shadow`):
+  - `.preheading-code` wraps the label in `<` and `/>`, rose to pink
+    (`rgb(244,63,94)` to `rgb(236,72,153)`).
+  - `.preheading-terminal` prefixes `$ `, pink to fuchsia (`rgb(236,72,153)` to
+    `rgb(219,39,119)`).
+  - `.preheading-comment` prefixes `// `, orange to rose (`rgb(251,146,60)` to
+    `rgb(251,113,133)`).
+  All three are on the Gradient-Text Allow-List; the bracket/prefix glyphs are pseudo-element
+  content, not typed text.
+
+### Signature: Aurora Motion & Accent Patterns
+The components above are static glass; these carry the system's choreography. Each is a
+reusable pattern, not a one-off.
+
+- **Process number watermark** (`.process-num`): a large glyph painted with a 200%-tall
+  gradient (faint white `rgba(255,255,255,0.10)` top half, cyan-to-violet bottom half) that
+  wipes upward as `background-position` slides on `.group:hover`, plus a violet drop-shadow.
+  The number fills with aurora light as you hover its card.
+- **Spinning aurora border** (`.aurora-border`, `.aurora-ring`, `.team-card-glow`,
+  `.aurora-ring-avatar`): a conic gradient rotated through the `--border-angle`
+  `@property` (`borderSpin 4s linear`), masked to a 2px ring and faded `opacity 0 to 1` on
+  hover / focus-within. Used for team cards, avatars, and accent outlines. Animation off
+  under reduced-motion.
+- **Accent-variable cards** (`.bento-card`, `.value-card`, `.tech-card`, `.cat-tab`): one
+  CSS-var contract drives per-card theming. A parent sets `--tech-accent` / `--cat-accent`
+  (or `--accent-border` / `--accent-glow` / `--accent-icon` / `--accent-tag`), and the card
+  derives its hover fill, border, and glow with `color-mix(in srgb, var(--accent) N%,
+  …)`. This keeps every card on the aurora palette without bespoke CSS per color.
+- **Asymmetric bento grids** (`.services-bento` 4-col, `.values-bento` 3-col): explicit
+  `grid-column` / `grid-row` placement (a featured 2x2 cell, a tall cell, wide cells), not a
+  uniform grid; both collapse to a single column at 640–768px. Gotcha: `.bento-card` placement
+  is keyed by global `nth-child`, so when reused outside `.services-bento` reset
+  `grid-column/row: auto`.
+- **Featured code window** (`.code-window`, `.code-titlebar`, `.code-body`): a mini editor
+  pane docked in the featured service cell, with `.svc-dot-*` traffic lights and a dimmed mono
+  code body, reinforcing the code-as-language motif inside a marketing card.
+- **Two-pane FAQ and story timeline** (`.faq-layout`, `.answer-panel`, `.story-panel`):
+  desktop is a question list beside an animated answer pane (`panelEnter 520ms` /
+  `panelExit 200ms`, both `cubic-bezier(0.16,1,0.3,1)`-family); mobile collapses to a
+  grid-rows `0fr to 1fr` accordion (`.mobile-answer`). The About story timeline reuses the
+  same panel keyframes.
+- **Partners marquee** (`.marquee-viewport`, `.marquee-inner`, `.partner-card`):
+  `marquee-scroll 32s linear` with an edge mask-fade and pause-on-hover; logos sit grayscale
+  at 45% opacity and colorize on hover. Reduced-motion drops the scroll and wraps the cards
+  into a static centered flex row.
 
 ## 6. Do's and Don'ts
 
@@ -292,8 +359,9 @@ radii are tight (8px on controls, 14px on cards); focus is always a visible auro
   swagger, no web3 buzzword energy.
 - **Don't** read as stiff corporate sterility (navy-suit, IBM/Accenture) or as a cluttered,
   ad-heavy marketplace.
-- **Don't** use `background-clip: text` gradients as decoration outside the two sanctioned
-  uses (the headline aurora sweep and the rose-pink preheading chip), and never a colored
+- **Don't** use `background-clip: text` gradients as decoration outside the Gradient-Text
+  Allow-List (headline/logo sweep, code/preheading chips, stat and impact numbers, the
+  `.process-num` hover fill); never on running body text, and never a colored
   `border-left`/`border-right` stripe as an accent.
 - **Don't** use pure `#000` or `#fff`, and don't introduce a light mode or theme toggle.
 - **Don't** let glass blur and glow become a default texture on every element; it is

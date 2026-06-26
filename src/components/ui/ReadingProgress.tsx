@@ -31,10 +31,10 @@ export function ReadingProgress() {
   }, [])
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50 h-0.5 bg-transparent" aria-hidden>
+    <div className="fixed inset-x-0 top-0 z-[60] h-0.5 bg-transparent" aria-hidden>
       <div
-        className="h-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400"
-        style={{ width: `${progress * 100}%` }}
+        className="h-full w-full origin-left bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400"
+        style={{ transform: `scaleX(${progress})` }}
       />
     </div>
   )

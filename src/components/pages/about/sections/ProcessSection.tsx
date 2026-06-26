@@ -1,7 +1,6 @@
 import { Search, PenTool, Code2, Rocket } from "lucide-react"
 import type { ElementType } from "react"
 import { SectionHeading } from "@/components/ui/SectionHeading"
-import { GlassCard } from "@/components/ui/GlassCard"
 import { RevealSection } from "@/components/ui/RevealSection"
 
 interface Step {
@@ -20,8 +19,8 @@ const steps: Step[] = [
 
 export function ProcessSection() {
   return (
-    <section id="process" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
-      <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
+    <section id="process" className="scroll-mt-28 section-y relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
+      <div className="aurora-bg-section absolute -inset-[14%] pointer-events-none" data-parallax="8" />
 
       <div className="relative z-10 container mx-auto px-4">
         <RevealSection>
@@ -32,18 +31,33 @@ export function ProcessSection() {
           />
         </RevealSection>
 
-        <RevealSection stagger className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
-          {steps.map((step) => (
-            <GlassCard key={step.n} lift className="group p-7">
-              <div className="flex items-center justify-between">
-                <span className="process-num text-4xl font-bold font-mono tabular-nums">{step.n}</span>
-                <step.Icon size={22} className="text-indigo-300 transition-colors group-hover:text-indigo-200" aria-hidden />
-              </div>
-              <h3 className="mt-4 text-lg font-bold text-white">{step.title}</h3>
-              <p className="mt-2 text-sm text-blue-100/60 leading-relaxed">{step.description}</p>
-            </GlassCard>
-          ))}
-        </RevealSection>
+        {/* Connected stepper, not a card grid: numbered nodes on a connector line (desktop)
+            that stack into an ordered list on smaller screens. */}
+        <div className="relative mx-auto mt-14 max-w-6xl">
+          <span
+            aria-hidden
+            data-draw="connector"
+            className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-6 h-px origin-left bg-white/10"
+          />
+          <RevealSection
+            as="ol"
+            stagger
+            className="grid list-none gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {steps.map((step) => (
+              <li key={step.n} className="group relative flex flex-col items-center text-center">
+                <span className="relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[var(--dark-2)] ring-1 ring-white/10 transition-shadow duration-300 group-hover:ring-white/20 group-hover:shadow-[0_0_22px_-4px_var(--aurora-cyan-light)]">
+                  <span className="process-num text-3xl font-bold font-mono tabular-nums">{step.n}</span>
+                </span>
+                <div className="mt-5 flex items-center justify-center gap-2">
+                  <step.Icon size={18} className="shrink-0 text-[var(--aurora-cyan-light)]" aria-hidden />
+                  <h3 className="text-lg font-bold text-[var(--color-text-base)]">{step.title}</h3>
+                </div>
+                <p className="mt-2 max-w-[28ch] text-sm text-[var(--color-text-muted)] leading-relaxed">{step.description}</p>
+              </li>
+            ))}
+          </RevealSection>
+        </div>
       </div>
     </section>
   )

@@ -137,17 +137,17 @@ export function Select({
         className={cn(
           "flex w-full items-center justify-between gap-2 rounded-xl bg-white/5 px-4 py-3 text-left text-sm",
           "border outline-none transition-colors hover:border-white/20",
-          "focus-visible:border-indigo-400/70 focus-visible:ring-2 focus-visible:ring-indigo-400/30 focus-visible:bg-white/[0.07]",
+          "focus-visible:border-[var(--aurora-violet-light)]/70 focus-visible:ring-2 focus-visible:ring-[var(--aurora-violet-light)]/30 focus-visible:bg-white/[0.07]",
           error ? "border-red-400/60" : "border-white/10",
         )}
       >
-        <span className={cn("truncate", selected ? "text-white" : "text-blue-100/35")}>
+        <span className={cn("truncate", selected ? "text-white" : "text-[var(--color-text-muted)]")}>
           {selected ? selected.label : placeholder}
         </span>
         <ChevronDown
           size={16}
           aria-hidden
-          className={cn("shrink-0 text-blue-100/50 transition-transform duration-200", open && "rotate-180")}
+          className={cn("shrink-0 text-[var(--color-text-muted)] transition-transform duration-200", open && "rotate-180")}
         />
       </button>
 

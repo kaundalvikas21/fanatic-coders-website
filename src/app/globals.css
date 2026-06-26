@@ -71,6 +71,9 @@
    AURORA DESIGN SYSTEM — Fanatic Coders
    ═══════════════════════════════════════════════════ */
 :root {
+  /* Offset below the fixed header (116px) for anchor landing + sticky rails. */
+  --header-offset: 8.5rem;
+
   /* Shadcn/ui light mode defaults */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -108,6 +111,7 @@
   /* Legacy vars (kept for backward compat) */
   --color-bg-base: #080810;
   --color-text-base: #f4f6ff;
+  --color-text-muted: #aab2d4; /* solid muted; ~8:1 on --dark-1, passes WCAG AA */
   --color-primary-rgb: 79, 70, 229;
   --color-secondary-rgb: 124, 58, 237;
   --color-accent-rgb: 37, 99, 235;
@@ -119,6 +123,10 @@
   --dark-3: #12122a;
   --dark-4: #1a1a3a;
 
+  /* ── Hero layout ── */
+  /* Top padding that clears the fixed header; fluid so mobile isn't over-padded. */
+  --hero-pt: clamp(8.5rem, 7rem + 5vw, 12.25rem);
+
   /* ── Aurora Accent ── */
   --aurora-violet:       #7c3aed;
   --aurora-violet-light: #a855f7;
@@ -128,6 +136,13 @@
   --aurora-cyan-light:   #22d3ee;
   --aurora-green:        #10b981;
   --aurora-green-light:  #34d399;
+
+  /* Web-dev hero robot scene accents. Tuned siblings of the aurora tokens, kept
+     exact to preserve the hand-lit illustration. Single source for the JSX style
+     objects in WebDevHeroVisual.tsx and the .wd-* keyframes below. */
+  --wd-blue:   #5b7cff;
+  --wd-violet: #8b5cf6;
+  --wd-cyan:   #34d2e8;
 
   /* ── Glassmorphism Tokens ── */
   --glass-bg:      rgba(255, 255, 255, 0.04);
@@ -196,6 +211,12 @@
   }
   html {
     @apply font-sans;
+  }
+  /* Clickable controls signal it: native buttons default to the arrow cursor. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
   }
 }
 
@@ -313,8 +334,8 @@ body {
 }
 
 .glass-nav {
-  background: rgba(8, 8, 16, 0.7);
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: color-mix(in oklab, var(--dark-1) 70%, transparent);
+  border: 1px solid var(--glass-border-aurora);
   box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
@@ -327,7 +348,7 @@ body {
   background:
     radial-gradient(ellipse 100% 70% at 15% 15%, rgba(124,58,237,0.45) 0%, transparent 55%),
     radial-gradient(ellipse 80% 60% at 85% 85%, rgba(6,182,212,0.35) 0%, transparent 55%),
-    var(--dark-0);
+    var(--dark-1);
 }
 
 .aurora-bg-section {
@@ -347,11 +368,72 @@ body {
   background: var(--dark-0);
 }
 
-/* Aurora mesh animated (hero only) */
-.aurora-animated {
-  animation: auroraShift 20s ease-in-out infinite alternate;
-  background-size: 200% 200%;
+/* Darkening scrim over a hero background image so centered white copy stays AA-legible
+   over the artwork's bright spots, and the image fades into the section below. Shared by
+   the portfolio and about heroes (any full-bleed image hero). */
+.hero-bg-scrim {
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 42%, rgba(8, 8, 16, 0.42), rgba(8, 8, 16, 0.72) 100%),
+    linear-gradient(
+      to bottom,
+      rgba(8, 8, 16, 0.82) 0%,
+      rgba(8, 8, 16, 0.3) 22%,
+      rgba(8, 8, 16, 0.48) 66%,
+      var(--dark-1) 100%
+    );
 }
+
+/* Hero image load animation: image fades in and settles from a slight zoom, then a
+   one-shot aurora light band wipes across. Both play on mount (so they replay each
+   reload), composited transform/opacity only, frozen under reduced-motion. */
+@keyframes heroBgReveal {
+  from { opacity: 0; transform: scale(1.12); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.hero-bg-img {
+  animation: heroBgReveal 3s var(--ease-snappy) both;
+  will-change: transform, opacity;
+}
+
+.hero-bg-sweep {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-bg-sweep::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  left: 0;
+  width: 60%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(167, 139, 250, 0) 30%,
+    rgba(167, 139, 250, 0.08) 48%,
+    rgba(34, 211, 238, 0.05) 58%,
+    rgba(167, 139, 250, 0) 70%,
+    transparent 100%
+  );
+  filter: blur(14px);
+  mix-blend-mode: screen;
+  transform: translateX(-180%) rotate(8deg);
+  opacity: 0;
+  animation: heroBgSweep 2.2s var(--ease-smooth) 0.5s both;
+}
+@keyframes heroBgSweep {
+  0%   { transform: translateX(-180%) rotate(8deg); opacity: 0; }
+  18%  { opacity: 0.6; }
+  82%  { opacity: 0.6; }
+  100% { transform: translateX(300%) rotate(8deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-img { animation: none; opacity: 1; transform: none; will-change: auto; }
+  .hero-bg-sweep::before { animation: none; opacity: 0; }
+}
+
 
 /* ═══════════════════════════════════════════════════
    AI-NATIVE DOT GRID TEXTURE
@@ -387,8 +469,46 @@ body {
   word-break: break-word;
 }
 
+/* Shared hero recipe: fluid display h1 + consistent header-clearing top padding.
+   Used across every page hero so the family scales together (no stepped md→lg jump). */
+.hero-h1 {
+  font-size: clamp(1.875rem, 1.1rem + 3.6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.hero-shell {
+  padding-top: var(--hero-pt);
+}
+
+/* Shared hero subcopy: muted blue-tinted body under the h1. Single source so every
+   page hero's lede color and measure stay aligned (margin stays per-hero in JSX). */
+.hero-subcopy {
+  @apply text-base sm:text-lg text-blue-100/70 max-w-2xl mx-auto leading-relaxed;
+}
+
+/* Unified vertical rhythm for content sections: tight on mobile, full on desktop.
+   Single source of truth — edit here to retune section spacing site-wide. */
+.section-y {
+  padding-block: clamp(3.5rem, 2.5rem + 5vw, 6rem);
+}
+
+/* Skip render + animation paint for heavy regions while they're off-screen.
+   content-visibility:auto only renders near the viewport; the `auto` intrinsic
+   height caches the real size after first paint so scrolling stays jank-free.
+   Used on backdrop-filter card sections and the hero robot's perpetual keyframes. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+.cv-robot {
+  content-visibility: auto;
+  contain-intrinsic-size: 470px 560px;
+}
+
 .heading-code .function {
-  @apply text-indigo-400;
+  color: var(--aurora-violet-light);
 }
 
 .heading-code .params {
@@ -402,14 +522,7 @@ body {
 
 .preheading-code {
   @apply inline-flex items-center justify-center px-4 py-1.5 mb-4 rounded-full text-sm font-mono;
-  background: linear-gradient(
-    135deg,
-    rgb(244, 63, 94),
-    rgb(236, 72, 153)
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: rgb(244, 63, 94);
   text-shadow: 0 0 30px rgba(244, 63, 94, 0.3);
   border: 1px solid rgba(244, 63, 94, 0.3);
 }
@@ -486,13 +599,31 @@ body {
 }
 
 .text-aurora-sweep {
-  background: linear-gradient(135deg, var(--aurora-violet), var(--aurora-blue), var(--aurora-cyan), var(--aurora-violet));
+  background: linear-gradient(135deg, var(--aurora-violet-light), var(--aurora-blue-light), var(--aurora-cyan-light), var(--aurora-violet-light));
   background-size: 300% 300%;
   animation: gradient 5s ease infinite;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+/* Fallbacks so the word never disappears when the clip can't paint: browsers
+   without background-clip:text, and forced-colors/high-contrast mode. */
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .text-aurora-sweep {
+    background: none;
+    color: var(--aurora-violet-light);
+    -webkit-text-fill-color: currentColor;
+  }
+}
+@media (forced-colors: active) {
+  .text-aurora-sweep {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+    animation: none;
+  }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -636,34 +767,97 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .team-card-glow::after { animation: none; }
+  .text-aurora-sweep { animation: none; }
 }
 
-/* Process step number: faint watermark that fills with aurora color on card hover.
-   A tall gradient (faint-white top half, aurora bottom half) clipped to the glyph;
-   sliding background-position wipes the color upward for a smooth fill. */
+/* Process step number: faint watermark that brightens to aurora violet on card
+   hover. Solid color (no gradient-clipped text) with a color + glow transition. */
 .process-num {
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.10) 0%,
-    rgba(255, 255, 255, 0.10) 50%,
-    var(--aurora-cyan) 50%,
-    var(--aurora-violet) 100%
-  );
-  background-size: 100% 200%;
-  background-position: 0% 0%;
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  transition: background-position var(--duration-slow) var(--ease-smooth),
+  color: rgba(255, 255, 255, 0.42);
+  transition: color var(--duration-base) var(--ease-smooth),
               filter var(--duration-base) var(--ease-smooth);
 }
 .group:hover .process-num {
-  background-position: 0% 100%;
+  color: var(--aurora-violet-light);
   filter: drop-shadow(0 0 14px rgba(124, 58, 237, 0.35));
+}
+
+/* Process cards pop from center on hover (scale, not the default card-lift upward
+   translate); keeps the card-lift glow. */
+.process-card:hover { transform: scale(1.04); }
+
+/* The Support phase is continuous, not a fixed-length step: a dashed aurora border
+   sets it apart from the seven solid-bordered phases and reads as "ongoing". */
+.process-card-ongoing {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--aurora-violet) 32%, transparent);
+}
+
+/* Deliverable rows: restrained, professional hover. Lift a touch, tint the border
+   to the group accent, deepen the shadow, and glow the icon tile. Accent vars
+   (--accent-border / --accent-icon) are set per row in ServiceDeliverables.tsx. */
+.deliverable-card {
+  transition: transform 0.3s var(--ease-smooth),
+              border-color 0.3s var(--ease-smooth),
+              background-color 0.3s var(--ease-smooth),
+              box-shadow 0.3s var(--ease-smooth);
+}
+.deliverable-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-border);
+  background-color: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--accent-border);
+}
+.deliverable-card:hover .icon-box {
+  box-shadow: 0 0 16px var(--accent-icon);
+}
+@media (prefers-reduced-motion: reduce) {
+  .deliverable-card { transition: none; }
+  .deliverable-card:hover { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .process-num { transition: none; }
+}
+
+/* Connected process flow: sequential steps on a rail (replaces uniform 4-up cards).
+   Equal-width steps; the rail is built from per-step left/right segments so it stays
+   aligned and breaks cleanly at each dot. Horizontal on desktop, stacked on mobile. */
+.process-step { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.process-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--aurora-violet);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--aurora-violet) 20%, transparent),
+    0 0 16px rgba(124, 58, 237, 0.45);
+}
+.process-rail-row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-block: 18px;
+}
+@media (min-width: 1024px) {
+  .process-rail-row::before,
+  .process-rail-row::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--aurora-violet) 55%, transparent),
+      color-mix(in srgb, var(--aurora-cyan) 40%, transparent)
+    );
+    opacity: 0.45;
+  }
+  .process-rail-row::before { left: 0; right: calc(50% + 12px); }
+  .process-rail-row::after  { left: calc(50% + 12px); right: 0; }
+  .process-step:first-child .process-rail-row::before { display: none; }
+  .process-step:last-child  .process-rail-row::after  { display: none; }
 }
 
 /* Keep Chrome/Safari autofill on the dark surface instead of the default white repaint. */
@@ -682,30 +876,43 @@ textarea:-webkit-autofill {
    ═══════════════════════════════════════════════════ */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity var(--duration-slow) var(--ease-snappy),
-              transform var(--duration-slow) var(--ease-snappy);
+  transform: translateY(40px) scale(0.985);
+  transition: opacity 0.8s var(--ease-snappy),
+              transform 0.8s var(--ease-snappy);
 }
 
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-/* Staggered children */
+/* Staggered children: each lifts + settles in turn, so a section reads as a
+   deliberate cascade rather than one block popping in. */
 .reveal-stagger > * {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s var(--ease-snappy),
-              transform 0.5s var(--ease-snappy);
+  transform: translateY(34px) scale(0.985);
+  transition: opacity 0.7s var(--ease-snappy),
+              transform 0.7s var(--ease-snappy);
 }
 
-.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0ms;  opacity: 1; transform: none; }
-.reveal-stagger.visible > *:nth-child(2) { transition-delay: 60ms; opacity: 1; transform: none; }
-.reveal-stagger.visible > *:nth-child(3) { transition-delay: 120ms; opacity: 1; transform: none; }
-.reveal-stagger.visible > *:nth-child(4) { transition-delay: 180ms; opacity: 1; transform: none; }
-.reveal-stagger.visible > *:nth-child(5) { transition-delay: 240ms; opacity: 1; transform: none; }
-.reveal-stagger.visible > *:nth-child(6) { transition-delay: 300ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0ms;   opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(2) { transition-delay: 90ms;  opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(3) { transition-delay: 180ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(4) { transition-delay: 270ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(5) { transition-delay: 360ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(6) { transition-delay: 450ms; opacity: 1; transform: none; }
+/* Any children past the 6th (e.g. a 3x3 capabilities grid) reveal together so they never stay hidden. */
+.reveal-stagger.visible > *:nth-child(n+7) { transition-delay: 520ms; opacity: 1; transform: none; }
+
+/* Motion-sensitive users get the content instantly, no fade/slide. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* ═══════════════════════════════════════════════════
    KINETIC TYPOGRAPHY
@@ -714,6 +921,7 @@ textarea:-webkit-autofill {
   display: inline-block;
   opacity: 0;
   transform: translateY(32px);
+  will-change: transform, opacity;
 }
 
 .word-reveal.visible {
@@ -808,15 +1016,6 @@ textarea:-webkit-autofill {
 /* ═══════════════════════════════════════════════════
    PARTNERS MARQUEE
    ═══════════════════════════════════════════════════ */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
-
 /* ═══════════════════════════════════════════════════
    @PROPERTY DECLARATIONS
    ═══════════════════════════════════════════════════ */
@@ -846,10 +1045,6 @@ textarea:-webkit-autofill {
   100% { background-position: 0% 50%; }
 }
 
-@keyframes auroraShift {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
 
 @keyframes borderSpin {
   to { --border-angle: 360deg; }
@@ -923,12 +1118,20 @@ textarea:-webkit-autofill {
    HEADER — logo gradient, nav links, mega-menu
    ═══════════════════════════════════════════════════ */
 .logo-gradient {
-  background: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4, #7c3aed);
+  background: linear-gradient(135deg, var(--aurora-violet), var(--aurora-blue), var(--aurora-cyan), var(--aurora-violet));
   background-size: 300% 300%;
   animation: gradShift 5s ease infinite;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+/* Fallbacks so the wordmark never disappears: no background-clip support, or
+   forced-colors / high-contrast mode. */
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .logo-gradient { background: none; color: var(--aurora-violet-light); -webkit-text-fill-color: currentColor; }
+}
+@media (forced-colors: active) {
+  .logo-gradient { background: none; color: CanvasText; -webkit-text-fill-color: CanvasText; animation: none; }
 }
 @keyframes gradShift {
   0%, 100% { background-position: 0% 50%; }
@@ -952,7 +1155,22 @@ textarea:-webkit-autofill {
 .nav-link:hover,
 .nav-link--active {
   color: #fff;
-  background: rgba(124, 58, 237, 0.1);
+  background: color-mix(in oklab, var(--aurora-violet) 10%, transparent);
+}
+/* Visible keyboard focus for every interactive nav control (WCAG 2.4.7). */
+.nav-link:focus-visible,
+.mega-item:focus-visible,
+.mobile-row:focus-visible,
+.mobile-item:focus-visible {
+  outline: 2px solid var(--aurora-violet-light);
+  outline-offset: 2px;
+}
+
+/* Header gains an opaque blurred bar once scrolled past the hero top. */
+.header-scrolled {
+  background: color-mix(in oklab, var(--dark-1) 95%, transparent);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
 }
 .mega-panel {
   position: absolute;
@@ -971,81 +1189,149 @@ textarea:-webkit-autofill {
   transform: translateX(-50%);
   width: 12px;
   height: 12px;
-  background: rgba(8, 8, 16, 0.97);
-  border-left: 1px solid rgba(124, 58, 237, 0.2);
-  border-top: 1px solid rgba(124, 58, 237, 0.2);
+  background: color-mix(in oklab, var(--dark-1) 97%, transparent);
+  border-left: 1px solid var(--glass-border-aurora);
+  border-top: 1px solid var(--glass-border-aurora);
   rotate: 45deg;
 }
 .mega-inner {
   display: flex;
-  background: rgba(8, 8, 16, 0.97);
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: color-mix(in oklab, var(--dark-1) 97%, transparent);
+  border: 1px solid var(--glass-border-aurora);
   border-radius: 1rem;
-  box-shadow: 0 20px 48px -8px rgba(0,0,0,0.6), 0 0 24px rgba(124,58,237,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
-  backdrop-filter: blur(32px) saturate(200%);
+  box-shadow: 0 20px 48px -8px rgba(0,0,0,0.6), 0 0 24px color-mix(in oklab, var(--aurora-violet) 5%, transparent), inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
   overflow: hidden;
 }
 .mega-columns { display: flex; flex: 1; padding: 2rem; gap: 0; }
 .mega-col { flex: 1; min-width: 210px; padding: 0 1.375rem; }
-.mega-col + .mega-col { border-left: 1px solid rgba(124, 58, 237, 0.1); }
+.mega-col + .mega-col { border-left: 1px solid color-mix(in oklab, var(--aurora-violet) 10%, transparent); }
 .col-head {
   display: flex; align-items: center; gap: 0.4rem;
   font-size: 0.85rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
-  color: #a855f7;
+  color: var(--aurora-violet-light);
   padding-bottom: 0.75rem; margin-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(124, 58, 237, 0.12);
+  border-bottom: 1px solid color-mix(in oklab, var(--aurora-violet) 12%, transparent);
 }
 .mega-item {
   position: relative; display: flex; align-items: center; gap: 0.75rem;
   padding: 0.625rem 0.875rem 0.625rem 1rem; border-radius: 0.5rem;
   text-decoration: none; overflow: hidden; transition: background 0.2s ease;
 }
-.mega-item::before {
-  content: ''; position: absolute; left: 0; top: 12%; height: 76%; width: 2px;
-  border-radius: 0 2px 2px 0;
-  background: linear-gradient(to bottom, #7c3aed, #06b6d4);
-  transform: scaleY(0); transform-origin: center;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.mega-item:hover::before { transform: scaleY(1); }
-.mega-item:hover { background: linear-gradient(90deg, rgba(124,58,237,0.12) 0%, rgba(124,58,237,0.04) 60%, transparent 100%); }
+.mega-item:hover { background: color-mix(in oklab, var(--aurora-violet) 10%, transparent); }
 .item-icon {
   display: flex; align-items: center; justify-content: center;
   width: 2.4rem; height: 2.4rem; border-radius: 0.45rem;
-  background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.18);
-  color: #a855f7; font-size: 1.1rem; flex-shrink: 0;
+  background: color-mix(in oklab, var(--aurora-violet) 10%, transparent);
+  border: 1px solid color-mix(in oklab, var(--aurora-violet) 18%, transparent);
+  color: var(--aurora-violet-light); font-size: 1.1rem; flex-shrink: 0;
   transition: background 0.2s ease, color 0.2s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .mega-item:hover .item-icon {
-  background: rgba(124,58,237,0.22); color: #c084fc; border-color: rgba(168,85,247,0.4);
-  transform: rotate(12deg) scale(1.1); box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+  background: color-mix(in oklab, var(--aurora-violet) 22%, transparent);
+  color: color-mix(in oklab, var(--aurora-violet-light) 65%, white);
+  border-color: color-mix(in oklab, var(--aurora-violet-light) 40%, transparent);
+  transform: rotate(12deg) scale(1.1); box-shadow: 0 4px 14px color-mix(in oklab, var(--aurora-violet) 35%, transparent);
 }
 .item-body { display: flex; flex-direction: column; gap: 0.1rem; flex: 1; min-width: 0; transition: transform 0.22s cubic-bezier(0.16,1,0.3,1); }
 .mega-item:hover .item-body { transform: translateX(3px); }
 .item-name { font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.82); line-height: 1.2; transition: color 0.18s ease; }
 .mega-item:hover .item-name { color: #fff; }
-.item-desc { font-size: 0.72rem; color: rgba(255,255,255,0.55); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-.item-arrow { font-size: 0.78rem; color: #a855f7; opacity: 0; transform: translateX(-5px); flex-shrink: 0; transition: opacity 0.18s ease 0.06s, transform 0.22s cubic-bezier(0.16,1,0.3,1) 0.06s; }
+.item-desc { font-size: 0.72rem; color: var(--color-text-muted); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.item-arrow { font-size: 0.78rem; color: var(--aurora-violet-light); opacity: 0; transform: translateX(-5px); flex-shrink: 0; transition: opacity 0.18s ease 0.06s, transform 0.22s cubic-bezier(0.16,1,0.3,1) 0.06s; }
 .mega-item:hover .item-arrow { opacity: 1; transform: translateX(0); }
-.v-divider { width: 1px; background: linear-gradient(to bottom, transparent 0%, rgba(124,58,237,0.18) 15%, rgba(124,58,237,0.18) 85%, transparent 100%); flex-shrink: 0; }
-.mega-featured { width: 250px; flex-shrink: 0; padding: 2rem 1.625rem; display: flex; flex-direction: column; background: linear-gradient(155deg, rgba(124,58,237,0.07) 0%, rgba(6,182,212,0.03) 100%); }
-.featured-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #06b6d4; margin-bottom: 0.3rem; }
-.featured-heading { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; line-height: 1.2; }
-.featured-body { font-size: 0.75rem; color: rgba(255,255,255,0.55); line-height: 1.55; margin-bottom: 1.25rem; }
+.v-divider { width: 1px; background: linear-gradient(to bottom, transparent 0%, color-mix(in oklab, var(--aurora-violet) 18%, transparent) 15%, color-mix(in oklab, var(--aurora-violet) 18%, transparent) 85%, transparent 100%); flex-shrink: 0; }
+.mega-featured { width: 250px; flex-shrink: 0; padding: 2rem 1.625rem; display: flex; flex-direction: column; background: linear-gradient(155deg, color-mix(in oklab, var(--aurora-violet) 7%, transparent) 0%, color-mix(in oklab, var(--aurora-cyan) 3%, transparent) 100%); }
+.featured-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--aurora-cyan-light); margin-bottom: 0.3rem; }
+.featured-heading { font-size: 1.1rem; font-weight: 700; color: var(--color-text-base); margin-bottom: 0.5rem; line-height: 1.2; }
+.featured-body { font-size: 0.75rem; color: var(--color-text-muted); line-height: 1.55; margin-bottom: 1.25rem; }
 .featured-stats { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
 .stat-item { display: flex; align-items: baseline; gap: 0.45rem; }
-.stat-num { font-size: 1.25rem; font-weight: 800; background: linear-gradient(135deg, #a855f7 0%, #06b6d4 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; line-height: 1; }
-.stat-label { font-size: 0.68rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; }
-.mobile-row { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; color: rgba(255,255,255,0.8); background: transparent; border: none; cursor: pointer; font-size: 0.9rem; text-decoration: none; transition: background 0.15s, color 0.15s; }
-.mobile-row:hover { background: rgba(124,58,237,0.1); color: #fff; }
-.mobile-col-head { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #a855f7; padding: 0.5rem 0.75rem 0.375rem; }
-.mobile-item { display: flex; align-items: center; gap: 0.625rem; padding: 0.75rem; border-radius: 0.375rem; font-size: 0.85rem; color: rgba(255,255,255,0.7); text-decoration: none; transition: background 0.15s, color 0.15s; }
-.mobile-item:hover { background: rgba(124,58,237,0.08); color: #fff; }
+.stat-num { font-size: 1.25rem; font-weight: 800; color: var(--aurora-violet-light); line-height: 1; font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 0.68rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.mobile-row { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 0.7rem 1rem; border-radius: 0.5rem; color: rgba(255,255,255,0.8); background: transparent; border: none; cursor: pointer; font-size: 0.9rem; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.mobile-row:hover { background: color-mix(in oklab, var(--aurora-violet) 10%, transparent); color: #fff; }
+.mobile-col-head { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--aurora-violet-light); padding: 0.5rem 0.75rem 0.375rem; }
+.mobile-item { display: flex; align-items: center; gap: 0.625rem; min-height: 44px; padding: 0.6rem 0.75rem; border-radius: 0.375rem; font-size: 0.85rem; color: rgba(255,255,255,0.78); text-decoration: none; transition: background 0.15s, color 0.15s; }
+.mobile-item:hover { background: color-mix(in oklab, var(--aurora-violet) 8%, transparent); color: #fff; }
+
+/* ── Mobile drawer (slides in from the right) ── */
+.mobile-backdrop {
+  position: fixed; inset: 0; z-index: 40;
+  background: color-mix(in oklab, var(--dark-0) 60%, transparent);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.26s var(--ease-snappy);
+}
+.mobile-backdrop.open { opacity: 1; pointer-events: auto; }
+
+.mobile-drawer {
+  position: fixed; top: 0; right: 0; z-index: 50;
+  height: 100dvh; width: min(22rem, 85vw);
+  display: flex; flex-direction: column;
+  background: color-mix(in oklab, var(--dark-1) 96%, transparent);
+  border-left: 1px solid var(--glass-border-aurora);
+  box-shadow: -12px 0 40px rgba(0,0,0,0.5);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  transform: translateX(100%);
+  transition: transform 0.26s var(--ease-snappy);
+  will-change: transform;
+}
+.mobile-drawer.open { transform: translateX(0); }
+
+.mobile-drawer-head {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.25rem 0.75rem;
+}
+.mobile-close {
+  display: grid; place-items: center;
+  width: 2.75rem; height: 2.75rem; border-radius: 0.6rem;
+  color: rgba(255,255,255,0.7); background: transparent; border: none; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.mobile-close:hover { background: color-mix(in oklab, var(--aurora-violet) 12%, transparent); color: #fff; }
+.mobile-close:focus-visible { outline: 2px solid var(--aurora-violet-light); outline-offset: 2px; }
+
+.mobile-drawer-body {
+  flex: 1; overflow-y: auto;
+  padding: 0.5rem 1rem 1.5rem;
+  display: flex; flex-direction: column; gap: 0.25rem;
+}
+
+/* ═══════════════════════════════════════════════════
+   THEMED SCROLLBAR (aurora) — consistent site-wide
+   ═══════════════════════════════════════════════════ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--aurora-violet) 55%, transparent) transparent;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--aurora-violet), var(--aurora-blue));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--aurora-violet-light), var(--aurora-blue-light));
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* Opt-out: containers that should stay scrollbar-free (unlayered, so it beats the
+   global themed bar above; a Tailwind layer-utility hide cannot) */
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
 
 /* ═══════════════════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════════════════ */
-.footer-root { background: #000000; }
+.footer-root { background: #050509; }
 .aurora-top-fade { background: linear-gradient(to bottom, rgba(79,70,229,0.05) 0%, transparent 60%); }
 .animated-gradient-text {
   background: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4, #7c3aed);
@@ -1055,6 +1341,7 @@ textarea:-webkit-autofill {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 
 /* ═══════════════════════════════════════════════════
    CTA SECTION
@@ -1111,22 +1398,45 @@ textarea:-webkit-autofill {
 }
 
 .code-element {
-  color: rgba(124,58,237,0.2);
+  color: color-mix(in oklab, var(--aurora-violet-light) 70%, transparent);
   padding: 0.4rem 0.8rem;
   border-radius: 0.5rem;
-  background: rgba(124,58,237,0.05);
-  border: 1px solid rgba(124,58,237,0.1);
+  background: color-mix(in oklab, var(--aurora-violet) 10%, transparent);
+  border: 1px solid color-mix(in oklab, var(--aurora-violet) 20%, transparent);
   cursor: default;
   user-select: none;
+  /* Opacity-only transition: transform is driven 1:1 by rAF, so transitioning
+     it would smear the pointer-follow. Fade is the only thing worth easing. */
+  transition: opacity 0.3s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .terminal-card { transition: none; }
+  /* No hover motion for the signature button under reduced motion (site-wide) */
+  .gradient-btn,
+  .gradient-btn .bg-gradient-1,
+  .gradient-btn .bg-gradient-2,
+  .gradient-btn .bg-gradient-3 { transition: none; }
+  .gradient-btn:hover { transform: none; }
+  .gradient-btn:hover .bg-gradient-1,
+  .gradient-btn:hover .bg-gradient-2,
+  .gradient-btn:hover .bg-gradient-3 { transform: none; }
+  /* Icons passed as button children: kill the hover slide too (site-wide) */
+  .gradient-btn svg { transition: none; }
+  .gradient-btn:hover svg { transform: none !important; }
 }
 
 /* ═══════════════════════════════════════════════════
    PARTNERS MARQUEE
    ═══════════════════════════════════════════════════ */
+/* Centre wash: faint violet to cyan, echoing the aurora sweep (one quiet wash per viewport) */
+.partners-glow {
+  background: radial-gradient(ellipse 60% 40% at 50% 50%,
+    color-mix(in srgb, var(--aurora-violet) 5%, transparent),
+    color-mix(in srgb, var(--aurora-cyan) 3%, transparent) 55%,
+    transparent 75%);
+}
+
 .marquee-viewport {
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
@@ -1161,13 +1471,14 @@ textarea:-webkit-autofill {
   margin-right: 1.5rem;
   border-radius: 0.75rem;
   background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(124,58,237,0.12);
-  transition: border-color 0.25s ease, background 0.25s ease;
+  border: 1px solid color-mix(in srgb, var(--aurora-violet) 12%, transparent);
+  transition: border-color var(--duration-fast) var(--ease-snappy),
+              background var(--duration-fast) var(--ease-snappy);
 }
 
 .partner-card:hover {
-  background: rgba(124,58,237,0.07);
-  border-color: rgba(124,58,237,0.28);
+  background: rgba(255,255,255,0.05);
+  border-color: color-mix(in srgb, var(--aurora-violet) 40%, transparent);
 }
 
 .partner-logo {
@@ -1186,6 +1497,19 @@ textarea:-webkit-autofill {
   filter: grayscale(0%) brightness(1);
 }
 
+/* Phones: tighter cards so logos read at a sensible size on narrow strips */
+@media (max-width: 640px) {
+  .partner-card {
+    width: 11rem;
+    padding: 1rem 1.125rem;
+    margin-right: 1rem;
+  }
+  .partner-logo {
+    height: 2rem;
+    width: 7rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-inner {
     animation: none;
@@ -1199,6 +1523,8 @@ textarea:-webkit-autofill {
     -webkit-mask-image: none;
   }
   .partner-card { margin-right: 0; }
+  /* Static wall: drop the duplicate sets so each logo shows once */
+  .partner-card[aria-hidden="true"] { display: none; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1246,6 +1572,167 @@ textarea:-webkit-autofill {
   .value-card { transition: none !important; }
 }
 
+/* how.weWork() — build -> maintain -> grow milestone timeline */
+.hww-tl-wrap { position: relative; }
+
+.hww-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Track behind the nodes; the accent fill draws on scroll-in */
+.hww-track {
+  position: absolute;
+  top: 1.5rem; /* node radius (node = 3rem) */
+  left: 16.66%;
+  right: 16.66%;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.hww-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--aurora-violet-light), var(--aurora-blue-light), var(--aurora-green-light));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.hww-tl-wrap.visible .hww-track::after {
+  animation: hwwDraw 2.4s cubic-bezier(0.45, 0, 0.55, 1) 0.15s forwards;
+}
+
+/* Run to node 2, hold ~1s, run to node 3 at the same rhythm. */
+@keyframes hwwDraw {
+  0%   { transform: scaleX(0); }
+  29%  { transform: scaleX(0.5); }
+  71%  { transform: scaleX(0.5); }
+  100% { transform: scaleX(1); }
+}
+@keyframes hwwDrawY {
+  0%   { transform: scaleY(0); }
+  29%  { transform: scaleY(0.5); }
+  71%  { transform: scaleY(0.5); }
+  100% { transform: scaleY(1); }
+}
+
+.hww-ms {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 0.5rem;
+  transition: transform 0.25s var(--ease-snappy);
+}
+.hww-ms:hover { transform: translateY(-3px); }
+
+.hww-ms-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hww-node {
+  position: relative;
+  z-index: 1;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  /* brighten the numeral for AA contrast on the dark fill (glow/border keep base accent) */
+  color: color-mix(in srgb, var(--icon-color) 80%, white);
+  /* opaque accent-tinted fill so the track line never shows through the circle */
+  background: color-mix(in srgb, var(--icon-color) 14%, var(--dark-3));
+  border: 1px solid var(--accent-border);
+  box-shadow: 0 0 0 6px var(--dark-3); /* ring only; the glow lives on the ::after layer */
+  margin-bottom: 1.25rem;
+}
+/* Glow on its own layer so only OPACITY animates (GPU-composited, no per-frame repaint;
+   box-shadow is painted once). opacity:1 base = the lit fallback for no-JS / reduced-motion;
+   the ignite animation's backwards-fill hides it while a node is waiting. */
+.hww-node::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 0 26px color-mix(in srgb, var(--icon-color) 70%, transparent);
+  opacity: 1;
+  pointer-events: none;
+  will-change: opacity;
+}
+.hww-ms:hover .hww-node::after {
+  opacity: 1 !important;
+  box-shadow: 0 0 32px color-mix(in srgb, var(--icon-color) 85%, transparent);
+}
+
+/* Dim by default; when the line reaches a node it ignites (scale pop + glow fade-in)
+   then breathes (scale + glow opacity loop), preserved as later steps run. Only
+   transform (node) and opacity (::after glow) animate -> stays on the compositor.
+   Delays match hwwDraw (n1 0.15s, n2 0.85s, n3 2.55s); breathe starts at delay + 0.7s. */
+@keyframes hwwPop      { 0% { transform: scale(1); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes hwwBreathe  { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes hwwGlowIn   { 0% { opacity: 0; } 60% { opacity: 1; } 100% { opacity: 0.6; } }
+@keyframes hwwGlowLoop { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+.hww-tl-wrap.visible .hww-ms:nth-child(1) .hww-node        { animation: hwwPop 0.7s ease-out 0.15s both, hwwBreathe 2.2s ease-in-out 0.85s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(1) .hww-node::after { animation: hwwGlowIn 0.7s ease-out 0.15s both, hwwGlowLoop 2.2s ease-in-out 0.85s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(2) .hww-node        { animation: hwwPop 0.7s ease-out 0.85s both, hwwBreathe 2.2s ease-in-out 1.55s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(2) .hww-node::after { animation: hwwGlowIn 0.7s ease-out 0.85s both, hwwGlowLoop 2.2s ease-in-out 1.55s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(3) .hww-node        { animation: hwwPop 0.7s ease-out 2.55s both, hwwBreathe 2.2s ease-in-out 3.25s infinite; }
+.hww-tl-wrap.visible .hww-ms:nth-child(3) .hww-node::after { animation: hwwGlowIn 0.7s ease-out 2.55s both, hwwGlowLoop 2.2s ease-in-out 3.25s infinite; }
+
+@media (max-width: 768px) {
+  .hww-timeline { grid-template-columns: 1fr; gap: 1.5rem; }
+  .hww-track {
+    top: 0; bottom: 0; left: 1.5rem; right: auto;
+    width: 2px; height: auto;
+    /* fade the ends so the spine doesn't overshoot the first/last node */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+  }
+  .hww-track::after {
+    background: linear-gradient(to bottom, var(--aurora-violet-light), var(--aurora-blue-light), var(--aurora-green-light));
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  .hww-tl-wrap.visible .hww-track::after { animation-name: hwwDrawY; }
+  .hww-ms {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 1.1rem;
+    padding: 0; /* node centre lands on the spine (left: 1.5rem == node radius) */
+  }
+  .hww-node { margin-bottom: 0; flex-shrink: 0; }
+  .hww-ms-body { align-items: flex-start; flex: 1; min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hww-track::after { animation: none !important; transform: none !important; transition: none !important; }
+  .hww-node { animation: none !important; transform: none !important; }
+  .hww-node::after { animation: none !important; opacity: 1 !important; }
+  .hww-ms, .hww-ms:hover { transform: none; }
+}
+
+/* Soft text link closing the section */
+.hww-link {
+  color: var(--aurora-violet-light);
+  transition: filter var(--duration-fast) var(--ease-smooth);
+}
+.hww-link:hover { filter: brightness(1.2); }
+
 /* ═══════════════════════════════════════════════════
    TESTIMONIALS
    ═══════════════════════════════════════════════════ */
@@ -1264,31 +1751,46 @@ textarea:-webkit-autofill {
   box-shadow: 0 0 24px rgba(124,58,237,0.07), 0 20px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
-.code-badge {
-  background: rgba(8,8,16,0.95);
-  border: 1px solid rgba(124,58,237,0.25);
-  backdrop-filter: blur(12px);
+/* Initials monogram avatar — static accent ring + glow (no per-frame repaint). */
+.testi-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: color-mix(in srgb, var(--accent) 82%, white);
+  background: color-mix(in srgb, var(--accent) 14%, var(--dark-2));
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
-/* Aurora spinning ring around testimonial avatar */
-.aurora-ring-avatar {
-  width: 80px;
-  height: 80px;
-  padding: 2px;
-  border-radius: 50%;
-  background: conic-gradient(
-    from var(--border-angle, 0deg),
-    var(--avatar-accent, #7c3aed),
-    rgba(6,182,212,0.8),
-    var(--avatar-accent, #7c3aed)
-  );
-  animation: borderSpin 4s linear infinite;
+/* Leading quote glyph instead of a colored left-stripe border. */
+.testi-quote::before {
+  content: "\201C";
+  position: absolute;
+  top: -1.6rem;
+  left: -0.4rem;
+  font-family: var(--font-mono);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--accent) 24%, transparent);
+  pointer-events: none;
 }
 
 .company-badge { display: inline-flex; align-items: center; }
 
+/* Cross-fade the slide content on change; min-height steadies the card between
+   quotes of different length so it doesn't jump. */
+.testi-slide { animation: panelEnter 420ms cubic-bezier(0.16, 1, 0.3, 1); }
+@media (min-width: 768px) {
+  .testimonial-card { min-height: 21rem; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .aurora-ring-avatar { animation: none; }
+  .testi-slide { animation: none; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1332,12 +1834,15 @@ textarea:-webkit-autofill {
 }
 
 .tech-icon {
+  /* monochrome logos (currentColor): light/neutral at rest, accent on hover */
+  color: rgba(255,255,255,0.82);
   background: color-mix(in srgb, var(--tech-accent) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--tech-accent) 30%, transparent);
   transition: all 0.2s ease;
 }
 
 .tech-card:hover .tech-icon {
+  color: color-mix(in srgb, var(--tech-accent) 75%, white);
   background: color-mix(in srgb, var(--tech-accent) 22%, transparent);
   transform: scale(1.08);
 }
@@ -1433,6 +1938,12 @@ textarea:-webkit-autofill {
 .answer-panel.is-exiting { animation: panelExit 200ms cubic-bezier(0.4,0,1,1) forwards; }
 .answer-panel.is-entering { animation: panelEnter 520ms cubic-bezier(0.16,1,0.3,1) forwards; }
 
+/* About "our story" timeline panel — reuses the FAQ panel keyframes.
+   will-change is scoped to the active swap states only (a backdrop-filtered panel),
+   so the compositor hint is dropped back at idle rather than held permanently. */
+.story-panel.is-exiting { animation: panelExit 200ms cubic-bezier(0.4,0,1,1) forwards; will-change: transform, opacity; }
+.story-panel.is-entering { animation: panelEnter 520ms cubic-bezier(0.16,1,0.3,1) forwards; will-change: transform, opacity; }
+
 .answer-question {
   font-size: 1.25rem;
   font-weight: 700;
@@ -1485,6 +1996,7 @@ textarea:-webkit-autofill {
 
 @media (prefers-reduced-motion: reduce) {
   .answer-panel.is-exiting, .answer-panel.is-entering { animation: none; }
+  .story-panel.is-exiting, .story-panel.is-entering { animation: none; }
   .faq-row, .row-arrow { transition: none; }
 }
 
@@ -1493,7 +2005,7 @@ textarea:-webkit-autofill {
    ═══════════════════════════════════════════════════ */
 .blog-card {
   background: rgba(15,15,26,0.95);
-  border: 1px solid rgba(79,70,229,0.2);
+  border: 1px solid rgba(124,58,237,0.2);
   backdrop-filter: blur(12px);
 }
 .blog-card:hover {
@@ -1542,6 +2054,37 @@ textarea:-webkit-autofill {
 .bento-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--accent-glow);
+}
+
+/* Capabilities cards (service detail). Solid token surface instead of a per-card
+   backdrop-filter (9 blurs on screen was the section's biggest paint cost). */
+.bento-card.cap-card {
+  background: color-mix(in srgb, var(--dark-1) 90%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
+}
+.bento-card.cap-card:hover { transform: scale(1.04); }
+
+/* Entrance via @keyframes so the stagger timing lives on animation-delay. The
+   shared .reveal-stagger drives entrance through transition-delay, which then
+   lingers on the element and leaks into hover (later cards react ~450ms late).
+   Running the reveal as an animation frees transition/transition-delay for hover;
+   transition-delay:0s clears the leaked stagger delay. Mirrors the home .bento-reveal. */
+.reveal-stagger.visible > .bento-card.cap-card {
+  transition-delay: 0s;
+  animation: capReveal 0.6s var(--ease-snappy) backwards;
+}
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(1) { animation-delay: 0ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(2) { animation-delay: 90ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(3) { animation-delay: 180ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(4) { animation-delay: 270ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(5) { animation-delay: 360ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(6) { animation-delay: 450ms; }
+.reveal-stagger.visible > .bento-card.cap-card:nth-child(n+7) { animation-delay: 520ms; }
+@keyframes capReveal {
+  from { opacity: 0; transform: translateY(34px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
 }
 
 .featured-inner {
@@ -1597,11 +2140,74 @@ textarea:-webkit-autofill {
 
 .view-link {
   text-decoration: none;
-  opacity: 0.75;
-  transition: gap 0.2s ease, opacity 0.2s ease;
+  transition: gap 0.2s ease;
   margin-top: auto;
 }
-.view-link:hover { gap: 8px; opacity: 1; }
+.view-link:hover { gap: 8px; }
+.view-link:focus-visible {
+  outline: 2px solid var(--icon-color, var(--aurora-violet-light));
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Whole-card link (normal service cards). Keep grid placement + hover-lift, add focus ring. */
+.bento-card.card-link { text-decoration: none; display: block; }
+.bento-card.card-link:focus-visible {
+  outline: 2px solid var(--icon-color, var(--aurora-violet-light));
+  outline-offset: 2px;
+}
+
+/* ── Card reveal: keyframe-driven so it doesn't inherit (and fight) the card's
+   0.2s hover transition. Small rise + fade, no scale, so the backdrop-filter
+   blur repaint stays cheap and the cascade reads smooth, not jerky. ── */
+@keyframes card-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.bento-card.bento-reveal { opacity: 0; }
+/* The shared useScrollReveal hook toggles `.visible` on the grid container; each
+   card then runs the keyframe (per-card animationDelay set inline). */
+.services-bento.visible > .bento-card.bento-reveal {
+  animation: card-rise 0.55s var(--ease-snappy) both;
+  will-change: transform, opacity;
+}
+
+/* Click affordance for the whole-card links: a small cue, resting and visible on
+   touch, that settles forward on hover/focus. */
+.card-link .card-go {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--icon-color, var(--aurora-violet-light));
+  opacity: 0.7;
+  transform: translateX(0);
+  transition: opacity 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
+}
+.card-link:hover .card-go,
+.card-link:focus-visible .card-go { opacity: 1; transform: translateX(3px); }
+
+/* Icon lifts with the card on hover (transform/opacity only). */
+.bento-card .icon-box { transition: transform 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth); }
+.bento-card:hover .icon-box {
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px var(--accent-icon, rgba(124,58,237,0.10));
+}
+
+/* Featured code window: blinking terminal cursor (paused under reduced motion). */
+.featured-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--aurora-cyan-light);
+  animation: cursor-blink 1.1s steps(1) infinite;
+}
+@keyframes cursor-blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
 
 /* Tablet */
 @media (max-width: 1024px) {
@@ -1628,6 +2234,11 @@ textarea:-webkit-autofill {
 
 @media (prefers-reduced-motion: reduce) {
   .bento-card { transition: none !important; }
+  .bento-card.bento-reveal { opacity: 1; }
+  .services-bento.visible > .bento-card.bento-reveal { animation: none; will-change: auto; }
+  .reveal-stagger.visible > .bento-card.cap-card { animation: none; }
+  .card-link .card-go { opacity: 1; transition: none; }
+  .featured-cursor { animation: none; opacity: 1; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1744,7 +2355,7 @@ textarea:-webkit-autofill {
   display: inline-block;
   width: 8px;
   height: 1.2em;
-  background-color: #4f46e5;
+  background-color: var(--aurora-violet);
   margin-left: 2px;
   vertical-align: middle;
   animation: blink 1s step-end infinite;
@@ -1756,7 +2367,7 @@ textarea:-webkit-autofill {
 /* ═══════════════════════════════════════════════════
    HERO SECTION
    ═══════════════════════════════════════════════════ */
-.hero-root { background: #000000; }
+.hero-root { background: var(--dark-1); }
 
 .noise-overlay {
   opacity: 0.025;
@@ -1765,12 +2376,24 @@ textarea:-webkit-autofill {
   background-repeat: repeat;
 }
 
-.aurora-mesh-bg {
+.aurora-mesh-bg { overflow: hidden; }
+/* Drift the mesh with a GPU transform instead of animating background-position
+   (which repainted the full-viewport gradient every frame). The layer is oversized
+   and clipped, so the translate never reveals an edge. */
+.aurora-mesh-bg::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
   background:
     radial-gradient(ellipse 100% 70% at 12% 12%, rgba(124,58,237,0.5) 0%, transparent 55%),
     radial-gradient(ellipse 80% 60% at 88% 88%, rgba(6,182,212,0.35) 0%, transparent 55%);
-  background-size: 200% 200%;
-  animation: auroraShift 20s ease-in-out infinite alternate;
+  will-change: transform;
+  animation: auroraDrift 20s ease-in-out infinite alternate;
+}
+
+@keyframes auroraDrift {
+  0%   { transform: translate3d(-4%, -3%, 0) scale(1.04); }
+  100% { transform: translate3d(4%, 3%, 0) scale(1.1); }
 }
 
 .hero-terminal-badge {
@@ -1791,22 +2414,99 @@ textarea:-webkit-autofill {
 .subheading-reveal {
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1) 0.55s,
-              transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.55s;
+  will-change: transform, opacity;
+  transition: opacity 0.7s var(--ease-snappy) 0.55s,
+              transform 0.7s var(--ease-snappy) 0.55s;
 }
 .subheading-reveal.visible { opacity: 0.7; transform: translateY(0); }
+
+/* CTA row reveal: lands the buttons between the subheading and the trust strip,
+   completing the single entrance cascade instead of popping in. */
+.cta-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  will-change: transform, opacity;
+  transition: opacity 0.7s var(--ease-snappy) 0.7s,
+              transform 0.7s var(--ease-snappy) 0.7s;
+}
+.cta-reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Drop the compositor hints once the entrance has played: will-change is only
+   worth its memory during the animation, not for the life of the page. */
+.hero-settled .word-reveal,
+.hero-settled .subheading-reveal,
+.hero-settled .cta-reveal,
+.hero-settled .stats-card { will-change: auto; }
 
 /* Stats card stagger reveal */
 .stats-card {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1),
-              transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform, opacity;
+  transition: opacity 0.6s var(--ease-snappy),
+              transform 0.6s var(--ease-snappy);
 }
 .stats-card.visible {
   opacity: 1;
   transform: translateY(0);
   transition-delay: calc(var(--stagger, 0) * 80ms + 700ms);
+}
+
+/* Credibility strip: one glass container, inline stat segments split by hairline
+   dividers. Real SITE_STATS numbers build trust without the 4-card metric cliche. */
+.hero-trust {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  max-width: 44rem;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.hero-trust-item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 0.75rem;
+  position: relative;
+  text-align: center;
+}
+.hero-trust-icon {
+  color: var(--aurora-violet-light);
+  margin-bottom: 0.15rem;
+}
+.hero-trust-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 18%;
+  height: 64%;
+  width: 1px;
+  background: var(--glass-border);
+}
+.hero-trust-num {
+  font-family: var(--font-mono);
+  font-size: clamp(1.15rem, 0.9rem + 1.1vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--aurora-violet-light);
+  font-variant-numeric: tabular-nums;
+}
+.hero-trust-label {
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
+
+/* Very narrow phones: tighten so all four segments stay comfortable at 320px. */
+@media (max-width: 360px) {
+  .hero-trust-item { padding-inline: 0.4rem; }
+  .hero-trust-num { font-size: 1.05rem; }
+  .hero-trust-label { font-size: 0.72rem; }
 }
 
 /* Hero cursor blink */
@@ -1819,23 +2519,83 @@ textarea:-webkit-autofill {
   display: inline-block;
   width: 2px;
   height: 1.1em;
-  background: #7c3aed;
+  background: var(--aurora-violet);
   margin-left: 3px;
   vertical-align: text-bottom;
   animation: blink 1s step-end infinite;
 }
 
-/* Violet icon colour for stats */
-.text-aurora-violet-icon { color: #a855f7; }
+/* Scroll cue: chevron pinned to the hero base, gentle bob, fades in last. */
+.hero-scroll-cue {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem; /* 44px min touch target (WCAG 2.5.5) */
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--aurora-violet-light) 75%, white);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-snappy) 1s, color 0.2s ease;
+}
+.hero-scroll-cue.visible { opacity: 0.7; }
+.hero-scroll-cue:hover { opacity: 1; color: var(--aurora-cyan-light); }
+.hero-scroll-cue.visible svg { animation: heroScrollBob 2s var(--ease-smooth) infinite; }
+.hero-scroll-cue:focus-visible { outline: 2px solid var(--aurora-violet-light); outline-offset: 3px; }
+
+@keyframes heroScrollBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(5px); }
+}
+
+/* Skip render work for below-fold sections; reserve height so CLS stays ~0. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .word-reveal, .subheading-reveal, .stats-card {
+  .word-reveal, .subheading-reveal, .stats-card, .cta-reveal {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
     transition: none !important;
   }
-  .aurora-mesh-bg, .hero-terminal-float, .hero-cursor, .about-cursor {
+  .hero-scroll-cue { opacity: 0.7 !important; transition: none !important; }
+  .mobile-backdrop, .mobile-drawer { transition: none !important; }
+  .aurora-mesh-bg, .aurora-mesh-bg::before, .hero-terminal-float, .hero-cursor, .about-cursor, .hero-scroll-cue svg, .logo-gradient {
+    animation: none !important;
+  }
+}
+
+/* ── Web Development hero robot scene (decorative, md+ only) ────────────── */
+.wd-core { animation: wd-coreGlow 2.4s ease-in-out infinite; }
+.wd-arm { animation: wd-armSway 5.5s ease-in-out infinite; }
+.wd-elbow { animation: wd-elbowSway 5.5s ease-in-out infinite; }
+.wd-scan { animation: wd-scanP 3.4s ease-in-out infinite; }
+.wd-tick { animation: wd-hudPulse 2s ease-in-out infinite; }
+.wd-dot { animation: wd-dotPulse 1.4s ease-in-out infinite; }
+.wd-telemetry { animation: wd-floatA 7s ease-in-out infinite; }
+.wd-prog { animation: wd-prog 3.6s ease-in-out infinite alternate; }
+.wd-chip-a { animation: wd-floatB 6.2s ease-in-out infinite; }
+.wd-chip-b { animation: wd-floatA 7.2s ease-in-out infinite; }
+
+@keyframes wd-floatA { 0% { translate: 0 0; } 50% { translate: 0 -14px; } 100% { translate: 0 0; } }
+@keyframes wd-floatB { 0% { translate: 0 0; } 50% { translate: 0 13px; } 100% { translate: 0 0; } }
+@keyframes wd-dotPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
+@keyframes wd-armSway { 0%,100% { transform: rotate(-43deg); } 50% { transform: rotate(-45.4deg); } }
+@keyframes wd-elbowSway { 0%,100% { transform: rotate(36deg); } 50% { transform: rotate(39deg); } }
+@keyframes wd-coreGlow { 0%,100% { opacity: .6; box-shadow: 0 0 8px var(--wd-cyan), 0 0 2px var(--wd-cyan); } 50% { opacity: 1; box-shadow: 0 0 18px var(--wd-cyan), 0 0 5px #fff; } }
+@keyframes wd-hudPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+@keyframes wd-prog { 0% { transform: scaleX(.24); } 100% { transform: scaleX(.9); } }
+@keyframes wd-scanP { 0% { transform: translateY(-4px); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(122px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .wd-core, .wd-arm, .wd-elbow, .wd-scan, .wd-tick,
+  .wd-dot, .wd-telemetry, .wd-prog, .wd-chip-a, .wd-chip-b {
     animation: none !important;
   }
 }

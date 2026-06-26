@@ -1,109 +1,69 @@
-"use client"
-
-import { useEffect, useRef, useState } from "react"
-import { LayoutGrid, Lightbulb, TrendingUp } from "lucide-react"
 import type { ElementType } from "react"
+import Link from "next/link"
+import { Hammer, Wrench, TrendingUp, ArrowRight } from "lucide-react"
+import { RevealSection } from "@/components/ui/RevealSection"
 
-interface CodeLine {
-  keyword: string
-  text: string
-  color: string
-  value?: string
-}
-
-interface CoreValue {
+interface WorkStage {
   id: string
+  step: string
   label: string
   title: string
   Icon: ElementType
-  gradient: string
+  /** rgba border + tag tints, all on the aurora palette. */
   borderColor: string
-  glowColor: string
   tagColor: string
+  /** CSS var for the accent (aurora light tone). */
   iconColor: string
   description: string
-  code: CodeLine[]
+  /** Honest one-line mono note in the code voice. */
+  note: string
 }
 
-const values: CoreValue[] = [
+const stages: WorkStage[] = [
   {
     id: "build",
+    step: "01",
     label: "build()",
     title: "Build",
-    Icon: LayoutGrid,
-    gradient: "from-[#f97316] to-[#ec4899]",
-    borderColor: "rgba(249,115,22,0.3)",
-    glowColor: "rgba(249,115,22,0.07)",
-    tagColor: "rgba(249,115,22,0.12)",
-    iconColor: "#fb923c",
+    Icon: Hammer,
+    borderColor: "rgba(124,58,237,0.3)",
+    tagColor: "rgba(124,58,237,0.12)",
+    iconColor: "var(--aurora-violet-light)",
     description:
-      "A small senior team builds your project with a focus on quality and transparency, so clients know where things stand.",
-    code: [
-      { keyword: "const", text: " approach = {",  color: "#fb923c" },
-      { keyword: "",      text: "  quality: ",    color: "#a3e635", value: "'high'" },
-      { keyword: "",      text: "  focus: ",      color: "#60a5fa", value: "'innovation'" },
-      { keyword: "",      text: "};",             color: "" },
-    ],
+      "A small senior team builds your product with weekly demos, so you always see where it stands.",
+    note: "// small senior team, weekly demos",
   },
   {
     id: "maintain",
+    step: "02",
     label: "maintain()",
     title: "Maintain",
-    Icon: Lightbulb,
-    gradient: "from-[#7c3aed] to-[#a855f7]",
-    borderColor: "rgba(124,58,237,0.35)",
-    glowColor: "rgba(124,58,237,0.09)",
-    tagColor: "rgba(124,58,237,0.12)",
-    iconColor: "#a855f7",
+    Icon: Wrench,
+    borderColor: "rgba(37,99,235,0.3)",
+    tagColor: "rgba(37,99,235,0.12)",
+    iconColor: "var(--aurora-blue-light)",
     description:
-      "We maintain websites and apps with steady, proactive management so they keep running well and meet ongoing client needs.",
-    code: [
-      { keyword: "function", text: " optimize() {", color: "#818cf8" },
-      { keyword: "",         text: "  reliability: ", color: "#a3e635", value: "'99.9%'" },
-      { keyword: "",         text: "  support: ",     color: "#60a5fa", value: "'24/7'" },
-      { keyword: "",         text: "};",              color: "" },
-    ],
+      "We keep what we ship running: proactive monitoring, updates, and quick fixes when something breaks.",
+    note: "// proactive monitoring, quick fixes",
   },
   {
     id: "grow",
+    step: "03",
     label: "grow()",
     title: "Grow",
     Icon: TrendingUp,
-    gradient: "from-[#10b981] to-[#06b6d4]",
     borderColor: "rgba(16,185,129,0.3)",
-    glowColor: "rgba(16,185,129,0.07)",
     tagColor: "rgba(16,185,129,0.12)",
-    iconColor: "#34d399",
+    iconColor: "var(--aurora-green-light)",
     description:
-      "We help businesses grow by enhancing their digital presence, optimizing performance, and driving engagement and long-term success.",
-    code: [
-      { keyword: "async",  text: " function scale() {", color: "#34d399" },
-      { keyword: "",       text: "  growth: ",          color: "#a3e635", value: "'exponential'" },
-      { keyword: "",       text: "  success: ",         color: "#60a5fa", value: "'guaranteed'" },
-      { keyword: "",       text: "};",                  color: "" },
-    ],
+      "We improve what works: tune performance, sharpen the funnel, and ship the next thing that moves the metric.",
+    note: "// measure, optimize, scale",
   },
 ]
 
 export default function CoreValuesSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.1 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
-  const v = visible ? "visible" : ""
-
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden" id="values">
+    <section className="section-y relative overflow-hidden" id="how-we-work">
       {/* Aurora section background */}
       <div className="absolute inset-0" style={{ background: "var(--dark-3)" }} />
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
@@ -114,104 +74,54 @@ export default function CoreValuesSection() {
 
       <div className="relative z-10 container mx-auto px-4">
         {/* Header */}
-        <div className={`text-center mb-16 reveal ${v}`}>
-          <div className="preheading-code">core.values</div>
+        <RevealSection className="text-center mb-14">
+          <div className="preheading-code">our.process</div>
           <h2 className="heading-code mt-2">
-            how.<span style={{ color: "#a855f7" }}>weWork</span>()
+            how.<span style={{ color: "var(--aurora-violet-light)" }}>weWork</span>()
           </h2>
-          <p className="subheading-code mt-3">{"// how we approach the work"}</p>
-        </div>
+          <p className="subheading-code mt-3">{"// build, maintain, and grow what we ship"}</p>
+        </RevealSection>
 
-        {/* Asymmetric bento grid */}
-        <div className="values-bento max-w-6xl mx-auto">
-          {values.map((val, i) => (
-            <div
-              key={val.id}
-              className={`value-card rounded-2xl p-8 reveal ${v}`}
-              style={{
-                "--accent-border": val.borderColor,
-                "--accent-glow": `0 0 20px ${val.glowColor}, inset 0 1px 0 rgba(255,255,255,0.05)`,
-                "--accent-tag": val.tagColor,
-                "--icon-color": val.iconColor,
-                transitionDelay: `${i * 100}ms`,
-              } as React.CSSProperties}
-            >
-              {/* Dot grid texture */}
-              <div
-                className="absolute inset-0 rounded-2xl pointer-events-none"
+        {/* Milestone timeline: all three stages visible on one connected track */}
+        <RevealSection className="hww-tl-wrap max-w-4xl mx-auto">
+          <span className="hww-track" aria-hidden />
+          <ol className="hww-timeline">
+            {stages.map((stage) => (
+              <li
+                key={stage.id}
+                className="hww-ms"
                 style={{
-                  backgroundImage:
-                    "radial-gradient(circle 1px, rgba(255,255,255,0.06) 1px, transparent 0)",
-                  backgroundSize: "20px 20px",
-                }}
-              />
-
-              {/* Header row */}
-              <div className="relative flex items-start justify-between mb-6">
-                <div
-                  className="icon-wrap w-14 h-14 rounded-xl flex items-center justify-center"
-                  style={{ background: val.tagColor, border: `1px solid ${val.borderColor}` }}
-                >
-                  <val.Icon size={24} style={{ color: val.iconColor }} aria-hidden />
-                </div>
-                <span
-                  className="text-xs font-mono px-3 py-1 rounded-full"
-                  style={{
-                    background: val.tagColor,
-                    border: `1px solid ${val.borderColor}`,
-                    color: val.iconColor,
-                  }}
-                >
-                  {val.label}
-                </span>
-              </div>
-
-              {/* Title */}
-              <h3
-                className="relative text-lg sm:text-xl md:text-2xl font-bold mb-3"
-                style={{
-                  backgroundImage: `linear-gradient(135deg, ${val.iconColor}, white 80%)`,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  color: "transparent",
-                }}
+                  "--accent-tag": stage.tagColor,
+                  "--accent-border": stage.borderColor,
+                  "--icon-color": stage.iconColor,
+                } as React.CSSProperties}
               >
-                {val.title}
-              </h3>
+                <span className="hww-node" aria-hidden>{stage.step}</span>
 
-              {/* Description */}
-              <p className="relative text-blue-100/65 text-sm leading-relaxed mb-6">
-                {val.description}
-              </p>
+                <div className="hww-ms-body">
+                  <span className="inline-flex items-center gap-2 font-mono text-xs font-semibold mb-1" style={{ color: `color-mix(in srgb, ${stage.iconColor} 80%, white)` }}>
+                    <stage.Icon size={15} aria-hidden />
+                    {stage.label}
+                  </span>
+                  <h3 className="text-lg sm:text-xl font-bold text-[#fafafa] mb-2">{stage.title}</h3>
+                  <p className="text-blue-100/65 text-sm leading-relaxed">{stage.description}</p>
+                  <p className="font-mono text-xs text-blue-100/65 mt-3">{stage.note}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </RevealSection>
 
-              {/* Code decoration */}
-              <div className="relative font-mono text-xs space-y-1 text-blue-100/35">
-                {val.code.map((line, li) => {
-                  if (line.keyword) {
-                    return (
-                      <div key={li}>
-                        <span style={{ color: val.iconColor }}>{line.keyword}</span>
-                        <span>{line.text}</span>
-                      </div>
-                    )
-                  }
-                  if (line.value) {
-                    return (
-                      <div key={li} className="pl-4">
-                        <span style={{ color: line.color }}>{line.text}</span>
-                        <span style={{ color: "#a3e635" }}>{line.value}</span>
-                        <span>,</span>
-                      </div>
-                    )
-                  }
-                  return <div key={li}><span>{line.text}</span></div>
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-
+        {/* Soft link forward */}
+        <RevealSection className="mt-12 flex justify-center">
+          <Link
+            href="/contact"
+            className="hww-link group inline-flex items-center gap-2 font-mono text-sm"
+          >
+            {"// scope your project"}
+            <ArrowRight size={15} aria-hidden className="transition-transform group-hover:translate-x-1" />
+          </Link>
+        </RevealSection>
       </div>
     </section>
   )

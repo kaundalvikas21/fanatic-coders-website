@@ -84,7 +84,7 @@ export function ContactSection() {
   const messageLength = values.message.trim().length
 
   return (
-    <section id="contact-form" className="py-20 md:py-24 relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
+    <section id="contact-form" className="section-y relative overflow-hidden" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4">
@@ -117,24 +117,24 @@ export function ContactSection() {
                   <button
                     type="button"
                     onClick={() => { setValues(EMPTY); setSubmitted(false) }}
-                    className="mt-6 text-sm font-mono text-indigo-300 hover:text-indigo-200 transition-colors"
+                    className="mt-5 inline-flex items-center px-4 py-2.5 rounded-lg text-sm font-mono text-indigo-300 hover:text-indigo-200 hover:bg-white/5 transition-colors"
                   >
                     ./send-another
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate>
-                  <p className="text-sm text-blue-100/55 mb-6">
+                  <p className="text-sm text-[var(--color-text-muted)] mb-6">
                     Fields marked <span className="text-rose-400">*</span> are required.
                   </p>
 
                   <div className="grid sm:grid-cols-2 gap-5">
                     <Field id="name" label="Name" required error={errors.name}>
-                      <IconInput Icon={User} id="name" type="text" value={values.name} error={errors.name}
+                      <IconInput Icon={User} id="name" type="text" value={values.name} error={errors.name} required
                         onChange={(v) => update("name", v)} placeholder="Ada Lovelace" autoComplete="name" />
                     </Field>
                     <Field id="email" label="Email" required error={errors.email}>
-                      <IconInput Icon={Mail} id="email" type="email" value={values.email} error={errors.email}
+                      <IconInput Icon={Mail} id="email" type="email" value={values.email} error={errors.email} required
                         onChange={(v) => update("email", v)} placeholder="ada@company.com" autoComplete="email" />
                     </Field>
                     <Field id="company" label="Company">
@@ -161,12 +161,13 @@ export function ContactSection() {
                         value={values.message}
                         onChange={(e) => update("message", e.target.value)}
                         aria-invalid={!!errors.message}
-                        aria-describedby={errors.message ? "message-error" : "message-counter"}
+                        aria-required
+                        aria-describedby={[errors.message && "message-error", "message-counter"].filter(Boolean).join(" ")}
                         className={fieldClass(errors.message)}
                         placeholder="What are you building, and what does success look like?"
                       />
                       <div id="message-counter" aria-live="polite"
-                        className={cn("mt-1.5 text-right text-xs font-mono", messageLength >= MESSAGE_MIN ? "text-indigo-300" : "text-blue-100/40")}>
+                        className={cn("mt-1.5 text-right text-xs font-mono", messageLength >= MESSAGE_MIN ? "text-indigo-300" : "text-[var(--color-text-muted)]")}>
                         {messageLength} / {MESSAGE_MIN} min
                       </div>
                     </Field>
@@ -177,7 +178,7 @@ export function ContactSection() {
                       sendMessage
                       <Send size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
                     </GradientButton>
-                    <span className="text-xs font-mono text-blue-100/45 text-center sm:text-left">
+                    <span className="text-xs font-mono text-[var(--color-text-muted)] text-center sm:text-left">
                       {"// a real person replies, no auto-responder"}
                     </span>
                   </div>
@@ -189,12 +190,12 @@ export function ContactSection() {
           {/* Info column */}
           <RevealSection className="space-y-4">
             {infoCards.map(({ Icon, label, value, href }) => (
-              <GlassCard key={label} accent="plain" className="p-5 flex items-start gap-4 transition-colors hover:border-indigo-400/20">
+              <GlassCard key={label} accent="plain" style={{ backdropFilter: "none", WebkitBackdropFilter: "none" }} className="p-5 flex items-start gap-4 transition-colors hover:border-indigo-400/20">
                 <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500/12">
                   <Icon size={18} className="text-indigo-300" aria-hidden />
                 </span>
                 <div className="min-w-0">
-                  <div className="text-xs font-mono text-blue-100/50">{label}</div>
+                  <div className="text-xs font-mono text-[var(--color-text-muted)]">{label}</div>
                   {href ? (
                     <a href={href} className="text-sm text-white hover:text-indigo-300 transition-colors break-words">{value}</a>
                   ) : (
@@ -204,8 +205,8 @@ export function ContactSection() {
               </GlassCard>
             ))}
 
-            <GlassCard accent="cyan" className="p-5">
-              <div className="text-xs font-mono text-blue-100/50 mb-3">{"// find us"}</div>
+            <GlassCard accent="cyan" style={{ backdropFilter: "none", WebkitBackdropFilter: "none" }} className="p-5">
+              <div className="text-xs font-mono text-[var(--color-text-muted)] mb-3">{"// find us"}</div>
               <div className="flex gap-3">
                 <SocialLink href="https://github.com" label="GitHub"><IconGithub size={18} /></SocialLink>
                 <SocialLink href="https://linkedin.com" label="LinkedIn"><IconLinkedin size={18} /></SocialLink>
@@ -220,16 +221,16 @@ export function ContactSection() {
 
 function fieldClass(error?: string, hasIcon = false) {
   return cn(
-    "w-full rounded-xl bg-white/5 py-3 text-sm text-white placeholder:text-blue-100/35",
+    "w-full rounded-xl bg-white/5 py-3 text-sm text-white placeholder:text-[var(--color-text-muted)]",
     hasIcon ? "pl-11 pr-4" : "px-4",
     "border outline-none transition-colors hover:border-white/20",
-    "focus:border-indigo-400/70 focus:ring-2 focus:ring-indigo-400/30 focus:bg-white/[0.07]",
+    "focus:border-[var(--aurora-violet-light)]/70 focus:ring-2 focus:ring-[var(--aurora-violet-light)]/30 focus:bg-white/[0.07]",
     error ? "border-red-400/60" : "border-white/10",
   )
 }
 
 function IconInput({
-  Icon, id, type, value, onChange, placeholder, autoComplete, error,
+  Icon, id, type, value, onChange, placeholder, autoComplete, error, required,
 }: {
   Icon: typeof User
   id: string
@@ -239,6 +240,7 @@ function IconInput({
   placeholder?: string
   autoComplete?: string
   error?: string
+  required?: boolean
 }) {
   return (
     <div className="relative">
@@ -251,6 +253,7 @@ function IconInput({
         placeholder={placeholder}
         autoComplete={autoComplete}
         aria-invalid={!!error}
+        aria-required={required || undefined}
         aria-describedby={error ? `${id}-error` : undefined}
         className={fieldClass(error, true)}
       />
@@ -280,7 +283,7 @@ function Field({ id, label, required, error, children }: {
 function SocialLink({ href, label, children }: { href: string; label: string; children: ReactNode }) {
   return (
     <a href={href} aria-label={label} target="_blank" rel="noopener noreferrer"
-      className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-blue-100/60 transition-colors hover:bg-indigo-500/20 hover:text-indigo-300">
+      className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/5 text-blue-100/60 transition-colors hover:bg-indigo-500/20 hover:text-indigo-300">
       {children}
     </a>
   )

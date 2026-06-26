@@ -1,55 +1,95 @@
-import Image from "next/image"
+import type { CSSProperties } from "react"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
-import { GlassCard } from "@/components/ui/GlassCard"
+import { ArrowRight } from "lucide-react"
+import { SectionHeading } from "@/components/ui/SectionHeading"
 import { RevealSection } from "@/components/ui/RevealSection"
+import { GlassCard } from "@/components/ui/GlassCard"
 import { getProject } from "../../portfolio/data"
-import type { ServiceItem } from "../data"
+import { type Accent, type ServiceGroup, type ServiceItem, iconColor, accentToken } from "../data"
 
-export function ServiceProof({ service }: { service: ServiceItem }) {
-  const cases = service.relatedCaseStudyIds.map(getProject).filter((p): p is NonNullable<typeof p> => Boolean(p))
-  if (cases.length === 0) return null
+function statBoxStyle(accent: Accent): CSSProperties {
+  const c = accentToken[accent]
+  return {
+    border: `1px solid color-mix(in srgb, ${c} 28%, transparent)`,
+    boxShadow: `0 0 0 1px color-mix(in srgb, ${c} 30%, transparent), inset 0 1px 0 rgba(255,255,255,0.04)`,
+    background: "color-mix(in srgb, var(--dark-1) 45%, transparent)",
+  }
+}
+
+export function ServiceProof({ service, group }: { service: ServiceItem; group: ServiceGroup }) {
+  const project = service.relatedCaseStudyIds.map(getProject).find(Boolean)
+  if (!project) return null
+
+  const color = iconColor[group.accent]
+  const stats = project.stats.slice(0, 3)
+  const chips = (project.services ?? project.tags ?? []).slice(0, 3)
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28" style={{ background: "var(--dark-2)" }}>
+    <section className="relative overflow-hidden section-y" style={{ background: "var(--dark-2)" }}>
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
+      <div
+        className="dot-grid absolute inset-0 pointer-events-none opacity-30"
+        style={{ maskImage: "radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent 70%)" }}
+      />
+
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
         <RevealSection>
-          <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-            proof.<span className="text-indigo-400">inProduction</span>()
-          </h2>
-          <p className="mt-4 text-base text-blue-100/60 leading-relaxed max-w-[55ch]">
-            Real projects where this work moved the numbers that mattered.
-          </p>
+          <SectionHeading
+            badge="featured.work"
+            title={<>case.<span className="function">study</span>()</>}
+            comment="// one project this work shipped"
+          />
         </RevealSection>
-        <RevealSection stagger className="mt-10 grid sm:grid-cols-2 gap-6">
-          {cases.map((p) => (
-            <Link key={p.id} href={`/portfolio/${p.id}`} className="no-underline group/card">
-              <GlassCard lift className="h-full overflow-hidden flex flex-col">
-                {p.imageUrl && (
-                  <div className="relative aspect-[16/9] overflow-hidden">
-                    <Image src={p.imageUrl} alt={p.title} fill className="object-cover transition-transform duration-500 group-hover/card:scale-105" sizes="(max-width: 640px) 100vw, 50vw" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  </div>
-                )}
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-lg font-bold text-white leading-snug transition-colors group-hover/card:text-indigo-200">{p.title}</h3>
-                    <ArrowUpRight size={18} className="mt-0.5 flex-shrink-0 text-blue-100/40 transition-colors group-hover/card:text-indigo-300" aria-hidden />
-                  </div>
-                  <p className="mt-2 text-sm text-blue-100/60 leading-relaxed line-clamp-2">{p.description}</p>
-                  <div className="mt-4 flex gap-5 border-t border-white/5 pt-4">
-                    {p.stats.slice(0, 2).map((stat) => (
-                      <div key={stat.label}>
-                        <div className="text-lg font-bold font-mono text-white tabular-nums">{stat.value}</div>
-                        <div className="text-[11px] font-mono text-blue-100/50">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
+
+        <RevealSection className="mt-14">
+          <Link href={`/portfolio/${project.id}`} className="group/case block no-underline">
+            <GlassCard className="p-8 md:p-10 transition-transform duration-300 ease-out group-hover/case:scale-[1.02]">
+            <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-10">
+              <div className="flex flex-col">
+                <p className="text-xs font-mono uppercase tracking-wider text-blue-100/60">
+                  {`// ${project.client} ${project.industry}`}
+                </p>
+                <h3 className="mt-4 text-2xl md:text-3xl font-bold text-white leading-snug">{project.title}</h3>
+                <p className="mt-3 text-base text-blue-100/60 leading-relaxed max-w-[52ch]">{project.description}</p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {chips.map((svc) => (
+                    <span
+                      key={svc}
+                      className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-xs font-mono text-blue-100/65"
+                    >
+                      <span style={{ color }}>+</span>
+                      {svc}
+                    </span>
+                  ))}
                 </div>
-              </GlassCard>
-            </Link>
-          ))}
+
+                <span
+                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-mono"
+                  style={{ color }}
+                >
+                  view case study
+                  <ArrowRight size={14} className="transition-transform group-hover/case:translate-x-1" aria-hidden />
+                </span>
+
+                <p className="mt-auto pt-8 text-xs font-mono text-blue-100/55">
+                  {"// figures are illustrative, shared with client permission on request"}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 self-start">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="rounded-2xl p-4 sm:p-5 text-center" style={statBoxStyle(group.accent)}>
+                    <div className="text-2xl md:text-3xl font-bold font-mono tabular-nums" style={{ color }}>
+                      {stat.value}
+                    </div>
+                    <div className="mt-1.5 text-xs font-mono text-blue-100/60">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            </GlassCard>
+          </Link>
         </RevealSection>
       </div>
     </section>

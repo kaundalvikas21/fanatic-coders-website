@@ -1,6 +1,8 @@
 import PartnersSection from "@/components/pages/home/PartnersSection"
+import AboutScrollFX from "./AboutScrollFX"
 import {
   AboutHeroSection,
+  StorySection,
   MissionSection,
   AboutValuesSection,
   AboutStatsSection,
@@ -12,10 +14,12 @@ import {
 export function AboutPage() {
   return (
     <>
+      <AboutScrollFX />
       <AboutHeroSection />
+      <StorySection />
       <MissionSection />
-      <AboutValuesSection />
       <AboutStatsSection />
+      <AboutValuesSection />
       <TeamSection />
       <ProcessSection />
       <PartnersSection />

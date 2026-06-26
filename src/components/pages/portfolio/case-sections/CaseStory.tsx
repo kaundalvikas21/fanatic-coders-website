@@ -1,13 +1,25 @@
 import Image from "next/image"
-import { Check } from "lucide-react"
+import type { ReactNode } from "react"
+import { Activity } from "lucide-react"
 import type { PortfolioProject } from "@/types"
 import { RevealSection } from "@/components/ui/RevealSection"
+import { GlassCard } from "@/components/ui/GlassCard"
+import { statIcons } from "./statIcons"
 
-function CodeHeading({ fn }: { fn: string }) {
+function Eyebrow({ children }: { children: string }) {
+  return <div className="preheading-code">{children}</div>
+}
+
+function Heading({ children }: { children: string }) {
+  return <h2 className="font-mono text-3xl md:text-4xl font-bold text-white tracking-tight">{children}</h2>
+}
+
+function Band({ tier, children }: { tier: string; children: ReactNode }) {
   return (
-    <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-      the.<span className="text-indigo-400">{fn}</span>()
-    </h2>
+    <section className="relative overflow-hidden section-y" style={{ background: `var(${tier})` }}>
+      <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">{children}</div>
+    </section>
   )
 }
 
@@ -17,37 +29,33 @@ export function CaseStory({ project }: { project: PortfolioProject }) {
   const approach = find("approach")
   const result = find("result")
   const galleryImg = project.gallery?.[0]
+  const steps = project.approach ?? []
+  const stats = project.stats ?? []
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28" style={{ background: "var(--dark-2)" }}>
-      <div className="aurora-bg-section absolute inset-0 pointer-events-none" />
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl space-y-20 md:space-y-24">
-
-        {challenge && (
-          <RevealSection className="max-w-2xl">
-            <CodeHeading fn="challenge" />
-            <p className="mt-5 text-base md:text-lg text-blue-100/72 leading-relaxed">{challenge.body}</p>
-          </RevealSection>
-        )}
-
-        {approach && (
+    <>
+      {challenge && (
+        <Band tier="--dark-2">
           <RevealSection>
-            <CodeHeading fn="approach" />
-            <div className="mt-6 grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-start">
               <div>
-                <p className="text-base md:text-lg text-blue-100/72 leading-relaxed">{approach.body}</p>
-                {project.approach && project.approach.length > 0 && (
-                  <ul className="mt-6 space-y-3">
-                    {project.approach.map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md bg-indigo-500/15">
-                          <Check size={13} className="text-indigo-300" aria-hidden />
-                        </span>
-                        <span className="text-sm text-blue-100/75 leading-relaxed">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <Eyebrow>the problem</Eyebrow>
+                <Heading>The Challenge</Heading>
+              </div>
+              <p className="text-base md:text-lg text-blue-100/75 leading-relaxed">{challenge.body}</p>
+            </div>
+          </RevealSection>
+        </Band>
+      )}
+
+      {approach && (
+        <Band tier="--dark-1">
+          <RevealSection>
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+              <div>
+                <Eyebrow>the strategy</Eyebrow>
+                <Heading>Our Approach</Heading>
+                <p className="mt-4 text-base md:text-lg text-blue-100/72 leading-relaxed">{approach.body}</p>
               </div>
               {galleryImg && (
                 <div className="relative aspect-[3/2] overflow-hidden rounded-2xl ring-1 ring-white/10">
@@ -56,28 +64,56 @@ export function CaseStory({ project }: { project: PortfolioProject }) {
               )}
             </div>
           </RevealSection>
-        )}
+        </Band>
+      )}
 
-        {project.tech && project.tech.length > 0 && (
+      {steps.length > 0 && (
+        <Band tier="--dark-2">
           <RevealSection>
-            <h2 className="text-2xl md:text-3xl font-bold font-mono text-white">
-              built.<span className="text-indigo-400">with</span>()
-            </h2>
-            <div className="mt-6 flex flex-wrap gap-2.5">
-              {project.tech.map((t) => (
-                <span key={t} className="rounded-lg border border-white/10 bg-white/5 px-3.5 py-2 text-sm font-mono text-blue-100/80">{t}</span>
+            <Eyebrow>the steps</Eyebrow>
+            <Heading>How We Delivered</Heading>
+            <p className="mt-4 text-base text-blue-100/65 leading-relaxed">The work, step by step.</p>
+            <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {steps.map((step, i) => (
+                <GlassCard key={step.title} lift className="group p-7">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="process-num text-4xl font-bold font-mono tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="mt-1.5 text-xs font-mono uppercase tracking-wide text-blue-100/45">{step.duration}</span>
+                  </div>
+                  <h3 className="mt-4 text-base font-bold text-white">{step.title}</h3>
+                  <p className="mt-2 text-sm text-blue-100/60 leading-relaxed">{step.desc}</p>
+                </GlassCard>
               ))}
             </div>
           </RevealSection>
-        )}
+        </Band>
+      )}
 
-        {result && (
-          <RevealSection className="max-w-2xl">
-            <CodeHeading fn="result" />
-            <p className="mt-5 text-base md:text-lg text-blue-100/80 leading-relaxed">{result.body}</p>
+      {(result || stats.length > 0) && (
+        <Band tier="--dark-1">
+          <RevealSection>
+            <Eyebrow>the outcome</Eyebrow>
+            <Heading>The Results</Heading>
+            {result && (
+              <p className="mt-4 text-base md:text-lg text-blue-100/75 leading-relaxed max-w-2xl">{result.body}</p>
+            )}
+            {stats.length > 0 && (
+              <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {stats.slice(0, 4).map((s) => {
+                  const Icon = statIcons[s.icon ?? ""] ?? Activity
+                  return (
+                    <GlassCard key={s.label} accent="cyan" lift className="p-6 text-center">
+                      <Icon size={24} aria-hidden className="mx-auto" style={{ color: "var(--aurora-cyan-light)" }} />
+                      <div className="mt-3 text-3xl md:text-4xl font-bold font-mono tabular-nums" style={{ color: "var(--aurora-cyan-light)" }}>{s.value}</div>
+                      <div className="mt-1.5 text-xs text-blue-100/55">{s.caption ?? s.label}</div>
+                    </GlassCard>
+                  )
+                })}
+              </div>
+            )}
           </RevealSection>
-        )}
-      </div>
-    </section>
+        </Band>
+      )}
+    </>
   )
 }

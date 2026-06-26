@@ -1,37 +1,24 @@
 import { Send, ArrowRight } from "lucide-react"
 import GradientButton from "@/components/ui/GradientButton"
-import { RevealSection } from "@/components/ui/RevealSection"
+import { CtaPanel } from "@/components/ui/CtaPanel"
 
 export function AboutCtaSection() {
   return (
-    <section id="about-cta" className="py-24 relative overflow-hidden" style={{ background: "var(--dark-1)" }}>
-      <div className="aurora-bg-cta absolute inset-0 pointer-events-none" />
-
-      <div className="relative z-10 container mx-auto px-4">
-        <RevealSection className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-mono mb-8 badge-aurora">
-            <span style={{ color: "#a855f7" }}>$</span>
-            <span className="text-blue-200/80">./work-with-us.sh</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-5 tracking-tight">
-            Like how we think? Let&apos;s build together.
-          </h2>
-          <p className="text-lg text-blue-100/65 mb-10 max-w-2xl mx-auto">
-            Tell us what you&apos;re building. We&apos;ll bring a senior team and a clear plan to get
-            it shipped.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <GradientButton href="/contact">
-              dropUsALine
-              <Send size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
-            </GradientButton>
-            <GradientButton href="/services" variant="secondary">
-              exploreServices
-              <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
-            </GradientButton>
-          </div>
-        </RevealSection>
-      </div>
-    </section>
+    <CtaPanel
+      sectionId="about-cta"
+      background="var(--dark-1)"
+      badge="./work-with-us.sh"
+      heading="Like how we think? Let's build together."
+      body="Tell us what you're building. We'll bring a senior team and a clear plan to get it shipped."
+    >
+      <GradientButton href="/contact">
+        dropUsALine
+        <Send size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+      </GradientButton>
+      <GradientButton href="/services" variant="secondary">
+        exploreServices
+        <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+      </GradientButton>
+    </CtaPanel>
   )
 }

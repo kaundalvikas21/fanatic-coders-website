@@ -1,10 +1,18 @@
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, ArrowLeft } from "lucide-react"
+import { ArrowRight, ShoppingBag, Globe, Cloud, Smartphone, Palette, Tag, type LucideIcon } from "lucide-react"
 import type { PortfolioProject } from "@/types"
 import GradientButton from "@/components/ui/GradientButton"
 import { RevealSection } from "@/components/ui/RevealSection"
 import { Breadcrumb } from "@/components/ui/Breadcrumb"
+import { TechTile } from "./TechTile"
+
+const TAG_ICONS: Record<string, LucideIcon> = {
+  "E-Commerce": ShoppingBag,
+  "Web": Globe,
+  "SaaS": Cloud,
+  "Mobile": Smartphone,
+  "Branding": Palette,
+}
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
@@ -19,8 +27,12 @@ export function CaseHero({ project }: { project: PortfolioProject }) {
   const hasImage = Boolean(project.imageUrl)
   const hasMeta = Boolean(project.client || project.industry || project.year || project.duration || project.services?.length)
 
+  const titleWords = project.title.trim().split(" ")
+  const titleLast = titleWords.pop() ?? project.title
+  const titleHead = titleWords.join(" ")
+
   return (
-    <section className="relative overflow-hidden pt-[184px] md:pt-[196px] pb-20">
+    <section className="relative flex min-h-[100svh] flex-col overflow-hidden hero-shell [--hero-pt:7.5rem] pb-8">
       {/* Background */}
       {hasImage ? (
         <>
@@ -33,20 +45,29 @@ export function CaseHero({ project }: { project: PortfolioProject }) {
         <div className="absolute inset-0 -z-10 pointer-events-none aurora-bg-hero" />
       )}
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl">
+      <div className="relative z-10 container mx-auto flex flex-1 flex-col justify-center px-4 sm:px-6 max-w-6xl">
         <RevealSection>
-          <Breadcrumb items={[{ label: "home", href: "/" }, { label: "work", href: "/portfolio" }, { label: project.id }]} />
+          <Breadcrumb items={[{ label: "home", href: "/" }, { label: "portfolio", href: "/portfolio" }, { label: project.title }]} />
         </RevealSection>
 
         <div className="mt-8 grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12 items-start">
           {/* Left: content */}
           <RevealSection>
             <div className="flex flex-wrap gap-1.5">
-              {project.tags.map((tag) => (
-                <span key={tag} className="rounded-full bg-indigo-500/20 px-2.5 py-0.5 text-[11px] font-mono text-indigo-200 ring-1 ring-indigo-400/30 backdrop-blur-sm">{tag}</span>
-              ))}
+              {project.tags.map((tag) => {
+                const Icon = TAG_ICONS[tag] ?? Tag
+                return (
+                  <span key={tag} className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-mono text-indigo-200 ring-1 ring-indigo-400/30 backdrop-blur-sm">
+                    <Icon size={13} aria-hidden className="shrink-0" />
+                    {tag}
+                  </span>
+                )
+              })}
             </div>
-            <h1 className="mt-4 text-4xl md:text-6xl font-bold text-white leading-[1.03] tracking-tight">{project.title}</h1>
+            <h1 className="mt-4 text-4xl md:text-6xl font-bold text-white leading-[1.03] tracking-tight">
+              {titleHead && <>{titleHead} </>}
+              <span className="text-aurora-sweep">{titleLast}</span>
+            </h1>
             {project.overview && (
               <p className="mt-5 text-lg text-blue-100/85 leading-relaxed max-w-[52ch]">{project.overview}</p>
             )}
@@ -55,9 +76,9 @@ export function CaseHero({ project }: { project: PortfolioProject }) {
                 startAProject
                 <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
               </GradientButton>
-              <Link href="/portfolio" className="inline-flex items-center justify-center gap-1.5 text-sm font-mono text-blue-100/70 hover:text-white transition-colors no-underline">
-                <ArrowLeft size={14} aria-hidden /> all work
-              </Link>
+              <GradientButton href="/portfolio" variant="secondary">
+                allWork
+              </GradientButton>
             </div>
           </RevealSection>
 
@@ -86,6 +107,19 @@ export function CaseHero({ project }: { project: PortfolioProject }) {
             </RevealSection>
           )}
         </div>
+
+        {project.tech && project.tech.length > 0 && (
+          <RevealSection className="mt-14 md:mt-16">
+            <div className="border-t border-white/10 pt-8 text-center">
+              <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-blue-100/45">built with</div>
+              <div className="mt-4 flex flex-wrap justify-center gap-2.5">
+                {project.tech.map((t) => (
+                  <TechTile key={t} name={t} />
+                ))}
+              </div>
+            </div>
+          </RevealSection>
+        )}
       </div>
     </section>
   )

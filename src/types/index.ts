@@ -17,10 +17,17 @@ export interface BlogPost {
   authorAvatar?: string
   tags?: string[]
   /** Article body as headed sections (each id anchors the table of contents). */
-  sections?: Array<{ id: string; heading: string; paragraphs: string[] }>
+  sections?: Array<{ id: string; heading: string; paragraphs?: string[]; blocks?: ArticleBlock[] }>
   /** Short scannable summary points. */
   takeaways?: string[]
 }
+
+/** A rich content block inside an article section. Renders when `blocks` is set; otherwise the section falls back to `paragraphs`. */
+export type ArticleBlock =
+  | { type: "p"; text: string }
+  | { type: "code"; lang?: string; code: string }
+  | { type: "list"; ordered?: boolean; items: string[] }
+  | { type: "quote"; text: string; cite?: string }
 
 export interface Service {
   id: string
@@ -63,7 +70,7 @@ export interface PortfolioProject {
   title: string
   description: string
   tags: string[]
-  stats: Array<{ label: string; value: string }>
+  stats: Array<{ label: string; value: string; caption?: string; icon?: string }>
   imageUrl?: string
   client?: string
   year?: string
@@ -73,8 +80,8 @@ export interface PortfolioProject {
   overview?: string
   /** Case-study body blocks (e.g. Challenge / Approach / Result). */
   sections?: Array<{ heading: string; body: string }>
-  /** Concrete "what we did" bullets for the approach section. */
-  approach?: string[]
+  /** Delivery steps for the case study: short title, rough duration, what we did. */
+  approach?: Array<{ title: string; duration: string; desc: string }>
   tech?: string[]
   quote?: { text: string; author: string; role: string }
   gallery?: string[]

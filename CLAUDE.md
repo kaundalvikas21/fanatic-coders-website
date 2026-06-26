@@ -179,10 +179,17 @@ Visit `http://localhost:3000` to see the application.
 ```
 src/
 ├── app/                      # Next.js App Router
-│   ├── layout.tsx           # Root layout (Header/Footer wrapper)
-│   ├── page.tsx             # Home route entrypoint (renders HomePage)
+│   ├── layout.tsx           # Root layout (html/body, fonts, globals, default metadata)
 │   ├── globals.css          # Tailwind v4 + theme variables
-│   └── favicon.ico
+│   ├── favicon.ico
+│   └── (frontend)/          # Public pages route group (URL-transparent)
+│       ├── layout.tsx       # Frontend chrome: skip-link, Header, <main>, Footer
+│       ├── page.tsx         # Home route entrypoint (renders home sections) -> /
+│       ├── about/page.tsx
+│       ├── blog/page.tsx + [slug]/page.tsx
+│       ├── contact/page.tsx
+│       ├── portfolio/page.tsx + [id]/page.tsx
+│       └── services/page.tsx + [slug]/page.tsx
 ├── components/
 │   ├── layout/              # Layout components
 │   │   ├── Header.tsx       # Navigation with mega menu
@@ -370,6 +377,12 @@ src/
 ---
 
 ## Animations
+
+**Single source of truth: `ANIMATION.md` + `src/lib/motion.ts`.** Two layers: scroll **reveals**
+use `<RevealSection>` / `useScrollReveal` (CSS + IntersectionObserver, lightweight); **complex
+motion** (count-up, typewriter, parallax) uses GSAP via `useCountUp` / `useTypewriter` / `motion.ts`.
+Never hand-roll `IntersectionObserver`/`rAF` or inline `cubic-bezier`. CSS hover/micro transitions
+reference `var(--ease-*)` / `var(--duration-*)`. Read `ANIMATION.md` before adding motion.
 
 This project uses a hybrid animation approach:
 
