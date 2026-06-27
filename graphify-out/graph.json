@@ -102,11 +102,7 @@
       {
         "id": "nextjs_scaffold_icon_set",
         "label": "Default Next.js Scaffold UI Icons",
-        "nodes": [
-          "window_icon",
-          "file_icon",
-          "globe_icon"
-        ],
+        "nodes": ["window_icon", "file_icon", "globe_icon"],
         "relation": "form",
         "confidence": "INFERRED",
         "confidence_score": 0.85,
@@ -115,10 +111,7 @@
       {
         "id": "nextjs_brand_logos",
         "label": "Next.js / Vercel Brand Logos",
-        "nodes": [
-          "next_logo",
-          "vercel_logo"
-        ],
+        "nodes": ["next_logo", "vercel_logo"],
         "relation": "form",
         "confidence": "INFERRED",
         "confidence_score": 0.8,
@@ -5939,11 +5932,7 @@
     {
       "id": "nextjs_scaffold_icon_set",
       "label": "Default Next.js Scaffold UI Icons",
-      "nodes": [
-        "window_icon",
-        "file_icon",
-        "globe_icon"
-      ],
+      "nodes": ["window_icon", "file_icon", "globe_icon"],
       "relation": "form",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
@@ -5952,10 +5941,7 @@
     {
       "id": "nextjs_brand_logos",
       "label": "Next.js / Vercel Brand Logos",
-      "nodes": [
-        "next_logo",
-        "vercel_logo"
-      ],
+      "nodes": ["next_logo", "vercel_logo"],
       "relation": "form",
       "confidence": "INFERRED",
       "confidence_score": 0.8,

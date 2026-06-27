@@ -1,9 +1,9 @@
-import type { BlogPost } from "@/types"
-import { PostHero } from "./post-sections/PostHero"
-import { PostBody } from "./post-sections/PostBody"
-import { PostAuthor } from "./post-sections/PostAuthor"
-import { PostRelated } from "./post-sections/PostRelated"
-import { BlogNewsletterSection } from "./sections/BlogNewsletterSection"
+import type { BlogPost } from '@/types';
+import { PostHero } from './post-sections/PostHero';
+import { PostBody } from './post-sections/PostBody';
+import { PostAuthor } from './post-sections/PostAuthor';
+import { PostRelated } from './post-sections/PostRelated';
+import { BlogNewsletterSection } from './sections/BlogNewsletterSection';
 
 export function BlogPostPage({ post }: { post: BlogPost }) {
   return (
@@ -14,5 +14,5 @@ export function BlogPostPage({ post }: { post: BlogPost }) {
       <PostRelated post={post} />
       <BlogNewsletterSection />
     </>
-  )
+  );
 }

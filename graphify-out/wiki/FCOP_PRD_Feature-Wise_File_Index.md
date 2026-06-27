@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### references
+
 - [[Shared Data Model Overview]] `EXTRACTED`
 - [[Feature 02: Project Management]] `EXTRACTED`
 - [[Feature 06: Admin Revenue & Business Dashboard]] `EXTRACTED`
@@ -24,4 +25,4 @@
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._

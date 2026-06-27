@@ -1,10 +1,10 @@
-import { BlogFilterProvider } from "./BlogFilterContext"
+import { BlogFilterProvider } from './BlogFilterContext';
 import {
   BlogHeroSection,
   BlogListSection,
   BlogPopularSection,
   BlogNewsletterSection,
-} from "./sections"
+} from './sections';
 
 export function BlogPage({ initialTag }: { initialTag?: string }) {
   return (
@@ -14,5 +14,5 @@ export function BlogPage({ initialTag }: { initialTag?: string }) {
       <BlogPopularSection />
       <BlogNewsletterSection />
     </BlogFilterProvider>
-  )
+  );
 }

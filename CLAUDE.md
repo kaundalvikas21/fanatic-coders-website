@@ -26,6 +26,7 @@ the raw `FCOP-PRD-MD-FILES/` set** (~25k words / ~34k tokens) — querying the g
 cheaper per question.
 
 For planning or understanding FCOP product scope:
+
 1. Read `graphify-out/wiki/index.md` (entry point — communities by size, `[[wikilinks]]`).
 2. Open only the relevant community article, then drill into its god-node article:
    - `wiki/FCOP_Data_Model_&_Entities.md` → `wiki/Shared_Data_Model_Overview.md`
@@ -44,14 +45,14 @@ graph halves (no edges between them) — expected until FCOP features get built.
 
 Recommended guidelines to keep code maintainable and focused.
 
-| File type | Recommendation | Location pattern |
-|---|---|---|
-| Page files | **~120 lines** | `src/app/**/*.tsx` |
+| File type                    | Recommendation | Location pattern                        |
+| ---------------------------- | -------------- | --------------------------------------- |
+| Page files                   | **~120 lines** | `src/app/**/*.tsx`                      |
 | Section & feature components | **~200 lines** | `src/components/**/*.tsx` (excl. `ui/`) |
-| Custom hooks | **~40 lines** | `src/hooks/**/*.ts` |
-| Type definitions | **~200 lines** | `src/types/**/*.ts` |
-| Utility files | **~80 lines** | `src/lib/**/*.ts` |
-| shadcn/ui components | **No limit** | `src/components/ui/**` (generated) |
+| Custom hooks                 | **~40 lines**  | `src/hooks/**/*.ts`                     |
+| Type definitions             | **~200 lines** | `src/types/**/*.ts`                     |
+| Utility files                | **~80 lines**  | `src/lib/**/*.ts`                       |
+| shadcn/ui components         | **No limit**   | `src/components/ui/**` (generated)      |
 
 **Hook creation rule:** Only create a hook file when it has 3+ consumers OR contains genuinely complex logic (multiple state values, effects with cleanup). Do NOT create hooks that wrap fewer lines than they contain.
 
@@ -62,10 +63,12 @@ Recommended guidelines to keep code maintainable and focused.
 **These rules MUST be followed for every task. Failure to follow these guidelines is not acceptable.**
 
 ### 1. Prompt Enhancement (BEFORE execution)
+
 - **ALWAYS** use `prompt-engineering-patterns` skill to improve the prompt before executing
 - Refine ambiguous requests into clear, actionable instructions
 
 ### 2. Brainstorming (BEFORE creative work)
+
 - **ALWAYS** use `superpowers:brainstorming` skill BEFORE any creative work
 - Applies to: creating features, building components, adding functionality, modifying behavior
 - Explores user intent, requirements, and design BEFORE implementation
@@ -74,26 +77,32 @@ Recommended guidelines to keep code maintainable and focused.
 - For plan execution: use `superpowers:executing-plans` skill
 
 ### 3. Code Writing Standards (BEFORE writing code)
+
 - **ALWAYS** use `karpathy-guidelines` skill before writing or editing any code
 - Follow the behavioral guidelines to reduce common LLM coding mistakes
 
 ### 4. Next.js Code Patterns
+
 When writing Next.js code, **ALWAYS** use these skills together:
+
 - `next-best-practices` - File conventions, RSC boundaries, data patterns
 - `vercel-composition-patterns` - React composition patterns that scale
 - `vercel-react-best-practices` - Performance optimization guidelines
 - Only proceed with coding AFTER these skills are loaded
 
 ### 5. Code Search (PREFERRED APPROACH)
+
 - **PREFERRED:** Use `typescript-lsp` skill for ALL code searches (symbols, functions, types, classes)
 - **FALLBACK:** Use `grep`, `Grep` tool, or text-based search for code
 - LSP provides type-aware results that understand imports, exports, and relationships
 
 ### 6. Error Handling (AFTER code changes)
+
 - **ALWAYS** use `error-handling-patterns` skill after editing code
 - Ensure all edge cases and error scenarios are handled properly
 
 ### 7. Type & Lint Checks (MANDATORY AFTER CHANGES)
+
 - **MANDATORY** after any code modification:
   ```bash
   npm run build  # Type check via TypeScript
@@ -102,6 +111,7 @@ When writing Next.js code, **ALWAYS** use these skills together:
 - Do NOT mark task complete if either fails
 
 ### 8. Component Patterns (BEFORE UI work)
+
 - Follow existing shadcn/ui patterns with radix-nova style
 - Check `src/components/ui/` for existing component patterns
 - Use `cn()` utility for conditional className merging
@@ -109,24 +119,29 @@ When writing Next.js code, **ALWAYS** use these skills together:
 - Home sections are in `src/components/pages/home/sections/`
 
 ### 9. Supabase Integration (FOR FUTURE USE)
+
 - When using Supabase MCP server, **ALWAYS** use `supabase-postgres-best-practices` skill
 - Follow Postgres performance optimization patterns
 - Note: Supabase will be integrated in future phases
 
 ### 10. Research First (BEFORE implementation)
+
 - **ALWAYS** use both `ref tools mcp` AND `exa mcp` together for documentation/research
 - Gather latest information BEFORE writing any code
 - Never assume patterns - verify with current docs
 
 ### 11. Browser Testing (AFTER all changes)
+
 - **ALWAYS** use `agent-browser` skill for end-to-end browser testing (PRIMARY)
 - **FALLBACK** use `chrome-devtools` MCP tools when agent-browser is unavailable
 - Verify changes work correctly in the browser before completing tasks
 - This ensures consistent testing across all sessions
 
 ### 12. Content & Copy Writing (MANDATORY for all section/page text)
+
 All user-facing copy MUST read as plain, human writing with **no AI signatures**. This applies
 to every new or edited section. Self-check edited copy with the `humanizer` skill.
+
 - **NO em dashes (—) or en dashes (–) as punctuation.** Use a period, comma, colon, or parentheses.
 - **No AI-marketing vocabulary:** seamless(ly), robust, leverage, elevate, unlock, empower,
   bespoke, harness, cutting-edge, realm, tapestry, testament, delve, "crafting exceptional",
@@ -142,19 +157,19 @@ to every new or edited section. Self-check edited copy with the `humanizer` skil
 
 ## Tech Stack
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Next.js | 16.2.3 | React framework with App Router |
-| React | 19.2.4 | UI library |
-| TypeScript | 6.0.2 | Type safety |
-| Tailwind CSS | v4 | Utility-first CSS with OKLCH colors |
-| shadcn/ui | 4.2.0 (radix-nova style) | Component library |
-| GSAP | 3.14.2 | Complex animations |
-| Swiper | 12.1.3 | Carousel/slider components |
-| Lucide React | 1.8.0 | Icon library |
-| Simple Icons | 16.15.0 | Brand icons |
-| tw-animate-css | 1.4.0 | Simple CSS animations |
-| Fonts | Plus Jakarta Sans + JetBrains Mono (both via @fontsource) | Sans for body/headings; JetBrains Mono for code/terminal motifs. |
+| Technology     | Version                                                   | Purpose                                                          |
+| -------------- | --------------------------------------------------------- | ---------------------------------------------------------------- |
+| Next.js        | 16.2.3                                                    | React framework with App Router                                  |
+| React          | 19.2.4                                                    | UI library                                                       |
+| TypeScript     | 6.0.2                                                     | Type safety                                                      |
+| Tailwind CSS   | v4                                                        | Utility-first CSS with OKLCH colors                              |
+| shadcn/ui      | 4.2.0 (radix-nova style)                                  | Component library                                                |
+| GSAP           | 3.14.2                                                    | Complex animations                                               |
+| Swiper         | 12.1.3                                                    | Carousel/slider components                                       |
+| Lucide React   | 1.8.0                                                     | Icon library                                                     |
+| Simple Icons   | 16.15.0                                                   | Brand icons                                                      |
+| tw-animate-css | 1.4.0                                                     | Simple CSS animations                                            |
+| Fonts          | Plus Jakarta Sans + JetBrains Mono (both via @fontsource) | Sans for body/headings; JetBrains Mono for code/terminal motifs. |
 
 ## Getting Started
 
@@ -351,24 +366,28 @@ src/
 ### Key Implementation Notes:
 
 **Route Groups:**
+
 - `(frontend)`: Public pages with shared header/footer
 - `(auth)`: Authentication pages with minimal layout
 - `(dashboard)`: Protected pages with sidebar navigation
 - Each route group can have its own layout
 
 **Migration Strategy:**
+
 1. Move current `app/layout.tsx` to `app/(frontend)/layout.tsx`
 2. Move current `app/page.tsx` to `app/(frontend)/page.tsx`
 3. Create new `app/layout.tsx` with only root providers
 4. Add route groups incrementally as needed
 
 **Authentication Flow:**
+
 - Use Supabase for authentication
 - Implement `AuthGuard` component for protected routes
 - Create `AuthContext` for global auth state
 - Build login/signup forms in `(auth)` route group
 
 **Dashboard Architecture:**
+
 - Protected by `AuthGuard` component
 - Sidebar navigation for dashboard sections
 - Separate components for dashboard-specific UI
@@ -391,11 +410,13 @@ This project uses a hybrid animation approach:
 Best for: Hero animations, scroll-triggered reveals, complex interactions, timeline-based sequences.
 
 The project includes GSAP helpers in `src/lib/animations.ts`:
+
 ```tsx
-import { fadeInUp, staggerFade, scaleOnScroll } from "@/lib/animations"
+import { fadeInUp, staggerFade, scaleOnScroll } from '@/lib/animations';
 ```
 
 **Common patterns:**
+
 - Hero section: Complex entrance animations with floating elements
 - Terminal: Typing animations and code reveals
 - Scroll reveals: Intersection Observer + GSAP timelines
@@ -405,16 +426,15 @@ import { fadeInUp, staggerFade, scaleOnScroll } from "@/lib/animations"
 Best for: Hover states, simple transitions, micro-interactions.
 
 ```tsx
-<div className="animate-fade-in animate-slide-up">
-  Simple entrance animation
-</div>
+<div className="animate-fade-in animate-slide-up">Simple entrance animation</div>
 ```
 
 ### Scroll Reveal Hook
 
 Custom hook for intersection observer-based scroll animations:
+
 ```tsx
-const { ref, isInView } = useScrollReveal()
+const { ref, isInView } = useScrollReveal();
 ```
 
 ## Component Patterns
@@ -429,6 +449,7 @@ const { ref, isInView } = useScrollReveal()
 ### Page Section Components
 
 Page sections follow these patterns:
+
 - Named with "Section" suffix
 - Located in `src/components/pages/<page>/sections/`
 - Re-exported from `src/components/pages/<page>/sections/index.ts`
@@ -440,6 +461,7 @@ Page sections follow these patterns:
 ### TypeScript Types
 
 All types are centralized in `src/types/index.ts`:
+
 - `NavLink`, `BlogPost`, `Service`, `Testimonial`
 - `TechItem`, `TechCategory`, `FAQItem`, `PortfolioProject`
 - `CoreValue`, `Partner`
@@ -449,11 +471,13 @@ Import types from `@/types` rather than defining inline.
 ## Code Conventions
 
 ### File Naming
+
 - Components: PascalCase with descriptive names (`HeroSection.tsx`)
 - Utilities: camelCase (`utils.ts`, `animations.ts`)
 - Hooks: camelCase with "use" prefix (`useScrollReveal.ts`)
 
 ### Import Order
+
 1. React/Next.js imports
 2. Third-party libraries
 3. Local components (with `@/` alias)
@@ -461,6 +485,7 @@ Import types from `@/types` rather than defining inline.
 5. Utilities/hooks
 
 ### Component Structure
+
 ```tsx
 // 1. Imports
 import { useState } from "react"
@@ -513,32 +538,36 @@ Components are added to `src/components/ui/` and automatically styled with radix
 ### Working with GSAP Animations
 
 Use existing helpers from `src/lib/animations.ts`:
+
 ```tsx
-import { fadeInUp, staggerFade } from "@/lib/animations"
+import { fadeInUp, staggerFade } from '@/lib/animations';
 ```
 
 For complex custom animations:
-```tsx
-import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-gsap.registerPlugin(ScrollTrigger)
+```tsx
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 ```
 
 ### Adding New Types
 
 Add to `src/types/index.ts` rather than defining inline:
+
 ```tsx
 // src/types/index.ts
 export interface NewType {
-  id: string
+  id: string;
   // ... other properties
 }
 ```
 
 Then import:
+
 ```tsx
-import { NewType } from "@/types"
+import { NewType } from '@/types';
 ```
 
 ## Performance Considerations

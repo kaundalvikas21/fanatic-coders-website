@@ -8,11 +8,11 @@
  * timeline) and must stay consistent with it.
  */
 export const SITE_STATS = {
-  yearsShipping: "8+", // founded 2018
-  projectsDelivered: "150+", // TODO confirm (was 150+ / 500 / 120+ across the site)
-  teamMembers: "40+", // TODO confirm (was 40+ / 50)
-  clientRetention: "98%",
+  yearsShipping: '8+', // founded 2018
+  projectsDelivered: '150+', // TODO confirm (was 150+ / 500 / 120+ across the site)
+  teamMembers: '40+', // TODO confirm (was 40+ / 50)
+  clientRetention: '98%',
   // Portfolio-only impact figures.
-  usersReached: "2.4M+",
-  avgConversionLift: "+41%",
-} as const
+  usersReached: '2.4M+',
+  avgConversionLift: '+41%',
+} as const;

@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { useEffect, useRef, useState } from "react"
-import Image from "next/image"
-import { ArrowLeft, ArrowRight, Code2, Play, Pause } from "lucide-react"
-import GradientButton from "@/components/ui/GradientButton"
-import { RevealSection } from "@/components/ui/RevealSection"
-import { projects as allProjects } from "@/components/pages/portfolio/data"
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { ArrowLeft, ArrowRight, Code2, Play, Pause } from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
+import { RevealSection } from '@/components/ui/RevealSection';
+import { projects as allProjects } from '@/components/pages/portfolio/data';
 
 // Home showcase pulls the first four real case studies from the single
 // portfolio source of truth so copy, imagery, and links never drift.
@@ -13,76 +13,102 @@ const featured = allProjects.slice(0, 4).map((p) => ({
   id: p.id,
   title: p.title,
   description: p.description,
-  image: p.imageUrl ?? "",
-  category: p.industry ?? p.tags[0] ?? "",
+  image: p.imageUrl ?? '',
+  category: p.industry ?? p.tags[0] ?? '',
   tech: (p.tech ?? p.tags).slice(0, 5),
   stats: p.stats.slice(0, 3),
   href: `/portfolio/${p.id}`,
-}))
+}));
 
 export default function PortfolioSection() {
-  const [currentIndex, setCurrentIndex]   = useState(0)
-  const [isPaused, setIsPaused]           = useState(false)
-  const [slideKey, setSlideKey]           = useState(0)   // drives fade-in re-trigger
-  const [isHovered, setIsHovered]         = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [slideKey, setSlideKey] = useState(0); // drives fade-in re-trigger
+  const [isHovered, setIsHovered] = useState(false);
 
-  const project = featured[currentIndex]
+  const project = featured[currentIndex];
 
   function goTo(i: number) {
-    setCurrentIndex(i)
-    setSlideKey(k => k + 1)
+    setCurrentIndex(i);
+    setSlideKey((k) => k + 1);
   }
-  function next() { goTo((currentIndex + 1) % featured.length) }
-  function prev() { goTo((currentIndex - 1 + featured.length) % featured.length) }
+  function next() {
+    goTo((currentIndex + 1) % featured.length);
+  }
+  function prev() {
+    goTo((currentIndex - 1 + featured.length) % featured.length);
+  }
 
   // Point the interval at the latest `next` without rebuilding the timer every
   // slide (classic useInterval): the auto-advance effect depends only on whether
   // the carousel is active, so the 5s cadence stays steady.
-  const savedNext = useRef(next)
-  useEffect(() => { savedNext.current = next })
+  const savedNext = useRef(next);
+  useEffect(() => {
+    savedNext.current = next;
+  });
 
   // Auto-advance, paused on hover, on manual pause, or under reduced motion.
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (prefersReducedMotion || isPaused || isHovered) return
-    const id = setInterval(() => savedNext.current(), 5000)
-    return () => clearInterval(id)
-  }, [isPaused, isHovered])
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion || isPaused || isHovered) return;
+    const id = setInterval(() => savedNext.current(), 5000);
+    return () => clearInterval(id);
+  }, [isPaused, isHovered]);
 
   return (
     <section
       className="min-h-screen section-y relative overflow-hidden"
       id="portfolio"
-      style={{ background: "var(--dark-3)" }}
+      style={{ background: 'var(--dark-3)' }}
     >
       {/* Background grid */}
       <div className="absolute inset-0 -z-10">
         <div className="portfolio-bg-grid absolute inset-0 opacity-10" />
       </div>
 
-      <RevealSection stagger className="container mx-auto px-4">
+      <RevealSection
+        stagger
+        className="container mx-auto px-4"
+      >
         {/* Header */}
         <div className="text-center mb-16">
           <div className="preheading-code">portfolio.showcase</div>
           <h2 className="heading-code">
             case_studies.<span className="function">featured</span>()
           </h2>
-          <p className="subheading-code">{"// Real builds, shipped. Pick one to read the work."}</p>
+          <p className="subheading-code">{'// Real builds, shipped. Pick one to read the work.'}</p>
           <button
             type="button"
             className="mt-6 inline-flex items-center gap-2 rounded-lg border border-[rgba(124,58,237,0.3)] bg-[rgba(124,58,237,0.1)] px-4 py-2 text-sm text-blue-100/80 transition-colors hover:bg-[rgba(124,58,237,0.2)]"
-            onClick={() => setIsPaused(p => !p)}
+            onClick={() => setIsPaused((p) => !p)}
             aria-pressed={isPaused}
           >
-            {isPaused
-              ? <><Play size={14} aria-hidden /> Resume project carousel</>
-              : <><Pause size={14} aria-hidden /> Pause project carousel</>
-            }
+            {isPaused ? (
+              <>
+                <Play
+                  size={14}
+                  aria-hidden
+                />{' '}
+                Resume project carousel
+              </>
+            ) : (
+              <>
+                <Pause
+                  size={14}
+                  aria-hidden
+                />{' '}
+                Pause project carousel
+              </>
+            )}
           </button>
         </div>
 
         {/* Screen-reader announcement of the active slide */}
-        <p className="sr-only" aria-live="polite" aria-atomic="true">
+        <p
+          className="sr-only"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           {`Project ${currentIndex + 1} of ${featured.length}: ${project.title}, ${project.category}`}
         </p>
 
@@ -100,7 +126,10 @@ export default function PortfolioSection() {
               aria-label="Previous featured project"
               onClick={prev}
             >
-              <ArrowLeft size={24} aria-hidden />
+              <ArrowLeft
+                size={24}
+                aria-hidden
+              />
             </button>
 
             {/* Desktop next arrow */}
@@ -110,7 +139,10 @@ export default function PortfolioSection() {
               aria-label="Next featured project"
               onClick={next}
             >
-              <ArrowRight size={24} aria-hidden />
+              <ArrowRight
+                size={24}
+                aria-hidden
+              />
             </button>
 
             {/* Project image */}
@@ -128,7 +160,10 @@ export default function PortfolioSection() {
             </div>
 
             {/* Project info card */}
-            <div className="portfolio-glass-card p-4 sm:p-8 rounded-2xl" key={`info-${slideKey}`}>
+            <div
+              className="portfolio-glass-card p-4 sm:p-8 rounded-2xl"
+              key={`info-${slideKey}`}
+            >
               <div className="portfolio-slide-in space-y-4 sm:space-y-6">
                 {/* Category */}
                 <div className="flex items-center gap-3">
@@ -147,21 +182,31 @@ export default function PortfolioSection() {
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-2 sm:gap-4">
                   {project.stats.map((stat) => (
-                    <div key={stat.label} className="portfolio-stat-card">
-                      <div className="text-sm sm:text-lg md:text-xl font-bold text-[var(--aurora-violet-light)]">{stat.value}</div>
-                      <div className="text-xs sm:text-sm text-blue-100/60">{stat.caption ?? stat.label}</div>
+                    <div
+                      key={stat.label}
+                      className="portfolio-stat-card"
+                    >
+                      <div className="text-sm sm:text-lg md:text-xl font-bold text-[var(--aurora-violet-light)]">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs sm:text-sm text-blue-100/60">
+                        {stat.caption ?? stat.label}
+                      </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Tech */}
                 <div className="flex flex-wrap gap-2">
-                  {project.tech.map(tag => (
+                  {project.tech.map((tag) => (
                     <span
                       key={tag}
                       className="inline-flex items-center gap-1 text-sm py-1 px-3 rounded-full font-mono bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.2)] text-[var(--aurora-violet-light)]"
                     >
-                      <Code2 size={12} aria-hidden />
+                      <Code2
+                        size={12}
+                        aria-hidden
+                      />
                       {tag}
                     </span>
                   ))}
@@ -170,7 +215,11 @@ export default function PortfolioSection() {
                 {/* CTA */}
                 <GradientButton href={project.href}>
                   viewCaseStudy
-                  <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+                  <ArrowRight
+                    size={14}
+                    className="ml-2 group-hover:translate-x-1 transition-transform"
+                    aria-hidden
+                  />
                 </GradientButton>
               </div>
             </div>
@@ -184,7 +233,10 @@ export default function PortfolioSection() {
               aria-label="Previous featured project"
               onClick={prev}
             >
-              <ArrowLeft size={20} aria-hidden />
+              <ArrowLeft
+                size={20}
+                aria-hidden
+              />
             </button>
             <div className="flex items-center gap-1">
               {featured.map((p, i) => (
@@ -199,7 +251,10 @@ export default function PortfolioSection() {
                   <span className="absolute h-1 w-5 rounded-full bg-[rgba(124,58,237,0.25)]" />
                   <span
                     className="absolute h-1 w-5 rounded-full bg-[var(--aurora-violet)] transition-transform duration-300"
-                    style={{ transform: `scaleX(${currentIndex === i ? 1 : 0})`, transformOrigin: "left" }}
+                    style={{
+                      transform: `scaleX(${currentIndex === i ? 1 : 0})`,
+                      transformOrigin: 'left',
+                    }}
                   />
                 </button>
               ))}
@@ -210,7 +265,10 @@ export default function PortfolioSection() {
               aria-label="Next featured project"
               onClick={next}
             >
-              <ArrowRight size={20} aria-hidden />
+              <ArrowRight
+                size={20}
+                aria-hidden
+              />
             </button>
           </div>
 
@@ -228,7 +286,10 @@ export default function PortfolioSection() {
                 <span className="absolute h-1 w-5 rounded-full bg-[rgba(124,58,237,0.25)]" />
                 <span
                   className="absolute h-1 w-5 rounded-full bg-[var(--aurora-violet)] transition-transform duration-300"
-                  style={{ transform: `scaleX(${currentIndex === i ? 1 : 0})`, transformOrigin: "left" }}
+                  style={{
+                    transform: `scaleX(${currentIndex === i ? 1 : 0})`,
+                    transformOrigin: 'left',
+                  }}
                 />
               </button>
             ))}
@@ -236,13 +297,20 @@ export default function PortfolioSection() {
 
           {/* View all */}
           <div className="mt-10 flex justify-center">
-            <GradientButton href="/portfolio" variant="secondary">
+            <GradientButton
+              href="/portfolio"
+              variant="secondary"
+            >
               viewAllProjects
-              <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+              <ArrowRight
+                size={14}
+                className="ml-2 group-hover:translate-x-1 transition-transform"
+                aria-hidden
+              />
             </GradientButton>
           </div>
         </div>
       </RevealSection>
     </section>
-  )
+  );
 }

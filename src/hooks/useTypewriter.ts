@@ -1,17 +1,17 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { gsap, useGSAP, registerGsap, prefersReducedMotion, EASE } from "@/lib/motion"
+import { useState } from 'react';
+import { gsap, useGSAP, registerGsap, prefersReducedMotion, EASE } from '@/lib/motion';
 
 interface UseTypewriterOptions {
   /** Seconds per character. */
-  speed?: number
+  speed?: number;
   /** Delay before typing starts (seconds). */
-  startDelay?: number
+  startDelay?: number;
   /** Type, hold, erase, repeat. */
-  loop?: boolean
+  loop?: boolean;
   /** Hold time at full text before erasing (loop only, seconds). */
-  pause?: number
+  pause?: number;
 }
 
 /**
@@ -21,29 +21,39 @@ interface UseTypewriterOptions {
  * so cleanup happens on unmount via useGSAP.
  */
 export function useTypewriter(text: string, opts: UseTypewriterOptions = {}) {
-  const { speed = 0.05, startDelay = 0, loop = false, pause = 2 } = opts
-  const [display, setDisplay] = useState("")
+  const { speed = 0.05, startDelay = 0, loop = false, pause = 2 } = opts;
+  const [display, setDisplay] = useState('');
 
   useGSAP(
     () => {
-      registerGsap()
+      registerGsap();
       if (prefersReducedMotion()) {
-        setDisplay(text)
-        return
+        setDisplay(text);
+        return;
       }
 
-      const proxy = { i: 0 }
-      const paint = () => setDisplay(text.slice(0, Math.round(proxy.i)))
-      const tl = gsap.timeline({ repeat: loop ? -1 : 0, delay: startDelay })
+      const proxy = { i: 0 };
+      const paint = () => setDisplay(text.slice(0, Math.round(proxy.i)));
+      const tl = gsap.timeline({ repeat: loop ? -1 : 0, delay: startDelay });
 
-      tl.to(proxy, { i: text.length, duration: text.length * speed, ease: EASE.none, onUpdate: paint })
+      tl.to(proxy, {
+        i: text.length,
+        duration: text.length * speed,
+        ease: EASE.none,
+        onUpdate: paint,
+      });
       if (loop) {
-        tl.to({}, { duration: pause })
-        tl.to(proxy, { i: 0, duration: text.length * speed * 0.6, ease: EASE.none, onUpdate: paint })
+        tl.to({}, { duration: pause });
+        tl.to(proxy, {
+          i: 0,
+          duration: text.length * speed * 0.6,
+          ease: EASE.none,
+          onUpdate: paint,
+        });
       }
     },
     { dependencies: [text, loop, speed] },
-  )
+  );
 
-  return display
+  return display;
 }

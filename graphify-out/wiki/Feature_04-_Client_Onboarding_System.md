@@ -7,10 +7,12 @@
 ## Connections by Relation
 
 ### rationale_for
+
 - [[Rationale: Structured Onboarding Improves Retention & Time-to-Revenue]] `EXTRACTED`
 - [[Rationale: Permission-Based Access Delegation over Password Sharing]] `EXTRACTED`
 
 ### references
+
 - [[Shared Data Model Overview]] `EXTRACTED`
 - [[FCOP PRD Feature-Wise File Index]] `EXTRACTED`
 - [[Feature 06: Admin Revenue & Business Dashboard]] `EXTRACTED`
@@ -18,6 +20,7 @@
 - [[Dynamic Service-Type Onboarding Wizard]] `EXTRACTED`
 
 ### shares_data_with
+
 - [[Entity: ClientUser]] `EXTRACTED`
 - [[Entity: FileAttachment]] `EXTRACTED`
 - [[Entity: Client]] `EXTRACTED`
@@ -25,4 +28,4 @@
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._

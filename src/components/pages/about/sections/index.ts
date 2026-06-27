@@ -1,8 +1,8 @@
-export { AboutHeroSection } from "./AboutHeroSection"
-export { StorySection } from "./StorySection"
-export { MissionSection } from "./MissionSection"
-export { AboutValuesSection } from "./AboutValuesSection"
-export { AboutStatsSection } from "./AboutStatsSection"
-export { TeamSection } from "./TeamSection"
-export { ProcessSection } from "./ProcessSection"
-export { AboutCtaSection } from "./AboutCtaSection"
+export { AboutHeroSection } from './AboutHeroSection';
+export { StorySection } from './StorySection';
+export { MissionSection } from './MissionSection';
+export { AboutValuesSection } from './AboutValuesSection';
+export { AboutStatsSection } from './AboutStatsSection';
+export { TeamSection } from './TeamSection';
+export { ProcessSection } from './ProcessSection';
+export { AboutCtaSection } from './AboutCtaSection';

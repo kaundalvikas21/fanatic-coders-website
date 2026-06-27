@@ -1,23 +1,23 @@
-import Image from "next/image"
-import { UserCheck, Zap, Receipt, ShieldCheck } from "lucide-react"
-import type { ElementType } from "react"
-import { RevealSection } from "@/components/ui/RevealSection"
+import Image from 'next/image';
+import { UserCheck, Zap, Receipt, ShieldCheck } from 'lucide-react';
+import type { ElementType } from 'react';
+import { RevealSection } from '@/components/ui/RevealSection';
 
 // The reassurance signals that used to be their own section, folded into the hero so a
 // visitor reads what to expect before the form, without a whole extra scroll.
 const trustChips: { Icon: ElementType; label: string; color: string }[] = [
-  { Icon: UserCheck, label: "Senior people, not SDRs", color: "var(--aurora-violet-light)" },
-  { Icon: Zap, label: "Reply within 1 business day", color: "var(--aurora-cyan-light)" },
-  { Icon: Receipt, label: "Clear on cost up front", color: "var(--aurora-blue-light)" },
-  { Icon: ShieldCheck, label: "Honest about fit", color: "var(--aurora-green-light)" },
-]
+  { Icon: UserCheck, label: 'Senior people, not SDRs', color: 'var(--aurora-violet-light)' },
+  { Icon: Zap, label: 'Reply within 1 business day', color: 'var(--aurora-cyan-light)' },
+  { Icon: Receipt, label: 'Clear on cost up front', color: 'var(--aurora-blue-light)' },
+  { Icon: ShieldCheck, label: 'Honest about fit', color: 'var(--aurora-green-light)' },
+];
 
 export function ContactHeroSection() {
   return (
     <section
       id="contact-hero"
       className="relative overflow-hidden hero-shell [--hero-pt:7.5rem] pb-8 min-h-[100svh] flex flex-col justify-center"
-      style={{ background: "var(--dark-1)" }}
+      style={{ background: 'var(--dark-1)' }}
     >
       <Image
         src="/contact_hero_bg.png"
@@ -28,8 +28,14 @@ export function ContactHeroSection() {
         sizes="100vw"
         className="object-cover hero-bg-img"
       />
-      <div className="hero-bg-scrim absolute inset-0 pointer-events-none" aria-hidden="true" />
-      <div className="hero-bg-sweep" aria-hidden="true" />
+      <div
+        className="hero-bg-scrim absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="hero-bg-sweep"
+        aria-hidden="true"
+      />
 
       <div className="relative z-10 container mx-auto px-4">
         <RevealSection className="max-w-3xl mx-auto text-center">
@@ -44,7 +50,10 @@ export function ContactHeroSection() {
           </p>
         </RevealSection>
 
-        <RevealSection stagger className="mt-8 flex flex-wrap justify-center gap-2.5">
+        <RevealSection
+          stagger
+          className="mt-8 flex flex-wrap justify-center gap-2.5"
+        >
           {trustChips.map(({ Icon, label, color }) => (
             <span
               key={label}
@@ -62,5 +71,5 @@ export function ContactHeroSection() {
         </RevealSection>
       </div>
     </section>
-  )
+  );
 }

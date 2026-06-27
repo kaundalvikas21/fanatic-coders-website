@@ -1,9 +1,9 @@
-import type { PortfolioProject } from "@/types"
-import { CtaBand } from "@/components/ui/CtaBand"
-import { CaseHero } from "./case-sections/CaseHero"
-import { CaseStory } from "./case-sections/CaseStory"
-import { CaseQuote } from "./case-sections/CaseQuote"
-import { CaseRelated } from "./case-sections/CaseRelated"
+import type { PortfolioProject } from '@/types';
+import { CtaBand } from '@/components/ui/CtaBand';
+import { CaseHero } from './case-sections/CaseHero';
+import { CaseStory } from './case-sections/CaseStory';
+import { CaseQuote } from './case-sections/CaseQuote';
+import { CaseRelated } from './case-sections/CaseRelated';
 
 export function CaseStudyPage({ project }: { project: PortfolioProject }) {
   return (
@@ -17,5 +17,5 @@ export function CaseStudyPage({ project }: { project: PortfolioProject }) {
         subtitle="Tell us what you're building and we'll bring the team to make it real."
       />
     </>
-  )
+  );
 }

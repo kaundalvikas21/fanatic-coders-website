@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react';
 
 /**
  * Tracks which section is nearest the top of the viewport via IntersectionObserver.
@@ -8,27 +8,27 @@ import { useEffect, useState } from "react"
  * section id. setState runs inside the async observer callback (not synchronously
  * in the effect), so it does not trip `react-hooks/set-state-in-effect`.
  */
-export function useScrollSpy(ids: string[], rootMargin = "-20% 0px -70% 0px") {
-  const [active, setActive] = useState(ids[0] ?? "")
+export function useScrollSpy(ids: string[], rootMargin = '-20% 0px -70% 0px') {
+  const [active, setActive] = useState(ids[0] ?? '');
 
   useEffect(() => {
     const targets = ids
       .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el))
-    if (targets.length === 0) return
+      .filter((el): el is HTMLElement => Boolean(el));
+    if (targets.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible[0]) setActive(visible[0].target.id)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
       },
-      { rootMargin, threshold: 0 }
-    )
-    targets.forEach((t) => observer.observe(t))
-    return () => observer.disconnect()
-  }, [ids, rootMargin])
+      { rootMargin, threshold: 0 },
+    );
+    targets.forEach((t) => observer.observe(t));
+    return () => observer.disconnect();
+  }, [ids, rootMargin]);
 
-  return active
+  return active;
 }

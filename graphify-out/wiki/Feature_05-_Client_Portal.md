@@ -7,9 +7,11 @@
 ## Connections by Relation
 
 ### conceptually_related_to
+
 - [[OQ-1: Payment Gateway Integration in V1]] `INFERRED`
 
 ### references
+
 - [[Shared Data Model Overview]] `EXTRACTED`
 - [[FCOP PRD Feature-Wise File Index]] `EXTRACTED`
 - [[Feature 06: Admin Revenue & Business Dashboard]] `EXTRACTED`
@@ -17,6 +19,7 @@
 - [[NFR: Accessibility (WCAG 2.1 AA for Client Portal)]] `EXTRACTED`
 
 ### shares_data_with
+
 - [[Entity: Project]] `EXTRACTED`
 - [[Entity: ClientUser]] `EXTRACTED`
 - [[Entity: FileAttachment]] `EXTRACTED`
@@ -25,4 +28,4 @@
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._

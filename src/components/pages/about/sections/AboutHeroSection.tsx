@@ -1,16 +1,16 @@
-import Image from "next/image"
-import { ArrowRight, Calendar, Users, Gauge, ShieldCheck } from "lucide-react"
-import type { ElementType } from "react"
-import GradientButton from "@/components/ui/GradientButton"
-import { RevealSection } from "@/components/ui/RevealSection"
+import Image from 'next/image';
+import { ArrowRight, Calendar, Users, Gauge, ShieldCheck } from 'lucide-react';
+import type { ElementType } from 'react';
+import GradientButton from '@/components/ui/GradientButton';
+import { RevealSection } from '@/components/ui/RevealSection';
 
 // Qualitative trust signals — the hard numbers live in the impact stats section.
 const trustChips: { Icon: ElementType; label: string; color: string }[] = [
-  { Icon: Calendar, label: "Since 2018", color: "var(--aurora-violet-light)" },
-  { Icon: Users, label: "Senior-only team", color: "var(--aurora-cyan-light)" },
-  { Icon: Gauge, label: "Ship in weeks", color: "var(--aurora-blue-light)" },
-  { Icon: ShieldCheck, label: "Own the outcome", color: "var(--aurora-green-light)" },
-]
+  { Icon: Calendar, label: 'Since 2018', color: 'var(--aurora-violet-light)' },
+  { Icon: Users, label: 'Senior-only team', color: 'var(--aurora-cyan-light)' },
+  { Icon: Gauge, label: 'Ship in weeks', color: 'var(--aurora-blue-light)' },
+  { Icon: ShieldCheck, label: 'Own the outcome', color: 'var(--aurora-green-light)' },
+];
 
 /**
  * About hero — full-height, matches the portfolio/services listing hero pattern:
@@ -22,7 +22,7 @@ export function AboutHeroSection() {
     <section
       id="about-hero"
       className="hero-shell [--hero-pt:7.5rem] pb-8 relative flex min-h-[100svh] flex-col overflow-hidden"
-      style={{ background: "var(--dark-1)" }}
+      style={{ background: 'var(--dark-1)' }}
     >
       <Image
         src="/about_hero_bg.png"
@@ -33,8 +33,14 @@ export function AboutHeroSection() {
         sizes="100vw"
         className="object-cover hero-bg-img"
       />
-      <div className="hero-bg-scrim absolute inset-0 pointer-events-none" aria-hidden="true" />
-      <div className="hero-bg-sweep" aria-hidden="true" />
+      <div
+        className="hero-bg-scrim absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="hero-bg-sweep"
+        aria-hidden="true"
+      />
 
       <div className="relative z-10 container mx-auto px-4 flex flex-1 flex-col justify-center">
         <RevealSection className="max-w-3xl mx-auto text-center">
@@ -44,13 +50,16 @@ export function AboutHeroSection() {
           </h1>
 
           <p className="mt-6 text-base sm:text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto leading-relaxed">
-            fanaticCoders is a small senior team. We design and build web and mobile products,
-            then stay on to keep them fast and useful. The people who write your code are the
-            ones who answer for it. No junior handoffs.
+            fanaticCoders is a small senior team. We design and build web and mobile products, then
+            stay on to keep them fast and useful. The people who write your code are the ones who
+            answer for it. No junior handoffs.
           </p>
         </RevealSection>
 
-        <RevealSection stagger className="mt-8 flex flex-wrap justify-center gap-2.5">
+        <RevealSection
+          stagger
+          className="mt-8 flex flex-wrap justify-center gap-2.5"
+        >
           {trustChips.map(({ Icon, label, color }) => (
             <span
               key={label}
@@ -68,15 +77,26 @@ export function AboutHeroSection() {
         </RevealSection>
 
         <RevealSection className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <GradientButton href="/contact" className="w-full sm:w-auto">
+          <GradientButton
+            href="/contact"
+            className="w-full sm:w-auto"
+          >
             startAProject
-            <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+            <ArrowRight
+              size={16}
+              className="ml-2 group-hover:translate-x-1 transition-transform"
+              aria-hidden
+            />
           </GradientButton>
-          <GradientButton href="/portfolio" variant="secondary" className="w-full sm:w-auto">
+          <GradientButton
+            href="/portfolio"
+            variant="secondary"
+            className="w-full sm:w-auto"
+          >
             seeOurWork
           </GradientButton>
         </RevealSection>
       </div>
     </section>
-  )
+  );
 }

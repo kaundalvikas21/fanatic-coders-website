@@ -1,9 +1,9 @@
-import type { SimpleIcon } from "simple-icons"
+import type { SimpleIcon } from 'simple-icons';
 
 interface TechLogoProps {
-  icon: SimpleIcon
-  size?: number
-  className?: string
+  icon: SimpleIcon;
+  size?: number;
+  className?: string;
 }
 
 // Monochrome: fills with currentColor so logos stay visible on the dark ground
@@ -21,5 +21,5 @@ export default function TechLogo({ icon, size = 28, className }: TechLogoProps) 
     >
       <path d={icon.path} />
     </svg>
-  )
+  );
 }

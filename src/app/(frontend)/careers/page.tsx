@@ -1,10 +1,11 @@
-import type { Metadata } from "next"
-import { ComingSoon } from "@/components/ui/ComingSoon"
+import type { Metadata } from 'next';
+import { ComingSoon } from '@/components/ui/ComingSoon';
 
 export const metadata: Metadata = {
-  title: "Careers | fanaticCoders",
-  description: "We hire senior engineers and designers who sweat the details. No public openings right now, but we always want to meet good people.",
-}
+  title: 'Careers | fanaticCoders',
+  description:
+    'We hire senior engineers and designers who sweat the details. No public openings right now, but we always want to meet good people.',
+};
 
 export default function Page() {
   return (
@@ -14,5 +15,5 @@ export default function Page() {
       headingSweep="well"
       note="No public openings right now. If you're a senior engineer or designer who cares about the details, send us your work and we'll talk."
     />
-  )
+  );
 }

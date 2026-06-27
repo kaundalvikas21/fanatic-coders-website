@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### references
+
 - [[Shared Data Model Overview]] `EXTRACTED`
 - [[FCOP PRD Feature-Wise File Index]] `EXTRACTED`
 - [[Feature 02: Project Management]] `EXTRACTED`
@@ -15,9 +16,10 @@
 - [[Feature 03: Google Workspace Integration]] `EXTRACTED`
 
 ### shares_data_with
+
 - [[Entity: Notification]] `EXTRACTED`
 - [[Entity: NotificationPreference]] `EXTRACTED`
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._

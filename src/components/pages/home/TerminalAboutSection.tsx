@@ -1,133 +1,148 @@
-"use client"
+'use client';
 
-import { useEffect, useRef, useState } from "react"
-import { Users, ArrowRight } from "lucide-react"
-import GradientButton from "@/components/ui/GradientButton"
-import { RevealSection } from "@/components/ui/RevealSection"
-import { SITE_STATS } from "@/lib/site-stats"
+import { useEffect, useRef, useState } from 'react';
+import { Users, ArrowRight } from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
+import { RevealSection } from '@/components/ui/RevealSection';
+import { SITE_STATS } from '@/lib/site-stats';
 
 const aboutContent = [
   {
-    command: "cat about.md",
+    command: 'cat about.md',
     output: [
-      "# About DevAgency",
-      "",
+      '# About DevAgency',
+      '',
       "We're a team of developers and designers who like building software that works well and lasts.",
-      "",
-      "## Our Mission",
-      "To turn good ideas into software that helps the business grow.",
-      "",
-      "## Core Values",
-      "- Innovation First",
-      "- Quality Obsessed",
-      "- User Centered",
-      "- Always Learning",
+      '',
+      '## Our Mission',
+      'To turn good ideas into software that helps the business grow.',
+      '',
+      '## Core Values',
+      '- Innovation First',
+      '- Quality Obsessed',
+      '- User Centered',
+      '- Always Learning',
     ],
   },
   {
-    command: "cat team/stats.json",
+    command: 'cat team/stats.json',
     output: [
-      "{",
+      '{',
       `  "team_size": ${parseInt(SITE_STATS.teamMembers, 10)},`,
       `  "years_experience": ${parseInt(SITE_STATS.yearsShipping, 10)},`,
       `  "projects_completed": ${parseInt(SITE_STATS.projectsDelivered, 10)},`,
       `  "happy_clients": "${SITE_STATS.clientRetention}"`,
-      "}",
+      '}',
     ],
   },
-]
+];
 
 function getLineColor(line: string): string {
-  if (line.startsWith("$"))    return "text-indigo-400"
-  if (line.startsWith("#"))    return "text-pink-400 font-bold"
-  if (line.startsWith("-"))    return "text-green-400"
-  if (line.startsWith("{") || line.startsWith("}")) return "text-yellow-400"
-  if (line.startsWith('  "'))  return "text-blue-400"
-  return ""
+  if (line.startsWith('$')) return 'text-indigo-400';
+  if (line.startsWith('#')) return 'text-pink-400 font-bold';
+  if (line.startsWith('-')) return 'text-green-400';
+  if (line.startsWith('{') || line.startsWith('}')) return 'text-yellow-400';
+  if (line.startsWith('  "')) return 'text-blue-400';
+  return '';
 }
 
 export default function TerminalAboutSection() {
-  const sectionRef     = useRef<HTMLElement>(null)
-  const contentRef     = useRef<HTMLDivElement>(null)
-  const mountedRef     = useRef(false)
-  const [started, setStarted]             = useState(false)
-  const [currentText, setCurrentText]     = useState("")
-  const [lines, setLines]                 = useState<string[]>([])
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const mountedRef = useRef(false);
+  const [started, setStarted] = useState(false);
+  const [currentText, setCurrentText] = useState('');
+  const [lines, setLines] = useState<string[]>([]);
 
   // Scroll trigger
   useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
+    const el = sectionRef.current;
+    if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setStarted(true); obs.disconnect() } },
-      { threshold: 0.2 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStarted(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   // Typewriter
   useEffect(() => {
-    if (!started) return
-    mountedRef.current = true
+    if (!started) return;
+    mountedRef.current = true;
 
     async function run() {
-      const delay = (ms: number) => new Promise<void>(res => setTimeout(res, ms))
+      const delay = (ms: number) => new Promise<void>((res) => setTimeout(res, ms));
 
       for (const block of aboutContent) {
-        if (!mountedRef.current) return
+        if (!mountedRef.current) return;
 
         // Type the command char by char
         for (let i = 0; i <= block.command.length; i++) {
-          if (!mountedRef.current) return
-          setCurrentText(block.command.slice(0, i))
-          await delay(50)
+          if (!mountedRef.current) return;
+          setCurrentText(block.command.slice(0, i));
+          await delay(50);
         }
 
-        await delay(500)
-        if (!mountedRef.current) return
+        await delay(500);
+        if (!mountedRef.current) return;
 
         // Commit command to output
-        setLines(prev => [...prev, `$ ${block.command}`])
-        setCurrentText("")
+        setLines((prev) => [...prev, `$ ${block.command}`]);
+        setCurrentText('');
 
         // Reveal output lines one by one
         for (const line of block.output) {
-          if (!mountedRef.current) return
-          setLines(prev => [...prev, line])
-          await delay(50)
+          if (!mountedRef.current) return;
+          setLines((prev) => [...prev, line]);
+          await delay(50);
         }
 
-        setLines(prev => [...prev, ""])
-        await delay(1000)
+        setLines((prev) => [...prev, '']);
+        await delay(1000);
       }
     }
 
-    run()
-    return () => { mountedRef.current = false }
-  }, [started])
+    run();
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [started]);
 
   // Auto-scroll terminal content
   useEffect(() => {
-    const el = contentRef.current
-    if (el) el.scrollTop = el.scrollHeight
-  }, [lines])
+    const el = contentRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [lines]);
 
   return (
-    <section ref={sectionRef} className="section-y relative overflow-hidden" id="about" style={{ background: "var(--dark-3)" }}>
+    <section
+      ref={sectionRef}
+      className="section-y relative overflow-hidden"
+      id="about"
+      style={{ background: 'var(--dark-3)' }}
+    >
       {/* Code-grid background */}
       <div className="absolute inset-0 -z-10">
         <div className="code-grid absolute inset-0" />
       </div>
 
-      <RevealSection stagger className="container mx-auto px-4">
+      <RevealSection
+        stagger
+        className="container mx-auto px-4"
+      >
         {/* Header */}
         <div className="text-center mb-16">
           <div className="preheading-code">about.module</div>
           <h2 className="heading-code">
             cat <span className="function">./about-us</span>
           </h2>
-          <p className="subheading-code">{"// Get to know our story"}</p>
+          <p className="subheading-code">{'// Get to know our story'}</p>
         </div>
 
         {/* Terminal window */}
@@ -144,10 +159,16 @@ export default function TerminalAboutSection() {
             </div>
 
             {/* Terminal content */}
-            <div ref={contentRef} className="about-terminal-content">
+            <div
+              ref={contentRef}
+              className="about-terminal-content"
+            >
               {lines.map((line, i) => (
-                <div key={i} className="about-terminal-line">
-                  <span className={getLineColor(line) || "text-white/75"}>{line}</span>
+                <div
+                  key={i}
+                  className="about-terminal-line"
+                >
+                  <span className={getLineColor(line) || 'text-white/75'}>{line}</span>
                 </div>
               ))}
               {/* Active typing line */}
@@ -163,15 +184,26 @@ export default function TerminalAboutSection() {
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
             <GradientButton href="/contact">
               joinOurTeam
-              <Users size={16} className="ml-2" aria-hidden />
+              <Users
+                size={16}
+                className="ml-2"
+                aria-hidden
+              />
             </GradientButton>
-            <GradientButton href="/careers" variant="secondary">
+            <GradientButton
+              href="/careers"
+              variant="secondary"
+            >
               viewOpenings
-              <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+              <ArrowRight
+                size={16}
+                className="ml-2 group-hover:translate-x-1 transition-transform"
+                aria-hidden
+              />
             </GradientButton>
           </div>
         </div>
       </RevealSection>
     </section>
-  )
+  );
 }

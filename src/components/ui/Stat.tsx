@@ -1,11 +1,11 @@
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
 export interface StatProps {
-  value: string
-  label: string
+  value: string;
+  label: string;
   /** Optional supporting line under the label. */
-  hint?: string
-  className?: string
+  hint?: string;
+  className?: string;
 }
 
 /**
@@ -14,10 +14,12 @@ export interface StatProps {
  */
 export function Stat({ value, label, hint, className }: StatProps) {
   return (
-    <div className={cn("glass-card-md rounded-2xl p-5 text-center", className)}>
-      <div className="text-3xl md:text-4xl font-bold font-mono tabular-nums text-white">{value}</div>
+    <div className={cn('glass-card-md rounded-2xl p-5 text-center', className)}>
+      <div className="text-3xl md:text-4xl font-bold font-mono tabular-nums text-white">
+        {value}
+      </div>
       <div className="mt-1.5 text-xs font-mono text-blue-100/55">{label}</div>
       {hint && <div className="mt-1 text-[11px] text-blue-100/40">{hint}</div>}
     </div>
-  )
+  );
 }

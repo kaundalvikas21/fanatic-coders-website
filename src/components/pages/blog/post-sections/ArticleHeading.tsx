@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Link2, Check } from "lucide-react"
+import { useState } from 'react';
+import { Link2, Check } from 'lucide-react';
 
 /**
  * Article section heading: mono, code-styled, with a hover-revealed anchor button
@@ -10,18 +10,18 @@ import { Link2, Check } from "lucide-react"
  * the URL and nudges the address bar.
  */
 export function ArticleHeading({ id, children }: { id: string; children: string }) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   function copyLink() {
-    const url = `${window.location.origin}${window.location.pathname}#${id}`
-    history.replaceState(null, "", `#${id}`)
+    const url = `${window.location.origin}${window.location.pathname}#${id}`;
+    history.replaceState(null, '', `#${id}`);
     navigator.clipboard
       ?.writeText(url)
       .then(() => {
-        setCopied(true)
-        setTimeout(() => setCopied(false), 1500)
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
       })
-      .catch(() => {})
+      .catch(() => {});
   }
 
   return (
@@ -30,17 +30,27 @@ export function ArticleHeading({ id, children }: { id: string; children: string 
       <button
         type="button"
         onClick={copyLink}
-        aria-label={copied ? "Link copied" : `Copy link to section: ${children}`}
+        aria-label={copied ? 'Link copied' : `Copy link to section: ${children}`}
         className="shrink-0 p-1.5 -m-1.5 text-indigo-300 opacity-0 transition-opacity hover:text-white group-hover/h:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
       >
-        {copied ? <Check size={16} aria-hidden /> : <Link2 size={16} aria-hidden />}
+        {copied ? (
+          <Check
+            size={16}
+            aria-hidden
+          />
+        ) : (
+          <Link2
+            size={16}
+            aria-hidden
+          />
+        )}
       </button>
       <span
         aria-hidden
-        className={`font-mono text-xs font-normal text-indigo-300 transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0"}`}
+        className={`font-mono text-xs font-normal text-indigo-300 transition-opacity duration-200 ${copied ? 'opacity-100' : 'opacity-0'}`}
       >
         copied
       </span>
     </h2>
-  )
+  );
 }

@@ -8,31 +8,76 @@
         "role": "primary",
         "displayName": "Aurora Violet",
         "canonical": "oklch(0.55 0.24 292)",
-        "tonalRamp": ["oklch(0.20 0.09 292)", "oklch(0.30 0.13 292)", "oklch(0.40 0.17 292)", "oklch(0.48 0.21 292)", "oklch(0.55 0.24 292)", "oklch(0.66 0.21 292)", "oklch(0.78 0.14 292)", "oklch(0.92 0.06 292)"]
+        "tonalRamp": [
+          "oklch(0.20 0.09 292)",
+          "oklch(0.30 0.13 292)",
+          "oklch(0.40 0.17 292)",
+          "oklch(0.48 0.21 292)",
+          "oklch(0.55 0.24 292)",
+          "oklch(0.66 0.21 292)",
+          "oklch(0.78 0.14 292)",
+          "oklch(0.92 0.06 292)"
+        ]
       },
       "aurora-blue": {
         "role": "primary",
         "displayName": "Aurora Blue",
         "canonical": "oklch(0.55 0.21 264)",
-        "tonalRamp": ["oklch(0.22 0.08 264)", "oklch(0.32 0.12 264)", "oklch(0.42 0.16 264)", "oklch(0.50 0.19 264)", "oklch(0.58 0.21 264)", "oklch(0.68 0.17 264)", "oklch(0.80 0.11 264)", "oklch(0.93 0.05 264)"]
+        "tonalRamp": [
+          "oklch(0.22 0.08 264)",
+          "oklch(0.32 0.12 264)",
+          "oklch(0.42 0.16 264)",
+          "oklch(0.50 0.19 264)",
+          "oklch(0.58 0.21 264)",
+          "oklch(0.68 0.17 264)",
+          "oklch(0.80 0.11 264)",
+          "oklch(0.93 0.05 264)"
+        ]
       },
       "aurora-cyan": {
         "role": "secondary",
         "displayName": "Aurora Cyan",
         "canonical": "oklch(0.70 0.13 207)",
-        "tonalRamp": ["oklch(0.25 0.06 207)", "oklch(0.35 0.09 207)", "oklch(0.45 0.11 207)", "oklch(0.55 0.12 207)", "oklch(0.70 0.13 207)", "oklch(0.80 0.11 207)", "oklch(0.88 0.08 207)", "oklch(0.95 0.04 207)"]
+        "tonalRamp": [
+          "oklch(0.25 0.06 207)",
+          "oklch(0.35 0.09 207)",
+          "oklch(0.45 0.11 207)",
+          "oklch(0.55 0.12 207)",
+          "oklch(0.70 0.13 207)",
+          "oklch(0.80 0.11 207)",
+          "oklch(0.88 0.08 207)",
+          "oklch(0.95 0.04 207)"
+        ]
       },
       "aurora-green": {
         "role": "tertiary",
         "displayName": "Aurora Green",
         "canonical": "oklch(0.70 0.15 162)",
-        "tonalRamp": ["oklch(0.25 0.06 162)", "oklch(0.35 0.09 162)", "oklch(0.45 0.11 162)", "oklch(0.55 0.13 162)", "oklch(0.70 0.15 162)", "oklch(0.80 0.13 162)", "oklch(0.88 0.09 162)", "oklch(0.95 0.04 162)"]
+        "tonalRamp": [
+          "oklch(0.25 0.06 162)",
+          "oklch(0.35 0.09 162)",
+          "oklch(0.45 0.11 162)",
+          "oklch(0.55 0.13 162)",
+          "oklch(0.70 0.15 162)",
+          "oklch(0.80 0.13 162)",
+          "oklch(0.88 0.09 162)",
+          "oklch(0.95 0.04 162)"
+        ]
       },
       "dark-surface": {
         "role": "neutral",
         "displayName": "Dark Surface",
         "canonical": "oklch(0.16 0.012 292)",
-        "tonalRamp": ["oklch(0.10 0.010 292)", "oklch(0.16 0.012 292)", "oklch(0.22 0.014 292)", "oklch(0.30 0.012 292)", "oklch(0.45 0.008 292)", "oklch(0.60 0.006 292)", "oklch(0.80 0.004 292)", "oklch(0.97 0.002 292)"]
+        "tonalRamp": [
+          "oklch(0.10 0.010 292)",
+          "oklch(0.16 0.012 292)",
+          "oklch(0.22 0.014 292)",
+          "oklch(0.30 0.012 292)",
+          "oklch(0.45 0.008 292)",
+          "oklch(0.60 0.006 292)",
+          "oklch(0.80 0.004 292)",
+          "oklch(0.97 0.002 292)"
+        ]
       },
       "ink": {
         "role": "neutral",
@@ -61,23 +106,64 @@
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Hero and section headlines; often the single aurora gradient sweep of the viewport." },
-      "headline": { "displayName": "Headline (Code)", "purpose": "Monospace code-styled section titles, e.g. `export class DigitalServices`." },
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero and section headlines; often the single aurora gradient sweep of the viewport."
+      },
+      "headline": {
+        "displayName": "Headline (Code)",
+        "purpose": "Monospace code-styled section titles, e.g. `export class DigitalServices`."
+      },
       "title": { "displayName": "Title", "purpose": "Card and subsection headings." },
       "body": { "displayName": "Body", "purpose": "Paragraph copy; cap measure at 65 to 75ch." },
-      "label": { "displayName": "Label (Code)", "purpose": "Preheadings, code chips, CTA verbs, metadata." }
+      "label": {
+        "displayName": "Label (Code)",
+        "purpose": "Preheadings, code chips, CTA verbs, metadata."
+      }
     },
     "shadows": [
-      { "name": "glass-glow", "value": "0 0 20px rgba(124,58,237,0.09), inset 0 1px 0 rgba(255,255,255,0.05)", "purpose": "Resting violet halo plus top inner highlight on glass cards." },
-      { "name": "glass-glow-cyan", "value": "0 0 20px rgba(6,182,212,0.09), inset 0 1px 0 rgba(255,255,255,0.05)", "purpose": "Cyan-keyed glass card variant." },
-      { "name": "glass-glow-green", "value": "0 0 20px rgba(16,185,129,0.10), inset 0 1px 0 rgba(255,255,255,0.05)", "purpose": "Green-keyed glass card variant." },
-      { "name": "lifted", "value": "0 16px 40px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.06)", "purpose": "Card hover elevation; pairs with translateY(-4px)." },
-      { "name": "primary-cta", "value": "0 8px 32px rgba(124,58,237,0.4)", "purpose": "Solid aurora primary button resting glow." },
-      { "name": "nav", "value": "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)", "purpose": "Sticky nav bar; the one sanctioned dark ambient shadow." }
+      {
+        "name": "glass-glow",
+        "value": "0 0 20px rgba(124,58,237,0.09), inset 0 1px 0 rgba(255,255,255,0.05)",
+        "purpose": "Resting violet halo plus top inner highlight on glass cards."
+      },
+      {
+        "name": "glass-glow-cyan",
+        "value": "0 0 20px rgba(6,182,212,0.09), inset 0 1px 0 rgba(255,255,255,0.05)",
+        "purpose": "Cyan-keyed glass card variant."
+      },
+      {
+        "name": "glass-glow-green",
+        "value": "0 0 20px rgba(16,185,129,0.10), inset 0 1px 0 rgba(255,255,255,0.05)",
+        "purpose": "Green-keyed glass card variant."
+      },
+      {
+        "name": "lifted",
+        "value": "0 16px 40px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.06)",
+        "purpose": "Card hover elevation; pairs with translateY(-4px)."
+      },
+      {
+        "name": "primary-cta",
+        "value": "0 8px 32px rgba(124,58,237,0.4)",
+        "purpose": "Solid aurora primary button resting glow."
+      },
+      {
+        "name": "nav",
+        "value": "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)",
+        "purpose": "Sticky nav bar; the one sanctioned dark ambient shadow."
+      }
     ],
     "motion": [
-      { "name": "ease-snappy", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Reveal and lift transitions (ease-out-expo feel)." },
-      { "name": "ease-smooth", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default easing for state transitions." },
+      {
+        "name": "ease-snappy",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Reveal and lift transitions (ease-out-expo feel)."
+      },
+      {
+        "name": "ease-smooth",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for state transitions."
+      },
       { "name": "duration-micro", "value": "150ms", "purpose": "Tiny state feedback." },
       { "name": "duration-fast", "value": "200ms", "purpose": "Hover, lift." },
       { "name": "duration-base", "value": "300ms", "purpose": "Standard transitions." },
@@ -177,12 +263,36 @@
       "Choreographed GSAP motion, fully disabled under prefers-reduced-motion."
     ],
     "rules": [
-      { "name": "The Reserved Aurora Rule", "body": "Full saturated gradient appears on roughly one element per viewport (a headline, a hero mesh, a primary CTA). Its rarity is what keeps it from reading as crypto-neon. If two gradients compete on one screen, one is wrong.", "section": "colors" },
-      { "name": "The Tint-the-Dark Rule", "body": "Neutrals are never pure #000/#fff. The ground is violet-tinted near-black; text is #fafafa, not white.", "section": "colors" },
-      { "name": "The Mono-Is-Meaning Rule", "body": "Monospace marks something that is genuinely code or command-like (a CTA verb, a section signature, a terminal line). It is never used for running prose to look technical.", "section": "typography" },
-      { "name": "The Glow-Not-Drop Rule", "body": "Elevation is conveyed by colored glow and tonal lift, not by heavy black drop-shadows. If a shadow looks gray and hard, it is wrong for this system.", "section": "elevation" },
-      { "name": "The Syntax-Accent Rule", "body": "Rose, pink, and indigo appear only on code-syntax surfaces (preheading chips, code-styled heading tokens). They never leak onto UI chrome, buttons, or body text, where the aurora set owns color.", "section": "colors" },
-      { "name": "The Gradient-Text Allow-List Rule", "body": "background-clip: text is restricted to a fixed set: the animated headline/logo sweep, the code/preheading chips, stat and impact numbers, and the .process-num hover fill. Outside this list, use a single solid color; never a gradient on running body text, and never a colored border-left/border-right stripe as an accent.", "section": "colors" }
+      {
+        "name": "The Reserved Aurora Rule",
+        "body": "Full saturated gradient appears on roughly one element per viewport (a headline, a hero mesh, a primary CTA). Its rarity is what keeps it from reading as crypto-neon. If two gradients compete on one screen, one is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tint-the-Dark Rule",
+        "body": "Neutrals are never pure #000/#fff. The ground is violet-tinted near-black; text is #fafafa, not white.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono-Is-Meaning Rule",
+        "body": "Monospace marks something that is genuinely code or command-like (a CTA verb, a section signature, a terminal line). It is never used for running prose to look technical.",
+        "section": "typography"
+      },
+      {
+        "name": "The Glow-Not-Drop Rule",
+        "body": "Elevation is conveyed by colored glow and tonal lift, not by heavy black drop-shadows. If a shadow looks gray and hard, it is wrong for this system.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Syntax-Accent Rule",
+        "body": "Rose, pink, and indigo appear only on code-syntax surfaces (preheading chips, code-styled heading tokens). They never leak onto UI chrome, buttons, or body text, where the aurora set owns color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Gradient-Text Allow-List Rule",
+        "body": "background-clip: text is restricted to a fixed set: the animated headline/logo sweep, the code/preheading chips, stat and impact numbers, and the .process-num hover fill. Outside this list, use a single solid color; never a gradient on running body text, and never a colored border-left/border-right stripe as an accent.",
+        "section": "colors"
+      }
     ],
     "dos": [
       "Do keep the ground violet-tinted near-black (#080810); float everything on it.",

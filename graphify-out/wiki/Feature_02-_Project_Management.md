@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### references
+
 - [[Shared Data Model Overview]] `EXTRACTED`
 - [[FCOP PRD Feature-Wise File Index]] `EXTRACTED`
 - [[Feature 06: Admin Revenue & Business Dashboard]] `EXTRACTED`
@@ -14,6 +15,7 @@
 - [[Feature 07: Notifications & Communication Layer]] `EXTRACTED`
 
 ### shares_data_with
+
 - [[Entity: Project]] `EXTRACTED`
 - [[Entity: FileAttachment]] `EXTRACTED`
 - [[Entity: ProjectMember]] `EXTRACTED`
@@ -26,4 +28,4 @@
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._

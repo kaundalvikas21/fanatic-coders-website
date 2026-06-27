@@ -2,93 +2,93 @@
 name: fanaticCoders
 description: Aurora Terminal — a dark, developer-native agency surface lit by violet-to-cyan aurora gradients
 colors:
-  aurora-violet: "#7c3aed"
-  aurora-violet-light: "#a855f7"
-  aurora-blue: "#2563eb"
-  aurora-blue-light: "#60a5fa"
-  aurora-cyan: "#06b6d4"
-  aurora-cyan-light: "#22d3ee"
-  aurora-green: "#10b981"
-  aurora-green-light: "#34d399"
-  syntax-rose: "#f43f5e"
-  syntax-pink: "#ec4899"
-  syntax-indigo: "#818cf8"
-  dark-void: "#000000"
-  dark-surface: "#080810"
-  dark-raised: "#0d0d1f"
-  dark-overlay: "#12122a"
-  dark-elevated: "#1a1a3a"
-  ink: "#fafafa"
-  ink-muted: "#8e8e8e"
+  aurora-violet: '#7c3aed'
+  aurora-violet-light: '#a855f7'
+  aurora-blue: '#2563eb'
+  aurora-blue-light: '#60a5fa'
+  aurora-cyan: '#06b6d4'
+  aurora-cyan-light: '#22d3ee'
+  aurora-green: '#10b981'
+  aurora-green-light: '#34d399'
+  syntax-rose: '#f43f5e'
+  syntax-pink: '#ec4899'
+  syntax-indigo: '#818cf8'
+  dark-void: '#000000'
+  dark-surface: '#080810'
+  dark-raised: '#0d0d1f'
+  dark-overlay: '#12122a'
+  dark-elevated: '#1a1a3a'
+  ink: '#fafafa'
+  ink-muted: '#8e8e8e'
 typography:
   display:
-    fontFamily: "Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.25rem, 6vw, 4rem)"
+    fontFamily: 'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif'
+    fontSize: 'clamp(2.25rem, 6vw, 4rem)'
     fontWeight: 700
     lineHeight: 1.05
-    letterSpacing: "-0.02em"
+    letterSpacing: '-0.02em'
   headline:
-    fontFamily: "JetBrains Mono, monospace"
-    fontSize: "clamp(1.5rem, 4vw, 3rem)"
+    fontFamily: 'JetBrains Mono, monospace'
+    fontSize: 'clamp(1.5rem, 4vw, 3rem)'
     fontWeight: 700
     lineHeight: 1.15
-    letterSpacing: "-0.01em"
+    letterSpacing: '-0.01em'
   title:
-    fontFamily: "Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.5rem"
+    fontFamily: 'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif'
+    fontSize: '1.5rem'
     fontWeight: 600
     lineHeight: 1.3
   body:
-    fontFamily: "Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1rem"
+    fontFamily: 'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif'
+    fontSize: '1rem'
     fontWeight: 400
     lineHeight: 1.6
   label:
-    fontFamily: "JetBrains Mono, monospace"
-    fontSize: "0.875rem"
+    fontFamily: 'JetBrains Mono, monospace'
+    fontSize: '0.875rem'
     fontWeight: 600
-    letterSpacing: "0.02em"
+    letterSpacing: '0.02em'
 rounded:
-  sm: "6px"
-  md: "8px"
-  lg: "10px"
-  xl: "14px"
-  2xl: "18px"
-  3xl: "22px"
+  sm: '6px'
+  md: '8px'
+  lg: '10px'
+  xl: '14px'
+  2xl: '18px'
+  3xl: '22px'
 spacing:
-  xs: "8px"
-  sm: "12px"
-  md: "16px"
-  lg: "24px"
-  xl: "48px"
+  xs: '8px'
+  sm: '12px'
+  md: '16px'
+  lg: '24px'
+  xl: '48px'
 components:
   button-primary:
-    backgroundColor: "{colors.aurora-violet}"
-    textColor: "#ffffff"
-    rounded: "{rounded.md}"
-    padding: "14px 32px"
-    typography: "{typography.label}"
+    backgroundColor: '{colors.aurora-violet}'
+    textColor: '#ffffff'
+    rounded: '{rounded.md}'
+    padding: '14px 32px'
+    typography: '{typography.label}'
   button-primary-hover:
-    backgroundColor: "{colors.aurora-blue}"
-    textColor: "#ffffff"
-    rounded: "{rounded.md}"
-    padding: "14px 32px"
+    backgroundColor: '{colors.aurora-blue}'
+    textColor: '#ffffff'
+    rounded: '{rounded.md}'
+    padding: '14px 32px'
   button-glass:
-    backgroundColor: "{colors.dark-surface}"
-    textColor: "#ffffff"
-    rounded: "{rounded.md}"
-    padding: "12px 28px"
-    typography: "{typography.label}"
+    backgroundColor: '{colors.dark-surface}'
+    textColor: '#ffffff'
+    rounded: '{rounded.md}'
+    padding: '12px 28px'
+    typography: '{typography.label}'
   card-glass:
-    backgroundColor: "{colors.dark-raised}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.xl}"
-    padding: "24px"
+    backgroundColor: '{colors.dark-raised}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.xl}'
+    padding: '24px'
   nav-bar:
-    backgroundColor: "{colors.dark-surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.xl}"
-    padding: "12px 24px"
+    backgroundColor: '{colors.dark-surface}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.xl}'
+    padding: '12px 24px'
 ---
 
 # Design System: fanaticCoders
@@ -115,6 +115,7 @@ crypto/neon-hype trap (glow overload, web3 swagger) that the aurora palette must
 into, and cluttered marketplace noise.
 
 **Key Characteristics:**
+
 - Dark-first (OLED), violet-tinted near-black ground; no light mode, no theme toggle.
 - Aurora gradient (violet to blue to cyan) as primary identity, used sparingly.
 - Monospace code motifs as authentic developer signal.
@@ -127,20 +128,24 @@ A near-monochrome dark ground carrying a saturated aurora accent that sweeps coo
 violet, blue, and cyan, with green as a reserved success/secondary voice.
 
 ### Primary
+
 - **Aurora Violet** (#7c3aed / oklch(0.55 0.24 292)): The anchor accent. Opens every
   gradient sweep, owns primary CTAs, focus glow, and brand logo. The identity color.
 - **Aurora Blue** (#2563eb): The midpoint of the aurora sweep and the primary hover state;
   cools the violet toward trust.
 
 ### Secondary
+
 - **Aurora Cyan** (#06b6d4 / oklch(0.70 0.13 207)): Closes the aurora sweep, lights the
   hero mesh from the far corner, and tints the secondary glass cards.
 
 ### Tertiary
+
 - **Aurora Green** (#10b981): Reserved. Success, reliability, and the third spotlight.
   Never part of the headline sweep, so it stays meaningful.
 
 ### Neutral
+
 - **Dark Surface** (#080810): The page ground. The hardcoded `body` background; everything
   floats on this.
 - **Dark Void to Elevated** (#000000, #0d0d1f, #12122a, #1a1a3a): The tonal-layering ramp
@@ -149,7 +154,9 @@ violet, blue, and cyan, with green as a reserved success/secondary voice.
 - **Ink Muted** (#8e8e8e / oklch(0.556 0 0)): Secondary text, captions, code comments.
 
 ### Code Syntax (accent)
+
 A separate trio reserved for code-syntax surfaces, distinct from the aurora identity:
+
 - **Syntax Rose** (#f43f5e) and **Syntax Pink** (#ec4899): The `.preheading-code` chip is a
   rose-to-pink gradient-text label (a sanctioned gradient-text exception, see Do's and
   Don'ts). Pink also colors `.heading-code .params`.
@@ -161,6 +168,7 @@ Semantic UI tokens (`--background`, `--foreground`, `--border`, `--ring`, `--des
 and `.dark`); the hex values above are the sRGB equivalents for tooling.
 
 ### Named Rules
+
 **The Reserved Aurora Rule.** Full saturated gradient appears on roughly one element per
 viewport (a headline, a hero mesh, a primary CTA). Its rarity is what keeps it from
 reading as crypto-neon. If two gradients compete on one screen, one is wrong.
@@ -200,6 +208,7 @@ identity, not ornament: a purpose-built coding typeface that signals real engine
 > headings inherit body Plus Jakarta Sans (see CLAUDE.md Known Issues).
 
 ### Hierarchy
+
 - **Display** (Plus Jakarta Sans 700, `clamp(2.25rem, 6vw, 4rem)`, line-height 1.05): Hero
   and section headlines, often as the single aurora gradient sweep of the viewport.
 - **Headline** (Mono 700, `clamp(1.5rem, 4vw, 3rem)`, line-height 1.15): Code-styled
@@ -211,6 +220,7 @@ identity, not ornament: a purpose-built coding typeface that signals real engine
   text, metadata. The `.preheading-code` chip wraps these in `<` and `/>`.
 
 ### Named Rules
+
 **The Mono-Is-Meaning Rule.** Monospace marks something that is genuinely code or
 command-like (a CTA verb, a section signature, a terminal line). It is never used for
 running prose to look technical.
@@ -222,6 +232,7 @@ A hybrid system: depth comes first from tonal layering up the dark ramp
 luminous, not dark drop-shadows; they read as the surface emitting light.
 
 ### Shadow Vocabulary
+
 - **Glass glow** (`box-shadow: 0 0 20px rgba(124,58,237,0.09), inset 0 1px 0 rgba(255,255,255,0.05)`):
   Resting state for glass cards. A faint violet halo plus a top inner highlight.
 - **Glass glow cyan / green** (same shape, cyan `rgba(6,182,212,0.09)` / green
@@ -232,8 +243,10 @@ luminous, not dark drop-shadows; they read as the surface emitting light.
   place a darker ambient shadow is allowed, to detach the sticky bar.
 
 ### Motion Tokens
+
 Depth has a partner: choreographed but quiet motion, driven by a small `:root` token set
 that components cite rather than hand-rolling curves.
+
 - **Easing:** `--ease-snappy` `cubic-bezier(.16,1,.3,1)` (entrances, reveals, hover lifts)
   and `--ease-smooth` `cubic-bezier(.4,0,.2,1)` (state cross-fades, color shifts). Both are
   ease-out; no bounce, no elastic.
@@ -244,6 +257,7 @@ that components cite rather than hand-rolling curves.
 - Every animated surface collapses to ~0ms under `prefers-reduced-motion`.
 
 ### Named Rules
+
 **The Glow-Not-Drop Rule.** Elevation is conveyed by colored glow and tonal lift, not by
 heavy black drop-shadows. If a shadow looks gray and hard, it is wrong for this system.
 
@@ -253,6 +267,7 @@ Character: luminous glass with precise edges. Surfaces are translucent and softl
 radii are tight (8px on controls, 14px on cards); focus is always a visible aurora ring.
 
 ### Buttons
+
 - **Shape:** Tight corners (8px radius, `{rounded.md}`).
 - **Primary** (`.btn-aurora-solid`): Solid aurora gradient `linear-gradient(135deg, #7c3aed, #2563eb)`,
   white text, weight 700, padding 14px 32px, glow `0 8px 32px rgba(124,58,237,0.4)`.
@@ -266,6 +281,7 @@ radii are tight (8px on controls, 14px on cards); focus is always a visible auro
   planes that shift on hover; a custom signature control.
 
 ### Cards / Containers
+
 - **Corner Style:** 14px radius (`{rounded.xl}`), 18px to 22px on large bento cells.
 - **Background:** Glass token (`rgba(255,255,255,0.04)`) over the dark ground, with
   `backdrop-filter: blur(20px) saturate(180%)`.
@@ -277,6 +293,7 @@ radii are tight (8px on controls, 14px on cards); focus is always a visible auro
   2x2 cell rather than a uniform grid.
 
 ### Navigation
+
 - **Style** (`.glass-nav`): Sticky glass bar, `rgba(8,8,16,0.7)`, `blur(24px) saturate(200%)`,
   1px aurora border, ambient nav shadow.
 - **Typography:** Label/mono and Plus Jakarta Sans; logo uses the aurora sweep gradient.
@@ -288,6 +305,7 @@ radii are tight (8px on controls, 14px on cards); focus is always a visible auro
 > set explicit dark styles, until the theming is fixed. See CLAUDE.md Known Issues.
 
 ### Signature: Terminal & Code Chips
+
 - Terminal surfaces share one chrome language: `rgba(8,8,16,0.7–0.95)` panel, 1px aurora
   border, a row of traffic-light dots (12px on `.terminal-card` / `.about-terminal-window`,
   7px `.svc-dot-*` inside the featured service code window), mono 0.875rem body, and a
@@ -301,10 +319,11 @@ radii are tight (8px on controls, 14px on cards); focus is always a visible auro
     `rgb(219,39,119)`).
   - `.preheading-comment` prefixes `// `, orange to rose (`rgb(251,146,60)` to
     `rgb(251,113,133)`).
-  All three are on the Gradient-Text Allow-List; the bracket/prefix glyphs are pseudo-element
-  content, not typed text.
+    All three are on the Gradient-Text Allow-List; the bracket/prefix glyphs are pseudo-element
+    content, not typed text.
 
 ### Signature: Aurora Motion & Accent Patterns
+
 The components above are static glass; these carry the system's choreography. Each is a
 reusable pattern, not a one-off.
 
@@ -321,7 +340,7 @@ reusable pattern, not a one-off.
   CSS-var contract drives per-card theming. A parent sets `--tech-accent` / `--cat-accent`
   (or `--accent-border` / `--accent-glow` / `--accent-icon` / `--accent-tag`), and the card
   derives its hover fill, border, and glow with `color-mix(in srgb, var(--accent) N%,
-  …)`. This keeps every card on the aurora palette without bespoke CSS per color.
+…)`. This keeps every card on the aurora palette without bespoke CSS per color.
 - **Asymmetric bento grids** (`.services-bento` 4-col, `.values-bento` 3-col): explicit
   `grid-column` / `grid-row` placement (a featured 2x2 cell, a tall cell, wide cells), not a
   uniform grid; both collapse to a single column at 640–768px. Gotcha: `.bento-card` placement
@@ -343,6 +362,7 @@ reusable pattern, not a one-off.
 ## 6. Do's and Don'ts
 
 ### Do:
+
 - **Do** keep the ground violet-tinted near-black (`#080810`); float everything on it.
 - **Do** spend the full aurora gradient on roughly one element per viewport (Reserved
   Aurora Rule), then let dark space breathe.
@@ -353,6 +373,7 @@ reusable pattern, not a one-off.
 - **Do** audit gradient and glass text for WCAG 2.2 AA contrast against the dark ground.
 
 ### Don't:
+
 - **Don't** ship generic template-agency layouts: stock-photo heroes, lorem filler, or
   endless identical icon-heading-text card grids.
 - **Don't** tip the aurora palette into crypto/neon hype: no glow overload, no neon-on-black

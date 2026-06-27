@@ -1,5 +1,5 @@
-import TechStackSection from "@/components/pages/home/TechStackSection"
-import TestimonialsSection from "@/components/pages/home/TestimonialsSection"
+import TechStackSection from '@/components/pages/home/TechStackSection';
+import TestimonialsSection from '@/components/pages/home/TestimonialsSection';
 import {
   ServicesHeroSection,
   ServicesOverviewSection,
@@ -8,7 +8,7 @@ import {
   ServicesWhySection,
   ServicesFaqSection,
   ServicesCtaSection,
-} from "./sections"
+} from './sections';
 
 export function ServicesPage() {
   return (
@@ -23,5 +23,5 @@ export function ServicesPage() {
       <ServicesFaqSection />
       <ServicesCtaSection />
     </>
-  )
+  );
 }

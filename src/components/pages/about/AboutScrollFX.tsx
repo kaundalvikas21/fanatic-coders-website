@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import { scrollParallax, scrollDraw } from "@/lib/animations"
+import { useEffect } from 'react';
+import { scrollParallax, scrollDraw } from '@/lib/animations';
 
 /**
  * Wires the GSAP ScrollTrigger effects for the About page: aurora-background
@@ -14,32 +14,32 @@ import { scrollParallax, scrollDraw } from "@/lib/animations"
  */
 export default function AboutScrollFX() {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    let cancelled = false
-    const tweens: Array<{ kill: () => void }> = []
+    let cancelled = false;
+    const tweens: Array<{ kill: () => void }> = [];
     const track = (t: { kill: () => void } | undefined) => {
-      if (!t) return
-      if (cancelled) t.kill()
-      else tweens.push(t)
-    }
+      if (!t) return;
+      if (cancelled) t.kill();
+      else tweens.push(t);
+    };
 
-    document.querySelectorAll<HTMLElement>("[data-parallax]").forEach((el) => {
-      const amount = Number(el.dataset.parallax) || 10
-      scrollParallax(el, amount).then(track)
-    })
+    document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
+      const amount = Number(el.dataset.parallax) || 10;
+      scrollParallax(el, amount).then(track);
+    });
     document.querySelectorAll<HTMLElement>('[data-draw="connector"]').forEach((el) => {
-      scrollDraw(el, "x").then(track)
-    })
+      scrollDraw(el, 'x').then(track);
+    });
     document.querySelectorAll<HTMLElement>('[data-draw="spine"]').forEach((el) => {
-      scrollDraw(el, "y").then(track)
-    })
+      scrollDraw(el, 'y').then(track);
+    });
 
     return () => {
-      cancelled = true
-      tweens.forEach((t) => t.kill())
-    }
-  }, [])
+      cancelled = true;
+      tweens.forEach((t) => t.kill());
+    };
+  }, []);
 
-  return null
+  return null;
 }

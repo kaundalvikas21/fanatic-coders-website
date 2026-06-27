@@ -1,12 +1,12 @@
-import PartnersSection from "@/components/pages/home/PartnersSection"
-import TestimonialsSection from "@/components/pages/home/TestimonialsSection"
+import PartnersSection from '@/components/pages/home/PartnersSection';
+import TestimonialsSection from '@/components/pages/home/TestimonialsSection';
 import {
   PortfolioHeroSection,
   PortfolioGridSection,
   PortfolioProcessSection,
   PortfolioResultsSection,
   PortfolioCtaSection,
-} from "./sections"
+} from './sections';
 
 export function PortfolioPage() {
   return (
@@ -19,5 +19,5 @@ export function PortfolioPage() {
       <TestimonialsSection />
       <PortfolioCtaSection />
     </>
-  )
+  );
 }

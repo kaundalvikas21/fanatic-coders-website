@@ -1,19 +1,18 @@
-import Header from "@/components/layout/Header"
-import Footer from "@/components/layout/Footer"
-import { BackToTop } from "@/components/ui/BackToTop"
-import { ReadingProgress } from "@/components/ui/ReadingProgress"
-import { MotionProvider } from "@/components/providers/MotionProvider"
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { BackToTop } from '@/components/ui/BackToTop';
+import { ReadingProgress } from '@/components/ui/ReadingProgress';
+import { MotionProvider } from '@/components/providers/MotionProvider';
 
-export default function FrontendLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <MotionProvider />
       <ReadingProgress />
-      <a href="#main-content" className="skip-link">
+      <a
+        href="#main-content"
+        className="skip-link"
+      >
         Skip to content
       </a>
       <Header />
@@ -21,5 +20,5 @@ export default function FrontendLayout({
       <Footer />
       <BackToTop />
     </>
-  )
+  );
 }

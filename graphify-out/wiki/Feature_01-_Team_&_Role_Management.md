@@ -7,12 +7,14 @@
 ## Connections by Relation
 
 ### references
+
 - [[Shared Data Model Overview]] `EXTRACTED`
 - [[FCOP PRD Feature-Wise File Index]] `EXTRACTED`
 - [[RBAC Deny-by-Default Authorization]] `EXTRACTED`
 - [[NFR: Audit Logging]] `EXTRACTED`
 
 ### shares_data_with
+
 - [[Entity: User]] `EXTRACTED`
 - [[Entity: ProjectMember]] `EXTRACTED`
 - [[Entity: NotificationPreference]] `EXTRACTED`
@@ -20,4 +22,4 @@
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._

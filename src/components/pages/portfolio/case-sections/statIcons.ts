@@ -18,7 +18,7 @@ import {
   MapPin,
   Navigation,
   type LucideIcon,
-} from "lucide-react"
+} from 'lucide-react';
 
 /** Maps a stat's `icon` key to a lucide icon for the case-study Results cards. */
 export const statIcons: Record<string, LucideIcon> = {
@@ -40,4 +40,4 @@ export const statIcons: Record<string, LucideIcon> = {
   truck: Truck,
   mapPin: MapPin,
   navigation: Navigation,
-}
+};

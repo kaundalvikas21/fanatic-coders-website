@@ -7,6 +7,7 @@
 ## Connections by Relation
 
 ### references
+
 - [[FCOP PRD Feature-Wise File Index]] `EXTRACTED`
 - [[Feature 02: Project Management]] `EXTRACTED`
 - [[Feature 06: Admin Revenue & Business Dashboard]] `EXTRACTED`
@@ -30,4 +31,4 @@
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._

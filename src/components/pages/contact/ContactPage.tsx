@@ -3,7 +3,7 @@ import {
   ContactSection,
   ContactProcessSection,
   ContactFaqSection,
-} from "./sections"
+} from './sections';
 
 export function ContactPage() {
   return (
@@ -13,5 +13,5 @@ export function ContactPage() {
       <ContactProcessSection />
       <ContactFaqSection />
     </>
-  )
+  );
 }

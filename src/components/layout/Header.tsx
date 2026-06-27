@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
-import { SITE_STATS } from "@/lib/site-stats"
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { SITE_STATS } from '@/lib/site-stats';
 import {
   LayoutGrid,
   Code2,
@@ -26,158 +26,219 @@ import {
   ChevronDown,
   Menu,
   X,
-} from "lucide-react"
-import GradientButton from "@/components/ui/GradientButton"
+} from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
 
 interface MegaMenuItem {
-  name: string
-  description: string
-  Icon: React.ElementType
-  href: string
+  name: string;
+  description: string;
+  Icon: React.ElementType;
+  href: string;
 }
 
 interface MegaMenuColumn {
-  heading: string
-  Icon: React.ElementType
-  items: MegaMenuItem[]
+  heading: string;
+  Icon: React.ElementType;
+  items: MegaMenuItem[];
 }
 
 const megaMenu = {
-  title: "Services",
+  title: 'Services',
   Icon: LayoutGrid,
   columns: [
     {
-      heading: "Build",
+      heading: 'Build',
       Icon: Code2,
       items: [
-        { name: "Web Development", description: "Scalable web apps",    Icon: Globe,         href: "/services/web-development" },
-        { name: "Mobile Apps",     description: "iOS & Android native", Icon: Smartphone,    href: "/services/mobile-apps"     },
-        { name: "E-Commerce",      description: "Custom online stores", Icon: ShoppingCart,  href: "/services/ecommerce"       },
-        { name: "Cloud Solutions", description: "AWS, Azure & GCP",     Icon: Cloud,         href: "/services/cloud"           },
+        {
+          name: 'Web Development',
+          description: 'Scalable web apps',
+          Icon: Globe,
+          href: '/services/web-development',
+        },
+        {
+          name: 'Mobile Apps',
+          description: 'iOS & Android native',
+          Icon: Smartphone,
+          href: '/services/mobile-apps',
+        },
+        {
+          name: 'E-Commerce',
+          description: 'Custom online stores',
+          Icon: ShoppingCart,
+          href: '/services/ecommerce',
+        },
+        {
+          name: 'Cloud Solutions',
+          description: 'AWS, Azure & GCP',
+          Icon: Cloud,
+          href: '/services/cloud',
+        },
       ],
     },
     {
-      heading: "Design",
+      heading: 'Design',
       Icon: Paintbrush,
       items: [
-        { name: "UI/UX Design",   description: "User-first interfaces", Icon: Pen,        href: "/services/design" },
-        { name: "Brand Identity", description: "Logos & guidelines",    Icon: BadgeCheck, href: "/services/brand"  },
-        { name: "Motion Design",  description: "Interface & product motion", Icon: Film,   href: "/services/motion" },
+        {
+          name: 'UI/UX Design',
+          description: 'User-first interfaces',
+          Icon: Pen,
+          href: '/services/design',
+        },
+        {
+          name: 'Brand Identity',
+          description: 'Logos & guidelines',
+          Icon: BadgeCheck,
+          href: '/services/brand',
+        },
+        {
+          name: 'Motion Design',
+          description: 'Interface & product motion',
+          Icon: Film,
+          href: '/services/motion',
+        },
       ],
     },
     {
-      heading: "Grow",
+      heading: 'Grow',
       Icon: TrendingUp,
       items: [
-        { name: "Digital Marketing",   description: "Growth campaigns", Icon: Megaphone, href: "/services/marketing" },
-        { name: "SEO & Content",       description: "Rankings & organic traffic", Icon: Search, href: "/services/seo" },
-        { name: "DevOps & Consulting", description: "CI/CD & strategy", Icon: GitBranch, href: "/services/devops"    },
+        {
+          name: 'Digital Marketing',
+          description: 'Growth campaigns',
+          Icon: Megaphone,
+          href: '/services/marketing',
+        },
+        {
+          name: 'SEO & Content',
+          description: 'Rankings & organic traffic',
+          Icon: Search,
+          href: '/services/seo',
+        },
+        {
+          name: 'DevOps & Consulting',
+          description: 'CI/CD & strategy',
+          Icon: GitBranch,
+          href: '/services/devops',
+        },
       ],
     },
   ] as MegaMenuColumn[],
   featured: {
-    href: "/contact",
-    cta: "startProject",
+    href: '/contact',
+    cta: 'startProject',
     description: "Tell us your vision and we'll respond within 24 hours.",
     stats: [
-      { number: SITE_STATS.projectsDelivered, label: "Projects"     },
-      { number: SITE_STATS.clientRetention,   label: "Satisfaction" },
-      { number: SITE_STATS.yearsShipping,     label: "Years Exp."   },
+      { number: SITE_STATS.projectsDelivered, label: 'Projects' },
+      { number: SITE_STATS.clientRetention, label: 'Satisfaction' },
+      { number: SITE_STATS.yearsShipping, label: 'Years Exp.' },
     ],
   },
-}
+};
 
 const navLinks = [
-  { label: "Portfolio", href: "/portfolio", Icon: Briefcase  },
-  { label: "About",     href: "/about",     Icon: Users      },
-  { label: "Blog",      href: "/blog",      Icon: Newspaper  },
-  { label: "Contact",   href: "/contact",   Icon: Mail       },
-]
+  { label: 'Portfolio', href: '/portfolio', Icon: Briefcase },
+  { label: 'About', href: '/about', Icon: Users },
+  { label: 'Blog', href: '/blog', Icon: Newspaper },
+  { label: 'Contact', href: '/contact', Icon: Mail },
+];
 
 export default function Header() {
-  const [isScrolled, setIsScrolled]               = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen]   = useState(false)
-  const [isMegaMenuOpen, setIsMegaMenuOpen]       = useState(false)
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
-  const navRef = useRef<HTMLElement>(null)
-  const drawerRef = useRef<HTMLDivElement>(null)
-  const hamburgerRef = useRef<HTMLButtonElement>(null)
-  const menuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const menuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    let ticking = false
-    const onScroll  = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(() => { setIsScrolled(window.scrollY > 20); ticking = false })
-    }
-    const onEscape  = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { setIsMegaMenuOpen(false); setIsMobileMenuOpen(false) }
-    }
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 20);
+        ticking = false;
+      });
+    };
+    const onEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsMegaMenuOpen(false);
+        setIsMobileMenuOpen(false);
+      }
+    };
     // Outside-click only dismisses the desktop mega menu. The mobile drawer has
     // its own dismissal (backdrop / Escape / X / link tap); closing it here would
     // fire on every tap inside the drawer, since the drawer lives outside navRef.
-    const onClick   = (e: MouseEvent) => {
+    const onClick = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setIsMegaMenuOpen(false)
+        setIsMegaMenuOpen(false);
       }
-    }
-    window.addEventListener("scroll", onScroll)
-    window.addEventListener("keydown", onEscape)
-    document.addEventListener("click", onClick)
+    };
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('keydown', onEscape);
+    document.addEventListener('click', onClick);
     return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("keydown", onEscape)
-      document.removeEventListener("click", onClick)
-    }
-  }, [])
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('keydown', onEscape);
+      document.removeEventListener('click', onClick);
+    };
+  }, []);
 
   // Lock body scroll + manage focus while the drawer is open.
   useEffect(() => {
-    if (!isMobileMenuOpen) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    const drawer = drawerRef.current
-    const hamburger = hamburgerRef.current
+    if (!isMobileMenuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const drawer = drawerRef.current;
+    const hamburger = hamburgerRef.current;
     const focusables = drawer?.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    )
-    focusables?.[0]?.focus()
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    );
+    focusables?.[0]?.focus();
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== "Tab" || !focusables || focusables.length === 0) return
-      const first = focusables[0]
-      const last = focusables[focusables.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
-    }
-    drawer?.addEventListener("keydown", onKeyDown)
+      if (e.key !== 'Tab' || !focusables || focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    drawer?.addEventListener('keydown', onKeyDown);
 
     return () => {
-      document.body.style.overflow = prev
-      drawer?.removeEventListener("keydown", onKeyDown)
-      hamburger?.focus()
-    }
-  }, [isMobileMenuOpen])
+      document.body.style.overflow = prev;
+      drawer?.removeEventListener('keydown', onKeyDown);
+      hamburger?.focus();
+    };
+  }, [isMobileMenuOpen]);
 
   function openMegaMenu() {
-    if (menuTimeout.current) clearTimeout(menuTimeout.current)
-    setIsMegaMenuOpen(true)
+    if (menuTimeout.current) clearTimeout(menuTimeout.current);
+    setIsMegaMenuOpen(true);
   }
   function closeMegaMenu() {
-    menuTimeout.current = setTimeout(() => setIsMegaMenuOpen(false), 150)
+    menuTimeout.current = setTimeout(() => setIsMegaMenuOpen(false), 150);
   }
   function cancelClose() {
-    if (menuTimeout.current) clearTimeout(menuTimeout.current)
+    if (menuTimeout.current) clearTimeout(menuTimeout.current);
   }
   function closeMobileMenu() {
-    setIsMobileMenuOpen(false)
-    setMobileServicesOpen(false)
+    setIsMobileMenuOpen(false);
+    setMobileServicesOpen(false);
   }
 
   return (
     <header
-      className={`fixed w-full z-50 transition-[background-color,backdrop-filter] duration-300${isScrolled ? " header-scrolled" : ""}`}
+      className={`fixed w-full z-50 transition-[background-color,backdrop-filter] duration-300${isScrolled ? ' header-scrolled' : ''}`}
     >
       <div className="container mx-auto px-4">
         <nav
@@ -185,10 +246,13 @@ export default function Header() {
           className="glass-nav rounded-2xl my-4 relative flex items-center justify-between px-6 py-4"
         >
           {/* Logo */}
-          <Link href="/" className="shrink-0 text-[1.2rem] font-bold no-underline hover:opacity-80 transition-opacity">
-            <span className="text-white">{"{"}</span>
+          <Link
+            href="/"
+            className="shrink-0 text-[1.2rem] font-bold no-underline hover:opacity-80 transition-opacity"
+          >
+            <span className="text-white">{'{'}</span>
             <span className="logo-gradient">fanaticCoders</span>
-            <span className="text-white">{"}"}</span>
+            <span className="text-white">{'}'}</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -197,28 +261,40 @@ export default function Header() {
             <li className="relative">
               <button
                 type="button"
-                className={`nav-link${isMegaMenuOpen ? " nav-link--active" : ""}`}
+                className={`nav-link${isMegaMenuOpen ? ' nav-link--active' : ''}`}
                 aria-haspopup="true"
                 aria-expanded={isMegaMenuOpen}
                 onMouseEnter={openMegaMenu}
                 onMouseLeave={closeMegaMenu}
-                onClick={() => setIsMegaMenuOpen(v => !v)}
+                onClick={() => setIsMegaMenuOpen((v) => !v)}
               >
-                <megaMenu.Icon size={14} aria-hidden />
+                <megaMenu.Icon
+                  size={14}
+                  aria-hidden
+                />
                 <span>{megaMenu.title}</span>
                 <ChevronDown
                   size={11}
                   className="transition-transform duration-250"
-                  style={{ transform: isMegaMenuOpen ? "rotate(180deg)" : "rotate(0deg)", color: "rgba(255,255,255,0.4)" }}
+                  style={{
+                    transform: isMegaMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    color: 'rgba(255,255,255,0.4)',
+                  }}
                   aria-hidden
                 />
               </button>
             </li>
 
-            {navLinks.map(link => (
+            {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="nav-link">
-                  <link.Icon size={14} aria-hidden />
+                <Link
+                  href={link.href}
+                  className="nav-link"
+                >
+                  <link.Icon
+                    size={14}
+                    aria-hidden
+                  />
                   <span>{link.label}</span>
                 </Link>
               </li>
@@ -230,7 +306,11 @@ export default function Header() {
             <div className="hidden sm:block">
               <GradientButton href="/contact">
                 startProject
-                <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+                <ArrowRight
+                  size={14}
+                  className="ml-2 group-hover:translate-x-1 transition-transform"
+                  aria-hidden
+                />
               </GradientButton>
             </div>
 
@@ -241,7 +321,7 @@ export default function Header() {
               aria-label="Toggle mobile navigation"
               aria-controls="mobile-drawer"
               aria-expanded={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(v => !v)}
+              onClick={() => setIsMobileMenuOpen((v) => !v)}
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -259,14 +339,20 @@ export default function Header() {
               <div className="mega-inner">
                 {/* 3 service columns */}
                 <div className="mega-columns">
-                  {megaMenu.columns.map(col => (
-                    <div key={col.heading} className="mega-col">
+                  {megaMenu.columns.map((col) => (
+                    <div
+                      key={col.heading}
+                      className="mega-col"
+                    >
                       <div className="col-head">
-                        <col.Icon size={13} aria-hidden />
+                        <col.Icon
+                          size={13}
+                          aria-hidden
+                        />
                         {col.heading}
                       </div>
                       <ul className="space-y-1 list-none m-0 p-0">
-                        {col.items.map(item => (
+                        {col.items.map((item) => (
                           <li key={item.href}>
                             <Link
                               href={item.href}
@@ -274,13 +360,20 @@ export default function Header() {
                               onClick={() => setIsMegaMenuOpen(false)}
                             >
                               <span className="item-icon">
-                                <item.Icon size={16} aria-hidden />
+                                <item.Icon
+                                  size={16}
+                                  aria-hidden
+                                />
                               </span>
                               <span className="item-body">
                                 <span className="item-name">{item.name}</span>
                                 <span className="item-desc">{item.description}</span>
                               </span>
-                              <ArrowRight size={12} className="item-arrow" aria-hidden />
+                              <ArrowRight
+                                size={12}
+                                className="item-arrow"
+                                aria-hidden
+                              />
                             </Link>
                           </li>
                         ))}
@@ -289,7 +382,10 @@ export default function Header() {
                   ))}
                 </div>
 
-                <div className="v-divider" aria-hidden />
+                <div
+                  className="v-divider"
+                  aria-hidden
+                />
 
                 {/* Featured panel */}
                 <div className="mega-featured">
@@ -297,8 +393,11 @@ export default function Header() {
                   <h3 className="featured-heading">Ready to Build?</h3>
                   <p className="featured-body">{megaMenu.featured.description}</p>
                   <div className="featured-stats">
-                    {megaMenu.featured.stats.map(s => (
-                      <div key={s.label} className="stat-item">
+                    {megaMenu.featured.stats.map((s) => (
+                      <div
+                        key={s.label}
+                        className="stat-item"
+                      >
                         <span className="stat-num">{s.number}</span>
                         <span className="stat-label">{s.label}</span>
                       </div>
@@ -307,7 +406,11 @@ export default function Header() {
                   <div className="mt-auto">
                     <GradientButton href={megaMenu.featured.href}>
                       {megaMenu.featured.cta}
-                      <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+                      <ArrowRight
+                        size={14}
+                        className="ml-2 group-hover:translate-x-1 transition-transform"
+                        aria-hidden
+                      />
                     </GradientButton>
                   </div>
                 </div>
@@ -315,12 +418,11 @@ export default function Header() {
             </div>
           )}
         </nav>
-
       </div>
 
       {/* Mobile backdrop */}
       <div
-        className={`mobile-backdrop lg:hidden${isMobileMenuOpen ? " open" : ""}`}
+        className={`mobile-backdrop lg:hidden${isMobileMenuOpen ? ' open' : ''}`}
         aria-hidden
         onClick={closeMobileMenu}
       />
@@ -329,7 +431,7 @@ export default function Header() {
       <div
         ref={drawerRef}
         id="mobile-drawer"
-        className={`mobile-drawer lg:hidden${isMobileMenuOpen ? " open" : ""}`}
+        className={`mobile-drawer lg:hidden${isMobileMenuOpen ? ' open' : ''}`}
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
@@ -338,9 +440,9 @@ export default function Header() {
       >
         <div className="mobile-drawer-head">
           <span className="text-[1.05rem] font-bold">
-            <span className="text-white">{"{"}</span>
+            <span className="text-white">{'{'}</span>
             <span className="logo-gradient">fanaticCoders</span>
-            <span className="text-white">{"}"}</span>
+            <span className="text-white">{'}'}</span>
           </span>
           <button
             type="button"
@@ -348,7 +450,10 @@ export default function Header() {
             aria-label="Close menu"
             onClick={closeMobileMenu}
           >
-            <X size={20} aria-hidden />
+            <X
+              size={20}
+              aria-hidden
+            />
           </button>
         </div>
 
@@ -358,33 +463,41 @@ export default function Header() {
             type="button"
             className="mobile-row w-full justify-between"
             aria-expanded={mobileServicesOpen}
-            onClick={() => setMobileServicesOpen(v => !v)}
+            onClick={() => setMobileServicesOpen((v) => !v)}
           >
             <span className="flex items-center gap-2.5 font-semibold">
-              <LayoutGrid size={16} className="text-[var(--aurora-violet-light)]" aria-hidden />
+              <LayoutGrid
+                size={16}
+                className="text-[var(--aurora-violet-light)]"
+                aria-hidden
+              />
               {megaMenu.title}
             </span>
             <ChevronDown
               size={14}
               className="transition-transform duration-300"
-              style={{ transform: mobileServicesOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+              style={{ transform: mobileServicesOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
               aria-hidden
             />
           </button>
 
           {mobileServicesOpen && (
             <div className="pl-3 space-y-4 pb-2">
-              {megaMenu.columns.map(col => (
+              {megaMenu.columns.map((col) => (
                 <div key={col.heading}>
                   <p className="mobile-col-head">{col.heading}</p>
-                  {col.items.map(item => (
+                  {col.items.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
                       className="mobile-item"
                       onClick={closeMobileMenu}
                     >
-                      <item.Icon size={15} className="text-[var(--aurora-violet-light)] shrink-0" aria-hidden />
+                      <item.Icon
+                        size={15}
+                        className="text-[var(--aurora-violet-light)] shrink-0"
+                        aria-hidden
+                      />
                       <span>{item.name}</span>
                     </Link>
                   ))}
@@ -393,7 +506,7 @@ export default function Header() {
             </div>
           )}
 
-          {navLinks.map(link => (
+          {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -401,20 +514,32 @@ export default function Header() {
               onClick={closeMobileMenu}
             >
               <span className="flex items-center gap-2.5">
-                <link.Icon size={17} className="text-[var(--aurora-violet-light)]" aria-hidden />
+                <link.Icon
+                  size={17}
+                  className="text-[var(--aurora-violet-light)]"
+                  aria-hidden
+                />
                 {link.label}
               </span>
             </Link>
           ))}
 
           <div className="pt-3">
-            <GradientButton href="/contact" onClick={closeMobileMenu} className="w-full justify-center">
+            <GradientButton
+              href="/contact"
+              onClick={closeMobileMenu}
+              className="w-full justify-center"
+            >
               startProject
-              <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+              <ArrowRight
+                size={14}
+                className="ml-2 group-hover:translate-x-1 transition-transform"
+                aria-hidden
+              />
             </GradientButton>
           </div>
         </div>
       </div>
     </header>
-  )
+  );
 }

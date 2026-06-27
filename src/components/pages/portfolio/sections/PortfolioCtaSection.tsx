@@ -1,6 +1,6 @@
-import { Send, ArrowRight } from "lucide-react"
-import GradientButton from "@/components/ui/GradientButton"
-import { CtaPanel } from "@/components/ui/CtaPanel"
+import { Send, ArrowRight } from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
+import { CtaPanel } from '@/components/ui/CtaPanel';
 
 export function PortfolioCtaSection() {
   return (
@@ -12,12 +12,23 @@ export function PortfolioCtaSection() {
     >
       <GradientButton href="/contact">
         startAConversation
-        <Send size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+        <Send
+          size={16}
+          className="ml-2 group-hover:translate-x-1 transition-transform"
+          aria-hidden
+        />
       </GradientButton>
-      <GradientButton href="/about" variant="secondary">
+      <GradientButton
+        href="/about"
+        variant="secondary"
+      >
         meetTheTeam
-        <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+        <ArrowRight
+          size={16}
+          className="ml-2 group-hover:translate-x-1 transition-transform"
+          aria-hidden
+        />
       </GradientButton>
     </CtaPanel>
-  )
+  );
 }

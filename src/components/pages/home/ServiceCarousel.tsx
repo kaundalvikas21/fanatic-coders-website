@@ -1,79 +1,103 @@
-"use client"
+'use client';
 
-import { useEffect, useRef } from "react"
-import { Code2, ArrowRight } from "lucide-react"
-import GradientButton from "@/components/ui/GradientButton"
+import { useEffect, useRef } from 'react';
+import { Code2, ArrowRight } from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
 
 const tags = [
-  "React", "Node.js", "TypeScript", "MongoDB", "WebSocket", "AWS",
-  "Vue.js", "Laravel", "PostgreSQL", "ElasticSearch", "Docker",
-  "Next.js", "GraphQL", "WebRTC", "Azure", "Python",
-  "Angular", "TensorFlow", "IoT", "Kubernetes", "Svelte",
-]
+  'React',
+  'Node.js',
+  'TypeScript',
+  'MongoDB',
+  'WebSocket',
+  'AWS',
+  'Vue.js',
+  'Laravel',
+  'PostgreSQL',
+  'ElasticSearch',
+  'Docker',
+  'Next.js',
+  'GraphQL',
+  'WebRTC',
+  'Azure',
+  'Python',
+  'Angular',
+  'TensorFlow',
+  'IoT',
+  'Kubernetes',
+  'Svelte',
+];
 
 // Duplicate for seamless scroll
-const allTags = [...tags, ...tags]
+const allTags = [...tags, ...tags];
 
 export default function ServiceCarousel() {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
+    const container = containerRef.current;
+    if (!container) return;
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (prefersReducedMotion) return
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
-    const SPEED = 60 // px per second (was 1px/frame @60fps; now frame-rate independent)
-    let scrollPos = 0
-    let animId = 0
-    let totalWidth = 0
-    let lastTs = 0
-    let running = false
+    const SPEED = 60; // px per second (was 1px/frame @60fps; now frame-rate independent)
+    let scrollPos = 0;
+    let animId = 0;
+    let totalWidth = 0;
+    let lastTs = 0;
+    let running = false;
 
     function tick(now: number) {
-      const dt = lastTs ? (now - lastTs) / 1000 : 0
-      lastTs = now
+      const dt = lastTs ? (now - lastTs) / 1000 : 0;
+      lastTs = now;
       if (totalWidth > 0) {
-        scrollPos = (scrollPos + SPEED * dt) % totalWidth
-        container!.scrollLeft = scrollPos
+        scrollPos = (scrollPos + SPEED * dt) % totalWidth;
+        container!.scrollLeft = scrollPos;
       }
-      animId = requestAnimationFrame(tick)
+      animId = requestAnimationFrame(tick);
     }
     function start() {
-      if (running) return
-      running = true
-      lastTs = 0
-      animId = requestAnimationFrame(tick)
+      if (running) return;
+      running = true;
+      lastTs = 0;
+      animId = requestAnimationFrame(tick);
     }
     function stop() {
-      if (!running) return
-      running = false
-      cancelAnimationFrame(animId)
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(animId);
     }
 
     // Measure after a tick to let layout settle
     const tid = setTimeout(() => {
-      const items = container.querySelectorAll<HTMLElement>(".service-tag")
-      totalWidth = Array.from(items).slice(0, tags.length).reduce((sum, el) => {
-        const style = window.getComputedStyle(el)
-        return sum + el.offsetWidth + parseFloat(style.marginRight || "0") + 24 /* gap-6 = 24px */
-      }, 0)
-    }, 100)
+      const items = container.querySelectorAll<HTMLElement>('.service-tag');
+      totalWidth = Array.from(items)
+        .slice(0, tags.length)
+        .reduce((sum, el) => {
+          const style = window.getComputedStyle(el);
+          return (
+            sum + el.offsetWidth + parseFloat(style.marginRight || '0') + 24
+          ); /* gap-6 = 24px */
+        }, 0);
+    }, 100);
 
     // Only animate while the strip is on screen.
     const io = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) start(); else stop() },
-      { threshold: 0 }
-    )
-    io.observe(container)
+      ([entry]) => {
+        if (entry.isIntersecting) start();
+        else stop();
+      },
+      { threshold: 0 },
+    );
+    io.observe(container);
 
     return () => {
-      clearTimeout(tid)
-      cancelAnimationFrame(animId)
-      io.disconnect()
-    }
-  }, [])
+      clearTimeout(tid);
+      cancelAnimationFrame(animId);
+      io.disconnect();
+    };
+  }, []);
 
   return (
     <section className="section-y relative overflow-hidden">
@@ -85,9 +109,16 @@ export default function ServiceCarousel() {
 
       {/* View All button — centred over the tag strip */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-        <GradientButton href="/portfolio" variant="secondary">
+        <GradientButton
+          href="/portfolio"
+          variant="secondary"
+        >
           viewAllProjects
-          <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden />
+          <ArrowRight
+            size={14}
+            className="ml-2 group-hover:translate-x-1 transition-transform"
+            aria-hidden
+          />
         </GradientButton>
       </div>
 
@@ -99,25 +130,32 @@ export default function ServiceCarousel() {
       <div
         ref={containerRef}
         className="overflow-hidden select-none relative opacity-20"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}
       >
-        <div className="flex gap-6 py-8 items-center" style={{ width: "max-content" }}>
+        <div
+          className="flex gap-6 py-8 items-center"
+          style={{ width: 'max-content' }}
+        >
           {allTags.map((tag, i) => (
             <div
               key={`${tag}-${i}`}
               className="service-tag flex-none px-6 py-3 rounded-lg flex items-center gap-2"
               style={{
-                background: "rgba(124,58,237,0.15)",
-                border: "1px solid rgba(124,58,237,0.3)",
-                color: "rgba(255,255,255,0.8)",
+                background: 'rgba(124,58,237,0.15)',
+                border: '1px solid rgba(124,58,237,0.3)',
+                color: 'rgba(255,255,255,0.8)',
               }}
             >
-              <Code2 size={14} className="text-indigo-400" aria-hidden />
+              <Code2
+                size={14}
+                className="text-indigo-400"
+                aria-hidden
+              />
               <span className="whitespace-nowrap text-sm">{tag}</span>
             </div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -19,7 +19,7 @@ import {
   siKubernetes,
   siTrpc,
   type SimpleIcon,
-} from "simple-icons"
+} from 'simple-icons';
 
 /**
  * Maps a portfolio tech name to its simple-icons logo. Names with no brand icon
@@ -28,15 +28,15 @@ import {
  * brand's hex (Next.js / Vercel are #000) never matters here.
  */
 export const techIcons: Record<string, SimpleIcon> = {
-  "Next.js": siNextdotjs,
+  'Next.js': siNextdotjs,
   TypeScript: siTypescript,
   Stripe: siStripe,
   PostgreSQL: siPostgresql,
   Vercel: siVercel,
   React: siReact,
-  "React Native": siReact,
+  'React Native': siReact,
   ClickHouse: siClickhouse,
-  "Node.js": siNodedotjs,
+  'Node.js': siNodedotjs,
   Expo: siExpo,
   SQLite: siSqlite,
   GraphQL: siGraphql,
@@ -48,4 +48,4 @@ export const techIcons: Record<string, SimpleIcon> = {
   Go: siGo,
   Kubernetes: siKubernetes,
   tRPC: siTrpc,
-}
+};

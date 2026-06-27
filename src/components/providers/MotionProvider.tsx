@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import { usePathname } from "next/navigation"
-import { registerGsap, ScrollTrigger } from "@/lib/motion"
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { registerGsap, ScrollTrigger } from '@/lib/motion';
 
 /**
  * Registers GSAP plugins + reusable effects once, and recomputes ScrollTrigger
@@ -11,14 +11,14 @@ import { registerGsap, ScrollTrigger } from "@/lib/motion"
  * this provider is about route-change refresh, not a hard dependency.
  */
 export function MotionProvider() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   useEffect(() => {
-    registerGsap()
+    registerGsap();
     // Let the new route paint, then refresh trigger start/end positions.
-    const id = requestAnimationFrame(() => ScrollTrigger.refresh())
-    return () => cancelAnimationFrame(id)
-  }, [pathname])
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
+  }, [pathname]);
 
-  return null
+  return null;
 }

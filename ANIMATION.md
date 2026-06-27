@@ -4,9 +4,9 @@ One engine, one place to change timing. Read this before adding motion to a page
 
 ## The rule: GSAP vs CSS
 
-| Use | For |
-|---|---|
-| **GSAP** (this system) | Anything triggered by scroll, mount, or an interaction sequence: entrance reveals, staggers, parallax, count-ups, typewriters, marquees, timelines. |
+| Use                              | For                                                                                                                                                                                         |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **GSAP** (this system)           | Anything triggered by scroll, mount, or an interaction sequence: entrance reveals, staggers, parallax, count-ups, typewriters, marquees, timelines.                                         |
 | **CSS** (`globals.css` + tokens) | Cheap state transitions only: hover, focus, active, open/close. Always reference `var(--ease-*)` / `var(--duration-*)`. Decorative ambient keyframes (aurora drift, cursor blink) stay CSS. |
 
 Never hardcode a duration or `cubic-bezier(...)` in a component. Import from `src/lib/motion.ts`
@@ -23,20 +23,26 @@ or use a registered effect.
 
 ### Registered effects (callable anywhere after registration)
 
-| Effect | Call | Does |
-|---|---|---|
-| `fadeUp` | `gsap.effects.fadeUp(el)` | opacity 0→1, rise |
-| `staggerReveal` | `gsap.effects.staggerReveal(els)` | the above, staggered |
-| `auroraEntrance` | `gsap.effects.auroraEntrance(el)` | scale + rise + fade |
+| Effect           | Call                              | Does                 |
+| ---------------- | --------------------------------- | -------------------- |
+| `fadeUp`         | `gsap.effects.fadeUp(el)`         | opacity 0→1, rise    |
+| `staggerReveal`  | `gsap.effects.staggerReveal(els)` | the above, staggered |
+| `auroraEntrance` | `gsap.effects.auroraEntrance(el)` | scale + rise + fade  |
 
 ## Primitives (use these, don't hand-roll)
 
 **Scroll reveals (CSS/IO — the lightweight path, used in ~48 sections):**
+
 - **`<RevealSection>`** (`src/components/ui/RevealSection.tsx`) — the one reveal wrapper. Applies
   `.reveal` (or `.reveal-stagger` with `stagger`); `useScrollReveal` adds `.visible` on entry.
   Props: `as`, `stagger`, `threshold`.
   ```tsx
-  <RevealSection stagger className="...">{children}</RevealSection>
+  <RevealSection
+    stagger
+    className="..."
+  >
+    {children}
+  </RevealSection>
   ```
 - **`useScrollReveal(opts)`** (`src/hooks/useScrollReveal.ts`) — the underlying IntersectionObserver
   hook; returns a ref that gets `.visible`. Use directly when a CSS keyframe drives the reveal
@@ -44,6 +50,7 @@ or use a registered effect.
   because `.reveal-stagger` loses the transition fight with `.bento-card`'s hover transition).
 
 **Complex motion (GSAP — only where it earns its weight):**
+
 - **`useCountUp(target, opts)`** (`src/hooks/useCountUp.ts`) — number count-up, `trigger:"scroll"`
   (enters view) or `"active"` (gated by a prop). Returns `{ ref, value }`.
 - **`useTypewriter(text, opts)`** (`src/hooks/useTypewriter.ts`) — returns the typed substring;

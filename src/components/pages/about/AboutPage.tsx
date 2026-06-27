@@ -1,5 +1,5 @@
-import PartnersSection from "@/components/pages/home/PartnersSection"
-import AboutScrollFX from "./AboutScrollFX"
+import PartnersSection from '@/components/pages/home/PartnersSection';
+import AboutScrollFX from './AboutScrollFX';
 import {
   AboutHeroSection,
   StorySection,
@@ -9,7 +9,7 @@ import {
   TeamSection,
   ProcessSection,
   AboutCtaSection,
-} from "./sections"
+} from './sections';
 
 export function AboutPage() {
   return (
@@ -25,5 +25,5 @@ export function AboutPage() {
       <PartnersSection />
       <AboutCtaSection />
     </>
-  )
+  );
 }

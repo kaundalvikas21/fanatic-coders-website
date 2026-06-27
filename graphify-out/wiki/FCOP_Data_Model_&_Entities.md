@@ -29,7 +29,7 @@
 - **Entity: TaskStatus** (2 connections) — `FCOP-PRD-MD-FILES/shared-02-data-model.md`
 - **Entity: TaskDependency** (2 connections) — `FCOP-PRD-MD-FILES/shared-02-data-model.md`
 - **Entity: OnboardingSubmission** (2 connections) — `FCOP-PRD-MD-FILES/shared-02-data-model.md`
-- *... and 7 more nodes in this community*
+- _... and 7 more nodes in this community_
 
 ## Relationships
 
@@ -57,4 +57,4 @@
 
 ---
 
-*Part of the graphify knowledge wiki. See [[index]] to navigate.*
+_Part of the graphify knowledge wiki. See [[index]] to navigate._
