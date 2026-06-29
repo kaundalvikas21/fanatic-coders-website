@@ -3,7 +3,15 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
-import { LayoutDashboard, Loader2, LogOut, Settings, UsersRound } from 'lucide-react';
+import {
+  Blocks,
+  LayoutDashboard,
+  Loader2,
+  LogOut,
+  Settings,
+  ShieldCheck,
+  UsersRound,
+} from 'lucide-react';
 import { authClient, useSession } from '@/lib/auth/client';
 
 type DashboardShellProps = {
@@ -12,6 +20,8 @@ type DashboardShellProps = {
 
 const navItems = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
+  { href: '/dashboard/admin', label: 'Admin', icon: ShieldCheck },
+  { href: '/dashboard/user/scaffolding', label: 'User scaffolding', icon: Blocks },
   { href: '/dashboard/team', label: 'Team', icon: UsersRound },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];

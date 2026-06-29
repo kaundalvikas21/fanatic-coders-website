@@ -25,6 +25,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * @example USER
+         * @enum {string}
+         */
+        Role: "USER" | "ADMIN";
         ApiResponse: {
             /** @example true */
             success: boolean;
@@ -38,6 +43,32 @@ export interface components {
                 code: string;
                 details?: string;
             };
+        };
+        User: {
+            /** @example clx0000000000000000000000 */
+            id: string;
+            /** @example Akshay */
+            name: string;
+            /**
+             * Format: email
+             * @example akshay@example.com
+             */
+            email: string;
+            /** @example true */
+            emailVerified: boolean;
+            /** @example https://example.com/avatar.png */
+            image?: string | null;
+            role: components["schemas"]["Role"];
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            updatedAt: string;
         };
         HealthResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["HealthData"];

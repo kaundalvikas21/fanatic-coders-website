@@ -9,6 +9,9 @@ export type {
   SuccessResponse,
 } from './api';
 
+export type { Role } from './enum';
+export type { User } from './user';
+
 export interface NavLink {
   label: string;
   href: string;
