@@ -7,6 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "release": "standard-version",
+    "release:dry": "standard-version --dry-run",
+    "release:patch": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -43,6 +48,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.7.4",
+    "standard-version": "^9.5.0",
     "tailwindcss": "^4",
     "typescript": "^6.0.2"
   },
