@@ -9,8 +9,21 @@ export type {
   SuccessResponse,
 } from './api';
 
+export {
+  LEAD_SOURCES,
+  LEAD_STATUSES,
+  ROLES,
+  SERVICE_INTEREST_OPTIONS,
+  SERVICE_INTERESTS,
+} from './enum';
 export type { LeadSource, LeadStatus, Role, ServiceInterest } from './enum';
-export type { CreateLeadInput, Lead } from './lead';
+export type {
+  CreateLeadInput,
+  CreatePublicLeadRequest,
+  CreatePublicLeadResponse,
+  Lead,
+  LeadResponse,
+} from './lead';
 export type { User } from './user';
 
 export interface NavLink {

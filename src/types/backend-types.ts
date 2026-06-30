@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/leads/public": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Capture a public website lead */
+        post: operations["createPublicLead"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -199,6 +216,23 @@ export interface components {
              */
             updatedAt: string;
         };
+        CreateLeadRequest: {
+            /** @example Akshay Kumar */
+            name: string;
+            /**
+             * Format: email
+             * @example akshay@example.com
+             */
+            email: string;
+            /** @example Fanatic Coders */
+            companyName?: string | null;
+            serviceInterest: components["schemas"]["ServiceInterest"];
+            /** @example AED 10,000 - AED 25,000 */
+            budgetRange?: string | null;
+        };
+        LeadResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Lead"];
+        };
         HealthResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["HealthData"];
         };
@@ -238,6 +272,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthResponse"];
+                };
+            };
+        };
+    };
+    createPublicLead: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLeadRequest"];
+            };
+        };
+        responses: {
+            /** @description Lead captured successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadResponse"];
+                };
+            };
+            /** @description Invalid lead payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
                 };
             };
         };

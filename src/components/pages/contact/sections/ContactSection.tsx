@@ -9,20 +9,37 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Select, type SelectOption } from '@/components/ui/Select';
 import { IconGithub, IconLinkedin } from '@/components/ui/SocialIcons';
 import { cn } from '@/lib/utils';
+import {
+  SERVICE_INTEREST_OPTIONS,
+  type CreatePublicLeadRequest,
+  type ServiceInterest,
+} from '@/types';
 
 interface FormState {
   name: string;
   email: string;
   company: string;
+  serviceInterest: ServiceInterest;
   budget: string;
   message: string;
 }
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
-const EMPTY: FormState = { name: '', email: '', company: '', budget: '', message: '' };
+const EMPTY: FormState = {
+  name: '',
+  email: '',
+  company: '',
+  serviceInterest: 'WEB_DEVELOPMENT',
+  budget: '',
+  message: '',
+};
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MESSAGE_MIN = 10;
+const API_BASE_URL = (process.env.NEXT_PUBLIC_AUTH_URL ?? 'http://localhost:5000').replace(
+  /\/$/,
+  '',
+);
 
 const budgetOptions: SelectOption[] = [
   { value: '<10k', label: 'Under $10k' },
@@ -30,6 +47,8 @@ const budgetOptions: SelectOption[] = [
   { value: '25-50k', label: '$25k to $50k' },
   { value: '50k+', label: '$50k+' },
 ];
+
+const serviceOptions: SelectOption[] = [...SERVICE_INTEREST_OPTIONS];
 
 function validate(values: FormState): FormErrors {
   const errors: FormErrors = {};
@@ -58,13 +77,15 @@ export function ContactSection() {
   const [values, setValues] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   function update<K extends keyof FormState>(key: K, value: string) {
     setValues((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const found = validate(values);
     if (Object.keys(found).length > 0) {
@@ -72,22 +93,38 @@ export function ContactSection() {
       return;
     }
     setErrors({});
-    // Interim guard: no backend yet. Route the lead through the visitor's mail client so it
-    // reaches us instead of being dropped. Replace with an API/Supabase post in a later phase.
-    const subject = `Project inquiry from ${values.name}`;
+    setSubmitError('');
+    setIsSubmitting(true);
+
     const budgetLabel = budgetOptions.find((o) => o.value === values.budget)?.label;
-    const body = [
-      `Name: ${values.name}`,
-      `Email: ${values.email}`,
-      values.company ? `Company: ${values.company}` : null,
-      budgetLabel ? `Budget: ${budgetLabel}` : null,
-      '',
-      values.message,
-    ]
-      .filter(Boolean)
-      .join('\n');
-    window.location.href = `mailto:hello@fanaticcoders.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSubmitted(true);
+
+    try {
+      const payload: CreatePublicLeadRequest = {
+        name: values.name.trim(),
+        email: values.email.trim(),
+        companyName: values.company.trim() || null,
+        serviceInterest: values.serviceInterest,
+        budgetRange: budgetLabel ?? null,
+      };
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/leads/public`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Lead request failed.');
+      }
+
+      setSubmitted(true);
+    } catch {
+      setSubmitError('Something went wrong. Please try again or email hello@fanaticcoders.com.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const messageLength = values.message.trim().length;
@@ -134,9 +171,8 @@ export function ContactSection() {
                   </div>
                   <h2 className="text-xl font-bold text-white">Almost there</h2>
                   <p className="mt-2 text-sm text-blue-100/65 max-w-sm mx-auto leading-relaxed">
-                    Thanks, {values.name.split(' ')[0] || 'there'}. Your email app should open with
-                    the details, hit send and a senior team member replies within a business day. If
-                    nothing opened, email{' '}
+                    Thanks, {values.name.split(' ')[0] || 'there'}. Your message reached us and a
+                    senior team member replies within a business day. You can also email{' '}
                     <a
                       href="mailto:hello@fanaticcoders.com"
                       className="text-indigo-300 hover:text-indigo-200"
@@ -217,6 +253,19 @@ export function ContactSection() {
                       />
                     </Field>
                     <Field
+                      id="serviceInterest"
+                      label="Service"
+                    >
+                      <Select
+                        id="serviceInterest"
+                        value={values.serviceInterest}
+                        onChange={(v) => update('serviceInterest', v as ServiceInterest)}
+                        options={serviceOptions}
+                        placeholder="Select a service"
+                        ariaLabel="Service interest"
+                      />
+                    </Field>
+                    <Field
                       id="budget"
                       label="Budget"
                     >
@@ -269,9 +318,10 @@ export function ContactSection() {
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
                     <GradientButton
                       type="submit"
+                      disabled={isSubmitting}
                       className="w-full sm:w-auto"
                     >
-                      sendMessage
+                      {isSubmitting ? 'sending' : 'sendMessage'}
                       <Send
                         size={16}
                         className="ml-2 group-hover:translate-x-1 transition-transform"
@@ -282,6 +332,15 @@ export function ContactSection() {
                       {'// a real person replies, no auto-responder'}
                     </span>
                   </div>
+                  {submitError && (
+                    <p className="mt-4 flex items-center gap-1.5 text-xs text-red-300">
+                      <AlertCircle
+                        size={12}
+                        aria-hidden
+                      />
+                      {submitError}
+                    </p>
+                  )}
                 </form>
               )}
             </GlassCard>
