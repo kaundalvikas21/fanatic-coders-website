@@ -10,7 +10,16 @@ import {
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -71,88 +80,103 @@ export const metadata = {
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
-      <section className="flex flex-col gap-4 rounded-xl border bg-card p-5 text-card-foreground shadow-sm lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">Operations dashboard</p>
-          <h1 className="mt-2 text-2xl font-semibold tracking-normal">Project control room</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Review leads, project health, delivery work, and team load from one place.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline">
-            <CalendarClock />
-            Schedule review
-          </Button>
-          <Button>
-            View leads
-            <ArrowUpRight />
-          </Button>
-        </div>
-      </section>
+    <div className="flex flex-col gap-6">
+      <Card>
+        <CardHeader className="gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <CardDescription>Operations dashboard</CardDescription>
+            <CardTitle className="mt-2 text-2xl">Project control room</CardTitle>
+            <CardDescription className="mt-2 max-w-2xl leading-6">
+              Review leads, project health, delivery work, and team load from one place.
+            </CardDescription>
+          </div>
+          <CardAction className="flex flex-wrap gap-2">
+            <Button variant="outline">
+              <CalendarClock data-icon="inline-start" />
+              Schedule review
+            </Button>
+            <Button>
+              View leads
+              <ArrowUpRight data-icon="inline-end" />
+            </Button>
+          </CardAction>
+        </CardHeader>
+      </Card>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {metrics.map(({ label, value, detail, icon: Icon }) => (
-          <article
+          <Card
             key={label}
-            className="rounded-xl border bg-card p-5 text-card-foreground shadow-sm"
+            size="sm"
           >
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-sm font-medium text-muted-foreground">{label}</p>
-              <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Icon className="size-4" />
-              </div>
-            </div>
-            <p className="mt-5 text-3xl font-semibold tracking-tight">{value}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
-          </article>
+            <CardHeader>
+              <CardDescription>{label}</CardDescription>
+              <CardAction>
+                <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Icon className="size-4" />
+                </div>
+              </CardAction>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold tracking-tight">{value}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
+            </CardContent>
+          </Card>
         ))}
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-        <article className="rounded-xl border bg-card text-card-foreground shadow-sm">
-          <div className="flex items-center justify-between gap-4 p-5">
+        <Card>
+          <CardHeader>
             <div>
-              <h2 className="text-base font-semibold">Lead intake</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Public contact form queue</p>
+              <CardTitle>Lead intake</CardTitle>
+              <CardDescription>Public contact form queue</CardDescription>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-            >
-              Open CRM
-            </Button>
-          </div>
-          <Separator />
-          <div className="divide-y">
-            {leads.map((lead) => (
-              <div
-                key={lead.name}
-                className="grid gap-3 p-5 md:grid-cols-[1fr_1fr_auto] md:items-center"
+            <CardAction>
+              <Button
+                variant="outline"
+                size="sm"
               >
-                <div>
-                  <p className="font-medium">{lead.name}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{lead.service}</p>
+                Open CRM
+              </Button>
+            </CardAction>
+          </CardHeader>
+          <Separator />
+          <CardContent className="px-0">
+            <div className="divide-y">
+              {leads.map((lead) => (
+                <div
+                  key={lead.name}
+                  className="grid gap-3 px-(--card-spacing) py-4 md:grid-cols-[1fr_1fr_auto] md:items-center"
+                >
+                  <div>
+                    <p className="font-medium">{lead.name}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{lead.service}</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{lead.budget}</p>
+                  <Badge
+                    variant="secondary"
+                    className="w-fit"
+                  >
+                    {lead.status}
+                  </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">{lead.budget}</p>
-                <span className="w-fit rounded-md border px-2.5 py-1 text-xs text-muted-foreground">
-                  {lead.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </article>
-
-        <article className="rounded-xl border bg-card p-5 text-card-foreground shadow-sm">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-base font-semibold">Project health</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Current delivery snapshot</p>
+              ))}
             </div>
-            <BriefcaseBusiness className="size-5 text-muted-foreground" />
-          </div>
-          <div className="mt-6 space-y-5">
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Project health</CardTitle>
+              <CardDescription>Current delivery snapshot</CardDescription>
+            </div>
+            <CardAction>
+              <BriefcaseBusiness className="size-5 text-muted-foreground" />
+            </CardAction>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-5">
             {projects.map((project) => (
               <div key={project.name}>
                 <div className="flex items-center justify-between gap-4">
@@ -163,20 +187,22 @@ export default function DashboardPage() {
                 <p className="mt-2 text-xs text-muted-foreground">{project.note}</p>
               </div>
             ))}
-          </div>
-        </article>
+          </CardContent>
+        </Card>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-3">
-        <article className="rounded-xl border bg-card p-5 text-card-foreground shadow-sm xl:col-span-2">
-          <div className="flex items-center justify-between gap-4">
+        <Card className="xl:col-span-2">
+          <CardHeader>
             <div>
-              <h2 className="text-base font-semibold">Recent activity</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Team and client updates</p>
+              <CardTitle>Recent activity</CardTitle>
+              <CardDescription>Team and client updates</CardDescription>
             </div>
-            <MessageSquareText className="size-5 text-muted-foreground" />
-          </div>
-          <div className="mt-6 space-y-4">
+            <CardAction>
+              <MessageSquareText className="size-5 text-muted-foreground" />
+            </CardAction>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
             {activity.map((item) => (
               <div
                 key={item.title}
@@ -189,18 +215,20 @@ export default function DashboardPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </article>
+          </CardContent>
+        </Card>
 
-        <article className="rounded-xl border bg-card p-5 text-card-foreground shadow-sm">
-          <div className="flex items-center justify-between gap-4">
+        <Card>
+          <CardHeader>
             <div>
-              <h2 className="text-base font-semibold">Team load</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Weekly capacity</p>
+              <CardTitle>Team load</CardTitle>
+              <CardDescription>Weekly capacity</CardDescription>
             </div>
-            <UsersRound className="size-5 text-muted-foreground" />
-          </div>
-          <div className="mt-6 space-y-4">
+            <CardAction>
+              <UsersRound className="size-5 text-muted-foreground" />
+            </CardAction>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
             {team.map((member) => (
               <div
                 key={member.name}
@@ -218,8 +246,8 @@ export default function DashboardPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </article>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );
