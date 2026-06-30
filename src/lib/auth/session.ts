@@ -1,7 +1,6 @@
 import { authClient } from './client';
-import type { Role, User } from '@/types';
-
-const ROLES: readonly Role[] = ['ADMIN', 'CLIENT', 'MANAGER', 'MEMBER'];
+import { getUserRole } from './role';
+import type { Role } from '@/types';
 
 export async function hasSession(headers: Headers): Promise<boolean> {
   return Boolean(await getSessionUser(headers));
@@ -41,14 +40,4 @@ async function getSessionUser(headers: Headers): Promise<unknown> {
   } catch {
     return null;
   }
-}
-
-function getUserRole(user: unknown): Role | null {
-  if (!user || typeof user !== 'object' || !('role' in user)) {
-    return null;
-  }
-
-  const role = user.role as User['role'];
-
-  return ROLES.includes(role) ? role : null;
 }
