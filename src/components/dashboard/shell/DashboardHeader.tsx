@@ -1,3 +1,4 @@
+import { DashboardThemeToggle } from '@/components/dashboard/shell/DashboardThemeToggle';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
@@ -11,6 +12,9 @@ export function DashboardHeader() {
         className="mr-2 data-vertical:h-4 data-vertical:self-auto"
       />
       <Breadcrumb items={[{ label: 'dashboard' }]} />
+      <div className="ml-auto">
+        <DashboardThemeToggle />
+      </div>
     </header>
   );
 }
