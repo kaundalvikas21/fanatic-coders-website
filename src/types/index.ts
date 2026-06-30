@@ -19,10 +19,22 @@ export {
 export type { LeadSource, LeadStatus, Role, ServiceInterest } from './enum';
 export type {
   CreateLeadInput,
+  CreateLeadRequest,
+  CreateLeadResponse,
   CreatePublicLeadRequest,
   CreatePublicLeadResponse,
+  DeleteLeadByIdParams,
+  DeleteLeadByIdResponse,
+  GetLeadByIdParams,
+  GetLeadByIdResponse,
+  GetLeadsResponse,
   Lead,
   LeadResponse,
+  LeadsResponse,
+  UpdateLeadByIdParams,
+  UpdateLeadByIdRequest,
+  UpdateLeadByIdResponse,
+  UpdateLeadInput,
 } from './lead';
 export type { User } from './user';
 

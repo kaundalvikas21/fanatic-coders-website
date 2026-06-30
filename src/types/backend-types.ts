@@ -21,18 +21,53 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/leads/public": {
+    "/api/v1/leads": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Fetch all leads
+         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         */
+        get: operations["getLeads"];
         put?: never;
-        /** Capture a public website lead */
-        post: operations["createPublicLead"];
+        /**
+         * Create a lead
+         * @description Creates a lead from an unauthenticated website form submission.
+         */
+        post: operations["createLead"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/leads/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch a lead by id
+         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         */
+        get: operations["getLeadById"];
+        /**
+         * Update a lead by id
+         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         */
+        put: operations["updateLeadById"];
+        post?: never;
+        /**
+         * Delete a lead by id
+         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         */
+        delete: operations["deleteLeadById"];
         options?: never;
         head?: never;
         patch?: never;
@@ -230,6 +265,24 @@ export interface components {
             /** @example AED 10,000 - AED 25,000 */
             budgetRange?: string | null;
         };
+        UpdateLeadRequest: {
+            /** @example Akshay Kumar */
+            name?: string;
+            /**
+             * Format: email
+             * @example akshay@example.com
+             */
+            email?: string;
+            /** @example Fanatic Coders */
+            companyName?: string | null;
+            serviceInterest?: components["schemas"]["ServiceInterest"];
+            /** @example AED 10,000 - AED 25,000 */
+            budgetRange?: string | null;
+            status?: components["schemas"]["LeadStatus"];
+        };
+        LeadsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Lead"][];
+        };
         LeadResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Lead"];
         };
@@ -248,8 +301,30 @@ export interface components {
             timestamp: string;
         };
     };
-    responses: never;
-    parameters: never;
+    responses: {
+        /** @description Authentication is required. */
+        Unauthorized: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ApiResponse"];
+            };
+        };
+        /** @description Authenticated user does not have an allowed role. */
+        Forbidden: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ApiResponse"];
+            };
+        };
+    };
+    parameters: {
+        /** @example clx0000000000000000000004 */
+        LeadId: string;
+    };
     requestBodies: never;
     headers: never;
     pathItems: never;
@@ -276,7 +351,29 @@ export interface operations {
             };
         };
     };
-    createPublicLead: {
+    getLeads: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Leads fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadsResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createLead: {
         parameters: {
             query?: never;
             header?: never;
@@ -300,6 +397,121 @@ export interface operations {
             };
             /** @description Invalid lead payload. */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getLeadById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000004 */
+                id: components["parameters"]["LeadId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Lead fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Lead was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    updateLeadById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000004 */
+                id: components["parameters"]["LeadId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLeadRequest"];
+            };
+        };
+        responses: {
+            /** @description Lead updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadResponse"];
+                };
+            };
+            /** @description Invalid lead payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Lead was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteLeadById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000004 */
+                id: components["parameters"]["LeadId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Lead deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Lead was not found. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
