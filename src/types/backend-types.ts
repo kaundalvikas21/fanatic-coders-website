@@ -30,6 +30,21 @@ export interface components {
          * @enum {string}
          */
         Role: "ADMIN" | "CLIENT" | "MANAGER" | "MEMBER";
+        /**
+         * @example NEW
+         * @enum {string}
+         */
+        LeadStatus: "NEW" | "IN_PROGRESS" | "DEAD";
+        /**
+         * @example CONTACT_FORM
+         * @enum {string}
+         */
+        LeadSource: "CONTACT_FORM";
+        /**
+         * @example WEB_DEVELOPMENT
+         * @enum {string}
+         */
+        ServiceInterest: "GOOGLE_ADS" | "SEO" | "WEB_DEVELOPMENT" | "MOBILE_APP_DEVELOPMENT" | "GENERAL_MARKETING" | "OTHER";
         ApiResponse: {
             /** @example true */
             success: boolean;
@@ -59,6 +74,120 @@ export interface components {
             /** @example https://example.com/avatar.png */
             image?: string | null;
             role: components["schemas"]["Role"];
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            updatedAt: string;
+        };
+        Session: {
+            /** @example clx0000000000000000000001 */
+            id: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-06T06:30:00.000Z
+             */
+            expiresAt: string;
+            /** @example session-token */
+            token: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            updatedAt: string;
+            /** @example 127.0.0.1 */
+            ipAddress?: string | null;
+            /** @example Mozilla/5.0 */
+            userAgent?: string | null;
+            /** @example clx0000000000000000000000 */
+            userId: string;
+        };
+        Account: {
+            /** @example clx0000000000000000000002 */
+            id: string;
+            /** @example akshay@example.com */
+            accountId: string;
+            /** @example credential */
+            providerId: string;
+            /** @example clx0000000000000000000000 */
+            userId: string;
+            accessToken?: string | null;
+            refreshToken?: string | null;
+            idToken?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-07-06T06:30:00.000Z
+             */
+            accessTokenExpiresAt?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-07-06T06:30:00.000Z
+             */
+            refreshTokenExpiresAt?: string | null;
+            /** @example openid email profile */
+            scope?: string | null;
+            password?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            updatedAt: string;
+        };
+        Verification: {
+            /** @example clx0000000000000000000003 */
+            id: string;
+            /** @example akshay@example.com */
+            identifier: string;
+            /** @example verification-token */
+            value: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:45:00.000Z
+             */
+            expiresAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            updatedAt: string;
+        };
+        Lead: {
+            /** @example clx0000000000000000000004 */
+            id: string;
+            /** @example Akshay Kumar */
+            name: string;
+            /**
+             * Format: email
+             * @example akshay@example.com
+             */
+            email: string;
+            /** @example Fanatic Coders */
+            companyName?: string | null;
+            serviceInterest: components["schemas"]["ServiceInterest"];
+            /** @example AED 10,000 - AED 25,000 */
+            budgetRange?: string | null;
+            status: components["schemas"]["LeadStatus"];
+            source: components["schemas"]["LeadSource"];
             /**
              * Format: date-time
              * @example 2026-06-29T06:30:00.000Z

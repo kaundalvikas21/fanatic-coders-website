@@ -9,7 +9,8 @@ export type {
   SuccessResponse,
 } from './api';
 
-export type { Role } from './enum';
+export type { LeadSource, LeadStatus, Role, ServiceInterest } from './enum';
+export type { CreateLeadInput, Lead } from './lead';
 export type { User } from './user';
 
 export interface NavLink {
