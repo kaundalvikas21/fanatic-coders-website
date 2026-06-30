@@ -26,10 +26,10 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         /**
-         * @example USER
+         * @example CLIENT
          * @enum {string}
          */
-        Role: "USER" | "ADMIN";
+        Role: "ADMIN" | "CLIENT" | "MANAGER" | "MEMBER";
         ApiResponse: {
             /** @example true */
             success: boolean;

@@ -5,11 +5,13 @@ import type { Role } from '@/types';
 
 const AUTH_PATHS = ['/login', '/signup'];
 const ADMIN_ROLE: Role = 'ADMIN';
-const USER_ROLE: Role = 'USER';
+const USER_DASHBOARD_ROLES: readonly Role[] = ['CLIENT', 'MANAGER', 'MEMBER'];
 const ROLE_HOME = {
   ADMIN: '/dashboard/admin',
-  USER: '/dashboard/user/',
-};
+  CLIENT: '/dashboard/user',
+  MANAGER: '/dashboard/user',
+  MEMBER: '/dashboard/user',
+} satisfies Record<Role, string>;
 
 export async function authMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -32,7 +34,7 @@ export async function authMiddleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
 
-    if (pathname.startsWith('/dashboard/user') && role !== USER_ROLE) {
+    if (pathname.startsWith('/dashboard/user') && (!role || !USER_DASHBOARD_ROLES.includes(role))) {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
 
