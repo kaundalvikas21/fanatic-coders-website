@@ -1,6 +1,6 @@
 'use client';
 
-import { adminRoutes, userRoutes } from '@config/routes';
+import { adminRoutes, userRoutes } from '@/config/routes';
 import { DashboardBrand } from '@/components/dashboard/shell/DashboardBrand';
 import { NavMain } from '@/components/dashboard/shell/NavMain';
 import { NavUser } from '@/components/dashboard/shell/NavUser';

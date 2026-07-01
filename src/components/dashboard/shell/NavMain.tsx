@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { DashboardRoute } from '@config/routes';
+import type { DashboardRoute } from '@/config/routes';
 
 export function NavMain({ items }: { items: DashboardRoute[] }) {
   const pathname = usePathname();
