@@ -76,23 +76,28 @@ export function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
-    const result =
-      mode === 'login'
-        ? await authClient.signIn.email({ email, password })
-        : await authClient.signUp.email({
-            name: String(formData.get('name') ?? '').trim(),
-            email,
-            password,
-          });
+    try {
+      const result =
+        mode === 'login'
+          ? await authClient.signIn.email({ email, password })
+          : await authClient.signUp.email({
+              name: String(formData.get('name') ?? '').trim(),
+              email,
+              password,
+            });
 
-    if (result.error) {
-      setMessage(result.error.message ?? 'Authentication failed.');
+      if (result.error) {
+        setMessage(result.error.message ?? 'Authentication failed.');
+        return;
+      }
+
+      router.replace('/dashboard');
+      router.refresh();
+    } catch {
+      setMessage('Authentication failed. Please try again.');
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    router.replace('/dashboard');
-    router.refresh();
   }
 
   return (
