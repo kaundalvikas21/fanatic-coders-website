@@ -8,12 +8,9 @@ import { RevealSection } from '@/components/ui/RevealSection';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Select, type SelectOption } from '@/components/ui/Select';
 import { IconGithub, IconLinkedin } from '@/components/ui/SocialIcons';
+import { createLead } from '@/lib/data/leads/mutations';
 import { cn } from '@/lib/utils';
-import {
-  SERVICE_INTEREST_OPTIONS,
-  type CreatePublicLeadRequest,
-  type ServiceInterest,
-} from '@/types';
+import { SERVICE_INTEREST_OPTIONS, type CreateLeadRequest, type ServiceInterest } from '@/types';
 
 interface FormState {
   name: string;
@@ -36,10 +33,6 @@ const EMPTY: FormState = {
 };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MESSAGE_MIN = 10;
-const API_BASE_URL = (process.env.NEXT_PUBLIC_AUTH_URL ?? 'http://localhost:5000').replace(
-  /\/$/,
-  '',
-);
 
 const budgetOptions: SelectOption[] = [
   { value: '<10k', label: 'Under $10k' },
@@ -99,7 +92,7 @@ export function ContactSection() {
     const budgetLabel = budgetOptions.find((o) => o.value === values.budget)?.label;
 
     try {
-      const payload: CreatePublicLeadRequest = {
+      const payload: CreateLeadRequest = {
         name: values.name.trim(),
         email: values.email.trim(),
         companyName: values.company.trim() || null,
@@ -107,15 +100,9 @@ export function ContactSection() {
         budgetRange: budgetLabel ?? null,
       };
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/leads/public`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await createLead(payload);
 
-      if (!response.ok) {
+      if (!response.success) {
         throw new Error('Lead request failed.');
       }
 
