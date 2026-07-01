@@ -1,4 +1,4 @@
-import { authClient } from './client';
+import { authClient } from '@/lib/auth/client';
 import { getUserRole } from './role';
 import type { Role } from '@/types';
 
