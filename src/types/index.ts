@@ -4,6 +4,8 @@ export type {
   GetHealthResponse,
   HealthData,
   HealthResponse,
+  RequestPasswordResetRequest,
+  RequestPasswordResetResponse,
   Response,
   Schemas,
   SuccessResponse,

@@ -21,3 +21,5 @@ export type HealthData = Schemas['HealthData'];
 export type HealthResponse = Schemas['HealthResponse'];
 export type GetHealthResponse =
   operations['getHealth']['responses'][200]['content']['application/json'];
+export type RequestPasswordResetRequest = Schemas['RequestPasswordResetRequest'];
+export type RequestPasswordResetResponse = Schemas['RequestPasswordResetResponse'];

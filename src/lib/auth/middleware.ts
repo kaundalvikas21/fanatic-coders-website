@@ -6,6 +6,7 @@ import type { Role } from '@/types';
 const AUTH_PATHS = ['/login', '/signup'];
 const ADMIN_ROLE: Role = 'ADMIN';
 const USER_DASHBOARD_ROLES: readonly Role[] = ['CLIENT', 'MANAGER', 'MEMBER'];
+
 const ROLE_HOME = {
   ADMIN: '/dashboard/admin',
   CLIENT: '/dashboard/user',

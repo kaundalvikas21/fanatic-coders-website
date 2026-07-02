@@ -21,6 +21,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/request-password-reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request a password reset email
+         * @description Triggers Better Auth password reset flow and sends the customer a reset email from the backend email service.
+         */
+        post: operations["requestPasswordReset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/leads": {
         parameters: {
             query?: never;
@@ -280,6 +300,25 @@ export interface components {
             budgetRange?: string | null;
             status?: components["schemas"]["LeadStatus"];
         };
+        RequestPasswordResetRequest: {
+            /**
+             * Format: email
+             * @example customer@example.com
+             */
+            email: string;
+            /**
+             * Format: uri
+             * @description Optional frontend reset password page. Origin must be configured as a trusted frontend origin.
+             * @example http://localhost:3000/reset-password
+             */
+            redirectTo?: string;
+        };
+        RequestPasswordResetResponse: components["schemas"]["ApiResponse"] & {
+            /** @example null */
+            data?: unknown;
+            /** @example If an account exists for this email, a password reset link has been sent. */
+            message?: string;
+        };
         LeadsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Lead"][];
         };
@@ -347,6 +386,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthResponse"];
+                };
+            };
+        };
+    };
+    requestPasswordReset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RequestPasswordResetRequest"];
+            };
+        };
+        responses: {
+            /** @description Request accepted. The response does not reveal whether the email exists. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequestPasswordResetResponse"];
+                };
+            };
+            /** @description Invalid email or redirect URL. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
                 };
             };
         };

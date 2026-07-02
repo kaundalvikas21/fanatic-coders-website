@@ -186,6 +186,17 @@ export function AuthForm({ mode }: AuthFormProps) {
           {copy.switchLabel}
         </Link>
       </p>
+
+      {mode === 'login' && (
+        <p className="mt-3 text-center text-sm">
+          <Link
+            href="/forgot-password"
+            className="font-semibold text-cyan-200 hover:text-cyan-100"
+          >
+            Forgot password?
+          </Link>
+        </p>
+      )}
     </section>
   );
 }
