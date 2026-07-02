@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.0.2...v0.1.0) (2026-07-02)
+
+### Features
+
+- **added auth setup :** added normal flow of auth setup for user ([48f664d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/48f664d26ebb9142c9dd23532d0673407c0ad81c))
+- **axios:** added axios client support ([0e638a0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/0e638a03d84ebda830e4ae1ab60fc89714826535))
+- **card:** added card component ([dcc71cd](https://github.com/kaundalvikas21/fanatic-coders-website/commit/dcc71cd0f13a606a83853bace88dd2f579a00fa6))
+- **dashboard navigation:** added dashboard navigation configuration using same pattern ([2026026](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2026026ca68f2aa42eae69c139fa07caaf2d8738))
+- **leads:** added leads functionality integration in admin dashboard ([8136c89](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8136c898bc213f63436956335085b46cf366bcf6))
+- **react-table:** added data-table from react table with shadcn ([6973bf8](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6973bf833167e082dd3db1653aabb3ab4347af27))
+- **resubale component:** add new rusabel component ([af7aec9](https://github.com/kaundalvikas21/fanatic-coders-website/commit/af7aec98b692de3418a4608dc3c1af9e728f950f))
+- **role:** updated role and types including middlware ([3ea0bff](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3ea0bff48c21c0b2a5db5865abad44e33f8270b0))
+- **setting,other pages compoennt:** added setting and addional pages ([b5aa2fd](https://github.com/kaundalvikas21/fanatic-coders-website/commit/b5aa2fd8fab05560cc7694b92e32cfe7343c9936))
+- **shadcn:** added shadcn primitives ([cf203c8](https://github.com/kaundalvikas21/fanatic-coders-website/commit/cf203c8e7153f00817e2f0ec9efb91d44c8edc16))
+- **sidebar:** added dashbaord sidebar and prmitives ([62f98b4](https://github.com/kaundalvikas21/fanatic-coders-website/commit/62f98b491a7b532ecbd44a5baac390e382f8b820))
+- **toaster:** add toaster to globaly app ([77b3c4d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/77b3c4d7201eeba553325fe4c96656730ff912b5))
+- **toggle:** added dark mode feature inside dashbaord ([f683a81](https://github.com/kaundalvikas21/fanatic-coders-website/commit/f683a81e80a91857fba85a5ba301cf037233b6a9))
+- **types:** added new types for leads ([81584eb](https://github.com/kaundalvikas21/fanatic-coders-website/commit/81584eb6eb3823fe027d41433f2b9abede7509d1))
+- **types:** added types for lead to manage lead ([16df4b2](https://github.com/kaundalvikas21/fanatic-coders-website/commit/16df4b2057e5e644d653f2a6bae4899719d101c4))
+
+### Bug Fixes
+
+- **auth:** added try catch blcok on submission for getting proper error ([575553e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/575553eb67f564f0ea23c2e77a0c82ef6a4238f9))
+- **navigation:** added dashboard routes navigations ([db58fd5](https://github.com/kaundalvikas21/fanatic-coders-website/commit/db58fd5837db0a523266c7d24d574bc80305ce62))
+- **tsconfig:** change alias import setting from root to app directory ([136e57c](https://github.com/kaundalvikas21/fanatic-coders-website/commit/136e57cedec3f18100e04aa40a41c51f237358cd))
+
+### Code Refactoring
+
+- **auth:** refactor auth folder structure ([02a603f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/02a603f83498a20d35350a9ecc0f4faeb3498d10))
+- **config:** move enviroment configuration from root to app router ([1ccb997](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1ccb997bf346145a845ad0ce56c2762cc143db43))
+- **contact:** added lead actions to contact form ([00e835d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/00e835d559e32d3ebb7cc4673ee0738276b372aa))
+- **types:** update types for lead mutations mostly ([c159d0f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c159d0fa2ba5d067909bfe34cba69d3be376562c))
+
 ### 0.0.2 (2026-06-29)
 
 ### Features
