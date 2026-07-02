@@ -6,7 +6,7 @@ import GradientButton from '@/components/ui/GradientButton';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { RevealSection } from '@/components/ui/RevealSection';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Select, type SelectOption } from '@/components/ui/Select';
+import { Select, type SelectOption } from '@/components/shared/forms/AuroraSelect';
 import { IconGithub, IconLinkedin } from '@/components/ui/SocialIcons';
 import { createLead } from '@/lib/data/leads/mutations';
 import { cn } from '@/lib/utils';

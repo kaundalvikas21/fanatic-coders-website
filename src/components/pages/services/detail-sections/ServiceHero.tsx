@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
 import { RevealSection } from '@/components/ui/RevealSection';
-import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { CodeBreadcrumb } from '@/components/shared/CodeBreadcrumb';
 import { type ServiceGroup, type ServiceItem, iconColor } from '../data';
 
 export function ServiceHero({ service, group }: { service: ServiceItem; group: ServiceGroup }) {
@@ -72,7 +72,7 @@ export function ServiceHero({ service, group }: { service: ServiceItem; group: S
       <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
       <div className="relative z-10 container mx-auto px-4 sm:px-6 flex w-full max-w-6xl flex-1 flex-col justify-center">
         <RevealSection>
-          <Breadcrumb
+          <CodeBreadcrumb
             items={[
               { label: 'home', href: '/' },
               { label: 'services', href: '/services' },

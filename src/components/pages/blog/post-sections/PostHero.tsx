@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Clock, Code2, Palette, TrendingUp, Building2, Tag, type LucideIcon } from 'lucide-react';
 import type { BlogPost } from '@/types';
 import { RevealSection } from '@/components/ui/RevealSection';
-import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { CodeBreadcrumb } from '@/components/shared/CodeBreadcrumb';
 import { categoryColor } from '@/lib/categoryColor';
 
 const CATEGORY_ICON: Record<string, LucideIcon> = {
@@ -49,7 +49,7 @@ export function PostHero({ post }: { post: BlogPost }) {
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-4xl text-center">
         <RevealSection stagger>
           <div className="flex justify-center">
-            <Breadcrumb
+            <CodeBreadcrumb
               items={[
                 { label: 'home', href: '/' },
                 { label: 'blog', href: '/blog' },

@@ -13,17 +13,13 @@ interface SelectProps {
   id?: string;
   value: string;
   onChange: (value: string) => void;
-  options: SelectOption[];
+  options: readonly SelectOption[];
   placeholder?: string;
   ariaLabel?: string;
   error?: boolean;
   className?: string;
 }
 
-/**
- * Accessible custom listbox. Replaces the native <select> so the menu can match the
- * dark Aurora theme. Keyboard, click-outside, and focus return are handled in-component.
- */
 export function Select({
   id,
   value,
@@ -65,17 +61,19 @@ export function Select({
     closeMenu();
   }
 
-  // Close on outside pointer.
   useEffect(() => {
     if (!open) return;
+
     function onPointerDown(e: MouseEvent) {
-      if (!containerRef.current?.contains(e.target as Node)) closeMenu(false);
+      if (!containerRef.current?.contains(e.target as Node)) {
+        closeMenu(false);
+      }
     }
+
     document.addEventListener('mousedown', onPointerDown);
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, [open]);
 
-  // Keep the active option scrolled into view.
   useEffect(() => {
     if (!open || activeIndex < 0) return;
     const node = listRef.current?.children[activeIndex] as HTMLElement | undefined;
@@ -173,6 +171,7 @@ export function Select({
           {options.map((opt, i) => {
             const isSelected = opt.value === value;
             const isActive = i === activeIndex;
+
             return (
               <li
                 key={opt.value}

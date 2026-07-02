@@ -1,5 +1,5 @@
 import { DashboardThemeToggle } from '@/components/dashboard/shell/DashboardThemeToggle';
-import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { BreadCrumb } from '@/components/shared/BreadCrumb';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
@@ -11,7 +11,7 @@ export function DashboardHeader() {
         orientation="vertical"
         className="mr-2 data-vertical:h-4 data-vertical:self-auto"
       />
-      <Breadcrumb items={[{ label: 'dashboard' }]} />
+      <BreadCrumb />
       <div className="ml-auto">
         <DashboardThemeToggle />
       </div>

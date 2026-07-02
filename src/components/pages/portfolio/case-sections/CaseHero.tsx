@@ -12,7 +12,7 @@ import {
 import type { PortfolioProject } from '@/types';
 import GradientButton from '@/components/ui/GradientButton';
 import { RevealSection } from '@/components/ui/RevealSection';
-import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { CodeBreadcrumb } from '@/components/shared/CodeBreadcrumb';
 import { TechTile } from './TechTile';
 
 const TAG_ICONS: Record<string, LucideIcon> = {
@@ -71,7 +71,7 @@ export function CaseHero({ project }: { project: PortfolioProject }) {
 
       <div className="relative z-10 container mx-auto flex flex-1 flex-col justify-center px-4 sm:px-6 max-w-6xl">
         <RevealSection>
-          <Breadcrumb
+          <CodeBreadcrumb
             items={[
               { label: 'home', href: '/' },
               { label: 'portfolio', href: '/portfolio' },

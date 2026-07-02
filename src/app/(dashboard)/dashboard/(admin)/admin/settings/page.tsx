@@ -1,9 +1,11 @@
 import { Bell, Globe2, Shield } from 'lucide-react';
 
+import { env } from '@/config/env';
+
 const settings = [
   {
     label: 'Backend URL',
-    value: process.env.NEXT_PUBLIC_AUTH_URL ?? 'http://localhost:3005',
+    value: env.NEXT_PUBLIC_AUTH_URL,
     icon: Globe2,
   },
   {
