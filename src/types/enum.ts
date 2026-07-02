@@ -15,6 +15,18 @@ export const LEAD_STATUSES = [
   'DEAD',
 ] as const satisfies readonly LeadStatus[];
 
+export const LEAD_STATUS_OPTIONS = [
+  { value: 'NEW', label: 'New' },
+  { value: 'IN_PROGRESS', label: 'In progress' },
+  { value: 'DEAD', label: 'Closed' },
+] as const satisfies readonly { value: LeadStatus; label: string }[];
+
+export const LEAD_STATUS_BADGE_VARIANTS = {
+  NEW: 'default',
+  IN_PROGRESS: 'secondary',
+  DEAD: 'outline',
+} as const satisfies Record<LeadStatus, 'default' | 'secondary' | 'outline'>;
+
 export const LEAD_SOURCES = ['CONTACT_FORM'] as const satisfies readonly LeadSource[];
 
 export const SERVICE_INTERESTS = [
