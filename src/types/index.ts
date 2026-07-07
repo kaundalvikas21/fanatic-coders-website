@@ -16,11 +16,16 @@ export {
   LEAD_STATUS_BADGE_VARIANTS,
   LEAD_STATUS_OPTIONS,
   LEAD_STATUSES,
-  ROLES,
   SERVICE_INTEREST_OPTIONS,
   SERVICE_INTERESTS,
 } from './enum';
-export type { LeadSource, LeadStatus, Role, ServiceInterest } from './enum';
+export type { LeadSource, LeadStatus, ServiceInterest } from './enum';
+export type {
+  Invitation,
+  InviteMemberRequest,
+  InviteMemberResponse,
+  InviteMemberRole,
+} from './invitation';
 export type {
   CreateLeadInput,
   CreateLeadRequest,

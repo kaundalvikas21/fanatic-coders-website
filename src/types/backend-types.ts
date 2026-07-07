@@ -50,7 +50,7 @@ export interface paths {
         };
         /**
          * Fetch all leads
-         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         * @description Requires lead:read permission in the active organization.
          */
         get: operations["getLeads"];
         put?: never;
@@ -74,18 +74,18 @@ export interface paths {
         };
         /**
          * Fetch a lead by id
-         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         * @description Requires lead:read permission in the active organization.
          */
         get: operations["getLeadById"];
         /**
          * Update a lead by id
-         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         * @description Requires lead:update permission in the active organization.
          */
         put: operations["updateLeadById"];
         post?: never;
         /**
          * Delete a lead by id
-         * @description Requires an authenticated user with ADMIN or MANAGER role.
+         * @description Requires lead:delete permission in the active organization.
          */
         delete: operations["deleteLeadById"];
         options?: never;
@@ -97,11 +97,6 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /**
-         * @example CLIENT
-         * @enum {string}
-         */
-        Role: "ADMIN" | "CLIENT" | "MANAGER" | "MEMBER";
         /**
          * @example NEW
          * @enum {string}
@@ -145,7 +140,6 @@ export interface components {
             emailVerified: boolean;
             /** @example https://example.com/avatar.png */
             image?: string | null;
-            role: components["schemas"]["Role"];
             /**
              * Format: date-time
              * @example 2026-06-29T06:30:00.000Z
@@ -350,7 +344,7 @@ export interface components {
                 "application/json": components["schemas"]["ApiResponse"];
             };
         };
-        /** @description Authenticated user does not have an allowed role. */
+        /** @description Authenticated user does not have the required permission. */
         Forbidden: {
             headers: {
                 [name: string]: unknown;
