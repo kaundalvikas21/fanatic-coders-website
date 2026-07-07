@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { authApi, publicApi } from '@/lib/axios/client';
 import { getApiError, unwrap } from '@/lib/axios/utils';
 import type {
@@ -19,34 +20,48 @@ export async function createLead(
   payload: CreateLeadRequest,
 ): Promise<CreateLeadResponse | ApiResponse> {
   try {
-    return await unwrap<CreateLeadResponse>(publicApi.post('/api/v1/leads', payload));
+    const response = await unwrap<CreateLeadResponse>(publicApi.post('/api/v1/leads', payload));
+
+    revalidatePath('/dashboard/leads');
+
+    return response;
   } catch (error) {
     return getApiError(error);
   }
 }
 
 /**
- * Update a lead by ID for admin use
- * Requires an authenticated ADMIN or MANAGER user
+ * Update a lead by ID.
+ * Requires lead:update permission in the active organization.
  */
 export async function updateLeadById(
   id: string,
   payload: UpdateLeadByIdRequest,
 ): Promise<UpdateLeadByIdResponse | ApiResponse> {
   try {
-    return await unwrap<UpdateLeadByIdResponse>(authApi.put(`/api/v1/leads/${id}`, payload));
+    const response = await unwrap<UpdateLeadByIdResponse>(
+      authApi.put(`/api/v1/leads/${id}`, payload),
+    );
+
+    revalidatePath('/dashboard/leads');
+
+    return response;
   } catch (error) {
     return getApiError(error);
   }
 }
 
 /**
- * Delete a lead by ID for admin use
- * Requires an authenticated ADMIN or MANAGER user
+ * Delete a lead by ID.
+ * Requires lead:delete permission in the active organization.
  */
 export async function deleteLeadById(id: string): Promise<DeleteLeadByIdResponse | ApiResponse> {
   try {
-    return await unwrap<DeleteLeadByIdResponse>(authApi.delete(`/api/v1/leads/${id}`));
+    const response = await unwrap<DeleteLeadByIdResponse>(authApi.delete(`/api/v1/leads/${id}`));
+
+    revalidatePath('/dashboard/leads');
+
+    return response;
   } catch (error) {
     return getApiError(error);
   }

@@ -14,7 +14,7 @@ export const publicApi: AxiosInstance = axios.create({
 });
 
 export const authApi: AxiosInstance = axios.create({
-  baseURL: env.NEXT_PUBLIC_AUTH_URL,
+  baseURL: env.NEXT_PUBLIC_API_URL,
   timeout: 15000,
   headers: defaultHeaders,
   withCredentials: true,

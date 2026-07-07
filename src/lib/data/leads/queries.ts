@@ -5,8 +5,8 @@ import { getApiError, unwrap } from '@/lib/axios/utils';
 import type { ApiResponse, GetLeadByIdResponse, GetLeadsResponse } from '@/types';
 
 /**
- * Get all leads for admin use
- * Requires an authenticated ADMIN or MANAGER user
+ * Get all leads.
+ * Requires lead:read permission in the active organization.
  */
 export async function getLeads(): Promise<GetLeadsResponse | ApiResponse> {
   try {
@@ -17,8 +17,8 @@ export async function getLeads(): Promise<GetLeadsResponse | ApiResponse> {
 }
 
 /**
- * Get a single lead by ID for admin use
- * Requires an authenticated ADMIN or MANAGER user
+ * Get a single lead by ID.
+ * Requires lead:read permission in the active organization.
  */
 export async function getLeadById(id: string): Promise<GetLeadByIdResponse | ApiResponse> {
   try {
