@@ -1,6 +1,6 @@
 'use client';
 
-import { adminRoutes, userRoutes } from '@/config/routes';
+import { dashboardRoutes } from '@/config/routes';
 import { DashboardBrand } from '@/components/dashboard/shell/DashboardBrand';
 import { NavMain } from '@/components/dashboard/shell/NavMain';
 import { NavUser } from '@/components/dashboard/shell/NavUser';
@@ -11,15 +11,14 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { useSession } from '@/lib/auth/client';
-import { getUserRole } from '@/lib/auth/role';
+import { hasAnyRole } from '@/lib/auth/roles';
 
-type DashboardSidebarProps = React.ComponentProps<typeof Sidebar>;
+type DashboardSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  role?: string | null;
+};
 
-export function DashboardSidebar(props: DashboardSidebarProps) {
-  const { data: session } = useSession();
-  const role = getUserRole(session?.user);
-  const routes = role === 'ADMIN' ? adminRoutes : userRoutes;
+export function DashboardSidebar({ role, ...props }: DashboardSidebarProps) {
+  const routes = dashboardRoutes.filter((item) => hasAnyRole(role, item.roles));
 
   return (
     <Sidebar
