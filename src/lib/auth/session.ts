@@ -1,13 +1,7 @@
 import { authClient } from '@/lib/auth/client';
-import { getUserRole } from './role';
-import type { Role } from '@/types';
 
 export async function hasSession(headers: Headers): Promise<boolean> {
   return Boolean(await getSessionUser(headers));
-}
-
-export async function getRole(headers: Headers): Promise<Role | null> {
-  return getUserRole(await getSessionUser(headers));
 }
 
 async function getSessionUser(headers: Headers): Promise<unknown> {
