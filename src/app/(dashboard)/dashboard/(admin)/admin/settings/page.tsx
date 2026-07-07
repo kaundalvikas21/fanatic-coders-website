@@ -5,7 +5,7 @@ import { env } from '@/config/env';
 const settings = [
   {
     label: 'Backend URL',
-    value: env.NEXT_PUBLIC_AUTH_URL,
+    value: env.NEXT_PUBLIC_API_URL,
     icon: Globe2,
   },
   {

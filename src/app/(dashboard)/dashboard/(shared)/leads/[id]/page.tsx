@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
-
 import { PageHeader } from '@/components/shared/page-header';
 import { WidgetCard } from '@/components/shared/widget-card';
+import { InviteForm } from '@/components/dashboard/leads/forms/InviteForm';
+import { StatusForm } from '@/components/dashboard/leads/forms/StatusForm';
 import { getLeadById } from '@/lib/data/leads/queries';
 import type { Lead, ServiceInterest } from '@/types';
-import { LeadActions } from './lead-actions';
 
 const serviceLabels = {
   WEB_DEVELOPMENT: 'Web development',
@@ -86,8 +86,9 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
         </WidgetCard>
       </div>
 
-      <aside className="h-full">
-        <LeadActions
+      <aside className="flex h-full flex-col gap-6">
+        <InviteForm leadEmail={lead.email} />
+        <StatusForm
           leadId={lead.id}
           initialStatus={lead.status}
         />

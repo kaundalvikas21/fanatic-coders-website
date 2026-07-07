@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { Loader2, LogIn, type LucideIcon, UserPlus } from 'lucide-react';
 
 import { authClient, useSession } from '@/lib/auth/client';
+import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
 
 type AuthMode = 'login' | 'signup';
 
@@ -57,6 +58,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   useEffect(() => {
     if (session) {
+      void setFcopOrganizationActive().catch(() => null);
       router.replace('/dashboard');
     }
   }, [router, session]);
@@ -91,6 +93,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
+      await setFcopOrganizationActive().catch(() => null);
       router.replace('/dashboard');
       router.refresh();
     } catch {
