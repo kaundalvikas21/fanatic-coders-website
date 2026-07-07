@@ -2,16 +2,25 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Loader2, LogIn, type LucideIcon, UserPlus } from 'lucide-react';
 
-import { authClient, useSession } from '@/lib/auth/client';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { authClient } from '@/lib/auth/client';
 import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
+import { InputField } from '@/components/shared/forms/InputField';
 
 type AuthMode = 'login' | 'signup';
 
 type AuthFormProps = {
   mode: AuthMode;
+};
+
+type AuthFormValues = {
+  name: string;
+  email: string;
+  password: string;
 };
 
 type AuthCopy = {
@@ -50,42 +59,41 @@ const content = {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
-  const { data: session, isPending: sessionPending } = useSession();
   const [message, setMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<AuthFormValues>({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
+  });
   const copy = content[mode];
   const Icon = copy.icon;
 
-  useEffect(() => {
-    if (session) {
-      void setFcopOrganizationActive().catch(() => null);
-      router.replace('/dashboard');
-    }
-  }, [router, session]);
+  async function redirectToDashboard() {
+    await setFcopOrganizationActive().catch(() => null);
+    router.replace('/dashboard');
+    router.refresh();
+  }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function onSubmit(values: AuthFormValues) {
     setMessage(null);
-    setIsSubmitting(true);
-
-    const formData = new FormData(event.currentTarget);
-    const email = String(formData.get('email') ?? '').trim();
-    const password = String(formData.get('password') ?? '');
-
-    if (!email || !password) {
-      setMessage('Enter your email and password.');
-      setIsSubmitting(false);
-      return;
-    }
 
     try {
       const result =
         mode === 'login'
-          ? await authClient.signIn.email({ email, password })
+          ? await authClient.signIn.email({
+              email: values.email,
+              password: values.password,
+            })
           : await authClient.signUp.email({
-              name: String(formData.get('name') ?? '').trim(),
-              email,
-              password,
+              name: values.name,
+              email: values.email,
+              password: values.password,
             });
 
       if (result.error) {
@@ -93,13 +101,9 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      await setFcopOrganizationActive().catch(() => null);
-      router.replace('/dashboard');
-      router.refresh();
+      await redirectToDashboard();
     } catch {
       setMessage('Authentication failed. Please try again.');
-    } finally {
-      setIsSubmitting(false);
     }
   }
 
@@ -116,68 +120,100 @@ export function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       <form
-        className="space-y-4"
-        onSubmit={handleSubmit}
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
       >
-        {mode === 'signup' && (
-          <label className="block text-sm font-medium text-slate-200">
-            Name
-            <input
-              name="name"
-              type="text"
-              autoComplete="name"
-              required
-              className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/50 focus:ring-3 focus:ring-cyan-300/10"
-              placeholder="Ava Reyes"
-            />
-          </label>
-        )}
-
-        <label className="block text-sm font-medium text-slate-200">
-          Email
-          <input
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/50 focus:ring-3 focus:ring-cyan-300/10"
-            placeholder="you@example.com"
-          />
-        </label>
-
-        <label className="block text-sm font-medium text-slate-200">
-          Password
-          <input
-            name="password"
-            type="password"
-            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-            required
-            minLength={8}
-            className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/50 focus:ring-3 focus:ring-cyan-300/10"
-            placeholder="At least 8 characters"
-          />
-        </label>
-
-        {message && (
-          <p className="rounded-lg border border-red-300/20 bg-red-400/10 px-3 py-2 text-sm text-red-100">
-            {message}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          disabled={isSubmitting || sessionPending}
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              {copy.pending}
-            </>
-          ) : (
-            copy.submit
+        <FieldGroup>
+          {mode === 'signup' && (
+            <Field data-invalid={Boolean(errors.name)}>
+              <FieldLabel htmlFor="name">Name</FieldLabel>
+              <InputField
+                id="name"
+                type="text"
+                autoComplete="name"
+                placeholder="Ava Reyes"
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? 'name-error' : undefined}
+                {...register('name', {
+                  setValueAs: (value) => String(value).trim(),
+                  required: 'Enter your name.',
+                })}
+              />
+              <FieldError
+                id="name-error"
+                errors={[errors.name]}
+              />
+            </Field>
           )}
-        </button>
+
+          <Field data-invalid={Boolean(errors.email)}>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <InputField
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? 'email-error' : undefined}
+              {...register('email', {
+                setValueAs: (value) => String(value).trim(),
+                required: 'Enter your email.',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Enter a valid email address.',
+                },
+              })}
+            />
+            <FieldError
+              id="email-error"
+              errors={[errors.email]}
+            />
+          </Field>
+
+          <Field data-invalid={Boolean(errors.password)}>
+            <FieldLabel htmlFor="password">Password</FieldLabel>
+            <InputField
+              id="password"
+              type="password"
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              placeholder="At least 8 characters"
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={errors.password ? 'password-error' : undefined}
+              {...register('password', {
+                required: 'Enter your password.',
+                minLength: {
+                  value: 8,
+                  message: 'Password must be at least 8 characters.',
+                },
+              })}
+            />
+            <FieldError
+              id="password-error"
+              errors={[errors.password]}
+            />
+          </Field>
+
+          {message && (
+            <p className="rounded-lg border border-red-300/20 bg-red-400/10 px-3 py-2 text-sm text-red-100">
+              {message}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="size-4 animate-spin" />
+                {copy.pending}
+              </>
+            ) : (
+              copy.submit
+            )}
+          </button>
+        </FieldGroup>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-300">

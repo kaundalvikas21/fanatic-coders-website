@@ -7,5 +7,12 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/login', '/signup', '/forgot-password', '/reset-password'],
+  matcher: [
+    '/dashboard/:path*',
+    '/login',
+    '/signup',
+    '/accept-invitation',
+    '/forgot-password',
+    '/reset-password',
+  ],
 };
