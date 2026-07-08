@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.1.0...v0.2.0) (2026-07-08)
+
+### Features
+
+- **auth:** added forgot and reset password feature ([2a367ce](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2a367ced704caa131bf593e13217191e723e6cef))
+- **date:** added new package for managing date formatting ([1810c04](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1810c043f1f9523c93f929ee6e70ee523f0db4a4))
+- **factory:** added factory functions for managing response ([41f0fd5](https://github.com/kaundalvikas21/fanatic-coders-website/commit/41f0fd5ff1636bd114bd284d9d37cf5b0839404a))
+- **lead:** display leads to admin and manager ([532d223](https://github.com/kaundalvikas21/fanatic-coders-website/commit/532d22331e27c4061385afc29ba1f068a521c290))
+- **onboarding:** added invitation onboarding feature ([b8f4927](https://github.com/kaundalvikas21/fanatic-coders-website/commit/b8f49275d0f77be0836871ded3c09dbb981122a8))
+- **packages:** added new package ([ba4f773](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ba4f7734c0c5f279dd087ad91589f973f07f9ffd))
+- **server client:** added server client auth for manging that in server boundaries ([09d2312](https://github.com/kaundalvikas21/fanatic-coders-website/commit/09d23127e2acb31493c832644fa901a2dfda5c92))
+- **types:** added types and server function for managing users ([907aecd](https://github.com/kaundalvikas21/fanatic-coders-website/commit/907aecd05581ac4b7f5f28132c448b9898cd5e44))
+- **types:** generate new types using auto generated types ([d66f607](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d66f607657fa8e69ac9a87c93e625d442fb7f8a1))
+- **users:** added users list to dsiplay with filter on admin dashboard ([360450d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/360450d49151475afe19196805eefc37fa2a2d6e))
+
+### Bug Fixes
+
+- **dashboard:** display dynamic dashboard ([da8e2e0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/da8e2e090d1c196b68c9c637dbb72cc19386fe79))
+
+### Code Refactoring
+
+- **api:** fix api client ([e6d8331](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e6d8331e338a7b7e62d187dc0f80aacf3bf705f3))
+- **auth:** modify infra for auth and use organization plugin better managing ([c99d3fa](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c99d3fa6bfc25d276a5cb2205cf47454cfd41a30))
+- **config:** added enviroment configuration and routes add new endpoints ([8296b8b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8296b8beacd8810f1a4692b513e693681931b3bf))
+- **leads:** optimize component for better readabillity ([6c58d0c](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6c58d0cc595bfa85e0760c050e07be40258d8010))
+
 ## [0.1.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.0.2...v0.1.0) (2026-07-02)
 
 ### Features
