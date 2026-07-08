@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { AppToaster } from '@/components/shared/app-toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
@@ -36,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
           <AppToaster />
         </ThemeProvider>
       </body>
