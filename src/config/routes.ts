@@ -50,8 +50,8 @@ export const dashboardRoutes = [
     roles: [Role.ADMIN],
   },
   {
-    title: 'Team',
-    url: '/dashboard/admin/team',
+    title: 'Users',
+    url: '/dashboard/admin/user',
     icon: UsersRound,
     roles: [Role.ADMIN],
   },

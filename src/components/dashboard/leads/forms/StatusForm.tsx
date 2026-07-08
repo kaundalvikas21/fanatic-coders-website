@@ -3,7 +3,6 @@
 import { Controller, Watch, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { SelectField } from '@/components/shared/forms/SelectField';
-import { WidgetCard } from '@/components/shared/widget-card';
 import { Badge } from '@/components/ui/badge';
 import { updateLeadById } from '@/lib/data/leads/mutations';
 import { cn } from '@/lib/utils';
@@ -88,51 +87,43 @@ export function StatusForm({ leadId, initialStatus }: StatusFormProps) {
   }
 
   return (
-    <WidgetCard
-      title="Status"
-      description="Update the lead stage."
-      className="overflow-visible"
-      titleClassName="text-xl font-semibold"
-      descriptionClassName="text-sm"
-    >
-      <div className="flex flex-col gap-3">
-        <Watch
-          control={form.control}
-          name="status"
-          render={(status) => {
-            return (
-              <Badge
-                variant={LEAD_STATUS_BADGE_VARIANTS[status]}
-                className="w-fit"
-              >
-                {getStatusLabel(status)}
-              </Badge>
-            );
-          }}
-        />
-        <Controller
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <SelectField
-              id="lead-status"
-              value={field.value}
-              options={statusOptions}
-              onChange={(value) => updateStatus(value, field.onChange)}
-              placeholder="Select status"
-              ariaLabel="Status"
-            />
-          )}
-        />
-        {statusError && (
-          <p
-            className="text-sm text-destructive"
-            aria-live="polite"
-          >
-            {statusError}
-          </p>
+    <div className="flex flex-col gap-3">
+      <Watch
+        control={form.control}
+        name="status"
+        render={(status) => {
+          return (
+            <Badge
+              variant={LEAD_STATUS_BADGE_VARIANTS[status]}
+              className="w-fit"
+            >
+              {getStatusLabel(status)}
+            </Badge>
+          );
+        }}
+      />
+      <Controller
+        control={form.control}
+        name="status"
+        render={({ field }) => (
+          <SelectField
+            id="lead-status"
+            value={field.value}
+            options={statusOptions}
+            onChange={(value) => updateStatus(value, field.onChange)}
+            placeholder="Select status"
+            ariaLabel="Status"
+          />
         )}
-      </div>
-    </WidgetCard>
+      />
+      {statusError && (
+        <p
+          className="text-sm text-destructive"
+          aria-live="polite"
+        >
+          {statusError}
+        </p>
+      )}
+    </div>
   );
 }
