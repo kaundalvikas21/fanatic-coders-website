@@ -45,7 +45,16 @@ export type {
   UpdateLeadByIdResponse,
   UpdateLeadInput,
 } from './lead';
-export type { User } from './user';
+export { USER_SORT_FIELDS } from './user';
+export type {
+  GetUserMemberResponse,
+  GetUsersInput,
+  GetUsersResponse,
+  User,
+  UserListItem,
+  UserSortField,
+  UsersData,
+} from './user';
 
 export interface NavLink {
   label: string;
