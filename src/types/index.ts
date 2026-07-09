@@ -21,7 +21,10 @@ export {
 } from './enum';
 export type { LeadSource, LeadStatus, ServiceInterest } from './enum';
 export type {
+  GetInvitationsResponse,
   Invitation,
+  InvitationListItem,
+  InvitationsData,
   InviteMemberRequest,
   InviteMemberResponse,
   InviteMemberRole,

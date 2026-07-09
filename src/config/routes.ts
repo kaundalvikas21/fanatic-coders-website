@@ -5,6 +5,7 @@ import {
   Inbox,
   LayoutDashboard,
   ListChecks,
+  MailPlus,
   Settings,
   ShieldCheck,
   UsersRound,
@@ -53,6 +54,12 @@ export const dashboardRoutes = [
     title: 'Users',
     url: '/dashboard/admin/user',
     icon: UsersRound,
+    roles: [Role.ADMIN],
+  },
+  {
+    title: 'Invitations',
+    url: '/dashboard/admin/invitations',
+    icon: MailPlus,
     roles: [Role.ADMIN],
   },
   {
