@@ -173,7 +173,7 @@ export interface components {
          * @example NEW
          * @enum {string}
          */
-        LeadStatus: "NEW" | "IN_PROGRESS" | "DEAD";
+        LeadStatus: "NEW" | "QUALIFIED" | "IN_PROGRESS" | "DEAD";
         /**
          * @example CONTACT_FORM
          * @enum {string}

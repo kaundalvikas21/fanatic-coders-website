@@ -9,18 +9,21 @@ export type ServiceRequestStatus = Schemas['ServiceRequestStatus'];
 
 export const LEAD_STATUSES = [
   'NEW',
+  'QUALIFIED',
   'IN_PROGRESS',
   'DEAD',
 ] as const satisfies readonly LeadStatus[];
 
 export const LEAD_STATUS_OPTIONS = [
   { value: 'NEW', label: 'New' },
+  { value: 'QUALIFIED', label: 'Qualified' },
   { value: 'IN_PROGRESS', label: 'In progress' },
   { value: 'DEAD', label: 'Closed' },
 ] as const satisfies readonly { value: LeadStatus; label: string }[];
 
 export const LEAD_STATUS_BADGE_VARIANTS = {
   NEW: 'default',
+  QUALIFIED: 'secondary',
   IN_PROGRESS: 'secondary',
   DEAD: 'outline',
 } as const satisfies Record<LeadStatus, 'default' | 'secondary' | 'outline'>;
