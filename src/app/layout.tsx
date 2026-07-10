@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { AppToaster } from '@/components/shared/app-toaster';
-import { ThemeProvider } from '@/components/theme-provider';
+import { PublicProvider } from '@/providers/PublicProvider';
 import './globals.css';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -31,15 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NuqsAdapter>{children}</NuqsAdapter>
-          <AppToaster />
-        </ThemeProvider>
+        <PublicProvider>{children}</PublicProvider>
       </body>
     </html>
   );
