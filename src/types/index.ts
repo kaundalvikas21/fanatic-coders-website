@@ -18,8 +18,11 @@ export {
   LEAD_STATUSES,
   SERVICE_INTEREST_OPTIONS,
   SERVICE_INTERESTS,
+  SERVICE_REQUEST_STATUS_BADGE_VARIANTS,
+  SERVICE_REQUEST_STATUS_OPTIONS,
+  SERVICE_REQUEST_STATUSES,
 } from './enum';
-export type { LeadSource, LeadStatus, ServiceInterest } from './enum';
+export type { LeadSource, LeadStatus, ServiceInterest, ServiceRequestStatus } from './enum';
 export type {
   GetInvitationsResponse,
   Invitation,
@@ -48,6 +51,24 @@ export type {
   UpdateLeadByIdResponse,
   UpdateLeadInput,
 } from './lead';
+export type {
+  CreateServiceRequestInput,
+  CreateServiceRequestRequest,
+  CreateServiceRequestResponse,
+  DeleteServiceRequestByIdParams,
+  DeleteServiceRequestByIdResponse,
+  GetServiceRequestByIdParams,
+  GetServiceRequestByIdResponse,
+  GetServiceRequestsResponse,
+  ServiceRequest,
+  ServiceRequestData,
+  ServiceRequestResponse,
+  ServiceRequestsResponse,
+  UpdateServiceRequestByIdParams,
+  UpdateServiceRequestByIdRequest,
+  UpdateServiceRequestByIdResponse,
+  UpdateServiceRequestInput,
+} from './service-request';
 export { USER_SORT_FIELDS } from './user';
 export type {
   GetUserMemberResponse,

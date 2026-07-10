@@ -5,6 +5,7 @@ type Schemas = components['schemas'];
 export type LeadStatus = Schemas['LeadStatus'];
 export type LeadSource = Schemas['LeadSource'];
 export type ServiceInterest = Schemas['ServiceInterest'];
+export type ServiceRequestStatus = Schemas['ServiceRequestStatus'];
 
 export const LEAD_STATUSES = [
   'NEW',
@@ -43,3 +44,27 @@ export const SERVICE_INTEREST_OPTIONS = [
   { value: 'GENERAL_MARKETING', label: 'General marketing' },
   { value: 'OTHER', label: 'Other' },
 ] as const satisfies readonly { value: ServiceInterest; label: string }[];
+
+export const SERVICE_REQUEST_STATUSES = [
+  'NEW',
+  'IN_PROGRESS',
+  'COMPLETED',
+  'CANCELLED',
+] as const satisfies readonly ServiceRequestStatus[];
+
+export const SERVICE_REQUEST_STATUS_OPTIONS = [
+  { value: 'NEW', label: 'New' },
+  { value: 'IN_PROGRESS', label: 'In progress' },
+  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'CANCELLED', label: 'Cancelled' },
+] as const satisfies readonly { value: ServiceRequestStatus; label: string }[];
+
+export const SERVICE_REQUEST_STATUS_BADGE_VARIANTS = {
+  NEW: 'default',
+  IN_PROGRESS: 'secondary',
+  COMPLETED: 'outline',
+  CANCELLED: 'destructive',
+} as const satisfies Record<
+  ServiceRequestStatus,
+  'default' | 'secondary' | 'outline' | 'destructive'
+>;

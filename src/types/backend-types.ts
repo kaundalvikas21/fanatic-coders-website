@@ -41,6 +41,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Invite an organization member
+         * @description Creates a Better Auth organization invitation for the FCOP organization and sends an invitation email. Requires invitation:create permission in the active organization.
+         */
+        post: operations["inviteMember"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/leads": {
         parameters: {
             query?: never;
@@ -93,6 +113,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/service-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch service requests
+         * @description Requires serviceRequest:read permission in the active organization.
+         */
+        get: operations["getServiceRequests"];
+        put?: never;
+        /**
+         * Create a service request
+         * @description Creates a service request for the authenticated client.
+         */
+        post: operations["createServiceRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/service-requests/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch a service request by id
+         * @description Requires serviceRequest:read permission in the active organization.
+         */
+        get: operations["getServiceRequestById"];
+        /**
+         * Update a service request by id
+         * @description Requires serviceRequest:update permission in the active organization.
+         */
+        put: operations["updateServiceRequestById"];
+        post?: never;
+        /**
+         * Delete a service request by id
+         * @description Requires serviceRequest:delete permission in the active organization.
+         */
+        delete: operations["deleteServiceRequestById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -112,6 +184,11 @@ export interface components {
          * @enum {string}
          */
         ServiceInterest: "GOOGLE_ADS" | "SEO" | "WEB_DEVELOPMENT" | "MOBILE_APP_DEVELOPMENT" | "GENERAL_MARKETING" | "OTHER";
+        /**
+         * @example NEW
+         * @enum {string}
+         */
+        ServiceRequestStatus: "NEW" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
         ApiResponse: {
             /** @example true */
             success: boolean;
@@ -294,6 +371,46 @@ export interface components {
             budgetRange?: string | null;
             status?: components["schemas"]["LeadStatus"];
         };
+        /**
+         * @description Service-specific answers collected from the selected service template.
+         * @example {
+         *       "websiteUrl": "https://example.com",
+         *       "targetKeywords": [
+         *         "seo agency",
+         *         "web development"
+         *       ]
+         *     }
+         */
+        ServiceRequestData: {
+            [key: string]: unknown;
+        };
+        ServiceRequest: {
+            /** @example clx0000000000000000000006 */
+            id: string;
+            /** @example clx0000000000000000000005 */
+            clientId: string;
+            service: components["schemas"]["ServiceInterest"];
+            status: components["schemas"]["ServiceRequestStatus"];
+            data?: components["schemas"]["ServiceRequestData"] | null;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-29T06:30:00.000Z
+             */
+            updatedAt: string;
+        };
+        CreateServiceRequestRequest: {
+            service: components["schemas"]["ServiceInterest"];
+            data?: components["schemas"]["ServiceRequestData"];
+        };
+        UpdateServiceRequestRequest: {
+            status?: components["schemas"]["ServiceRequestStatus"];
+            data?: components["schemas"]["ServiceRequestData"];
+        };
         RequestPasswordResetRequest: {
             /**
              * Format: email
@@ -313,11 +430,65 @@ export interface components {
             /** @example If an account exists for this email, a password reset link has been sent. */
             message?: string;
         };
+        /**
+         * @example CLIENT
+         * @enum {string}
+         */
+        InviteMemberRole: "MANAGER" | "MEMBER" | "CLIENT";
+        InviteMemberRequest: {
+            /**
+             * Format: email
+             * @example client@example.com
+             */
+            email: string;
+            role: components["schemas"]["InviteMemberRole"];
+            /**
+             * @description Resend the invitation email if a pending invitation already exists.
+             * @example true
+             */
+            resend?: boolean;
+        };
+        Invitation: {
+            /** @example clx0000000000000000000005 */
+            id: string;
+            /**
+             * Format: email
+             * @example client@example.com
+             */
+            email: string;
+            /** @example CLIENT */
+            role: string;
+            /** @example seed-org-fanatic-coders */
+            organizationId: string;
+            /** @example seed-user-admin */
+            inviterId: string;
+            /** @example pending */
+            status: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-08T06:30:00.000Z
+             */
+            expiresAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-06T06:30:00.000Z
+             */
+            createdAt?: string;
+        };
+        InvitationResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Invitation"];
+        };
         LeadsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Lead"][];
         };
         LeadResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Lead"];
+        };
+        ServiceRequestsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["ServiceRequest"][];
+        };
+        ServiceRequestResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["ServiceRequest"];
         };
         HealthResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["HealthData"];
@@ -357,6 +528,8 @@ export interface components {
     parameters: {
         /** @example clx0000000000000000000004 */
         LeadId: string;
+        /** @example clx0000000000000000000006 */
+        ServiceRequestId: string;
     };
     requestBodies: never;
     headers: never;
@@ -408,6 +581,50 @@ export interface operations {
             };
             /** @description Invalid email or redirect URL. */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    inviteMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteMemberRequest"];
+            };
+        };
+        responses: {
+            /** @description Invitation created and invitation email queued/sent. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationResponse"];
+                };
+            };
+            /** @description Invalid invitation payload or Better Auth rejected the invitation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description FCOP organization has not been bootstrapped. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -577,6 +794,186 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             /** @description Lead was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getServiceRequests: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Service requests fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceRequestsResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createServiceRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateServiceRequestRequest"];
+            };
+        };
+        responses: {
+            /** @description Service request created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceRequestResponse"];
+                };
+            };
+            /** @description Invalid service request payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            /** @description Client profile has not been created. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getServiceRequestById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                id: components["parameters"]["ServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Service request fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceRequestResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    updateServiceRequestById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                id: components["parameters"]["ServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateServiceRequestRequest"];
+            };
+        };
+        responses: {
+            /** @description Service request updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceRequestResponse"];
+                };
+            };
+            /** @description Invalid service request payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteServiceRequestById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                id: components["parameters"]["ServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Service request deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceRequestResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found. */
             404: {
                 headers: {
                     [name: string]: unknown;
