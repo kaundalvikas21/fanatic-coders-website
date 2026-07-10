@@ -5,7 +5,14 @@ import { hasSession } from './session';
 export async function authMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isDashboardPath = pathname.startsWith('/dashboard');
+  const isAuthOnlyPath = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(
+    pathname,
+  );
   const sessionExists = await hasSession(request.headers);
+
+  if (isAuthOnlyPath && sessionExists) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 
   // Dashboard routes require a valid session before checking permissions.
   if (isDashboardPath && !sessionExists) {

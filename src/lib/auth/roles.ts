@@ -1,3 +1,6 @@
+import { authClient } from '@/lib/auth/client';
+import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';
+
 export const Role = {
   ADMIN: 'ADMIN',
   CLIENT: 'CLIENT',
@@ -13,29 +16,6 @@ export const USER_ROLE_OPTIONS = USER_ROLES.map((role) => ({
   value: role,
   label: `${role.charAt(0)}${role.slice(1).toLowerCase()}`,
 }));
-
-const routeAccess = [
-  {
-    prefix: '/dashboard/admin',
-    roles: [Role.ADMIN],
-  },
-  {
-    prefix: '/dashboard/client',
-    roles: USER_ROLES,
-  },
-  {
-    prefix: '/dashboard/leads',
-    roles: [Role.ADMIN, Role.MANAGER],
-  },
-  {
-    prefix: '/dashboard/projects',
-    roles: ALL_ROLES,
-  },
-  {
-    prefix: '/dashboard/tasks',
-    roles: [Role.ADMIN, Role.MANAGER, Role.MEMBER],
-  },
-] satisfies readonly { prefix: string; roles: readonly Role[] }[];
 
 export function parseRoles(role?: string | null): Role[] {
   if (!role) {
@@ -58,14 +38,16 @@ export function getRoleHomePath(role: string | null | undefined) {
   return hasAnyRole(role, [Role.ADMIN]) ? '/dashboard/admin' : '/dashboard/client';
 }
 
-export function canAccessDashboardPath(role: string | null | undefined, pathname: string) {
-  if (pathname === '/dashboard') {
-    return true;
-  }
+export async function getRole(headers: Headers) {
+  const result = await authClient.organization.getActiveMemberRole({
+    query: {
+      organizationSlug: FCOP_ORGANIZATION_SLUG,
+    },
+    fetchOptions: {
+      headers,
+      cache: 'no-store',
+    },
+  });
 
-  const match = routeAccess.find(
-    (item) => pathname === item.prefix || pathname.startsWith(`${item.prefix}/`),
-  );
-
-  return match ? hasAnyRole(role, match.roles) : true;
+  return result.data?.role ?? null;
 }
