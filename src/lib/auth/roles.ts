@@ -9,6 +9,10 @@ export type Role = (typeof Role)[keyof typeof Role];
 
 export const ALL_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 export const USER_ROLES = [Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
+export const USER_ROLE_OPTIONS = USER_ROLES.map((role) => ({
+  value: role,
+  label: `${role.charAt(0)}${role.slice(1).toLowerCase()}`,
+}));
 
 const routeAccess = [
   {

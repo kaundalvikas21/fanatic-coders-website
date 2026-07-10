@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BackButton } from '@/components/shared/back-button';
@@ -13,11 +13,8 @@ type PageHeaderProps = {
     label: string;
     href: string;
   };
+  actionSlot?: ReactNode;
 };
-
-function isExternalHref(href: string) {
-  return href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('http');
-}
 
 export function PageHeader({
   title,
@@ -25,6 +22,7 @@ export function PageHeader({
   showBackButton = false,
   backLabel = 'Back',
   action,
+  actionSlot,
 }: PageHeaderProps) {
   return (
     <Card>
@@ -36,15 +34,14 @@ export function PageHeader({
             {description && <CardDescription>{description}</CardDescription>}
           </div>
         </div>
-        {action && (
+        {(action || actionSlot) && (
           <CardAction className="flex flex-wrap items-center gap-2">
-            <Button asChild>
-              {isExternalHref(action.href) ? (
-                <a href={action.href}>{action.label}</a>
-              ) : (
+            {actionSlot}
+            {action && (
+              <Button asChild>
                 <Link href={action.href}>{action.label}</Link>
-              )}
-            </Button>
+              </Button>
+            )}
           </CardAction>
         )}
       </CardHeader>
