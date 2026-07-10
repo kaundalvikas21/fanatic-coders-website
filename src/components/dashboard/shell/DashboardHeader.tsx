@@ -1,5 +1,5 @@
-import { DashboardThemeToggle } from '@/components/dashboard/shell/DashboardThemeToggle';
 import { BreadCrumb } from '@/components/shared/BreadCrumb';
+import { ThemeToggle } from '@/components/shared/Toggle';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
@@ -25,7 +25,7 @@ export function DashboardHeader({ organizationSlug, role }: DashboardHeaderProps
         >
           {organizationSlug ?? 'no-org'} / {role ?? 'no-role'}
         </Badge>
-        <DashboardThemeToggle />
+        <ThemeToggle />
       </div>
     </header>
   );
