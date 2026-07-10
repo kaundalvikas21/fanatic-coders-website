@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.2.0...v0.2.1) (2026-07-10)
+
+### Features
+
+- **invitation:** added components pages for regarding invitation ([c8461ae](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c8461ae9c546e008e790a86601b2f89ed8bc3a89))
+- **invitation:** added invitation navigation and types ([70f01d5](https://github.com/kaundalvikas21/fanatic-coders-website/commit/70f01d58421100f9ee276f60cfc7c0f1d3a4fb01))
+- **sheet:** added reusable sheet for creating component ([4249784](https://github.com/kaundalvikas21/fanatic-coders-website/commit/4249784470e6aae3d40a8067c9e755c8e906cec5))
+- **types:** added service request types ([b8ab0e5](https://github.com/kaundalvikas21/fanatic-coders-website/commit/b8ab0e5b4fdef44ec8fda940eb1c232ac4b832bf))
+- **zod:** added zod package for validation ([5548255](https://github.com/kaundalvikas21/fanatic-coders-website/commit/5548255aa9a0e1eaed8c5b55e52fb129e1402d6c))
+
+### Bug Fixes
+
+- **ui:** fix theme toggle related issue ([21eb1f0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/21eb1f08f0b8376e43bc8b650eaa9820af957293))
+- **ui:** remove link tag from page header ([71e524f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/71e524ff4076e5c962a12964dbd7aeb4700e0369))
+
+### Code Refactoring
+
+- **auth:** fix auth roles related issues , added auth middlware ts ([56189d6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/56189d64565e14036437719f1038fe86539294fc))
+- **dashboard:** reorganize component structure of layout ([244d342](https://github.com/kaundalvikas21/fanatic-coders-website/commit/244d34245ba7c8f4e000697cf82bfd1d90ca6166))
+- **provider:** reorganize files for managing providers based on concern ([8e96d3b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8e96d3bea2cdf7f025af2e2e52466d5398fbdabd))
+- **types:** refactor types for remove repeated types shape repsonse and mkeep it simple ([6d8f502](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6d8f50297273d69a49767e817dde2e2e1f8321d0))
+
 ## [0.2.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.1.0...v0.2.0) (2026-07-08)
 
 ### Features
