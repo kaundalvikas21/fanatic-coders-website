@@ -62,3 +62,6 @@ graphify-out/manifest.json
 
 # Feature prds
 /featureprd
+
+# Local static design templates
+/src/templates/

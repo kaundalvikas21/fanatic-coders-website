@@ -4,6 +4,7 @@ type AcceptInvitationPageProps = {
   searchParams: Promise<{
     invitationId?: string;
     email?: string;
+    serviceInterest?: string;
   }>;
 };
 
@@ -18,6 +19,7 @@ export default async function AcceptInvitationPage({ searchParams }: AcceptInvit
     <AcceptInvitationFlow
       invitationId={params.invitationId}
       invitedEmail={params.email}
+      serviceInterest={params.serviceInterest}
     />
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Form from '@rjsf/shadcn';
 import type { IChangeEvent } from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
@@ -20,7 +21,7 @@ import {
 import { getServiceRequestStepJsonSchema } from '@/modules/service-requests/schemas/rjsf';
 import { getServiceRequestStepUiSchema } from '@/modules/service-requests/schemas/ui-schema';
 import { getCreateServiceRequestFormSchema } from '@/modules/service-requests/schemas/zod';
-import { SERVICE_INTEREST_OPTIONS, type ServiceInterest } from '@/types';
+import { SERVICE_INTEREST_OPTIONS, SERVICE_INTERESTS, type ServiceInterest } from '@/types';
 import { ServiceRequestProgress } from './ServiceRequestProgress';
 import { ServiceRequestReview } from './ServiceRequestReview';
 import { ServiceRequestStepCard } from './ServiceRequestStepCard';
@@ -36,6 +37,12 @@ type JsonObject = Record<string, unknown>;
 
 const defaultService = SERVICE_INTEREST_OPTIONS[0]?.value ?? 'WEB_DEVELOPMENT';
 
+function getInitialService(value: string | null): ServiceInterest {
+  return SERVICE_INTERESTS.includes(value as ServiceInterest)
+    ? (value as ServiceInterest)
+    : defaultService;
+}
+
 function mergeData(current: JsonObject, next: unknown) {
   if (!next || typeof next !== 'object' || Array.isArray(next)) {
     return current;
@@ -48,10 +55,12 @@ function mergeData(current: JsonObject, next: unknown) {
 }
 
 export function ServiceRequestForm() {
-  const [service, setService] = useState<ServiceInterest>(defaultService);
+  const searchParams = useSearchParams();
+  const initialService = getInitialService(searchParams.get('serviceInterest'));
+  const [service, setService] = useState<ServiceInterest>(initialService);
   const [stepIndex, setStepIndex] = useState(0);
   const [formData, setFormData] = useState<JsonObject>(() =>
-    getServiceRequestDefaultValues(defaultService),
+    getServiceRequestDefaultValues(initialService),
   );
   const [isPending, startTransition] = useTransition();
   const template = useMemo(() => getServiceRequestTemplate(service), [service]);

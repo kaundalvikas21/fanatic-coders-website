@@ -1,11 +1,13 @@
 import type { ApiResponse, Response } from './api';
 import type { authServerClient } from '@/lib/auth/server-client';
+import type { ServiceInterest } from './enum';
 
 export type InviteMemberRole = 'CLIENT' | 'MANAGER' | 'MEMBER';
 
 export type InviteMemberRequest = {
   email: string;
   role: InviteMemberRole;
+  serviceInterest?: ServiceInterest;
   resend?: boolean;
 };
 

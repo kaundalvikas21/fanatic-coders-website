@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, LogIn, LogOut, UserPlus } from 'lucide-react';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
@@ -13,6 +13,7 @@ type InviteAuthMode = 'signup' | 'login';
 type AcceptInvitationFlowProps = {
   invitationId?: string;
   invitedEmail?: string;
+  serviceInterest?: string;
 };
 
 const modeCopy = {
@@ -52,13 +53,19 @@ const wait = (milliseconds: number) =>
     window.setTimeout(resolve, milliseconds);
   });
 
-export function AcceptInvitationFlow({ invitationId, invitedEmail }: AcceptInvitationFlowProps) {
+export function AcceptInvitationFlow({
+  invitationId,
+  invitedEmail,
+  serviceInterest,
+}: AcceptInvitationFlowProps) {
   const router = useRouter();
   const { data: session, isPending: sessionPending } = useSession();
   const [mode, setMode] = useState<InviteAuthMode>('signup');
   const [message, setMessage] = useState<string | null>(null);
   const [offerSignOut, setOfferSignOut] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isAcceptingInvitationRef = useRef(false);
+  const hasAcceptedInvitationRef = useRef(false);
   const copy = modeCopy[mode];
   const Icon = copy.icon;
   const sessionEmail = session?.user.email;
@@ -67,6 +74,10 @@ export function AcceptInvitationFlow({ invitationId, invitedEmail }: AcceptInvit
   );
 
   async function finishInvitation() {
+    if (isAcceptingInvitationRef.current || hasAcceptedInvitationRef.current) {
+      return;
+    }
+
     if (!invitationId) {
       setMessage('This invitation link is missing an invitation id.');
       return;
@@ -78,11 +89,14 @@ export function AcceptInvitationFlow({ invitationId, invitedEmail }: AcceptInvit
       return;
     }
 
+    isAcceptingInvitationRef.current = true;
+
     const result = await authClient.organization.acceptInvitation({
       invitationId,
     });
 
     if (result.error) {
+      isAcceptingInvitationRef.current = false;
       const errorMessage = result.error.message ?? 'Could not accept this invitation.';
 
       if (errorMessage.toLowerCase().includes('not the recipient')) {
@@ -99,8 +113,13 @@ export function AcceptInvitationFlow({ invitationId, invitedEmail }: AcceptInvit
       return;
     }
 
+    hasAcceptedInvitationRef.current = true;
     await setFcopOrganizationActive().catch(() => null);
-    router.replace('/dashboard');
+    router.replace(
+      serviceInterest
+        ? `/dashboard/client/service-requests/new?serviceInterest=${encodeURIComponent(serviceInterest)}`
+        : '/dashboard',
+    );
     router.refresh();
   }
 

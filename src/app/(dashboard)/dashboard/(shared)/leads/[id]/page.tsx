@@ -80,7 +80,10 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           titleClassName="text-xl font-semibold"
           descriptionClassName="text-sm"
         >
-          <InviteForm leadEmail={lead.email} />
+          <InviteForm
+            leadEmail={lead.email}
+            serviceInterest={lead.serviceInterest}
+          />
         </WidgetCard>
 
         {/* Status Action */}

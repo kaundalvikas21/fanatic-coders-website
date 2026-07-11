@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { inviteMember } from '@/lib/data/invitations/mutations';
+import type { ServiceInterest } from '@/types';
 
 type InviteFormProps = {
   leadEmail: string;
+  serviceInterest: ServiceInterest;
 };
 
 type InviteFormValues = {
@@ -15,7 +17,7 @@ type InviteFormValues = {
   resend: boolean;
 };
 
-export function InviteForm({ leadEmail }: InviteFormProps) {
+export function InviteForm({ leadEmail, serviceInterest }: InviteFormProps) {
   const form = useForm<InviteFormValues>({
     defaultValues: {
       email: leadEmail,
@@ -28,6 +30,7 @@ export function InviteForm({ leadEmail }: InviteFormProps) {
     const result = await inviteMember({
       email: values.email.trim().toLowerCase(),
       role: values.role,
+      serviceInterest,
       resend: values.resend,
     });
 
