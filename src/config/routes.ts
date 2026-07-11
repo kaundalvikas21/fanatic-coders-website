@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 import {
   Blocks,
   BriefcaseBusiness,
+  ClipboardList,
   Inbox,
   LayoutDashboard,
   ListChecks,
@@ -72,6 +73,12 @@ export const dashboardRoutes = [
     title: 'Client',
     url: '/dashboard/client',
     icon: Blocks,
+    roles: USER_ROLES,
+  },
+  {
+    title: 'Services',
+    url: '/dashboard/client/service-requests/new',
+    icon: ClipboardList,
     roles: USER_ROLES,
   },
 ] satisfies DashboardRoute[];
