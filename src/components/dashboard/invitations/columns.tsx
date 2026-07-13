@@ -5,7 +5,7 @@ import { ArrowUpDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { InvitationListItem } from '@/types';
-import { formatMediumDate } from '@/utils/date';
+import { formatDate } from '@/utils/date';
 import { getUserRoleBadgeVariant } from '@/utils/user-formatters';
 
 function getInvitationStatusVariant(status: string) {
@@ -60,14 +60,14 @@ export const invitationColumns: ColumnDef<InvitationListItem>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{formatMediumDate(row.original.createdAt)}</span>
+      <span className="text-muted-foreground">{formatDate(row.original.createdAt)}</span>
     ),
   },
   {
     accessorKey: 'expiresAt',
     header: 'Expires',
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{formatMediumDate(row.original.expiresAt)}</span>
+      <span className="text-muted-foreground">{formatDate(row.original.expiresAt)}</span>
     ),
   },
 ];

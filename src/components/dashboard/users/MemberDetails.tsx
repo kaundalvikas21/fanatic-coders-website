@@ -1,6 +1,6 @@
 import { DetailItem } from '@/components/shared/detail-item';
 import type { UserListItem } from '@/types';
-import { formatMediumDate } from '@/utils/date';
+import { formatDate } from '@/utils/date';
 
 export function MemberDetails({ member }: { member: UserListItem }) {
   return (
@@ -27,7 +27,7 @@ export function MemberDetails({ member }: { member: UserListItem }) {
       />
       <DetailItem
         label="Joined"
-        value={formatMediumDate(member.createdAt)}
+        value={formatDate(member.createdAt)}
       />
     </dl>
   );

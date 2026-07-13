@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { UserListItem } from '@/types';
-import { formatMediumDate } from '@/utils/date';
+import { formatDate } from '@/utils/date';
 import { getInitials } from '@/utils/string';
 import { getUserRoleBadgeVariant } from '@/utils/user-formatters';
 
@@ -84,7 +84,7 @@ export const userColumns: ColumnDef<UserListItem>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{formatMediumDate(row.original.createdAt)}</span>
+      <span className="text-muted-foreground">{formatDate(row.original.createdAt)}</span>
     ),
   },
   {

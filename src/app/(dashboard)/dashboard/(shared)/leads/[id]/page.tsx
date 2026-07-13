@@ -6,7 +6,7 @@ import { InviteForm } from '@/components/dashboard/leads/forms/InviteForm';
 import { StatusForm } from '@/components/dashboard/leads/forms/StatusForm';
 import { getLeadById } from '@/lib/data/leads/queries';
 import type { Lead, ServiceInterest } from '@/types';
-import { formatMediumDate } from '@/utils/date';
+import { formatDate } from '@/utils/date';
 
 const serviceLabels = {
   WEB_DEVELOPMENT: 'Web development',
@@ -62,11 +62,11 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             />
             <DetailItem
               label="Created"
-              value={formatMediumDate(lead.createdAt)}
+              value={formatDate(lead.createdAt)}
             />
             <DetailItem
               label="Updated"
-              value={formatMediumDate(lead.updatedAt)}
+              value={formatDate(lead.updatedAt)}
             />
           </dl>
         </WidgetCard>
