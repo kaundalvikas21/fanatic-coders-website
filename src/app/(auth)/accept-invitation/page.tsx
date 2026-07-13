@@ -1,4 +1,8 @@
 import { AcceptInvitationFlow } from '@/components/auth/AcceptInvitationFlow';
+import {
+  getServiceRequestRoute,
+  parseServiceRequestService,
+} from '@/modules/service-requests/config/service-routes';
 
 type AcceptInvitationPageProps = {
   searchParams: Promise<{
@@ -14,12 +18,13 @@ export const metadata = {
 
 export default async function AcceptInvitationPage({ searchParams }: AcceptInvitationPageProps) {
   const params = await searchParams;
+  const service = parseServiceRequestService(params.serviceInterest);
 
   return (
     <AcceptInvitationFlow
       invitationId={params.invitationId}
       invitedEmail={params.email}
-      serviceInterest={params.serviceInterest}
+      redirectPath={service ? getServiceRequestRoute(service) : '/dashboard'}
     />
   );
 }

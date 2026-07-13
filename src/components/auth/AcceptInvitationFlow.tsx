@@ -1,19 +1,22 @@
 'use client';
 
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, LogIn, LogOut, UserPlus } from 'lucide-react';
+import { LogIn, UserPlus } from 'lucide-react';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import { authClient, useSession } from '@/lib/auth/client';
 import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
-import { InputField } from '@/components/shared/forms/InputField';
+import { AuthLayout } from './AuthLayout';
+import { AuthSubmitButton } from './AuthSubmitButton';
+import { AUTH_INPUT_CLASS_NAME } from './auth-styles';
 
 type InviteAuthMode = 'signup' | 'login';
 
 type AcceptInvitationFlowProps = {
   invitationId?: string;
   invitedEmail?: string;
-  serviceInterest?: string;
+  redirectPath?: string;
 };
 
 const modeCopy = {
@@ -56,28 +59,20 @@ const wait = (milliseconds: number) =>
 export function AcceptInvitationFlow({
   invitationId,
   invitedEmail,
-  serviceInterest,
+  redirectPath = '/dashboard',
 }: AcceptInvitationFlowProps) {
   const router = useRouter();
   const { data: session, isPending: sessionPending } = useSession();
   const [mode, setMode] = useState<InviteAuthMode>('signup');
   const [message, setMessage] = useState<string | null>(null);
-  const [offerSignOut, setOfferSignOut] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isAcceptingInvitationRef = useRef(false);
-  const hasAcceptedInvitationRef = useRef(false);
   const copy = modeCopy[mode];
-  const Icon = copy.icon;
   const sessionEmail = session?.user.email;
   const hasMismatchedSession = Boolean(
     invitedEmail && sessionEmail && invitedEmail.toLowerCase() !== sessionEmail.toLowerCase(),
   );
 
-  async function finishInvitation() {
-    if (isAcceptingInvitationRef.current || hasAcceptedInvitationRef.current) {
-      return;
-    }
-
+  async function acceptInvitation() {
     if (!invitationId) {
       setMessage('This invitation link is missing an invitation id.');
       return;
@@ -85,42 +80,27 @@ export function AcceptInvitationFlow({
 
     if (hasMismatchedSession) {
       setMessage(`This invitation is for ${invitedEmail}. Sign out from ${sessionEmail} first.`);
-      setOfferSignOut(true);
       return;
     }
 
-    isAcceptingInvitationRef.current = true;
+    setIsSubmitting(true);
 
-    const result = await authClient.organization.acceptInvitation({
-      invitationId,
-    });
+    try {
+      const result = await authClient.organization.acceptInvitation({
+        invitationId,
+      });
 
-    if (result.error) {
-      isAcceptingInvitationRef.current = false;
-      const errorMessage = result.error.message ?? 'Could not accept this invitation.';
-
-      if (errorMessage.toLowerCase().includes('not the recipient')) {
-        setOfferSignOut(true);
-        setMessage(
-          sessionEmail
-            ? `This invitation is not for ${sessionEmail}. Sign out and continue with the invited email.`
-            : errorMessage,
-        );
+      if (result.error) {
+        setMessage(result.error.message ?? 'Could not accept this invitation.');
         return;
       }
 
-      setMessage(errorMessage);
-      return;
+      await setFcopOrganizationActive().catch(() => null);
+      router.replace(redirectPath);
+      router.refresh();
+    } finally {
+      setIsSubmitting(false);
     }
-
-    hasAcceptedInvitationRef.current = true;
-    await setFcopOrganizationActive().catch(() => null);
-    router.replace(
-      serviceInterest
-        ? `/dashboard/client/service-requests/new?serviceInterest=${encodeURIComponent(serviceInterest)}`
-        : '/dashboard',
-    );
-    router.refresh();
   }
 
   async function waitForSession() {
@@ -142,30 +122,16 @@ export function AcceptInvitationFlow({
   }
 
   useEffect(() => {
-    if (session) {
-      void finishInvitation();
+    if (session && !isSubmitting) {
+      void acceptInvitation();
     }
-    // finishInvitation depends on UI state; session/invitationId are the behavior triggers.
+    // Accept when an existing matching session opens an invitation link.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, invitationId]);
-
-  async function handleSignOut() {
-    setMessage(null);
-    setOfferSignOut(false);
-    setIsSubmitting(true);
-
-    try {
-      await authClient.signOut();
-      router.refresh();
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
+  }, [sessionEmail, invitationId]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage(null);
-    setOfferSignOut(false);
     setIsSubmitting(true);
 
     const formData = new FormData(event.currentTarget);
@@ -204,7 +170,7 @@ export function AcceptInvitationFlow({
         return;
       }
 
-      await finishInvitation();
+      await acceptInvitation();
     } catch {
       setMessage('Authentication failed. Please try again.');
     } finally {
@@ -213,40 +179,38 @@ export function AcceptInvitationFlow({
   }
 
   return (
-    <section className="mx-auto w-full max-w-md rounded-lg border border-white/10 bg-white/[0.04] p-6 shadow-2xl shadow-black/30">
-      <div className="mb-8 flex items-start gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-cyan-300/20 bg-cyan-400/10 text-cyan-200">
-          <Icon className="size-5" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold tracking-normal text-white">{copy.title}</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-300">{copy.description}</p>
-        </div>
-      </div>
-
+    <AuthLayout
+      title={copy.title}
+      description={copy.description}
+      icon={copy.icon}
+    >
       <form onSubmit={handleSubmit}>
         <FieldGroup>
           {mode === 'signup' && (
+            // Collect display name only when the invited user creates an account.
             <Field>
               <FieldLabel htmlFor="invite-name">Name</FieldLabel>
-              <InputField
+              <Input
                 id="invite-name"
                 name="name"
                 type="text"
                 autoComplete="name"
+                className={AUTH_INPUT_CLASS_NAME}
                 required
                 placeholder="Ava Reyes"
               />
             </Field>
           )}
 
+          {/* Invitation recipient email; locked when email is present in the invite link. */}
           <Field>
             <FieldLabel htmlFor="invite-email">Email</FieldLabel>
-            <InputField
+            <Input
               id="invite-email"
               name="email"
               type="email"
               autoComplete="email"
+              className={AUTH_INPUT_CLASS_NAME}
               required
               readOnly={Boolean(invitedEmail)}
               defaultValue={invitedEmail ?? ''}
@@ -254,13 +218,15 @@ export function AcceptInvitationFlow({
             />
           </Field>
 
+          {/* Password for signing in or creating the invited account. */}
           <Field>
             <FieldLabel htmlFor="invite-password">Password</FieldLabel>
-            <InputField
+            <Input
               id="invite-password"
               name="password"
               type="password"
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              className={AUTH_INPUT_CLASS_NAME}
               required
               minLength={8}
               placeholder="At least 8 characters"
@@ -273,38 +239,12 @@ export function AcceptInvitationFlow({
             </p>
           )}
 
-          {(hasMismatchedSession || offerSignOut) && (
-            <button
-              type="button"
-              disabled={isSubmitting}
-              onClick={handleSignOut}
-              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <LogOut className="size-4" />
-              Sign out
-            </button>
-          )}
-
-          <button
-            type="submit"
-            disabled={
-              isSubmitting ||
-              sessionPending ||
-              hasMismatchedSession ||
-              offerSignOut ||
-              !invitationId
-            }
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                {copy.pending}
-              </>
-            ) : (
-              copy.submit
-            )}
-          </button>
+          <AuthSubmitButton
+            label={copy.submit}
+            pendingLabel={copy.pending}
+            isPending={isSubmitting}
+            disabled={isSubmitting || sessionPending || hasMismatchedSession || !invitationId}
+          />
         </FieldGroup>
       </form>
 
@@ -321,6 +261,6 @@ export function AcceptInvitationFlow({
           {copy.switchLabel}
         </button>
       </p>
-    </section>
+    </AuthLayout>
   );
 }

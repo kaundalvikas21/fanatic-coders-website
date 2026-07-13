@@ -4,9 +4,13 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { KeyRound, Loader2 } from 'lucide-react';
-
+import { KeyRound } from 'lucide-react';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth/client';
+import { AuthLayout } from './AuthLayout';
+import { AuthSubmitButton } from './AuthSubmitButton';
+import { AUTH_INPUT_CLASS_NAME } from './auth-styles';
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -58,93 +62,82 @@ export function ResetPasswordForm() {
   const isSubmitting = form.formState.isSubmitting;
 
   return (
-    <section className="mx-auto w-full max-w-md rounded-lg border border-white/10 bg-white/4 p-6 shadow-2xl shadow-black/30">
-      <div className="mb-8 flex items-start gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-cyan-300/20 bg-cyan-400/10 text-cyan-200">
-          <KeyRound className="size-5" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold tracking-normal text-white">Set new password</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-300">
-            Choose a new password for your account.
-          </p>
-        </div>
-      </div>
-
+    <AuthLayout
+      title="Set new password"
+      description="Choose a new password for your account."
+      icon={KeyRound}
+    >
       {!token && (
         <p className="mb-4 rounded-lg border border-red-300/20 bg-red-400/10 px-3 py-2 text-sm text-red-100">
           This reset link is invalid or expired. Request a new link to continue.
         </p>
       )}
 
-      <form
-        className="space-y-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <label className="block text-sm font-medium text-slate-200">
-          New password
-          <input
-            type="password"
-            autoComplete="new-password"
-            disabled={!token || isComplete}
-            className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/50 focus:ring-3 focus:ring-cyan-300/10 disabled:cursor-not-allowed disabled:opacity-60"
-            placeholder="At least 8 characters"
-            {...form.register('password', {
-              required: 'Enter a new password.',
-              minLength: {
-                value: MIN_PASSWORD_LENGTH,
-                message: 'Use at least 8 characters.',
-              },
-            })}
-          />
-        </label>
-        {passwordError && (
-          <p className="rounded-lg border border-red-300/20 bg-red-400/10 px-3 py-2 text-sm text-red-100">
-            {passwordError}
-          </p>
-        )}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FieldGroup>
+          {/* New password saved for the reset token. */}
+          <Field data-invalid={Boolean(passwordError)}>
+            <FieldLabel htmlFor="new-password">New password</FieldLabel>
+            <Input
+              id="new-password"
+              type="password"
+              autoComplete="new-password"
+              className={AUTH_INPUT_CLASS_NAME}
+              disabled={!token || isComplete}
+              placeholder="At least 8 characters"
+              aria-invalid={Boolean(passwordError)}
+              aria-describedby={passwordError ? 'new-password-error' : undefined}
+              {...form.register('password', {
+                required: 'Enter a new password.',
+                minLength: {
+                  value: MIN_PASSWORD_LENGTH,
+                  message: 'Use at least 8 characters.',
+                },
+              })}
+            />
+            <FieldError
+              id="new-password-error"
+              errors={[form.formState.errors.password]}
+            />
+          </Field>
 
-        <label className="block text-sm font-medium text-slate-200">
-          Confirm password
-          <input
-            type="password"
-            autoComplete="new-password"
-            disabled={!token || isComplete}
-            className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/50 focus:ring-3 focus:ring-cyan-300/10 disabled:cursor-not-allowed disabled:opacity-60"
-            placeholder="Repeat new password"
-            {...form.register('confirmPassword', {
-              required: 'Confirm your new password.',
-              validate: (value) =>
-                value === form.getValues('password') || 'Passwords do not match.',
-            })}
-          />
-        </label>
-        {confirmPasswordError && (
-          <p className="rounded-lg border border-red-300/20 bg-red-400/10 px-3 py-2 text-sm text-red-100">
-            {confirmPasswordError}
-          </p>
-        )}
+          {/* Confirmation field prevents accidental password typos. */}
+          <Field data-invalid={Boolean(confirmPasswordError)}>
+            <FieldLabel htmlFor="confirm-password">Confirm password</FieldLabel>
+            <Input
+              id="confirm-password"
+              type="password"
+              autoComplete="new-password"
+              className={AUTH_INPUT_CLASS_NAME}
+              disabled={!token || isComplete}
+              placeholder="Repeat new password"
+              aria-invalid={Boolean(confirmPasswordError)}
+              aria-describedby={confirmPasswordError ? 'confirm-password-error' : undefined}
+              {...form.register('confirmPassword', {
+                required: 'Confirm your new password.',
+                validate: (value) =>
+                  value === form.getValues('password') || 'Passwords do not match.',
+              })}
+            />
+            <FieldError
+              id="confirm-password-error"
+              errors={[form.formState.errors.confirmPassword]}
+            />
+          </Field>
 
-        {message && (
-          <p className="rounded-lg border border-cyan-300/20 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-50">
-            {message}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          disabled={isSubmitting || !token || isComplete}
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              Updating password
-            </>
-          ) : (
-            'Update password'
+          {message && (
+            <p className="rounded-lg border border-cyan-300/20 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-50">
+              {message}
+            </p>
           )}
-        </button>
+
+          <AuthSubmitButton
+            label="Update password"
+            pendingLabel="Updating password"
+            isPending={isSubmitting}
+            disabled={!token || isComplete}
+          />
+        </FieldGroup>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-300">
@@ -156,6 +149,6 @@ export function ResetPasswordForm() {
           {isComplete ? 'Sign in' : 'Request reset'}
         </Link>
       </p>
-    </section>
+    </AuthLayout>
   );
 }

@@ -4,12 +4,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Loader2, LogIn, type LucideIcon, UserPlus } from 'lucide-react';
-
+import { LogIn, type LucideIcon, UserPlus } from 'lucide-react';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth/client';
 import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
-import { InputField } from '@/components/shared/forms/InputField';
+import { AuthLayout } from './AuthLayout';
+import { AuthSubmitButton } from './AuthSubmitButton';
+import { AUTH_INPUT_CLASS_NAME } from './auth-styles';
 
 type AuthMode = 'login' | 'signup';
 
@@ -72,7 +74,6 @@ export function AuthForm({ mode }: AuthFormProps) {
     },
   });
   const copy = content[mode];
-  const Icon = copy.icon;
 
   async function redirectToDashboard() {
     await setFcopOrganizationActive().catch(() => null);
@@ -108,29 +109,25 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <section className="mx-auto w-full max-w-md rounded-lg border border-white/10 bg-white/[0.04] p-6 shadow-2xl shadow-black/30">
-      <div className="mb-8 flex items-start gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-cyan-300/20 bg-cyan-400/10 text-cyan-200">
-          <Icon className="size-5" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold tracking-normal text-white">{copy.title}</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-300">{copy.description}</p>
-        </div>
-      </div>
-
+    <AuthLayout
+      title={copy.title}
+      description={copy.description}
+      icon={copy.icon}
+    >
       <form
         noValidate
         onSubmit={handleSubmit(onSubmit)}
       >
         <FieldGroup>
           {mode === 'signup' && (
+            // Collect display name only when creating a new account.
             <Field data-invalid={Boolean(errors.name)}>
               <FieldLabel htmlFor="name">Name</FieldLabel>
-              <InputField
+              <Input
                 id="name"
                 type="text"
                 autoComplete="name"
+                className={AUTH_INPUT_CLASS_NAME}
                 placeholder="Ava Reyes"
                 aria-invalid={Boolean(errors.name)}
                 aria-describedby={errors.name ? 'name-error' : undefined}
@@ -146,12 +143,14 @@ export function AuthForm({ mode }: AuthFormProps) {
             </Field>
           )}
 
+          {/* Account email used for login/signup. */}
           <Field data-invalid={Boolean(errors.email)}>
             <FieldLabel htmlFor="email">Email</FieldLabel>
-            <InputField
+            <Input
               id="email"
               type="email"
               autoComplete="email"
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="you@example.com"
               aria-invalid={Boolean(errors.email)}
               aria-describedby={errors.email ? 'email-error' : undefined}
@@ -170,12 +169,14 @@ export function AuthForm({ mode }: AuthFormProps) {
             />
           </Field>
 
+          {/* Password for current login or new account creation. */}
           <Field data-invalid={Boolean(errors.password)}>
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <InputField
+            <Input
               id="password"
               type="password"
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="At least 8 characters"
               aria-invalid={Boolean(errors.password)}
               aria-describedby={errors.password ? 'password-error' : undefined}
@@ -199,20 +200,11 @@ export function AuthForm({ mode }: AuthFormProps) {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                {copy.pending}
-              </>
-            ) : (
-              copy.submit
-            )}
-          </button>
+          <AuthSubmitButton
+            label={copy.submit}
+            pendingLabel={copy.pending}
+            isPending={isSubmitting}
+          />
         </FieldGroup>
       </form>
 
@@ -236,6 +228,6 @@ export function AuthForm({ mode }: AuthFormProps) {
           </Link>
         </p>
       )}
-    </section>
+    </AuthLayout>
   );
 }
