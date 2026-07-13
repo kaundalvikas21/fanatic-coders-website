@@ -1,15 +1,12 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { type FormEvent, useState } from 'react';
 import Form from '@rjsf/shadcn';
 import type { IChangeEvent } from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
-import { ChevronLeft, ChevronRight, Loader2, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Muted, Small } from '@/components/ui/typography';
 import { createServiceRequest } from '@/modules/service-requests/data/mutations';
@@ -21,7 +18,12 @@ import {
 import { getServiceRequestStepJsonSchema } from '@/modules/service-requests/schemas/rjsf';
 import { getServiceRequestStepUiSchema } from '@/modules/service-requests/schemas/ui-schema';
 import { getCreateServiceRequestFormSchema } from '@/modules/service-requests/schemas/zod';
-import { SERVICE_INTEREST_OPTIONS, SERVICE_INTERESTS, type ServiceInterest } from '@/types';
+import {
+  mergeServiceRequestFormData,
+  type ServiceRequestFormData,
+} from '@/modules/service-requests/utils/form-data';
+import { SERVICE_INTEREST_OPTIONS, type ServiceInterest } from '@/types';
+import { ServiceRequestFormActions } from './ServiceRequestFormActions';
 import { ServiceRequestProgress } from './ServiceRequestProgress';
 import { ServiceRequestReview } from './ServiceRequestReview';
 import { ServiceRequestStepCard } from './ServiceRequestStepCard';
@@ -32,80 +34,104 @@ type ServiceRequestFormValues = {
   data: Record<string, unknown>;
 };
 
+type ServiceRequestFormProps = {
+  initialService?: ServiceInterest;
+  lockService?: boolean;
+};
+
+type ServiceRequestFormState = {
+  service: ServiceInterest;
+  stepIndex: number;
+  formData: ServiceRequestFormData;
+  isSubmitting: boolean;
+};
+
 type AnyTemplateField = ServiceRequestTemplateField;
-type JsonObject = Record<string, unknown>;
 
 const defaultService = SERVICE_INTEREST_OPTIONS[0]?.value ?? 'WEB_DEVELOPMENT';
 
-function getInitialService(value: string | null): ServiceInterest {
-  return SERVICE_INTERESTS.includes(value as ServiceInterest)
-    ? (value as ServiceInterest)
-    : defaultService;
-}
+export function ServiceRequestForm({
+  initialService = defaultService,
+  lockService: isServiceLocked = false,
+}: ServiceRequestFormProps) {
+  // Keep wizard state together because service changes reset step and data together.
+  const [requestForm, setRequestForm] = useState<ServiceRequestFormState>(() => ({
+    service: initialService,
+    stepIndex: 0,
+    formData: getServiceRequestDefaultValues(initialService),
+    isSubmitting: false,
+  }));
 
-function mergeData(current: JsonObject, next: unknown) {
-  if (!next || typeof next !== 'object' || Array.isArray(next)) {
-    return current;
-  }
-
-  return {
-    ...current,
-    ...(next as JsonObject),
-  };
-}
-
-export function ServiceRequestForm() {
-  const searchParams = useSearchParams();
-  const initialService = getInitialService(searchParams.get('serviceInterest'));
-  const [service, setService] = useState<ServiceInterest>(initialService);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [formData, setFormData] = useState<JsonObject>(() =>
-    getServiceRequestDefaultValues(initialService),
-  );
-  const [isPending, startTransition] = useTransition();
-  const template = useMemo(() => getServiceRequestTemplate(service), [service]);
+  const { service, stepIndex, formData, isSubmitting } = requestForm;
+  const template = getServiceRequestTemplate(service);
   const activeStep = template.steps[stepIndex] ?? template.steps[0];
   const activeFields = activeStep.fields as readonly AnyTemplateField[];
-  const activeSchema = useMemo(
-    () => getServiceRequestStepJsonSchema(activeFields, activeStep.title),
-    [activeFields, activeStep.title],
-  );
-  const activeUiSchema = useMemo(() => getServiceRequestStepUiSchema(activeFields), [activeFields]);
+  const activeSchema = getServiceRequestStepJsonSchema(activeFields, activeStep.title);
+  const activeUiSchema = getServiceRequestStepUiSchema(activeFields);
   const isFirstStep = stepIndex === 0;
   const isLastStep = stepIndex === template.steps.length - 1;
 
-  function goBack() {
-    setStepIndex((current) => Math.max(current - 1, 0));
+  // Move to the previous wizard step without going below the first step.
+  function handleBack() {
+    setRequestForm((current) => ({
+      ...current,
+      stepIndex: Math.max(current.stepIndex - 1, 0),
+    }));
   }
 
-  function updateService(value: string) {
+  // Reset wizard answers when client picks a different service template.
+  function handleServiceChange(value: string) {
     const nextService = value as ServiceInterest;
 
-    setService(nextService);
-    setStepIndex(0);
-    setFormData(getServiceRequestDefaultValues(nextService));
+    setRequestForm((current) => ({
+      ...current,
+      service: nextService,
+      stepIndex: 0,
+      formData: getServiceRequestDefaultValues(nextService),
+    }));
   }
 
-  function goToStep(index: number) {
-    if (index <= stepIndex) {
-      setStepIndex(index);
+  // Allow revisiting completed/current steps, but block skipping ahead.
+  function handleStepSelect(nextStepIndex: number) {
+    if (nextStepIndex > stepIndex) {
+      toast.error('Please continue through each step before jumping ahead.');
       return;
     }
 
-    toast.error('Please continue through each step before jumping ahead.');
+    setRequestForm((current) => ({
+      ...current,
+      stepIndex: nextStepIndex,
+    }));
   }
 
-  function submit(values: ServiceRequestFormValues) {
+  // Keep partial answers from the current RJSF step in the full request payload.
+  function handleFormChange(event: IChangeEvent<ServiceRequestFormData>) {
+    setRequestForm((current) => ({
+      ...current,
+      formData: mergeServiceRequestFormData(current.formData, event.formData),
+    }));
+  }
+
+  // Validate the final payload before creating the service request.
+  async function handleRequestSubmit(values: ServiceRequestFormValues) {
     const schema = getCreateServiceRequestFormSchema(values.service);
     const result = schema.safeParse(values);
 
     if (!result.success) {
       toast.error('Please complete the required fields before submitting.');
-      setStepIndex(0);
+      setRequestForm((current) => ({
+        ...current,
+        stepIndex: 0,
+      }));
       return;
     }
 
-    startTransition(async () => {
+    setRequestForm((current) => ({
+      ...current,
+      isSubmitting: true,
+    }));
+
+    try {
       const response = await createServiceRequest({
         service: result.data.service,
         data: result.data.data,
@@ -117,29 +143,47 @@ export function ServiceRequestForm() {
       }
 
       toast.success('Service request created.');
-      setStepIndex(0);
-      setFormData(getServiceRequestDefaultValues(service));
-    });
+      setRequestForm((current) => ({
+        ...current,
+        stepIndex: 0,
+        formData: getServiceRequestDefaultValues(current.service),
+      }));
+    } finally {
+      setRequestForm((current) => ({
+        ...current,
+        isSubmitting: false,
+      }));
+    }
   }
 
-  function handleStepSubmit(event: IChangeEvent<JsonObject>) {
-    const nextData = mergeData(formData, event.formData);
+  // Save current step data, then either continue or submit from the last step.
+  function handleStepSubmit(event: IChangeEvent<ServiceRequestFormData>) {
+    const nextData = mergeServiceRequestFormData(formData, event.formData);
 
-    setFormData(nextData);
+    setRequestForm((current) => ({
+      ...current,
+      formData: nextData,
+    }));
 
     if (isLastStep) {
-      submit({ service, data: nextData });
+      void handleRequestSubmit({ service, data: nextData });
       return;
     }
 
-    setStepIndex((current) => Math.min(current + 1, template.steps.length - 1));
+    setRequestForm((current) => ({
+      ...current,
+      stepIndex: Math.min(current.stepIndex + 1, template.steps.length - 1),
+    }));
+  }
+
+  // Submit the read-only review screen using already collected wizard data.
+  function handleReviewSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void handleRequestSubmit({ service, data: formData });
   }
 
   return (
-    <WidgetCard
-      title="New service request"
-      description={template.description}
-    >
+    <WidgetCard>
       <div className="grid gap-6">
         <ServiceRequestProgress
           steps={template.steps}
@@ -155,22 +199,22 @@ export function ServiceRequestForm() {
               description={step.description}
               isActive={index === stepIndex}
               isCompleted={index < stepIndex}
-              onSelect={() => goToStep(index)}
+              onSelect={() => handleStepSelect(index)}
             />
           ))}
         </div>
 
         <FieldGroup>
-          {stepIndex === 0 && (
+          {stepIndex === 0 && !isServiceLocked && (
             <Field>
               <FieldLabel>Service</FieldLabel>
               <SelectField
                 id="service-request-service"
                 value={service}
                 options={SERVICE_INTEREST_OPTIONS}
-                onChange={updateService}
+                onChange={handleServiceChange}
                 placeholder="Select service"
-                disabled={isPending}
+                disabled={isSubmitting}
               />
             </Field>
           )}
@@ -183,10 +227,7 @@ export function ServiceRequestForm() {
           {activeStep.id === 'review' ? (
             <form
               className="grid gap-5"
-              onSubmit={(event) => {
-                event.preventDefault();
-                submit({ service, data: formData });
-              }}
+              onSubmit={handleReviewSubmit}
             >
               <ServiceRequestReview
                 template={template}
@@ -194,31 +235,12 @@ export function ServiceRequestForm() {
                 data={formData}
               />
 
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={isPending || isFirstStep}
-                  onClick={goBack}
-                >
-                  <ChevronLeft data-icon="inline-start" />
-                  Back
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isPending}
-                >
-                  {isPending ? (
-                    <Loader2
-                      data-icon="inline-start"
-                      className="animate-spin"
-                    />
-                  ) : (
-                    <Send data-icon="inline-start" />
-                  )}
-                  {isPending ? 'Creating' : 'Create request'}
-                </Button>
-              </div>
+              <ServiceRequestFormActions
+                isSubmitting={isSubmitting}
+                isFirstStep={isFirstStep}
+                isReviewStep
+                onBack={handleBack}
+              />
             </form>
           ) : (
             <Form
@@ -226,32 +248,19 @@ export function ServiceRequestForm() {
               uiSchema={activeUiSchema}
               validator={validator}
               formData={formData}
-              disabled={isPending}
+              disabled={isSubmitting}
               noHtml5Validate
               showErrorList={false}
               templates={{ ObjectFieldTemplate: ServiceRequestObjectFieldTemplate }}
-              onChange={(event) => setFormData(mergeData(formData, event.formData))}
+              onChange={handleFormChange}
               onSubmit={handleStepSubmit}
               onError={() => toast.error('Please complete the required fields before continuing.')}
             >
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={isPending || isFirstStep}
-                  onClick={goBack}
-                >
-                  <ChevronLeft data-icon="inline-start" />
-                  Back
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isPending}
-                >
-                  Continue
-                  <ChevronRight data-icon="inline-end" />
-                </Button>
-              </div>
+              <ServiceRequestFormActions
+                isSubmitting={isSubmitting}
+                isFirstStep={isFirstStep}
+                onBack={handleBack}
+              />
             </Form>
           )}
         </FieldGroup>

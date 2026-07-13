@@ -1,16 +1,34 @@
+import { redirect } from 'next/navigation';
 import { ServiceRequestForm } from '@/modules/service-requests';
 import { PageHeader } from '@/components/shared/page-header';
+import {
+  getServiceRequestRoute,
+  parseServiceRequestService,
+} from '@/modules/service-requests/config/service-routes';
 
 export const metadata = {
   title: 'New Service Request | fanaticCoders',
 };
 
-export default function NewServiceRequestPage() {
+type NewServiceRequestPageProps = {
+  searchParams: Promise<{
+    serviceInterest?: string;
+  }>;
+};
+
+export default async function NewServiceRequestPage({ searchParams }: NewServiceRequestPageProps) {
+  const params = await searchParams;
+  const service = parseServiceRequestService(params.serviceInterest);
+
+  if (service) {
+    redirect(getServiceRequestRoute(service));
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Create service request"
-        description="Select a service and answer the request questions for that service."
+        title="Create Service"
+        description="Select a service to continue."
         showBackButton
       />
       <ServiceRequestForm />
