@@ -1,11 +1,10 @@
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { DashboardContent } from '@/components/dashboard/shell/DashboardContent';
 import { DashboardHeader } from '@/components/dashboard/shell/DashboardHeader';
 import { DashboardSidebar } from '@/components/dashboard/shell/DashboardSidebar';
 import { SidebarInset } from '@/components/ui/sidebar';
+import { getCurrentAccess } from '@/lib/auth/current-access';
 import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';
-import { getRole } from '@/lib/auth/roles';
 import { requireAuth } from '@/lib/auth/server';
 import { DashboardProvider } from '@/providers/DashboardProvider';
 import './global.css';
@@ -14,7 +13,8 @@ export const dynamic = 'force-dynamic';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   await requireAuth();
-  const role = await getRole(await headers());
+  const access = await getCurrentAccess();
+  const role = access?.role;
 
   if (!role) {
     redirect('/unauthorized');

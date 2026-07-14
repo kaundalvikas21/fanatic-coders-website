@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { DetailItem } from '@/components/shared/detail-item';
+import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { InviteForm } from '@/components/dashboard/leads/forms/InviteForm';
@@ -29,8 +30,8 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
   }
 
   return (
-    <div className="grid items-stretch gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
-      <div className="flex flex-col gap-6">
+    <DetailPageLayout>
+      <DetailPageLayout.Main>
         <PageHeader
           title={lead.name}
           description={lead.companyName || 'No company added'}
@@ -70,9 +71,9 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             />
           </dl>
         </WidgetCard>
-      </div>
+      </DetailPageLayout.Main>
 
-      <aside className="flex h-full flex-col gap-6">
+      <DetailPageLayout.Aside>
         {/* Invite Action */}
         <WidgetCard
           title="Invite"
@@ -99,7 +100,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             initialStatus={lead.status}
           />
         </WidgetCard>
-      </aside>
-    </div>
+      </DetailPageLayout.Aside>
+    </DetailPageLayout>
   );
 }
