@@ -1,6 +1,10 @@
+import { ErrorState } from '@/components/shared/error-state';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { getCurrentAccess } from '@/lib/auth/current-access';
-import { ServiceCatalog, ServiceRequestList } from '@/modules/service-requests';
+import {
+  getServiceRequestPermissions,
+  ServiceCatalog,
+  ServiceRequestList,
+} from '@/modules/service-requests';
 import { getServiceRequests } from '@/modules/service-requests/data/queries';
 import type { ServiceRequest } from '@/types';
 
@@ -9,15 +13,15 @@ export const metadata = {
 };
 
 export default async function ServicesPage() {
-  const access = await getCurrentAccess();
-  const canCreateServiceRequest = access?.can('serviceRequest', 'create') ?? false;
-  const response = await getServiceRequests();
-  const hasServiceRequests = response.success && Array.isArray(response.data);
-  const requests: ServiceRequest[] = hasServiceRequests ? (response.data as ServiceRequest[]) : [];
+  const permissions = await getServiceRequestPermissions();
+  const { success, data, message } = await getServiceRequests();
+  const requests: ServiceRequest[] =
+    success && Array.isArray(data) ? (data as ServiceRequest[]) : [];
 
   return (
     <div className="flex flex-col gap-6">
-      {canCreateServiceRequest && (
+      {/* Service catalog for clients who can create requests. */}
+      {permissions.canCreate && (
         <WidgetCard
           title="Available services"
           description="Choose a service to start a focused request."
@@ -28,7 +32,15 @@ export default async function ServicesPage() {
         </WidgetCard>
       )}
 
-      <ServiceRequestList requests={requests} />
+      {/* Service request list or load failure for the current viewer. */}
+      {success ? (
+        <ServiceRequestList requests={requests} />
+      ) : (
+        <ErrorState
+          title="Could not load service requests"
+          message={message}
+        />
+      )}
     </div>
   );
 }
