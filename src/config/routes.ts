@@ -18,6 +18,11 @@ export type DashboardRoute = {
   url: string;
   icon: ComponentType<{ className?: string }>;
   roles: readonly DashboardRole[];
+  subItems?: Array<{
+    title: string;
+    url: string;
+    roles: readonly DashboardRole[];
+  }>;
 };
 
 export const dashboardRoutes = [
@@ -77,8 +82,20 @@ export const dashboardRoutes = [
   },
   {
     title: 'Services',
-    url: '/dashboard/client/service-requests/new',
+    url: '/dashboard/services',
     icon: ClipboardList,
-    roles: USER_ROLES,
+    roles: ALL_ROLES,
+    subItems: [
+      {
+        title: 'All Services',
+        url: '/dashboard/services',
+        roles: ALL_ROLES,
+      },
+      {
+        title: 'New Request',
+        url: '/dashboard/services/new',
+        roles: [Role.CLIENT],
+      },
+    ],
   },
 ] satisfies DashboardRoute[];

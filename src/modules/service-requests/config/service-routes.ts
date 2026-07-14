@@ -14,7 +14,7 @@ const SERVICE_REQUEST_SEGMENT_SERVICES = Object.fromEntries(
 ) as Record<string, ServiceInterest>;
 
 export function getServiceRequestRoute(service: ServiceInterest) {
-  return `/dashboard/client/service-requests/new/${SERVICE_REQUEST_ROUTE_SEGMENTS[service]}`;
+  return `/dashboard/services/new/${SERVICE_REQUEST_ROUTE_SEGMENTS[service]}`;
 }
 
 export function parseServiceRequestService(value?: string | null): ServiceInterest | null {

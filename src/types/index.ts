@@ -1,4 +1,12 @@
 export type {
+  AccessModel,
+  AccessOperation,
+  AccessPermissions,
+  CurrentAccess,
+  CurrentAccessData,
+  GetCurrentAccessResponse,
+} from './access';
+export type {
   ApiResponse,
   FailureResponse,
   GetHealthResponse,

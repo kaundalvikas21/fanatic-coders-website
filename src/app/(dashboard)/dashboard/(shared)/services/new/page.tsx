@@ -27,8 +27,8 @@ export default async function NewServiceRequestPage({ searchParams }: NewService
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Create Service"
-        description="Select a service to continue."
+        title="Start a Service Request"
+        description="Choose a service to get started."
         showBackButton
       />
       <ServiceRequestForm />

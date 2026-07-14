@@ -4,9 +4,13 @@ import { type FormEvent, useState } from 'react';
 import Form from '@rjsf/shadcn';
 import type { IChangeEvent } from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
+import { CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
 import { toast } from 'sonner';
 import { SelectField } from '@/components/shared/forms/SelectField';
+import { AcknowledgementCard } from '@/components/shared/acknowledgement-card';
 import { WidgetCard } from '@/components/shared/widget-card';
+import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Muted, Small } from '@/components/ui/typography';
 import { createServiceRequest } from '@/modules/service-requests/data/mutations';
@@ -44,6 +48,7 @@ type ServiceRequestFormState = {
   stepIndex: number;
   formData: ServiceRequestFormData;
   isSubmitting: boolean;
+  isSubmitted: boolean;
 };
 
 type AnyTemplateField = ServiceRequestTemplateField;
@@ -60,9 +65,10 @@ export function ServiceRequestForm({
     stepIndex: 0,
     formData: getServiceRequestDefaultValues(initialService),
     isSubmitting: false,
+    isSubmitted: false,
   }));
 
-  const { service, stepIndex, formData, isSubmitting } = requestForm;
+  const { service, stepIndex, formData, isSubmitting, isSubmitted } = requestForm;
   const template = getServiceRequestTemplate(service);
   const activeStep = template.steps[stepIndex] ?? template.steps[0];
   const activeFields = activeStep.fields as readonly AnyTemplateField[];
@@ -88,6 +94,7 @@ export function ServiceRequestForm({
       service: nextService,
       stepIndex: 0,
       formData: getServiceRequestDefaultValues(nextService),
+      isSubmitted: false,
     }));
   }
 
@@ -145,8 +152,7 @@ export function ServiceRequestForm({
       toast.success('Service request created.');
       setRequestForm((current) => ({
         ...current,
-        stepIndex: 0,
-        formData: getServiceRequestDefaultValues(current.service),
+        isSubmitted: true,
       }));
     } finally {
       setRequestForm((current) => ({
@@ -184,87 +190,105 @@ export function ServiceRequestForm({
 
   return (
     <WidgetCard>
-      <div className="grid gap-6">
-        <ServiceRequestProgress
-          steps={template.steps}
-          activeStepIndex={stepIndex}
+      {isSubmitted ? (
+        <AcknowledgementCard
+          icon={CheckCircle2}
+          title="Your request has been submitted"
+          description="We received your service request. Our team will review it and follow up with the next steps."
+          action={
+            <Button
+              asChild
+              variant="outline"
+            >
+              <Link href="/dashboard/services">Follow up</Link>
+            </Button>
+          }
         />
+      ) : (
+        <div className="grid gap-6">
+          <ServiceRequestProgress
+            steps={template.steps}
+            activeStepIndex={stepIndex}
+          />
 
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-          {template.steps.map((step, index) => (
-            <ServiceRequestStepCard
-              key={step.id}
-              stepNumber={index + 1}
-              title={step.title}
-              description={step.description}
-              isActive={index === stepIndex}
-              isCompleted={index < stepIndex}
-              onSelect={() => handleStepSelect(index)}
-            />
-          ))}
-        </div>
-
-        <FieldGroup>
-          {stepIndex === 0 && !isServiceLocked && (
-            <Field>
-              <FieldLabel>Service</FieldLabel>
-              <SelectField
-                id="service-request-service"
-                value={service}
-                options={SERVICE_INTEREST_OPTIONS}
-                onChange={handleServiceChange}
-                placeholder="Select service"
-                disabled={isSubmitting}
+          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            {template.steps.map((step, index) => (
+              <ServiceRequestStepCard
+                key={step.id}
+                stepNumber={index + 1}
+                title={step.title}
+                description={step.description}
+                isActive={index === stepIndex}
+                isCompleted={index < stepIndex}
+                onSelect={() => handleStepSelect(index)}
               />
-            </Field>
-          )}
-
-          <div>
-            <Small className="block">{activeStep.title}</Small>
-            <Muted className="mt-1">{activeStep.description}</Muted>
+            ))}
           </div>
 
-          {activeStep.id === 'review' ? (
-            <form
-              className="grid gap-5"
-              onSubmit={handleReviewSubmit}
-            >
-              <ServiceRequestReview
-                template={template}
-                service={service}
-                data={formData}
-              />
+          <FieldGroup>
+            {stepIndex === 0 && !isServiceLocked && (
+              <Field>
+                <FieldLabel>Service</FieldLabel>
+                <SelectField
+                  id="service-request-service"
+                  value={service}
+                  options={SERVICE_INTEREST_OPTIONS}
+                  onChange={handleServiceChange}
+                  placeholder="Select service"
+                  disabled={isSubmitting}
+                />
+              </Field>
+            )}
 
-              <ServiceRequestFormActions
-                isSubmitting={isSubmitting}
-                isFirstStep={isFirstStep}
-                isReviewStep
-                onBack={handleBack}
-              />
-            </form>
-          ) : (
-            <Form
-              schema={activeSchema}
-              uiSchema={activeUiSchema}
-              validator={validator}
-              formData={formData}
-              disabled={isSubmitting}
-              noHtml5Validate
-              showErrorList={false}
-              templates={{ ObjectFieldTemplate: ServiceRequestObjectFieldTemplate }}
-              onChange={handleFormChange}
-              onSubmit={handleStepSubmit}
-              onError={() => toast.error('Please complete the required fields before continuing.')}
-            >
-              <ServiceRequestFormActions
-                isSubmitting={isSubmitting}
-                isFirstStep={isFirstStep}
-                onBack={handleBack}
-              />
-            </Form>
-          )}
-        </FieldGroup>
-      </div>
+            <div>
+              <Small className="block">{activeStep.title}</Small>
+              <Muted className="mt-1">{activeStep.description}</Muted>
+            </div>
+
+            {activeStep.id === 'review' ? (
+              <form
+                className="grid gap-5"
+                onSubmit={handleReviewSubmit}
+              >
+                <ServiceRequestReview
+                  template={template}
+                  service={service}
+                  data={formData}
+                />
+
+                <ServiceRequestFormActions
+                  isSubmitting={isSubmitting}
+                  isFirstStep={isFirstStep}
+                  isReviewStep
+                  onBack={handleBack}
+                />
+              </form>
+            ) : (
+              <Form
+                schema={activeSchema}
+                uiSchema={activeUiSchema}
+                validator={validator}
+                formData={formData}
+                disabled={isSubmitting}
+                noHtml5Validate
+                showErrorList={false}
+                templates={{ ObjectFieldTemplate: ServiceRequestObjectFieldTemplate }}
+                onChange={handleFormChange}
+                onSubmit={handleStepSubmit}
+                onError={() =>
+                  toast.error('Please complete the required fields before continuing.')
+                }
+              >
+                <ServiceRequestFormActions
+                  isSubmitting={isSubmitting}
+                  isFirstStep={isFirstStep}
+                  onBack={handleBack}
+                />
+              </Form>
+            )}
+          </FieldGroup>
+        </div>
+      )}
     </WidgetCard>
   );
 }
