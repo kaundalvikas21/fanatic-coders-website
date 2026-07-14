@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.2.1...v0.2.2) (2026-07-14)
+
+### Features
+
+- **components:** added service requests components ([a1d2b0b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a1d2b0bd588c7a0f90798048bd473346aab249dc))
+- **notfound:** added not found component ([67d40ed](https://github.com/kaundalvikas21/fanatic-coders-website/commit/67d40edd4cba17e30be1d32b3348f57b891c6886))
+- **package:** added new pacakge for building schema based form ([dca9fd4](https://github.com/kaundalvikas21/fanatic-coders-website/commit/dca9fd4884171e27637731998fc41b9934a2dd8d))
+- **service request schema:** added service request schema ([357bc2b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/357bc2bdb8e810d06ef485aa4a7615e9d157d801))
+- **service request:** added routes for managing service requests ([8b5c28d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8b5c28d1370c59ba049e841661fd2c75489c6472))
+- **shadcn:** added shadcn compoennt progress bar based on shadcn ([fc8c0ac](https://github.com/kaundalvikas21/fanatic-coders-website/commit/fc8c0ac1784de401653a4249f8086a7fbbcfe76f))
+
+### Bug Fixes
+
+- **datte:** fix date naming related issue and use constent meaning full name ([92afbcb](https://github.com/kaundalvikas21/fanatic-coders-website/commit/92afbcb7d7c398f2b1c9244eef2be87ed75f2ee3))
+
+### Code Refactoring
+
+- **accept:** accept invitation flow refactor ([090a257](https://github.com/kaundalvikas21/fanatic-coders-website/commit/090a257944bbbd9db69eb5708fc9baaaa4e81893))
+- **auth:** refactor auth components ([c13543a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c13543a9afbb4c4d6c99044a7e7403fbbb1667b0))
+- **lead:** refactor code display data based on their acce role ([8677ebf](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8677ebf0569daea1860e60f1c488affa67d602e4))
+- **service request:** reorganize folder structure ([61db5f3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/61db5f3af27976ef371c8665fe71497a92ef4a42))
+- **service:** reorganize folder strucuture ([3c4a108](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3c4a108ca20bcb2b742fafeff47806df436b7f83))
+- **types:** update lead enum based ([52a8051](https://github.com/kaundalvikas21/fanatic-coders-website/commit/52a8051267116d4fed9d7825c719565e6399e504))
+
 ### [0.2.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.2.0...v0.2.1) (2026-07-10)
 
 ### Features
