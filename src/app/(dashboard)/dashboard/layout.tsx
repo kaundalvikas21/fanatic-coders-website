@@ -7,6 +7,7 @@ import { getCurrentAccess } from '@/lib/auth/current-access';
 import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';
 import { requireAuth } from '@/lib/auth/server';
 import { DashboardProvider } from '@/providers/DashboardProvider';
+import { PermissionProvider } from '@/providers/PermissionProvider';
 import './global.css';
 
 export const dynamic = 'force-dynamic';
@@ -21,15 +22,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <DashboardProvider>
-      <DashboardSidebar role={role} />
-      <SidebarInset className="dashboard-shell">
-        <DashboardHeader
-          organizationSlug={FCOP_ORGANIZATION_SLUG}
-          role={role}
-        />
-        <DashboardContent>{children}</DashboardContent>
-      </SidebarInset>
-    </DashboardProvider>
+    <PermissionProvider permissions={access.permissions}>
+      <DashboardProvider>
+        <DashboardSidebar role={role} />
+        <SidebarInset className="dashboard-shell">
+          <DashboardHeader
+            organizationSlug={FCOP_ORGANIZATION_SLUG}
+            role={role}
+          />
+          <DashboardContent>{children}</DashboardContent>
+        </SidebarInset>
+      </DashboardProvider>
+    </PermissionProvider>
   );
 }
