@@ -35,7 +35,18 @@ export function hasAnyRole(role: string | null | undefined, allowedRoles: readon
 }
 
 export function getRoleHomePath(role: string | null | undefined) {
-  return hasAnyRole(role, [Role.ADMIN]) ? '/dashboard/admin' : '/dashboard/client';
+  switch (role) {
+    case Role.ADMIN:
+      return '/dashboard/admin';
+    case Role.MANAGER:
+      return '/dashboard/leads';
+    case Role.MEMBER:
+      return '/dashboard/tasks';
+    case Role.CLIENT:
+      return '/dashboard/client';
+    default:
+      return '/unauthorized';
+  }
 }
 
 export async function getRole(headers: Headers) {
