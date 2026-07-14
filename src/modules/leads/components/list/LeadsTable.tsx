@@ -2,7 +2,7 @@
 
 import { DataTable } from '@/components/ui/data-table';
 import type { Lead } from '@/types';
-import { leadColumns } from './columns';
+import { leadColumns } from './lead-columns';
 
 export function LeadsTable({ data }: { data: Lead[] }) {
   return (

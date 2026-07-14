@@ -1,22 +1,17 @@
 import { notFound } from 'next/navigation';
-import { DetailItem } from '@/components/shared/detail-item';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { InviteForm } from '@/components/dashboard/leads/forms/InviteForm';
-import { StatusForm } from '@/components/dashboard/leads/forms/StatusForm';
-import { getLeadById } from '@/lib/data/leads/queries';
-import type { Lead, ServiceInterest } from '@/types';
+import { leadServiceLabels } from '@/modules/leads/config/labels';
+import {
+  getLeadById,
+  LeadInfoCard,
+  LeadInviteForm,
+  LeadStatusForm,
+  type LeadInfoItem,
+} from '@/modules/leads';
+import type { Lead } from '@/types';
 import { formatDate } from '@/utils/date';
-
-const serviceLabels = {
-  WEB_DEVELOPMENT: 'Web development',
-  MOBILE_APP_DEVELOPMENT: 'Mobile app development',
-  SEO: 'SEO',
-  GOOGLE_ADS: 'Google Ads',
-  GENERAL_MARKETING: 'General marketing',
-  OTHER: 'Other',
-} satisfies Record<ServiceInterest, string>;
 
 export const dynamic = 'force-dynamic';
 
@@ -29,65 +24,61 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
     notFound();
   }
 
+  // Prepare display rows explicitly so the card only handles rendering.
+  const leadInfoItems = [
+    {
+      label: 'Email',
+      value: lead.email,
+    },
+    {
+      label: 'Service',
+      value: leadServiceLabels[lead.serviceInterest],
+    },
+    {
+      label: 'Budget',
+      value: lead.budgetRange || 'Not shared',
+    },
+    {
+      label: 'Source',
+      value: 'Contact form',
+    },
+    {
+      label: 'Created',
+      value: formatDate(lead.createdAt),
+    },
+    {
+      label: 'Updated',
+      value: formatDate(lead.updatedAt),
+    },
+  ] satisfies LeadInfoItem[];
+
   return (
     <DetailPageLayout>
       <DetailPageLayout.Main>
+        {/* Lead identity and submitted request details. */}
         <PageHeader
           title={lead.name}
           description={lead.companyName || 'No company added'}
           showBackButton
         />
 
-        <WidgetCard
-          title="Request info"
-          description="Contact and project details."
-          titleClassName="text-xl font-semibold"
-          descriptionClassName="text-sm"
-        >
-          <dl className="grid gap-4 sm:grid-cols-2">
-            <DetailItem
-              label="Email"
-              value={lead.email}
-            />
-            <DetailItem
-              label="Service"
-              value={serviceLabels[lead.serviceInterest]}
-            />
-            <DetailItem
-              label="Budget"
-              value={lead.budgetRange || 'Not shared'}
-            />
-            <DetailItem
-              label="Source"
-              value="Contact form"
-            />
-            <DetailItem
-              label="Created"
-              value={formatDate(lead.createdAt)}
-            />
-            <DetailItem
-              label="Updated"
-              value={formatDate(lead.updatedAt)}
-            />
-          </dl>
-        </WidgetCard>
+        <LeadInfoCard items={leadInfoItems} />
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
-        {/* Invite Action */}
+        {/* Follow-up actions for converting or updating this lead. */}
         <WidgetCard
           title="Invite"
           description="Send client access to this lead email."
           titleClassName="text-xl font-semibold"
           descriptionClassName="text-sm"
         >
-          <InviteForm
+          <LeadInviteForm
             leadEmail={lead.email}
             serviceInterest={lead.serviceInterest}
           />
         </WidgetCard>
 
-        {/* Status Action */}
         <WidgetCard
           title="Status"
           description="Update the lead stage."
@@ -95,7 +86,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           titleClassName="text-xl font-semibold"
           descriptionClassName="text-sm"
         >
-          <StatusForm
+          <LeadStatusForm
             leadId={lead.id}
             initialStatus={lead.status}
           />

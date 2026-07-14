@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getLeads } from '@/lib/data/leads/queries';
+import { getLeads } from '@/modules/leads';
 export const metadata = {
   title: 'Admin | fanaticCoders',
 };

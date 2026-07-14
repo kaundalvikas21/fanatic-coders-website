@@ -8,8 +8,8 @@ import { RevealSection } from '@/components/ui/RevealSection';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Select, type SelectOption } from '@/components/shared/forms/AuroraSelect';
 import { IconGithub, IconLinkedin } from '@/components/ui/SocialIcons';
-import { createLead } from '@/lib/data/leads/mutations';
 import { cn } from '@/lib/utils';
+import { createLead } from '@/modules/leads';
 import { SERVICE_INTEREST_OPTIONS, type CreateLeadRequest, type ServiceInterest } from '@/types';
 
 interface FormState {

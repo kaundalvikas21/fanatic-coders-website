@@ -18,23 +18,9 @@ import {
   LEAD_STATUS_BADGE_VARIANTS,
   LEAD_STATUS_OPTIONS,
   type Lead,
-  type LeadSource,
   type LeadStatus,
-  type ServiceInterest,
 } from '@/types';
-
-const serviceLabels = {
-  WEB_DEVELOPMENT: 'Web development',
-  MOBILE_APP_DEVELOPMENT: 'Mobile app development',
-  SEO: 'SEO',
-  GOOGLE_ADS: 'Google Ads',
-  GENERAL_MARKETING: 'General marketing',
-  OTHER: 'Other',
-} satisfies Record<ServiceInterest, string>;
-
-const sourceLabels = {
-  CONTACT_FORM: 'Contact form',
-} satisfies Record<LeadSource, string>;
+import { leadServiceLabels, leadSourceLabels } from '../../config/labels';
 
 function LeadStatusBadge({ status }: { status: LeadStatus }) {
   const option = LEAD_STATUS_OPTIONS.find((item) => item.value === status);
@@ -73,7 +59,7 @@ function getLeadMailHref(lead: Lead) {
 function LeadMessage({ lead }: { lead: Lead }) {
   return (
     <div className="flex max-w-[44rem] flex-col gap-1 text-muted-foreground">
-      <p>Service: {serviceLabels[lead.serviceInterest]}</p>
+      <p>Service: {leadServiceLabels[lead.serviceInterest]}</p>
       <p>Budget: {lead.budgetRange || 'Not shared'}</p>
     </div>
   );
@@ -121,7 +107,7 @@ export const leadColumns: ColumnDef<Lead>[] = [
           variant="outline"
           className="w-fit"
         >
-          {sourceLabels[row.original.source]}
+          {leadSourceLabels[row.original.source]}
         </Badge>
         <span className="text-muted-foreground">
           {row.original.companyName || 'No company added'}

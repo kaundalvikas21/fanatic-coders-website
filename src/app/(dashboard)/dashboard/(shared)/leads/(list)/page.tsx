@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { DataTableSkelton } from '@/components/shared/skeleton/DataTableSkeleton';
-import { LeadsTableSection } from './leads-table-section';
+import { LeadsTableSection } from '@/modules/leads';
 
 export const metadata = {
   title: 'Leads | fanaticCoders',

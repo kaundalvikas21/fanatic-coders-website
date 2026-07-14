@@ -4,7 +4,6 @@ import { Controller, Watch, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import { Badge } from '@/components/ui/badge';
-import { updateLeadById } from '@/lib/data/leads/mutations';
 import { cn } from '@/lib/utils';
 import {
   LEAD_STATUS_BADGE_VARIANTS,
@@ -12,13 +11,14 @@ import {
   type Lead,
   type LeadStatus,
 } from '@/types';
+import { updateLeadById } from '../../data/mutations';
 
-type StatusFormProps = {
+type LeadStatusFormProps = {
   leadId: string;
   initialStatus: LeadStatus;
 };
 
-type StatusFormValues = {
+type LeadStatusFormValues = {
   status: LeadStatus;
 };
 
@@ -37,8 +37,8 @@ function getStatusLabel(status: LeadStatus) {
   return LEAD_STATUS_OPTIONS.find((option) => option.value === status)?.label ?? status;
 }
 
-export function StatusForm({ leadId, initialStatus }: StatusFormProps) {
-  const form = useForm<StatusFormValues>({
+export function LeadStatusForm({ leadId, initialStatus }: LeadStatusFormProps) {
+  const form = useForm<LeadStatusFormValues>({
     mode: 'onChange',
     defaultValues: {
       status: initialStatus,
