@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { inviteMember } from '@/lib/data/invitations/mutations';
+import { inviteMember } from '@/modules/invitations/data/mutations';
 import type { ServiceInterest } from '@/types';
 
 type LeadInviteFormProps = {

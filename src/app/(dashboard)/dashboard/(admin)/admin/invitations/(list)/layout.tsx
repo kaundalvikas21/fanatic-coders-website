@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { MailPlus } from 'lucide-react';
-import InvitationForm from '@/components/dashboard/invitations/CreateInvitationForm';
 import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { PageHeader } from '@/components/shared/page-header';
+import { CreateInvitationForm } from '@/modules/invitations';
 
 export default function AdminInvitationsLayout({ children }: { children: ReactNode }) {
   return (
@@ -23,7 +23,7 @@ export default function AdminInvitationsLayout({ children }: { children: ReactNo
                 </ActionSheetButton>
               }
             >
-              <InvitationForm />
+              <CreateInvitationForm />
             </ActionSheet>
           }
         />

@@ -1,4 +1,4 @@
-import { AcceptInvitationFlow } from '@/components/auth/AcceptInvitationFlow';
+import { AcceptInvitationFlow } from '@/modules/invitations';
 import {
   getServiceRequestRoute,
   parseServiceRequestService,
