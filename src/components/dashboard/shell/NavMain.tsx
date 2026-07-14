@@ -16,34 +16,15 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import type { DashboardRoute } from '@/config/routes';
+import type { DashboardRoute, DashboardRouteGroup } from '@/config/routes';
 import { cn } from '@/lib/utils';
+import { getActiveDashboardRouteUrl, getActiveSubItemUrl } from './nav-utils';
 
 type NavMainItemProps = {
   item: DashboardRoute;
   pathname: string;
   activeItemUrl?: string;
 };
-
-function isActive(pathname: string, href: string) {
-  if (href === '/dashboard/admin') {
-    return pathname === '/dashboard/admin' || pathname === '/dashboard/admin/';
-  }
-
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function getActiveSubItemUrl(item: DashboardRoute, pathname: string) {
-  const activeSubItems = item.subItems?.filter((subItem) => isActive(pathname, subItem.url)) ?? [];
-
-  return activeSubItems.sort((a, b) => b.url.length - a.url.length)[0]?.url;
-}
-
-function getActiveItemUrl(items: DashboardRoute[], pathname: string) {
-  const activeItems = items.filter((item) => isActive(pathname, item.url));
-
-  return activeItems.sort((a, b) => b.url.length - a.url.length)[0]?.url;
-}
 
 function NavMainItem({ item, pathname, activeItemUrl }: NavMainItemProps) {
   const hasSubItems = Boolean(item.subItems?.length);
@@ -110,23 +91,28 @@ function NavMainItem({ item, pathname, activeItemUrl }: NavMainItemProps) {
   );
 }
 
-export function NavMain({ items }: { items: DashboardRoute[] }) {
+export function NavMain({ groups }: { groups: DashboardRouteGroup[] }) {
   const pathname = usePathname();
-  const activeItemUrl = getActiveItemUrl(items, pathname);
+  const items = groups.flatMap((group) => group.items);
+  const activeItemUrl = getActiveDashboardRouteUrl(items, pathname);
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => (
-          <NavMainItem
-            key={item.title}
-            item={item}
-            pathname={pathname}
-            activeItemUrl={activeItemUrl}
-          />
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
+    <>
+      {groups.map((group) => (
+        <SidebarGroup key={group.label}>
+          <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+          <SidebarMenu>
+            {group.items.map((item) => (
+              <NavMainItem
+                key={item.title}
+                item={item}
+                pathname={pathname}
+                activeItemUrl={activeItemUrl}
+              />
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      ))}
+    </>
   );
 }

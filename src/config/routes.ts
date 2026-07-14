@@ -11,7 +11,7 @@ import {
   ShieldCheck,
   UsersRound,
 } from 'lucide-react';
-import { ALL_ROLES, Role, USER_ROLES, type Role as DashboardRole } from '@/lib/auth/roles';
+import { ALL_ROLES, Role, type Role as DashboardRole } from '@/lib/auth/roles';
 
 export type DashboardRoute = {
   title: string;
@@ -25,77 +25,107 @@ export type DashboardRoute = {
   }>;
 };
 
-export const dashboardRoutes = [
+export type DashboardRouteGroup = {
+  label: string;
+  items: DashboardRoute[];
+};
+
+const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
+const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
+const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
+const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
+
+export const dashboardRouteGroups: DashboardRouteGroup[] = [
   {
-    title: 'Overview',
-    url: '/dashboard',
-    icon: LayoutDashboard,
-    roles: ALL_ROLES,
-  },
-  {
-    title: 'Leads',
-    url: '/dashboard/leads',
-    icon: Inbox,
-    roles: [Role.ADMIN, Role.MANAGER],
-  },
-  {
-    title: 'Projects',
-    url: '/dashboard/projects',
-    icon: BriefcaseBusiness,
-    roles: ALL_ROLES,
-  },
-  {
-    title: 'Tasks',
-    url: '/dashboard/tasks',
-    icon: ListChecks,
-    roles: [Role.ADMIN, Role.MANAGER, Role.MEMBER],
-  },
-  {
-    title: 'Admin',
-    url: '/dashboard/admin',
-    icon: ShieldCheck,
-    roles: [Role.ADMIN],
-  },
-  {
-    title: 'Users',
-    url: '/dashboard/admin/user',
-    icon: UsersRound,
-    roles: [Role.ADMIN],
-  },
-  {
-    title: 'Invitations',
-    url: '/dashboard/admin/invitations',
-    icon: MailPlus,
-    roles: [Role.ADMIN],
-  },
-  {
-    title: 'Settings',
-    url: '/dashboard/admin/settings',
-    icon: Settings,
-    roles: [Role.ADMIN],
-  },
-  {
-    title: 'Client',
-    url: '/dashboard/client',
-    icon: Blocks,
-    roles: USER_ROLES,
-  },
-  {
-    title: 'Services',
-    url: '/dashboard/services',
-    icon: ClipboardList,
-    roles: ALL_ROLES,
-    subItems: [
+    label: 'Business',
+    items: [
       {
-        title: 'All Services',
-        url: '/dashboard/services',
+        title: 'Overview',
+        url: '/dashboard',
+        icon: LayoutDashboard,
         roles: ALL_ROLES,
       },
       {
-        title: 'New Request',
-        url: '/dashboard/services/new',
+        title: 'Leads',
+        url: '/dashboard/leads',
+        icon: Inbox,
+        roles: LEAD_ROLES,
+      },
+      {
+        title: 'Services',
+        url: '/dashboard/services',
+        icon: ClipboardList,
+        roles: SERVICE_REQUEST_ROLES,
+        subItems: [
+          {
+            title: 'All Services',
+            url: '/dashboard/services',
+            roles: SERVICE_REQUEST_ROLES,
+          },
+          {
+            title: 'New Request',
+            url: '/dashboard/services/new',
+            roles: [Role.CLIENT],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Delivery',
+    items: [
+      {
+        title: 'Projects',
+        url: '/dashboard/projects',
+        icon: BriefcaseBusiness,
+        roles: PROJECT_ROLES,
+      },
+      {
+        title: 'Tasks',
+        url: '/dashboard/tasks',
+        icon: ListChecks,
+        roles: TASK_ROLES,
+      },
+    ],
+  },
+  {
+    label: 'Administration',
+    items: [
+      {
+        title: 'Admin',
+        url: '/dashboard/admin',
+        icon: ShieldCheck,
+        roles: [Role.ADMIN],
+      },
+      {
+        title: 'Users',
+        url: '/dashboard/admin/user',
+        icon: UsersRound,
+        roles: [Role.ADMIN],
+      },
+      {
+        title: 'Invitations',
+        url: '/dashboard/admin/invitations',
+        icon: MailPlus,
+        roles: [Role.ADMIN],
+      },
+      {
+        title: 'Settings',
+        url: '/dashboard/admin/settings',
+        icon: Settings,
+        roles: [Role.ADMIN],
+      },
+    ],
+  },
+  {
+    label: 'Account',
+    items: [
+      {
+        title: 'Client',
+        url: '/dashboard/client',
+        icon: Blocks,
         roles: [Role.CLIENT],
       },
     ],
   },
-] satisfies DashboardRoute[];
+];

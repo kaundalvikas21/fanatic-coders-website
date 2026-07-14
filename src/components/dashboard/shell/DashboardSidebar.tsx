@@ -1,9 +1,9 @@
 'use client';
 
-import { dashboardRoutes } from '@/config/routes';
 import { DashboardBrand } from '@/components/dashboard/shell/DashboardBrand';
 import { NavMain } from '@/components/dashboard/shell/NavMain';
 import { NavUser } from '@/components/dashboard/shell/NavUser';
+import { getAccessibleDashboardRouteGroups } from '@/components/dashboard/shell/nav-utils';
 import {
   Sidebar,
   SidebarContent,
@@ -11,14 +11,13 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { hasAnyRole } from '@/lib/auth/roles';
 
 type DashboardSidebarProps = React.ComponentProps<typeof Sidebar> & {
   role?: string | null;
 };
 
 export function DashboardSidebar({ role, ...props }: DashboardSidebarProps) {
-  const routes = dashboardRoutes.filter((item) => hasAnyRole(role, item.roles));
+  const routeGroups = getAccessibleDashboardRouteGroups(role);
 
   return (
     <Sidebar
@@ -29,7 +28,7 @@ export function DashboardSidebar({ role, ...props }: DashboardSidebarProps) {
         <DashboardBrand />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={routes} />
+        <NavMain groups={routeGroups} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
