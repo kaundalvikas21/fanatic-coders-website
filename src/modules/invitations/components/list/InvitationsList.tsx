@@ -2,10 +2,10 @@ import { MailPlus } from 'lucide-react';
 import { EmptyState } from '@/components/shared/empty-state';
 import { ErrorState } from '@/components/shared/error-state';
 import { DataTable } from '@/components/ui/data-table';
-import { getInvitations } from '@/lib/data/invitations/queries';
-import { invitationColumns } from './columns';
+import { getInvitations } from '../../data/queries';
+import { invitationColumns } from './invitation-columns';
 
-export async function Invitations() {
+export async function InvitationsList() {
   const response = await getInvitations();
   const invitations = response.success && response.data ? response.data.invitations : [];
 

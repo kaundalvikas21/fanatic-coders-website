@@ -17,7 +17,7 @@ type InvitationFormValues = {
   role: (typeof USER_ROLES)[number];
 };
 
-export default function InvitationForm() {
+export function CreateInvitationForm() {
   const router = useRouter();
   const { close } = useSheet();
   const form = useForm<InvitationFormValues>({

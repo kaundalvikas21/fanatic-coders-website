@@ -3,13 +3,13 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogIn, UserPlus } from 'lucide-react';
+import { AuthLayout } from '@/components/auth/AuthLayout';
+import { AuthSubmitButton } from '@/components/auth/AuthSubmitButton';
+import { AUTH_INPUT_CLASS_NAME } from '@/components/auth/auth-styles';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { authClient, useSession } from '@/lib/auth/client';
 import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
-import { AuthLayout } from './AuthLayout';
-import { AuthSubmitButton } from './AuthSubmitButton';
-import { AUTH_INPUT_CLASS_NAME } from './auth-styles';
 
 type InviteAuthMode = 'signup' | 'login';
 

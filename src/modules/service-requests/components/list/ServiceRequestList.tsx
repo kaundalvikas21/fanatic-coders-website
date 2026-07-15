@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -6,6 +8,7 @@ import {
   SERVICE_REQUEST_SERVICE_LABELS,
   SERVICE_REQUEST_STATUS_LABELS,
 } from '@/modules/service-requests/config/labels';
+import { useServiceRequestPermissions } from '@/modules/service-requests/hooks/use-service-request-permissions';
 import { formatDate } from '@/utils/date';
 import { SERVICE_REQUEST_STATUS_BADGE_VARIANTS, type ServiceRequest } from '@/types';
 
@@ -13,12 +16,36 @@ type ServiceRequestListProps = {
   requests: ServiceRequest[];
 };
 
+type ServiceRequestWithClient = ServiceRequest & {
+  client?: {
+    member?: {
+      user?: {
+        name?: string | null;
+        email?: string | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+function getClientLabel(request: ServiceRequest) {
+  const client = request as ServiceRequestWithClient;
+  const user = client.client?.member?.user;
+
+  return user?.name || user?.email || request.clientId;
+}
+
 export function ServiceRequestList({ requests }: ServiceRequestListProps) {
+  const permissions = useServiceRequestPermissions();
+
   if (requests.length === 0) {
     return (
-      <WidgetCard title="Submitted requests">
+      <WidgetCard
+        title={permissions.isManagementView ? 'Client service requests' : 'Submitted requests'}
+      >
         <p className="text-sm leading-6 text-muted-foreground">
-          Your submitted service requests will appear here for follow-up.
+          {permissions.isManagementView
+            ? 'Client-submitted service requests will appear here for review.'
+            : 'Your submitted service requests will appear here for follow-up.'}
         </p>
       </WidgetCard>
     );
@@ -39,6 +66,11 @@ export function ServiceRequestList({ requests }: ServiceRequestListProps) {
               <p className="mt-1 text-sm text-muted-foreground">
                 Submitted {formatDate(request.createdAt)}
               </p>
+              {permissions.isManagementView && (
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Client: {getClientLabel(request)}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center gap-2">

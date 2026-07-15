@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
-import { getCurrentAccess } from '@/lib/auth/current-access';
-import { ServiceRequestAside, ServiceRequestDetails } from '@/modules/service-requests';
+import {
+  getServiceRequestPermissions,
+  ServiceRequestAside,
+  ServiceRequestDetails,
+} from '@/modules/service-requests';
 import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/config/labels';
 import { getServiceRequestById } from '@/modules/service-requests/data/queries';
 import type { ServiceRequest } from '@/types';
@@ -15,34 +18,38 @@ type ServiceRequestDetailPageProps = {
 
 export default async function ServiceRequestDetailPage({ params }: ServiceRequestDetailPageProps) {
   const { id } = await params;
-  const access = await getCurrentAccess();
-  const canManageServiceRequest = access?.can('serviceRequest', 'update') ?? false;
+  const permissions = await getServiceRequestPermissions();
+  const { success, data: request } = (await getServiceRequestById(id)) as {
+    success: boolean;
+    data?: ServiceRequest | null;
+  };
 
-  const response = await getServiceRequestById(id);
-  const request = response.success && response.data ? (response.data as ServiceRequest) : null;
-
-  if (!request) {
+  if (!success || !request) {
     notFound();
   }
 
   return (
     <DetailPageLayout>
       <DetailPageLayout.Main>
+        {/* Service request title and viewer-specific context. */}
         <PageHeader
           title={SERVICE_REQUEST_SERVICE_LABELS[request.service]}
-          description="Review your submitted service request."
+          description={
+            permissions.isManagementView
+              ? 'Review and manage this client service request.'
+              : 'Review your submitted service request.'
+          }
           showBackButton
           backLabel="Services"
         />
 
+        {/* Submitted service request answers. */}
         <ServiceRequestDetails request={request} />
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
-        <ServiceRequestAside
-          request={request}
-          canManageActions={canManageServiceRequest}
-        />
+        {/* Status, metadata, and permitted management actions. */}
+        <ServiceRequestAside request={request} />
       </DetailPageLayout.Aside>
     </DetailPageLayout>
   );

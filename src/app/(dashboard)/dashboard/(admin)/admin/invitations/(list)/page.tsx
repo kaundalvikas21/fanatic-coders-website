@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
-import { Invitations } from '@/components/dashboard/invitations/Invitations';
 import { DataTableSkelton } from '@/components/shared/skeleton/DataTableSkeleton';
+import { InvitationsList } from '@/modules/invitations';
 
 export const metadata = {
   title: 'Invitations | fanaticCoders',
@@ -19,7 +19,7 @@ export default function AdminInvitationsPage() {
         />
       }
     >
-      <Invitations />
+      <InvitationsList />
     </Suspense>
   );
 }
