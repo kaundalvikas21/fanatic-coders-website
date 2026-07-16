@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.2.2...v0.3.0) (2026-07-16)
+
+### Features
+
+- **avatar:** make user avatar component shared ([e725741](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e72574148b3108c770964454bac21988f4d6e55b))
+- **entities:** added pages for upcoming entities features ([bc6d26c](https://github.com/kaundalvikas21/fanatic-coders-website/commit/bc6d26c09aad84d364dea15ea7f22b2cfcc73bc1))
+- **message component:** added service request message component ([21157d0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/21157d03f431a2123e12a2a58b7b87a4ec1ac099))
+- **permissions:** added permission hooks and server function for request messages ([767b1a2](https://github.com/kaundalvikas21/fanatic-coders-website/commit/767b1a205266580bef30cf8edf2bf137aaa0c0b7))
+- **provider:** created context and added permissions provider ([a21dc57](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a21dc5740c6c286105e2ee2ff85808195b4e852d))
+- **types:** added types for services requests messages ([a6a6154](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a6a6154ece9a306b9d5e62f6a5399aed05bc5407))
+
+### Code Refactoring
+
+- **auth:** reorganize helper function ([aee46ad](https://github.com/kaundalvikas21/fanatic-coders-website/commit/aee46ad7e0cb44076661b17eead8f5b4b21b08dd))
+- **auth:** try to make auth middlware more readable and clean ([c36d0dc](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c36d0dc918d1608cc81bf35dd0a58ce3e7ef6907))
+- **dynamic page:** make component more explicty and reasonable component ([e8d129a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e8d129a0038ec7133efed0ef6b362d0dee1e4701))
+- **invitations:** organize folder structure and move them to module based arch ([514153e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/514153e6ac698169764ded464227c4454398f6bb))
+- **lead:** reorganize folder structure and add leads into modules folder ([8b8287d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8b8287dd7713fc7228a6bca9d555bd6be7781561))
+- **permission:** added module based permission access ([fb233c8](https://github.com/kaundalvikas21/fanatic-coders-website/commit/fb233c845d03a3d1ef96074897fff8bccd183c7c))
+- **routes:** reorganize routes and add new routes ([80c1288](https://github.com/kaundalvikas21/fanatic-coders-website/commit/80c12885bb179820270db167e988383142674617))
+
 ### [0.2.2](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.2.1...v0.2.2) (2026-07-14)
 
 ### Features
