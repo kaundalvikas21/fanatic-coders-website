@@ -14,7 +14,7 @@ export const ALL_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as
 export const USER_ROLES = [Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 export const USER_ROLE_OPTIONS = USER_ROLES.map((role) => ({
   value: role,
-  label: `${role.charAt(0)}${role.slice(1).toLowerCase()}`,
+  label: getRoleLabel(role),
 }));
 
 export function parseRoles(role?: string | null): Role[] {
@@ -26,6 +26,16 @@ export function parseRoles(role?: string | null): Role[] {
     .split(',')
     .map((item) => item.trim())
     .filter((item): item is Role => Object.values(Role).includes(item as Role));
+}
+
+export function getRoleLabel(role?: string | null) {
+  const [primaryRole] = parseRoles(role);
+
+  if (!primaryRole) {
+    return 'User';
+  }
+
+  return `${primaryRole.charAt(0)}${primaryRole.slice(1).toLowerCase()}`;
 }
 
 export function hasAnyRole(role: string | null | undefined, allowedRoles: readonly Role[]) {

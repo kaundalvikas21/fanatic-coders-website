@@ -15,6 +15,7 @@ export type AccessModel =
   | 'project'
   | 'revenue'
   | 'serviceRequest'
+  | 'serviceRequestMessage'
   | 'task'
   | 'team'
   | 'timeEntry';

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { BadgeCheck, ChevronsUpDown, LogOut, Settings } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserAvatar } from '@/components/shared/user-avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,13 +19,11 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { authClient, useSession } from '@/lib/auth/client';
-import { getInitials } from '@/utils/string';
 
 type UserIdentity = {
   name: string;
   email: string;
   image?: string;
-  initials: string;
 };
 
 function getUserIdentity(
@@ -42,20 +40,19 @@ function getUserIdentity(
     name: user?.name || 'Signed in',
     email: user?.email || '',
     image: user?.image ?? undefined,
-    initials: getInitials(user?.name, user?.email),
   };
 }
 
 function UserIdentityRow({ user }: { user: UserIdentity }) {
   return (
     <>
-      <Avatar className="h-8 w-8 rounded-lg">
-        <AvatarImage
-          src={user.image}
-          alt={user.name}
-        />
-        <AvatarFallback className="rounded-lg">{user.initials}</AvatarFallback>
-      </Avatar>
+      <UserAvatar
+        name={user.name}
+        email={user.email}
+        image={user.image}
+        className="h-8 w-8 rounded-lg"
+        fallbackClassName="rounded-lg"
+      />
       <div className="grid flex-1 text-left text-sm leading-tight">
         <span className="truncate font-medium">{user.name}</span>
         <span className="truncate text-xs">{user.email}</span>

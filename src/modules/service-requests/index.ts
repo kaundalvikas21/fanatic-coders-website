@@ -1,9 +1,12 @@
-export { ServiceRequestAside } from './components/details/ServiceRequestAside';
-export { ServiceRequestDetails } from './components/details/ServiceRequestDetails';
+export { ServiceRequestConversation } from './components/conversation';
+export { ServiceRequestSummarySections } from './components/details/ServiceRequestSummarySections';
 export { ServiceRequestForm } from './components/form/ServiceRequestForm';
 export { ServiceCatalog } from './components/list/ServiceCatalog';
 export { ServiceRequestList } from './components/list/ServiceRequestList';
+export { useServiceRequestMessagePermissions } from './hooks/use-service-request-message-permissions';
 export { useServiceRequestPermissions } from './hooks/use-service-request-permissions';
+export { createServiceRequestMessagePermissions } from './utils/message-permissions';
 export { createServiceRequestPermissions } from './utils/permissions';
 export { getServiceRequestPermissions } from './data/permissions';
 export type { ServiceRequestPermissions } from './utils/permissions';
+export type { ServiceRequestMessagePermissions } from './utils/message-permissions';
