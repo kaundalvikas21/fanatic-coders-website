@@ -1,0 +1,39 @@
+# Dependencies are installed inside Docker.
+node_modules/
+.pnpm-store/
+
+# Generated build output is recreated inside Docker.
+.next/
+out/
+dist/
+build/
+.vercel/
+
+# Git, CI, editor, and local tooling files.
+.git/
+.github/
+.vscode/
+.idea/
+.husky/
+
+# Local environment files can contain secrets.
+.env
+.env.*
+!.env.example
+
+# Logs, tests, caches, and temporary files.
+*.log
+coverage/
+playwright-report/
+test-results/
+.cache/
+.turbo/
+*.tsbuildinfo
+
+# OS metadata and deployment definitions are not application source.
+.DS_Store
+Thumbs.db
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+docker-compose*.yaml
