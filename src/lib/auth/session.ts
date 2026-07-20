@@ -25,6 +25,7 @@ async function getSessionUser(headers: Headers): Promise<unknown> {
   try {
     const { data } = await authClient.getSession({
       fetchOptions: {
+        credentials: 'include',
         headers: requestHeaders,
         cache: 'no-store',
       },
