@@ -1,5 +1,6 @@
 import { authClient } from '@/lib/auth/client';
 import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';
+import { OrganizationMemberRole } from '@/types';
 
 export const Role = {
   ADMIN: 'ADMIN',
@@ -71,4 +72,8 @@ export async function getRole(headers: Headers) {
   });
 
   return result.data?.role ?? null;
+}
+
+export function isOrganizationMemberRole(role: string): role is OrganizationMemberRole {
+  return role === 'ADMIN' || role === 'MANAGER' || role === 'MEMBER' || role === 'CLIENT';
 }
