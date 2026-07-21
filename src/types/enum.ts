@@ -6,6 +6,9 @@ export type LeadStatus = Schemas['LeadStatus'];
 export type LeadSource = Schemas['LeadSource'];
 export type ServiceInterest = Schemas['ServiceInterest'];
 export type ServiceRequestStatus = Schemas['ServiceRequestStatus'];
+export type ProjectStatus = Schemas['ProjectStatus'];
+export type ProjectMemberRole = Schemas['ProjectMemberRole'];
+export type ProjectCurrency = Schemas['ProjectCurrency'];
 
 export const LEAD_STATUSES = [
   'NEW',
@@ -71,3 +74,36 @@ export const SERVICE_REQUEST_STATUS_BADGE_VARIANTS = {
   ServiceRequestStatus,
   'default' | 'secondary' | 'outline' | 'destructive'
 >;
+
+export const PROJECT_STATUSES = [
+  'PLANNING',
+  'ACTIVE',
+  'ON_HOLD',
+  'COMPLETED',
+  'ARCHIVED',
+] as const satisfies readonly ProjectStatus[];
+
+export const PROJECT_STATUS_OPTIONS = [
+  { value: 'PLANNING', label: 'Planning' },
+  { value: 'ACTIVE', label: 'Active' },
+  { value: 'ON_HOLD', label: 'On hold' },
+  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'ARCHIVED', label: 'Archived' },
+] as const satisfies readonly { value: ProjectStatus; label: string }[];
+
+export const PROJECT_STATUS_BADGE_VARIANTS = {
+  PLANNING: 'default',
+  ACTIVE: 'secondary',
+  ON_HOLD: 'outline',
+  COMPLETED: 'outline',
+  ARCHIVED: 'destructive',
+} as const satisfies Record<ProjectStatus, 'default' | 'secondary' | 'outline' | 'destructive'>;
+
+export const PROJECT_CURRENCIES = ['USD', 'AED'] as const satisfies readonly ProjectCurrency[];
+
+export const DEFAULT_PROJECT_CURRENCY = 'USD' satisfies ProjectCurrency;
+
+export const PROJECT_CURRENCY_OPTIONS = [
+  { value: 'USD', label: 'USD' },
+  { value: 'AED', label: 'AED' },
+] as const satisfies readonly { value: ProjectCurrency; label: string }[];

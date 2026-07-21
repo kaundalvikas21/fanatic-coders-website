@@ -1,5 +1,6 @@
 import type { components } from './backend-types';
 import type { Response } from './api';
+import type { InviteMemberRole } from './invitation';
 
 type Schemas = components['schemas'];
 
@@ -8,6 +9,7 @@ export type User = Schemas['User'];
 export const USER_SORT_FIELDS = ['createdAt', 'role', 'userId', 'id'] as const;
 
 export type UserSortField = (typeof USER_SORT_FIELDS)[number];
+export type OrganizationMemberRole = InviteMemberRole | 'ADMIN';
 
 export type GetUsersInput = {
   sortBy?: UserSortField;

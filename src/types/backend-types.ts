@@ -41,6 +41,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch current user access
+         * @description Returns the authenticated user, active organization member, role, and permission statements for UI access checks.
+         */
+        get: operations["getMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/invitations": {
         parameters: {
             query?: never;
@@ -137,6 +157,96 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/service-requests/{serviceRequestId}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch service request messages
+         * @description Returns the consultation chronologically. Clients receive only shared messages from their own service request.
+         */
+        get: operations["getServiceRequestMessages"];
+        put?: never;
+        /**
+         * Create a service request message
+         * @description Adds a message to a service request consultation. Only Admin and Manager can create internal messages.
+         */
+        post: operations["createServiceRequestMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/service-requests/{serviceRequestId}/project": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create project from service request
+         * @description Creates a project using the client and service from an existing service request. Admin can assign a manager; Manager is assigned to self.
+         */
+        post: operations["createProjectFromServiceRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch projects
+         * @description Admin sees all projects; clients see own projects; other members see assigned or created projects.
+         */
+        get: operations["getProjects"];
+        put?: never;
+        /**
+         * Create a project
+         * @description Creates a project directly. Admin can assign a manager; Manager is assigned to self.
+         */
+        post: operations["createProject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a project by id */
+        get: operations["getProjectById"];
+        /**
+         * Update a project by id
+         * @description Updates project details. Admin can reassign manager; Manager stays assigned to self.
+         */
+        put: operations["updateProjectById"];
+        post?: never;
+        /** Delete a project by id */
+        delete: operations["deleteProjectById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/service-requests/{id}": {
         parameters: {
             query?: never;
@@ -189,6 +299,27 @@ export interface components {
          * @enum {string}
          */
         ServiceRequestStatus: "NEW" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+        /**
+         * @example PLANNING
+         * @enum {string}
+         */
+        ProjectStatus: "PLANNING" | "ACTIVE" | "ON_HOLD" | "COMPLETED" | "ARCHIVED";
+        /**
+         * @example MANAGER
+         * @enum {string}
+         */
+        ProjectMemberRole: "MANAGER" | "MEMBER";
+        /**
+         * @default USD
+         * @example USD
+         * @enum {string}
+         */
+        ProjectCurrency: "USD" | "AED";
+        /**
+         * @example CLIENT
+         * @enum {string}
+         */
+        OrganizationRole: "ADMIN" | "CLIENT" | "MANAGER" | "MEMBER";
         ApiResponse: {
             /** @example true */
             success: boolean;
@@ -202,6 +333,54 @@ export interface components {
                 code: string;
                 details?: string;
             };
+        };
+        MeUser: {
+            /** @example clx0000000000000000000000 */
+            id: string;
+            /** @example Akshay */
+            name: string;
+            /**
+             * Format: email
+             * @example akshay@example.com
+             */
+            email: string;
+        };
+        /**
+         * @description Role permission statements keyed by resource. The values are allowed CRUD or domain actions.
+         * @example {
+         *       "ac": [
+         *         "read"
+         *       ],
+         *       "serviceRequest": [
+         *         "create",
+         *         "read"
+         *       ],
+         *       "serviceRequestMessage": [
+         *         "create",
+         *         "read"
+         *       ],
+         *       "project": [
+         *         "read"
+         *       ],
+         *       "dashboard": [
+         *         "read"
+         *       ]
+         *     }
+         */
+        PermissionStatements: {
+            [key: string]: string[];
+        };
+        Me: {
+            user: components["schemas"]["MeUser"];
+            /** @example seed-org-fanatic-coders */
+            organizationId: string;
+            /** @example seed-member-client */
+            memberId: string;
+            role: components["schemas"]["OrganizationRole"];
+            permissions: components["schemas"]["PermissionStatements"];
+        };
+        MeResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Me"];
         };
         User: {
             /** @example clx0000000000000000000000 */
@@ -411,6 +590,177 @@ export interface components {
             status?: components["schemas"]["ServiceRequestStatus"];
             data?: components["schemas"]["ServiceRequestData"];
         };
+        ProjectMember: {
+            /** @example clx0000000000000000000011 */
+            id: string;
+            /** @example clx0000000000000000000010 */
+            projectId: string;
+            /** @example seed-member-manager */
+            memberId: string;
+            role: components["schemas"]["ProjectMemberRole"];
+            /**
+             * Format: date-time
+             * @example 2026-07-21T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-21T06:30:00.000Z
+             */
+            updatedAt: string;
+        };
+        Project: {
+            /** @example clx0000000000000000000010 */
+            id: string;
+            /** @example clx0000000000000000000005 */
+            clientId: string;
+            /** @example clx0000000000000000000006 */
+            serviceRequestId?: string | null;
+            /** @example seed-member-admin */
+            createdByMemberId: string;
+            /** @example Acme website redesign */
+            name: string;
+            /** @example Website redesign project created from the client service request. */
+            description?: string | null;
+            service: components["schemas"]["ServiceInterest"];
+            status: components["schemas"]["ProjectStatus"];
+            /**
+             * Format: date-time
+             * @example 2026-08-01T00:00:00.000Z
+             */
+            startDate?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-09-15T00:00:00.000Z
+             */
+            endDate?: string | null;
+            /**
+             * Format: decimal
+             * @example 25000
+             */
+            budgetAmount?: number | null;
+            currency: components["schemas"]["ProjectCurrency"];
+            /**
+             * Format: date-time
+             * @example 2026-07-21T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-21T06:30:00.000Z
+             */
+            updatedAt: string;
+            memberProjects?: components["schemas"]["ProjectMember"][];
+        };
+        CreateProjectRequest: {
+            /** @example clx0000000000000000000005 */
+            clientId: string;
+            /** @example clx0000000000000000000006 */
+            serviceRequestId?: string;
+            /**
+             * @description Admin-only manager assignment. Managers are assigned to self by the backend.
+             * @example seed-member-manager
+             */
+            managerMemberId?: string;
+            /** @example Acme website redesign */
+            name: string;
+            /** @example Website redesign project created from discovery. */
+            description?: string;
+            service: components["schemas"]["ServiceInterest"];
+            status?: components["schemas"]["ProjectStatus"];
+            /** Format: date-time */
+            startDate?: string;
+            /** Format: date-time */
+            endDate?: string;
+            /** @example 25000 */
+            budgetAmount?: number;
+            currency?: components["schemas"]["ProjectCurrency"];
+        };
+        CreateProjectFromServiceRequestRequest: {
+            /**
+             * @description Admin-only manager assignment. Managers are assigned to self by the backend.
+             * @example seed-member-manager
+             */
+            managerMemberId?: string;
+            /** @example Acme website redesign */
+            name?: string;
+            /** @example Project created from the accepted service request. */
+            description?: string;
+            status?: components["schemas"]["ProjectStatus"];
+            /** Format: date-time */
+            startDate?: string;
+            /** Format: date-time */
+            endDate?: string;
+            /** @example 25000 */
+            budgetAmount?: number;
+            currency?: components["schemas"]["ProjectCurrency"];
+        };
+        UpdateProjectRequest: {
+            /**
+             * @description Admin-only manager reassignment. Managers are assigned to self by the backend.
+             * @example seed-member-manager
+             */
+            managerMemberId?: string | null;
+            name?: string;
+            description?: string | null;
+            status?: components["schemas"]["ProjectStatus"];
+            /** Format: date-time */
+            startDate?: string | null;
+            /** Format: date-time */
+            endDate?: string | null;
+            budgetAmount?: number | null;
+            currency?: components["schemas"]["ProjectCurrency"];
+        };
+        ServiceRequestMessageAuthorUser: {
+            /** @example clx0000000000000000000000 */
+            id: string;
+            /** @example Akshay */
+            name: string;
+            /** @example https://example.com/avatar.png */
+            image?: string | null;
+        };
+        ServiceRequestMessageAuthor: {
+            /** @example seed-member-manager */
+            id: string;
+            role: components["schemas"]["OrganizationRole"];
+            user: components["schemas"]["ServiceRequestMessageAuthorUser"];
+        };
+        ServiceRequestMessage: {
+            /** @example clx0000000000000000000007 */
+            id: string;
+            /** @example clx0000000000000000000006 */
+            serviceRequestId: string;
+            /** @example seed-member-manager */
+            authorMemberId: string;
+            /** @example Could you confirm the target launch date? */
+            body: string;
+            /**
+             * @description Internal messages are visible only to Admin and Manager roles.
+             * @example false
+             */
+            isInternal: boolean;
+            /**
+             * Format: date-time
+             * @example 2026-07-15T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-15T06:30:00.000Z
+             */
+            updatedAt: string;
+            author: components["schemas"]["ServiceRequestMessageAuthor"];
+        };
+        CreateServiceRequestMessageRequest: {
+            /** @example Could you confirm the target launch date? */
+            body: string;
+            /**
+             * @description Admin/Manager-only internal note. Clients cannot set this to true.
+             * @default false
+             * @example false
+             */
+            isInternal: boolean;
+        };
         RequestPasswordResetRequest: {
             /**
              * Format: email
@@ -442,6 +792,7 @@ export interface components {
              */
             email: string;
             role: components["schemas"]["InviteMemberRole"];
+            serviceInterest?: components["schemas"]["ServiceInterest"];
             /**
              * @description Resend the invitation email if a pending invitation already exists.
              * @example true
@@ -458,6 +809,7 @@ export interface components {
             email: string;
             /** @example CLIENT */
             role: string;
+            serviceInterest?: components["schemas"]["ServiceInterest"];
             /** @example seed-org-fanatic-coders */
             organizationId: string;
             /** @example seed-user-admin */
@@ -489,6 +841,18 @@ export interface components {
         };
         ServiceRequestResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["ServiceRequest"];
+        };
+        ProjectsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Project"][];
+        };
+        ProjectResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Project"];
+        };
+        ServiceRequestMessagesResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["ServiceRequestMessage"][];
+        };
+        ServiceRequestMessageResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["ServiceRequestMessage"];
         };
         HealthResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["HealthData"];
@@ -530,6 +894,12 @@ export interface components {
         LeadId: string;
         /** @example clx0000000000000000000006 */
         ServiceRequestId: string;
+        /** @example clx0000000000000000000006 */
+        ServiceRequestMessageServiceRequestId: string;
+        /** @example clx0000000000000000000006 */
+        ServiceRequestProjectServiceRequestId: string;
+        /** @example clx0000000000000000000010 */
+        ProjectId: string;
     };
     requestBodies: never;
     headers: never;
@@ -581,6 +951,36 @@ export interface operations {
             };
             /** @description Invalid email or redirect URL. */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current user fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            /** @description Authenticated user does not have an active organization member. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -858,7 +1258,326 @@ export interface operations {
                 };
             };
             401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
             /** @description Client profile has not been created. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getServiceRequestMessages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestMessageServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Service request messages fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceRequestMessagesResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found or is not accessible to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    createServiceRequestMessage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestMessageServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateServiceRequestMessageRequest"];
+            };
+        };
+        responses: {
+            /** @description Service request message created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceRequestMessageResponse"];
+                };
+            };
+            /** @description Invalid service request message payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found or is not accessible to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    createProjectFromServiceRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProjectServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProjectFromServiceRequestRequest"];
+            };
+        };
+        responses: {
+            /** @description Project created from service request successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            /** @description Invalid project payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description A project already exists for this service request. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getProjects: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Projects fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectsResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProjectRequest"];
+            };
+        };
+        responses: {
+            /** @description Project created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            /** @description Invalid project payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Client or service request was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getProjectById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                id: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Project fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    updateProjectById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                id: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectRequest"];
+            };
+        };
+        responses: {
+            /** @description Project updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            /** @description Invalid project payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteProjectById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                id: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Project deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project was not found. */
             404: {
                 headers: {
                     [name: string]: unknown;

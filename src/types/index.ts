@@ -20,17 +20,31 @@ export type {
 } from './api';
 
 export {
+  DEFAULT_PROJECT_CURRENCY,
   LEAD_SOURCES,
   LEAD_STATUS_BADGE_VARIANTS,
   LEAD_STATUS_OPTIONS,
   LEAD_STATUSES,
+  PROJECT_CURRENCIES,
+  PROJECT_CURRENCY_OPTIONS,
   SERVICE_INTEREST_OPTIONS,
   SERVICE_INTERESTS,
+  PROJECT_STATUS_BADGE_VARIANTS,
+  PROJECT_STATUS_OPTIONS,
+  PROJECT_STATUSES,
   SERVICE_REQUEST_STATUS_BADGE_VARIANTS,
   SERVICE_REQUEST_STATUS_OPTIONS,
   SERVICE_REQUEST_STATUSES,
 } from './enum';
-export type { LeadSource, LeadStatus, ServiceInterest, ServiceRequestStatus } from './enum';
+export type {
+  LeadSource,
+  LeadStatus,
+  ProjectCurrency,
+  ProjectMemberRole,
+  ProjectStatus,
+  ServiceInterest,
+  ServiceRequestStatus,
+} from './enum';
 export type {
   GetInvitationsResponse,
   Invitation,
@@ -59,6 +73,26 @@ export type {
   UpdateLeadByIdResponse,
   UpdateLeadInput,
 } from './lead';
+export type {
+  CreateProjectFromServiceRequestRequest,
+  CreateProjectFromServiceRequestResponse,
+  CreateProjectInput,
+  CreateProjectRequest,
+  CreateProjectResponse,
+  DeleteProjectByIdParams,
+  DeleteProjectByIdResponse,
+  GetProjectByIdParams,
+  GetProjectByIdResponse,
+  GetProjectsResponse,
+  Project,
+  ProjectMember,
+  ProjectResponse,
+  ProjectsResponse,
+  UpdateProjectByIdParams,
+  UpdateProjectByIdRequest,
+  UpdateProjectByIdResponse,
+  UpdateProjectInput,
+} from './project';
 export type {
   CreateServiceRequestInput,
   CreateServiceRequestRequest,
@@ -89,6 +123,7 @@ export type {
   GetUserMemberResponse,
   GetUsersInput,
   GetUsersResponse,
+  OrganizationMemberRole,
   User,
   UserListItem,
   UserSortField,
