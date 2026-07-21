@@ -14,8 +14,16 @@ import { ServiceRequestActionsCard } from '@/modules/service-requests/components
 import { ServiceRequestStatusCard } from '@/modules/service-requests/components/details/ServiceRequestStatusCard';
 import { ServiceRequestInfoCard } from '@/modules/service-requests/components/details/ServiceRequestInfoCard';
 import { ServiceRequestNotificationsCard } from '@/modules/service-requests/components/details/ServiceRequestNotificationsCard';
+import { CreateProjectFromServiceRequestForm } from '@/modules/projects';
+import { getCurrentAccess } from '@/lib/auth/current-access';
+import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
+import type { OrganizationMemberRole } from '@/types';
 
 export const dynamic = 'force-dynamic';
+
+const PROJECT_MANAGER_ASSIGNMENT_ROLES = [
+  'MANAGER',
+] as const satisfies readonly OrganizationMemberRole[];
 
 type ServiceRequestDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -24,6 +32,7 @@ type ServiceRequestDetailPageProps = {
 export default async function ServiceRequestDetailPage({ params }: ServiceRequestDetailPageProps) {
   const { id } = await params;
   const permissions = await getServiceRequestPermissions();
+  const access = await getCurrentAccess();
   const { success, data: request } = (await getServiceRequestById(id)) as {
     success: boolean;
     data?: ServiceRequest | null;
@@ -35,6 +44,9 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
   }
 
   const template = getServiceRequestTemplate(request.service);
+  const managers = permissions.canUpdate
+    ? await getOrganizationMembersByRole(PROJECT_MANAGER_ASSIGNMENT_ROLES)
+    : [];
 
   return (
     <DetailPageLayout>
@@ -62,11 +74,19 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
-        {/* Show management controls only to viewers with update access. */}
-        {permissions.canUpdate && <ServiceRequestActionsCard request={request} />}
-
-        {/* Keep shared status and request context visible to every viewer. */}
+        {/* Keep status as the dedicated top-level state display for every viewer. */}
         <ServiceRequestStatusCard request={request} />
+
+        {/* Show management controls below status only to viewers with update access. */}
+        {permissions.canUpdate && <ServiceRequestActionsCard request={request} />}
+        {permissions.canUpdate && request.status !== 'COMPLETED' && (
+          <CreateProjectFromServiceRequestForm
+            request={request}
+            managers={managers}
+            canAssignManager={access?.role === 'ADMIN'}
+          />
+        )}
+
         <ServiceRequestInfoCard request={request} />
         <ServiceRequestNotificationsCard />
       </DetailPageLayout.Aside>
