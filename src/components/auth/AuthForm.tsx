@@ -59,6 +59,8 @@ const content = {
   },
 } satisfies Record<AuthMode, AuthCopy>;
 
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
@@ -81,6 +83,25 @@ export function AuthForm({ mode }: AuthFormProps) {
     router.refresh();
   }
 
+  async function waitForSession() {
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const { data } = await authClient.getSession({
+        fetchOptions: {
+          credentials: 'include',
+          cache: 'no-store',
+        },
+      });
+
+      if (data?.user) {
+        return true;
+      }
+
+      await wait(200);
+    }
+
+    return false;
+  }
+
   async function onSubmit(values: AuthFormValues) {
     setMessage(null);
 
@@ -99,6 +120,13 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       if (result.error) {
         setMessage(result.error.message ?? 'Authentication failed.');
+        return;
+      }
+
+      const hasSession = await waitForSession();
+
+      if (!hasSession) {
+        setMessage('Signed in, but the session was not ready. Refresh and try again.');
         return;
       }
 

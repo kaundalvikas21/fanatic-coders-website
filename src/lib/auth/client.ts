@@ -4,6 +4,9 @@ import { env } from '@/config/env';
 
 export const authClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_AUTH_URL,
+  fetchOptions: {
+    credentials: 'include',
+  },
   plugins: [
     organizationClient({
       teams: {
