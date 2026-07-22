@@ -1,3 +1,4 @@
+// Creates the server Better Auth client and forwards cookie/bearer auth headers.
 import 'server-only';
 
 import { cookies } from 'next/headers';

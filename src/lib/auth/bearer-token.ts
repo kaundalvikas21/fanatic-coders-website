@@ -1,3 +1,4 @@
+// Defines bearer token cookie/storage names and helpers for forwarding token auth.
 export const FCOP_AUTH_TOKEN_COOKIE = 'fcop_auth_token';
 export const FCOP_AUTH_TOKEN_STORAGE_KEY = 'fcop_auth_token';
 
@@ -19,7 +20,7 @@ export function getBearerTokenFromCookieHeader(cookieHeader?: string | null) {
     return null;
   }
 
-  const [, value] = tokenCookie.split('=');
+  const value = tokenCookie.slice(`${FCOP_AUTH_TOKEN_COOKIE}=`.length);
 
   try {
     return decodeURIComponent(value ?? '');

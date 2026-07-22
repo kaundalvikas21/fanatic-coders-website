@@ -60,8 +60,6 @@ const content = {
   },
 } satisfies Record<AuthMode, AuthCopy>;
 
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
@@ -82,25 +80,6 @@ export function AuthForm({ mode }: AuthFormProps) {
     await setFcopOrganizationActive().catch(() => null);
     router.replace('/dashboard');
     router.refresh();
-  }
-
-  async function waitForSession() {
-    for (let attempt = 0; attempt < 5; attempt += 1) {
-      const { data } = await authClient.getSession({
-        fetchOptions: {
-          credentials: 'include',
-          cache: 'no-store',
-        },
-      });
-
-      if (data?.user) {
-        return true;
-      }
-
-      await wait(200);
-    }
-
-    return false;
   }
 
   async function onSubmit(values: AuthFormValues) {
@@ -141,13 +120,6 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       if (bearerToken) {
         await storeFrontendBearerToken(bearerToken);
-      }
-
-      const hasSession = await waitForSession();
-
-      if (!hasSession) {
-        setMessage('Signed in, but the session was not ready. Refresh and try again.');
-        return;
       }
 
       await redirectToDashboard();

@@ -1,3 +1,4 @@
+// Provides server-side auth guards for protected App Router pages.
 import 'server-only';
 
 import { redirect } from 'next/navigation';

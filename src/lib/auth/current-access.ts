@@ -1,3 +1,4 @@
+// Loads the current user's backend access role and permission set for dashboard gates.
 import 'server-only';
 
 import { cache } from 'react';
