@@ -2,8 +2,15 @@ import 'server-only';
 
 import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';
 import { authServerClient, getServerAuthFetchOptions } from '@/lib/auth/server-client';
-import type { GetUserMemberResponse, GetUsersInput, GetUsersResponse, UserListItem } from '@/types';
+import type {
+  GetUserMemberResponse,
+  GetUsersInput,
+  GetUsersResponse,
+  OrganizationMemberRole,
+  UserListItem,
+} from '@/types';
 import { ApiResponse, HttpStatus } from '@/utils/api-response';
+import { isOrganizationMemberRole } from '@/lib/auth/roles';
 
 const USERS_PAGE_LIMIT = 10;
 
@@ -77,6 +84,24 @@ export async function getUsers(input: GetUsersInput = {}): Promise<GetUsersRespo
       },
     });
   }
+}
+
+export async function getOrganizationMembersByRole(
+  roles: readonly OrganizationMemberRole[],
+): Promise<UserListItem[]> {
+  const response = await getUsers({ sortBy: 'createdAt' });
+  const allowedRoles = new Set(roles);
+
+  if (!response.success || !response.data) {
+    return [];
+  }
+
+  return response.data.members.filter((member) =>
+    member.role
+      .split(',')
+      .map((role) => role.trim())
+      .some((role) => isOrganizationMemberRole(role) && allowedRoles.has(role)),
+  );
 }
 
 export async function getUserMemberById(memberId: string): Promise<GetUserMemberResponse> {
