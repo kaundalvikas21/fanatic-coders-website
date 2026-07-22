@@ -9,6 +9,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth/client';
 import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
+import { storeFrontendBearerToken } from '@/lib/auth/token-client';
 import { AuthLayout } from './AuthLayout';
 import { AuthSubmitButton } from './AuthSubmitButton';
 import { AUTH_INPUT_CLASS_NAME } from './auth-styles';
@@ -106,21 +107,40 @@ export function AuthForm({ mode }: AuthFormProps) {
     setMessage(null);
 
     try {
+      let bearerToken: string | null = null;
       const result =
         mode === 'login'
-          ? await authClient.signIn.email({
-              email: values.email,
-              password: values.password,
-            })
-          : await authClient.signUp.email({
-              name: values.name,
-              email: values.email,
-              password: values.password,
-            });
+          ? await authClient.signIn.email(
+              {
+                email: values.email,
+                password: values.password,
+              },
+              {
+                onSuccess: (ctx) => {
+                  bearerToken = ctx.response.headers.get('set-auth-token');
+                },
+              },
+            )
+          : await authClient.signUp.email(
+              {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+              },
+              {
+                onSuccess: (ctx) => {
+                  bearerToken = ctx.response.headers.get('set-auth-token');
+                },
+              },
+            );
 
       if (result.error) {
         setMessage(result.error.message ?? 'Authentication failed.');
         return;
+      }
+
+      if (bearerToken) {
+        await storeFrontendBearerToken(bearerToken);
       }
 
       const hasSession = await waitForSession();

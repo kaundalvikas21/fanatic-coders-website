@@ -1,4 +1,8 @@
 import { authClient } from '@/lib/auth/client';
+import {
+  createBearerAuthorizationHeader,
+  getBearerTokenFromCookieHeader,
+} from '@/lib/auth/bearer-token';
 
 export async function hasSession(headers: Headers): Promise<boolean> {
   return Boolean(await getSessionUser(headers));
@@ -16,6 +20,13 @@ async function getSessionUser(headers: Headers): Promise<unknown> {
 
   if (cookie) {
     requestHeaders.set('cookie', cookie);
+    const bearerAuthorization = createBearerAuthorizationHeader(
+      getBearerTokenFromCookieHeader(cookie),
+    );
+
+    if (bearerAuthorization) {
+      requestHeaders.set('authorization', bearerAuthorization);
+    }
   }
 
   if (authorization) {

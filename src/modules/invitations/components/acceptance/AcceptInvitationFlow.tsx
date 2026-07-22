@@ -10,6 +10,7 @@ import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { authClient, useSession } from '@/lib/auth/client';
 import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
+import { storeFrontendBearerToken } from '@/lib/auth/token-client';
 
 type InviteAuthMode = 'signup' | 'login';
 
@@ -107,6 +108,7 @@ export function AcceptInvitationFlow({
     for (let attempt = 0; attempt < 5; attempt += 1) {
       const { data } = await authClient.getSession({
         fetchOptions: {
+          credentials: 'include',
           cache: 'no-store',
         },
       });
@@ -146,18 +148,37 @@ export function AcceptInvitationFlow({
     }
 
     try {
+      let bearerToken: string | null = null;
       const result =
         mode === 'login'
-          ? await authClient.signIn.email({ email, password })
-          : await authClient.signUp.email({
-              name,
-              email,
-              password,
-            });
+          ? await authClient.signIn.email(
+              { email, password },
+              {
+                onSuccess: (ctx) => {
+                  bearerToken = ctx.response.headers.get('set-auth-token');
+                },
+              },
+            )
+          : await authClient.signUp.email(
+              {
+                name,
+                email,
+                password,
+              },
+              {
+                onSuccess: (ctx) => {
+                  bearerToken = ctx.response.headers.get('set-auth-token');
+                },
+              },
+            );
 
       if (result.error) {
         setMessage(result.error.message ?? 'Authentication failed.');
         return;
+      }
+
+      if (bearerToken) {
+        await storeFrontendBearerToken(bearerToken);
       }
 
       const hasSession = await waitForSession();

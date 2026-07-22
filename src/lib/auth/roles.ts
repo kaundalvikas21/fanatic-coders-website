@@ -1,4 +1,5 @@
 import { authClient } from '@/lib/auth/client';
+import { withBearerAuthorizationFromCookies } from '@/lib/auth/bearer-token';
 import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';
 import { OrganizationMemberRole } from '@/types';
 
@@ -66,7 +67,7 @@ export async function getRole(headers: Headers) {
       organizationSlug: FCOP_ORGANIZATION_SLUG,
     },
     fetchOptions: {
-      headers,
+      headers: withBearerAuthorizationFromCookies(headers),
       cache: 'no-store',
     },
   });
