@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import axios, { AxiosHeaders, type AxiosInstance } from 'axios';
 
+import { createBearerAuthorizationHeader, FCOP_AUTH_TOKEN_COOKIE } from '@/lib/auth/bearer-token';
 import { env } from '@/config/env';
 
 const defaultHeaders = {
@@ -23,11 +24,23 @@ export const authApi: AxiosInstance = axios.create({
 authApi.interceptors.request.use(async (config) => {
   config.withCredentials = true;
 
-  const cookieHeader = (await cookies()).toString();
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+  const authorization = createBearerAuthorizationHeader(
+    cookieStore.get(FCOP_AUTH_TOKEN_COOKIE)?.value,
+  );
 
-  if (cookieHeader) {
+  if (cookieHeader || authorization) {
     const headers = AxiosHeaders.from(config.headers);
-    headers.set('Cookie', cookieHeader);
+
+    if (cookieHeader) {
+      headers.set('Cookie', cookieHeader);
+    }
+
+    if (authorization) {
+      headers.set('Authorization', authorization);
+    }
+
     config.headers = headers;
   }
 

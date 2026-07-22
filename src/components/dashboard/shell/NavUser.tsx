@@ -19,6 +19,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { authClient, useSession } from '@/lib/auth/client';
+import { clearFrontendBearerToken } from '@/lib/auth/token-client';
 
 type UserIdentity = {
   name: string;
@@ -68,7 +69,7 @@ export function NavUser() {
   const user = getUserIdentity(session?.user);
 
   async function handleSignOut() {
-    await authClient.signOut();
+    await authClient.signOut().finally(clearFrontendBearerToken);
     router.replace('/login');
     router.refresh();
   }
