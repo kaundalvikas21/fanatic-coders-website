@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { BriefcaseBusiness } from 'lucide-react';
+import { DatePickerField } from '@/components/shared/forms/DatePickerField';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
@@ -11,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { createProjectFromServiceRequest } from '@/modules/projects/data/mutations';
+import { formatDateInputValue, parseDateInputValue, startOfToday } from '@/utils/date';
 import type {
   CreateProjectFromServiceRequestRequest,
   Project,
@@ -55,8 +57,16 @@ export function CreateProjectFromServiceRequestForm({
     },
   });
   const isSubmitting = form.formState.isSubmitting;
+  const selectedStartDateValue = useWatch({ control: form.control, name: 'startDate' });
   const budgetAmountError = form.formState.errors.budgetAmount?.message;
   const managerMemberIdError = form.formState.errors.managerMemberId?.message;
+  const startDateError = form.formState.errors.startDate?.message;
+  const endDateError = form.formState.errors.endDate?.message;
+  const todayDate = startOfToday();
+  const todayDateValue = formatDateInputValue(todayDate);
+  const selectedStartDate = parseDateInputValue(selectedStartDateValue);
+  const endDateMinDate = selectedStartDate ?? todayDate;
+  const endDateMinValue = formatDateInputValue(endDateMinDate);
 
   async function handleSubmit(values: CreateProjectFormValues) {
     const payload: CreateProjectFromServiceRequestRequest = {};
@@ -241,21 +251,51 @@ export function CreateProjectFromServiceRequestForm({
           <div className="grid gap-3 sm:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="project-start">Start date</FieldLabel>
-              <Input
-                id="project-start"
-                type="date"
-                disabled={isSubmitting}
-                {...form.register('startDate')}
+              <Controller
+                control={form.control}
+                name="startDate"
+                rules={{
+                  validate: (value) =>
+                    !value || value >= todayDateValue || 'Start date cannot be in the past.',
+                }}
+                render={({ field }) => (
+                  <DatePickerField
+                    id="project-start"
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Pick start date"
+                    error={startDateError}
+                    disabled={isSubmitting}
+                    minDate={todayDate}
+                  />
+                )}
               />
+              {startDateError && <FieldError errors={[{ message: startDateError }]} />}
             </Field>
             <Field>
               <FieldLabel htmlFor="project-end">End date</FieldLabel>
-              <Input
-                id="project-end"
-                type="date"
-                disabled={isSubmitting}
-                {...form.register('endDate')}
+              <Controller
+                control={form.control}
+                name="endDate"
+                rules={{
+                  validate: (value) =>
+                    !value ||
+                    value >= endDateMinValue ||
+                    'End date cannot be before the start date.',
+                }}
+                render={({ field }) => (
+                  <DatePickerField
+                    id="project-end"
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Pick end date"
+                    error={endDateError}
+                    disabled={isSubmitting}
+                    minDate={endDateMinDate}
+                  />
+                )}
               />
+              {endDateError && <FieldError errors={[{ message: endDateError }]} />}
             </Field>
           </div>
 
