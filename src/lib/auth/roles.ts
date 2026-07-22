@@ -1,3 +1,4 @@
+// Defines organization roles and helpers for role-based dashboard routing.
 import { authClient } from '@/lib/auth/client';
 import { withBearerAuthorizationFromCookies } from '@/lib/auth/bearer-token';
 import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';

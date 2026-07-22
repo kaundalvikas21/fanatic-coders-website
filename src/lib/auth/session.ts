@@ -1,8 +1,6 @@
+// Resolves whether an incoming request has a valid Better Auth session.
 import { authClient } from '@/lib/auth/client';
-import {
-  createBearerAuthorizationHeader,
-  getBearerTokenFromCookieHeader,
-} from '@/lib/auth/bearer-token';
+import { withBearerAuthorizationFromCookies } from '@/lib/auth/bearer-token';
 
 export async function hasSession(headers: Headers): Promise<boolean> {
   return Boolean(await getSessionUser(headers));
@@ -16,22 +14,7 @@ async function getSessionUser(headers: Headers): Promise<unknown> {
     return null;
   }
 
-  const requestHeaders = new Headers();
-
-  if (cookie) {
-    requestHeaders.set('cookie', cookie);
-    const bearerAuthorization = createBearerAuthorizationHeader(
-      getBearerTokenFromCookieHeader(cookie),
-    );
-
-    if (bearerAuthorization) {
-      requestHeaders.set('authorization', bearerAuthorization);
-    }
-  }
-
-  if (authorization) {
-    requestHeaders.set('authorization', authorization);
-  }
+  const requestHeaders = withBearerAuthorizationFromCookies(headers);
 
   try {
     const { data } = await authClient.getSession({

@@ -52,11 +52,6 @@ const modeCopy = {
   }
 >;
 
-const wait = (milliseconds: number) =>
-  new Promise((resolve) => {
-    window.setTimeout(resolve, milliseconds);
-  });
-
 export function AcceptInvitationFlow({
   invitationId,
   invitedEmail,
@@ -102,25 +97,6 @@ export function AcceptInvitationFlow({
     } finally {
       setIsSubmitting(false);
     }
-  }
-
-  async function waitForSession() {
-    for (let attempt = 0; attempt < 5; attempt += 1) {
-      const { data } = await authClient.getSession({
-        fetchOptions: {
-          credentials: 'include',
-          cache: 'no-store',
-        },
-      });
-
-      if (data?.user) {
-        return true;
-      }
-
-      await wait(200);
-    }
-
-    return false;
   }
 
   useEffect(() => {
@@ -179,16 +155,6 @@ export function AcceptInvitationFlow({
 
       if (bearerToken) {
         await storeFrontendBearerToken(bearerToken);
-      }
-
-      const hasSession = await waitForSession();
-
-      if (!hasSession) {
-        setMessage(
-          'Account created, but the session was not ready. Sign in again to accept the invitation.',
-        );
-        setMode('login');
-        return;
       }
 
       await acceptInvitation();

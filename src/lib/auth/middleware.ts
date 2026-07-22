@@ -1,3 +1,4 @@
+// Enforces route-level auth redirects for dashboard and auth-only pages.
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { getRole, getRoleHomePath } from './roles';

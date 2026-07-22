@@ -1,3 +1,4 @@
+// Wraps Better Auth organization client calls for the FCOP workspace.
 import { useCallback, useMemo } from 'react';
 import { authClient } from '@/lib/auth/client';
 import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';

@@ -1,3 +1,4 @@
+// Creates the browser Better Auth client and attaches the stored bearer token.
 import { createAuthClient } from 'better-auth/react';
 import { organizationClient } from 'better-auth/client/plugins';
 import { FCOP_AUTH_TOKEN_STORAGE_KEY } from '@/lib/auth/bearer-token';
