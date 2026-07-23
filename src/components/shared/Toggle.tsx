@@ -4,10 +4,27 @@ import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 import { Toggle } from '@/components/ui/toggle';
+import { useClient } from '@/hooks/useClient';
 
 export function ThemeToggle() {
+  const isClient = useClient();
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
+
+  if (!isClient) {
+    return (
+      <Toggle
+        variant="outline"
+        size="lg"
+        pressed={false}
+        aria-label="Toggle theme"
+        disabled
+      >
+        <Sun className="scale-100 rotate-0 transition-all" />
+        <span className="sr-only">Toggle theme</span>
+      </Toggle>
+    );
+  }
 
   return (
     <Toggle
