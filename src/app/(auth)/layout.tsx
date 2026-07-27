@@ -7,18 +7,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       className="min-h-screen bg-[#080810] px-4 py-6 text-white sm:px-6 lg:px-8"
     >
       <div className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-6xl flex-col">
-        <header className="flex items-center justify-between border-b border-white/10 pb-5">
+        <header className="flex items-center border-b border-white/10 pb-5">
           <Link
             href="/"
             className="font-mono text-sm font-bold tracking-normal text-white"
           >
             fanaticCoders
-          </Link>
-          <Link
-            href="/dashboard"
-            className="rounded-lg border border-white/10 px-3 py-2 text-sm text-slate-200 transition hover:border-cyan-300/40 hover:text-white"
-          >
-            Dashboard
           </Link>
         </header>
         <div className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[0.95fr_1.05fr]">
