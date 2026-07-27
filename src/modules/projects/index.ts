@@ -2,6 +2,9 @@ export { CreateProjectFromServiceRequestForm } from './components/CreateProjectF
 export { ProjectInfoCard } from './components/ProjectInfoCard';
 export { ProjectList } from './components/ProjectList';
 export { ProjectMembersCard } from './components/ProjectMembersCard';
+export { ProjectTasksCard } from './components/ProjectTasksCard';
+export { TaskCreateForm } from './components/TaskCreateForm';
+export { TaskQueue } from './components/TaskQueue';
 export { useProjectPermissions } from './hooks/use-project-permissions';
 export { createProjectPermissions } from './utils/permissions';
 export { getProjectPermissions } from './data/permissions';
