@@ -120,6 +120,24 @@ export type {
 } from './service-request-message';
 export { USER_SORT_FIELDS } from './user';
 export type {
+  CreateTaskRequest,
+  Task,
+  TaskAssignee,
+  TaskPriority,
+  TaskResponse,
+  TasksResponse,
+  TaskStatus,
+  UpdateTaskRequest,
+} from './task';
+export {
+  TASK_PRIORITIES,
+  TASK_PRIORITY_BADGE_VARIANTS,
+  TASK_PRIORITY_OPTIONS,
+  TASK_STATUSES,
+  TASK_STATUS_BADGE_VARIANTS,
+  TASK_STATUS_OPTIONS,
+} from './task';
+export type {
   GetUserMemberResponse,
   GetUsersInput,
   GetUsersResponse,
