@@ -28,6 +28,7 @@ import {
   X,
 } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
+import { HeaderAuthAction } from '@/components/layout/HeaderAuthAction';
 
 interface MegaMenuItem {
   name: string;
@@ -303,6 +304,10 @@ export default function Header() {
 
           {/* CTA + Hamburger */}
           <div className="flex items-center gap-3 shrink-0">
+            <div className="hidden lg:block">
+              <HeaderAuthAction variant="desktop" />
+            </div>
+
             <div className="hidden sm:block">
               <GradientButton href="/contact">
                 startProject
@@ -523,6 +528,11 @@ export default function Header() {
               </span>
             </Link>
           ))}
+
+          <HeaderAuthAction
+            variant="mobile"
+            onNavigate={closeMobileMenu}
+          />
 
           <div className="pt-3">
             <GradientButton
