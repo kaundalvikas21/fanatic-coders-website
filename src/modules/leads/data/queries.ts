@@ -2,15 +2,21 @@
 
 import { authApi } from '@/lib/axios/client';
 import { getApiError, unwrap } from '@/lib/axios/utils';
-import type { ApiResponse, GetLeadByIdResponse, GetLeadsResponse } from '@/types';
+import type { ApiResponse, GetLeadByIdResponse, GetLeadsInput, GetLeadsResponse } from '@/types';
 
 /**
  * Get all leads.
  * Requires lead:read permission in the active organization.
  */
-export async function getLeads(): Promise<GetLeadsResponse | ApiResponse> {
+export async function getLeads(
+  filters: GetLeadsInput = {},
+): Promise<GetLeadsResponse | ApiResponse> {
   try {
-    return await unwrap<GetLeadsResponse>(authApi.get('/api/v1/leads'));
+    return await unwrap<GetLeadsResponse>(
+      authApi.get('/api/v1/leads', {
+        params: filters,
+      }),
+    );
   } catch (error) {
     return getApiError(error);
   }

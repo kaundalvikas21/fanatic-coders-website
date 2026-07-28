@@ -8,7 +8,7 @@ import { getProjectTasks } from '@/modules/projects/data/tasks';
 import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/config/labels';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import { formatDate } from '@/utils/date';
-import type { Project, Task } from '@/types';
+import type { PaginatedProjects, Project, Task } from '@/types';
 
 export const metadata = {
   title: 'Client Dashboard | fanaticCoders',
@@ -25,10 +25,10 @@ function getProjectProgress(tasks: Task[]) {
 }
 
 export default async function ClientDashboardPage() {
-  const projectsResponse = await getProjects();
+  const projectsResponse = await getProjects({ pageSize: 100 });
   const projects: Project[] =
-    projectsResponse.success && Array.isArray(projectsResponse.data)
-      ? (projectsResponse.data as Project[])
+    projectsResponse.success && projectsResponse.data
+      ? (projectsResponse.data as PaginatedProjects).items
       : [];
   const projectCards = await Promise.all(
     projects.map(async (project) => {

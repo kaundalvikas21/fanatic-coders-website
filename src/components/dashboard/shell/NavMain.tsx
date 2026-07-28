@@ -10,6 +10,7 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -34,6 +35,24 @@ function NavMainItem({ item, pathname, activeItemUrl }: NavMainItemProps) {
   const [isOpen, setIsOpen] = useState(shouldOpen);
 
   if (!hasSubItems) {
+    if (item.comingSoon) {
+      return (
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            tooltip={`${item.title} — Coming soon`}
+            disabled
+            aria-disabled
+          >
+            <item.icon />
+            <span>{item.title}</span>
+          </SidebarMenuButton>
+          <SidebarMenuBadge className="right-2 bg-sidebar-accent px-1.5 text-[10px] uppercase">
+            Soon
+          </SidebarMenuBadge>
+        </SidebarMenuItem>
+      );
+    }
+
     return (
       <SidebarMenuItem>
         <SidebarMenuButton

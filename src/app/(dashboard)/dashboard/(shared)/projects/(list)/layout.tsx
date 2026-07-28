@@ -1,20 +1,20 @@
 import type { ReactNode } from 'react';
 import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
-import { LeadsFilters } from '@/modules/leads';
+import { ProjectsFilters } from '@/modules/projects';
 
-export default function LeadsLayout({ children }: { children: ReactNode }) {
+export default function ProjectsLayout({ children }: { children: ReactNode }) {
   return (
     <ListsLayout
       header={
         <PageHeader
-          title="Leads"
-          description="Review contact requests and track follow-up."
+          title="Projects"
+          description="Track delivery workspaces created from service requests."
           showBackButton
         />
       }
     >
-      <LeadsFilters />
+      <ProjectsFilters />
       {children}
     </ListsLayout>
   );

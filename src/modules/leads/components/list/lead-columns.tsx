@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Eye, Mail, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, Eye, MoreHorizontal } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import {
   type LeadStatus,
 } from '@/types';
 import { leadServiceLabels, leadSourceLabels } from '../../config/labels';
+import { TypographyMuted } from '@/components/ui/typography';
 
 function LeadStatusBadge({ status }: { status: LeadStatus }) {
   const option = LEAD_STATUS_OPTIONS.find((item) => item.value === status);
@@ -48,12 +49,6 @@ function formatRelativeDate(value: string) {
   return new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',
   }).format(date);
-}
-
-function getLeadMailHref(lead: Lead) {
-  const subject = encodeURIComponent(`Project inquiry from ${lead.name}`);
-
-  return `mailto:${lead.email}?subject=${subject}`;
 }
 
 function LeadMessage({ lead }: { lead: Lead }) {
@@ -88,12 +83,7 @@ export const leadColumns: ColumnDef<Lead>[] = [
           >
             {lead.name}
           </Link>
-          <a
-            href={getLeadMailHref(lead)}
-            className="text-muted-foreground hover:text-primary hover:underline"
-          >
-            {lead.email}
-          </a>
+          <TypographyMuted>{lead.email}</TypographyMuted>
         </div>
       );
     },
@@ -170,12 +160,6 @@ export const leadColumns: ColumnDef<Lead>[] = [
                     <Eye />
                     View lead
                   </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <a href={getLeadMailHref(lead)}>
-                    <Mail />
-                    Email lead
-                  </a>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>

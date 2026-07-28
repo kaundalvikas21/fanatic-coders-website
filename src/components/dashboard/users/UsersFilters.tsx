@@ -51,19 +51,19 @@ export function UsersFilters() {
     }
   }, [debouncedName, filters.name, setFilters]);
 
-  function setSortBy(value: string) {
+  function handleSortByChange(value: string) {
     void setFilters({ sortBy: value as UserSortField });
   }
 
-  function setSortDirection(value: string) {
+  function handleSortDirectionChange(value: string) {
     void setFilters({ sortDirection: value as typeof filters.sortDirection });
   }
 
-  function setName(value: string) {
+  function handleNameChange(value: string) {
     setNameInput(value);
   }
 
-  function resetFilters() {
+  function handleReset() {
     void setFilters(DEFAULT_FILTERS);
     setNameInput('');
   }
@@ -77,7 +77,7 @@ export function UsersFilters() {
             id="users-sort-by"
             value={filters.sortBy}
             options={sortByOptions}
-            onChange={setSortBy}
+            onChange={handleSortByChange}
             ariaLabel="Members sort field"
           />
         </Field>
@@ -88,7 +88,7 @@ export function UsersFilters() {
             id="users-sort-direction"
             value={filters.sortDirection}
             options={sortDirectionOptions}
-            onChange={setSortDirection}
+            onChange={handleSortDirectionChange}
             ariaLabel="Members sort direction"
           />
         </Field>
@@ -98,7 +98,7 @@ export function UsersFilters() {
           <Input
             type="search"
             value={nameInput}
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => handleNameChange(event.target.value)}
             placeholder="Search by name"
           />
         </Field>
@@ -106,7 +106,7 @@ export function UsersFilters() {
         <Button
           type="button"
           variant="outline"
-          onClick={resetFilters}
+          onClick={handleReset}
           className="w-full md:w-auto"
         >
           <RotateCcw />
