@@ -18,8 +18,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { authClient, useSession } from '@/lib/auth/client';
+import { authClient } from '@/lib/auth/client';
 import { clearFrontendBearerToken } from '@/lib/auth/token-client';
+import { useAuth } from '@/providers/AuthProvider';
+import { useClient } from '@/hooks/useClient';
 
 type UserIdentity = {
   name: string;
@@ -64,9 +66,10 @@ function UserIdentityRow({ user }: { user: UserIdentity }) {
 
 export function NavUser() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const { isMobile } = useSidebar();
-  const user = getUserIdentity(session?.user);
+  const isClient = useClient();
+  const user = getUserIdentity(isClient ? session?.user : undefined);
 
   async function handleSignOut() {
     await authClient.signOut().finally(clearFrontendBearerToken);
