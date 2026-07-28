@@ -1,14 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { LogIn, type LucideIcon, UserPlus } from 'lucide-react';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth/client';
+import { FCOP_ORGANIZATION_SLUG } from '@/lib/auth/organization';
 import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
+import { getRoleHomePath } from '@/lib/auth/roles';
 import { storeFrontendBearerToken } from '@/lib/auth/token-client';
 import { AuthLayout } from './AuthLayout';
 import { AuthSubmitButton } from './AuthSubmitButton';
@@ -61,7 +62,6 @@ const content = {
 } satisfies Record<AuthMode, AuthCopy>;
 
 export function AuthForm({ mode }: AuthFormProps) {
-  const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const {
     register,
@@ -78,8 +78,13 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   async function redirectToDashboard() {
     await setFcopOrganizationActive().catch(() => null);
-    router.replace('/dashboard');
-    router.refresh();
+    const { data } = await authClient.organization.getActiveMemberRole({
+      query: {
+        organizationSlug: FCOP_ORGANIZATION_SLUG,
+      },
+    });
+
+    window.location.replace(getRoleHomePath(data?.role));
   }
 
   async function onSubmit(values: AuthFormValues) {

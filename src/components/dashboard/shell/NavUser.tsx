@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { BadgeCheck, ChevronsUpDown, LogOut, Settings } from 'lucide-react';
 import { UserAvatar } from '@/components/shared/user-avatar';
 import {
@@ -65,7 +64,6 @@ function UserIdentityRow({ user }: { user: UserIdentity }) {
 }
 
 export function NavUser() {
-  const router = useRouter();
   const { session } = useAuth();
   const { isMobile } = useSidebar();
   const isClient = useClient();
@@ -73,8 +71,7 @@ export function NavUser() {
 
   async function handleSignOut() {
     await authClient.signOut().finally(clearFrontendBearerToken);
-    router.replace('/login');
-    router.refresh();
+    window.location.replace('/login');
   }
 
   return (
