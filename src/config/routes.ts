@@ -3,6 +3,7 @@ import {
   Blocks,
   BriefcaseBusiness,
   ClipboardList,
+  CreditCard,
   Inbox,
   LayoutDashboard,
   ListChecks,
@@ -18,6 +19,7 @@ export type DashboardRoute = {
   url: string;
   icon: ComponentType<{ className?: string }>;
   roles: readonly DashboardRole[];
+  comingSoon?: boolean;
   subItems?: Array<{
     title: string;
     url: string;
@@ -33,6 +35,7 @@ export type DashboardRouteGroup = {
 const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
 const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
+const BILLING_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 
 export const dashboardRouteGroups: DashboardRouteGroup[] = [
@@ -86,6 +89,13 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         icon: ListChecks,
         roles: TASK_ROLES,
       },
+      {
+        title: 'Payments',
+        url: '/dashboard/payments',
+        icon: CreditCard,
+        roles: BILLING_ROLES,
+        comingSoon: true,
+      },
     ],
   },
   {
@@ -114,6 +124,7 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         url: '/dashboard/admin/settings',
         icon: Settings,
         roles: [Role.ADMIN],
+        comingSoon: true,
       },
     ],
   },
