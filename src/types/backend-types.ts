@@ -831,7 +831,21 @@ export interface components {
             data: components["schemas"]["Invitation"];
         };
         LeadsResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["Lead"][];
+            data: components["schemas"]["PaginatedLeads"];
+        };
+        PaginationMeta: {
+            /** @example 1 */
+            page: number;
+            /** @example 10 */
+            pageSize: number;
+            /** @example 24 */
+            totalItems: number;
+            /** @example 3 */
+            totalPages: number;
+        };
+        PaginatedLeads: {
+            items: components["schemas"]["Lead"][];
+            pagination: components["schemas"]["PaginationMeta"];
         };
         LeadResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Lead"];
@@ -1036,7 +1050,18 @@ export interface operations {
     };
     getLeads: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Filter by exact lead email. */
+                email?: string;
+                /** @description Filter by lead status. */
+                status?: components["schemas"]["LeadStatus"];
+                /** @description Filter by requested service type. */
+                serviceType?: components["schemas"]["ServiceInterest"];
+                /** @description One-based page number. */
+                page?: number;
+                /** @description Number of leads per page. */
+                pageSize?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1050,6 +1075,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LeadsResponse"];
+                };
+            };
+            /** @description Invalid lead filters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
                 };
             };
             401: components["responses"]["Unauthorized"];

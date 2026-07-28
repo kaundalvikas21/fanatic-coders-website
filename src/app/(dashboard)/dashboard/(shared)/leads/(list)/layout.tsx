@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
+import { LeadsFilters } from '@/modules/leads';
 
 export default function LeadsLayout({ children }: { children: ReactNode }) {
   return (
@@ -13,6 +14,7 @@ export default function LeadsLayout({ children }: { children: ReactNode }) {
         />
       }
     >
+      <LeadsFilters />
       {children}
     </ListsLayout>
   );

@@ -11,7 +11,7 @@ import { getProjects } from '@/modules/projects/data/queries';
 import { getTasks } from '@/modules/projects/data/tasks';
 import { getServiceRequests } from '@/modules/service-requests/data/queries';
 import { formatDate } from '@/utils/date';
-import type { Project, ServiceRequest, Task } from '@/types';
+import type { PaginatedLeads, Project, ServiceRequest, Task } from '@/types';
 
 export const metadata = {
   title: 'Admin | fanaticCoders',
@@ -22,12 +22,12 @@ export const dynamic = 'force-dynamic';
 export default async function AdminPage() {
   // Load each workspace domain together to build one current operational snapshot.
   const [response, projectsResponse, tasksResponse, serviceRequestsResponse] = await Promise.all([
-    getLeads(),
+    getLeads({ pageSize: 100 }),
     getProjects(),
     getTasks(),
     getServiceRequests(),
   ]);
-  const leads = response.success && Array.isArray(response.data) ? response.data : [];
+  const leads = response.success && response.data ? (response.data as PaginatedLeads).items : [];
   const projects: Project[] =
     projectsResponse.success && Array.isArray(projectsResponse.data)
       ? (projectsResponse.data as Project[])
