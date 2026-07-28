@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.3.0...v0.3.1) (2026-07-28)
+
+### Features
+
+- **api:** added muataions and queries function for managing data ([7137232](https://github.com/kaundalvikas21/fanatic-coders-website/commit/71372327be201343ab47c7515cf5790760a015a3))
+- **chart:** added package for manging chart ([2391895](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2391895753571f0a578d68d9a8a8ab8277d87b39))
+- **component:** added components for displaying project and services data ([14470cb](https://github.com/kaundalvikas21/fanatic-coders-website/commit/14470cb32543b40246ce7035fdcaa0d880786c6a))
+- **config:** added configuration ([30807bd](https://github.com/kaundalvikas21/fanatic-coders-website/commit/30807bdccc2eede999b1225fa953e1fc861de224))
+- **dashbaord:** display dynamic charts on dahsboard ([a18bc35](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a18bc35b142e314dbeb503297feb457ce48e2afe))
+- **forms:** added form for creating projects ([e63f4da](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e63f4da23ed751eef289650b67aecd20a84405f4))
+- **header:** added auth button on home page for login ([0b9fab0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/0b9fab08d76e8b09becdbf4e90eeff7494989173))
+- **package:** added new package react-day-picker for managin dates ([0225b14](https://github.com/kaundalvikas21/fanatic-coders-website/commit/0225b143b91ba9a5bbb8ccab04416e2e7eb6874c))
+- **permissions:** added permissions hook and functions ([49d7de7](https://github.com/kaundalvikas21/fanatic-coders-website/commit/49d7de721bc1de6e2c5e8f5b6d6ddd660d5375a4))
+- **projects:** added task component for managing projects ([6a6b443](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6a6b4430911438291bf65c62ddd6ee71c1983f57))
+- **providers:** added auth provider for manaing client based auth interactivity ([309550f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/309550ff264122b55d0ee9bbdf38deb78d1124d2))
+- **route:** getting data and added routes for manging tasks ([b213e17](https://github.com/kaundalvikas21/fanatic-coders-website/commit/b213e17e3c4536d358b16a65041f97bd768eefed))
+- **shadnc:** added new shadcn component for managing date ([d9b0d0c](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d9b0d0c6dc3ccc851c65fa05131ab66157b97c4a))
+- **sidbear:** added sidebar menu active primary color ([0492550](https://github.com/kaundalvikas21/fanatic-coders-website/commit/04925509eeaf065510fb84ebf3464ce83f3dc395))
+- **types:** added types for data safety using Backend as SSOT backed-types ([a793bd1](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a793bd15e5cd686056fde5b89711410ad43dfd26))
+- **types:** added types for managing tasks ([c0028dc](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c0028dcaad616a326d61c2b84fec99c603d77e6c))
+
+### Bug Fixes
+
+- **auth:** added miminal transition on auth page ([7592e0b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/7592e0b5073f424338d01445c1e0945c39669303))
+- **auth:** fixing issue regarding auth ([a5e115a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a5e115a705914ccaa43521d704b5c9f0c6282563))
+- **auth:** passes credentials attrbute in client ([476f2d6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/476f2d6214668a040acf680ebd6bdb4e6be5e5cf))
+- **auth:** refactor auth code and remove dead code make code clean ([87d7ac4](https://github.com/kaundalvikas21/fanatic-coders-website/commit/87d7ac48c2813a27c2d0d0342b3b1f67bced7aae))
+- **auth:** remove dashbaord link from auth layout ([59d77a7](https://github.com/kaundalvikas21/fanatic-coders-website/commit/59d77a70409eb7b4ba31b0d5ac39ede755dd3eb7))
+- **bearer:** added bearer based approach for authentication instead of cookie based ([3a275e2](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3a275e2eb7dbbd04a17772c838086003e4049500))
+- **toggle:** fix hydration issue on theme toggle ([d829e7f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d829e7fc29364b2a88b4c1bf2b06d64282482740))
+
+### Code Refactoring
+
+- **utility:** added utility function to checking orgnanization member role ([f0ba6a3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/f0ba6a39e1f5d85de1d92032880bffabe9aefb91))
+
 ## [0.3.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.2.2...v0.3.0) (2026-07-16)
 
 ### Features
