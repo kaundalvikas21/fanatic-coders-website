@@ -1,6 +1,9 @@
 export { CreateProjectFromServiceRequestForm } from './components/CreateProjectFromServiceRequestForm';
 export { ProjectInfoCard } from './components/ProjectInfoCard';
+export { ProjectItemCard } from './components/ProjectItemCard';
 export { ProjectList } from './components/ProjectList';
+export { ProjectListLoader } from './components/ProjectListLoader';
+export { ProjectsFilters } from './components/ProjectsFilters';
 export { ProjectMembersCard } from './components/ProjectMembersCard';
 export { ProjectTasksCard } from './components/ProjectTasksCard';
 export { TaskCreateForm } from './components/TaskCreateForm';

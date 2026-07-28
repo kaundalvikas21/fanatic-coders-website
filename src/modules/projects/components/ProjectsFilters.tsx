@@ -10,15 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
-  LEAD_STATUSES,
-  LEAD_STATUS_OPTIONS,
+  PROJECT_STATUSES,
+  PROJECT_STATUS_OPTIONS,
   SERVICE_INTERESTS,
   SERVICE_INTEREST_OPTIONS,
 } from '@/types';
 
-const leadFiltersParsers = {
-  email: parseAsString.withDefault(''),
-  status: parseAsStringLiteral(LEAD_STATUSES),
+const projectFiltersParsers = {
+  name: parseAsString.withDefault(''),
+  status: parseAsStringLiteral(PROJECT_STATUSES),
   serviceType: parseAsStringLiteral(SERVICE_INTERESTS),
   page: parseAsInteger.withDefault(1),
 };
@@ -27,7 +27,7 @@ const ALL_FILTERS_VALUE = 'all';
 
 const statusOptions = [
   { value: ALL_FILTERS_VALUE, label: 'All statuses' },
-  ...LEAD_STATUS_OPTIONS,
+  ...PROJECT_STATUS_OPTIONS,
 ] satisfies SelectOption[];
 
 const serviceOptions = [
@@ -35,28 +35,28 @@ const serviceOptions = [
   ...SERVICE_INTEREST_OPTIONS,
 ] satisfies SelectOption[];
 
-export function LeadsFilters() {
-  const [filters, setFilters] = useQueryStates(leadFiltersParsers, {
+export function ProjectsFilters() {
+  const [filters, setFilters] = useQueryStates(projectFiltersParsers, {
     shallow: false,
   });
-  const [emailInput, setEmailInput] = useState(filters.email);
-  const debouncedEmail = useDebounce(emailInput, 500);
+  const [nameInput, setNameInput] = useState(filters.name);
+  const debouncedName = useDebounce(nameInput, 500);
 
   useEffect(() => {
-    const nextEmail = debouncedEmail.trim().toLowerCase();
+    const nextName = debouncedName.trim();
 
-    if (nextEmail !== filters.email) {
-      void setFilters({ email: nextEmail || null, page: null });
+    if (nextName !== filters.name) {
+      void setFilters({ name: nextName || null, page: null });
     }
-  }, [debouncedEmail, filters.email, setFilters]);
+  }, [debouncedName, filters.name, setFilters]);
 
-  function handleEmailChange(value: string) {
-    setEmailInput(value);
+  function handleNameChange(value: string) {
+    setNameInput(value);
   }
 
   function handleStatusChange(value: string) {
     void setFilters({
-      status: value === ALL_FILTERS_VALUE ? null : (value as (typeof LEAD_STATUSES)[number]),
+      status: value === ALL_FILTERS_VALUE ? null : (value as (typeof PROJECT_STATUSES)[number]),
       page: null,
     });
   }
@@ -71,25 +71,25 @@ export function LeadsFilters() {
 
   function handleReset() {
     void setFilters({
-      email: null,
+      name: null,
       status: null,
       serviceType: null,
       page: null,
     });
-    setEmailInput('');
+    setNameInput('');
   }
 
   return (
     <WidgetCard>
       <FieldGroup className="grid gap-4 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
         <Field>
-          <FieldLabel htmlFor="leads-email">Email</FieldLabel>
+          <FieldLabel htmlFor="projects-name">Project name</FieldLabel>
           <Input
-            id="leads-email"
+            id="projects-name"
             type="search"
-            value={emailInput}
-            onChange={(event) => handleEmailChange(event.target.value)}
-            placeholder="lead@example.com"
+            value={nameInput}
+            onChange={(event) => handleNameChange(event.target.value)}
+            placeholder="Search by name"
             autoComplete="off"
           />
         </Field>
@@ -97,22 +97,22 @@ export function LeadsFilters() {
         <Field>
           <FieldLabel>Status</FieldLabel>
           <SelectField
-            id="leads-status"
+            id="projects-status"
             value={filters.status ?? ALL_FILTERS_VALUE}
             options={statusOptions}
             onChange={handleStatusChange}
-            ariaLabel="Filter leads by status"
+            ariaLabel="Filter projects by status"
           />
         </Field>
 
         <Field>
           <FieldLabel>Service</FieldLabel>
           <SelectField
-            id="leads-service"
+            id="projects-service"
             value={filters.serviceType ?? ALL_FILTERS_VALUE}
             options={serviceOptions}
             onChange={handleServiceTypeChange}
-            ariaLabel="Filter leads by service"
+            ariaLabel="Filter projects by service"
           />
         </Field>
 

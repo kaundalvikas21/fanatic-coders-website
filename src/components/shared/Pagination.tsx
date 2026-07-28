@@ -33,7 +33,7 @@ export function Pagination({
     return null;
   }
 
-  function changePage(nextPage: number) {
+  function handlePageChange(nextPage: number) {
     void setPage(nextPage <= 1 ? null : nextPage);
   }
 
@@ -57,7 +57,7 @@ export function Pagination({
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => changePage(page - 1)}
+          onClick={() => handlePageChange(page - 1)}
           disabled={page <= 1}
         >
           Previous
@@ -66,7 +66,7 @@ export function Pagination({
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => changePage(page + 1)}
+          onClick={() => handlePageChange(page + 1)}
           disabled={page >= totalPages}
         >
           Next

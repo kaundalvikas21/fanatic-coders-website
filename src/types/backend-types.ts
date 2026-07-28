@@ -857,7 +857,11 @@ export interface components {
             data: components["schemas"]["ServiceRequest"];
         };
         ProjectsResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["Project"][];
+            data: components["schemas"]["PaginatedProjects"];
+        };
+        PaginatedProjects: {
+            items: components["schemas"]["Project"][];
+            pagination: components["schemas"]["PaginationMeta"];
         };
         ProjectResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Project"];
@@ -1051,7 +1055,7 @@ export interface operations {
     getLeads: {
         parameters: {
             query?: {
-                /** @description Filter by exact lead email. */
+                /** @description Filter by full or partial lead email. */
                 email?: string;
                 /** @description Filter by lead status. */
                 status?: components["schemas"]["LeadStatus"];
@@ -1443,7 +1447,18 @@ export interface operations {
     };
     getProjects: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Filter by full or partial project name. */
+                name?: string;
+                /** @description Filter by project status. */
+                status?: components["schemas"]["ProjectStatus"];
+                /** @description Filter by project service type. */
+                serviceType?: components["schemas"]["ServiceInterest"];
+                /** @description One-based page number. */
+                page?: number;
+                /** @description Number of projects per page. */
+                pageSize?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1457,6 +1472,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProjectsResponse"];
+                };
+            };
+            /** @description Invalid project filters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
                 };
             };
             401: components["responses"]["Unauthorized"];
