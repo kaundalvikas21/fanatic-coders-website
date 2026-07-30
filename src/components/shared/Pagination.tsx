@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import type * as ApiTypes from '@/types/api';
 
 type PaginationProps = {
-  pagination: ApiTypes.Pagination;
+  pagination?: Partial<ApiTypes.Pagination> | null;
   itemLabel?: string;
   queryKey?: string;
   className?: string;
@@ -18,17 +18,15 @@ export function Pagination({
   queryKey = 'page',
   className,
 }: PaginationProps) {
-  const { page, totalPages, totalItems } = pagination;
+  const page = pagination?.page ?? 1;
+  const totalPages = Math.max(pagination?.totalPages ?? 1, 1);
+  const totalItems = pagination?.totalItems;
   const [, setPage] = useQueryState(
     queryKey,
     parseAsInteger.withDefault(1).withOptions({
       shallow: false,
     }),
   );
-
-  if (totalItems === 0) {
-    return null;
-  }
 
   function handlePageChange(nextPage: number) {
     void setPage(nextPage <= 1 ? null : nextPage);
@@ -46,7 +44,12 @@ export function Pagination({
         className="text-sm text-muted-foreground"
         aria-live="polite"
       >
-        Page {page} of {totalPages} · {totalItems} {itemLabel}
+        {totalItems !== undefined && (
+          <>
+            {totalItems} {itemLabel} ·{' '}
+          </>
+        )}
+        Page {page} of {totalPages}.
       </p>
 
       <div className="flex items-center gap-2">
