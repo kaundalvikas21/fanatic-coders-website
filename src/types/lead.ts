@@ -2,7 +2,6 @@ import type { operations } from './backend-types';
 import type { Response, Schemas } from './api';
 
 export type Lead = Schemas['Lead'];
-export type LeadPagination = Schemas['PaginationMeta'];
 export type PaginatedLeads = Schemas['PaginatedLeads'];
 export type LeadsResponse = Response<PaginatedLeads>;
 export type LeadResponse = Response<Lead>;

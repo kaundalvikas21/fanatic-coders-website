@@ -3,13 +3,10 @@
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import type * as ApiTypes from '@/types/api';
 
 type PaginationProps = {
-  pagination: {
-    page: number;
-    totalPages: number;
-    totalItems: number;
-  };
+  pagination: ApiTypes.Pagination;
   itemLabel?: string;
   queryKey?: string;
   className?: string;

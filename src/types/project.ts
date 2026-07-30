@@ -8,7 +8,6 @@ export type CreateProjectFromServiceRequestInput =
   Schemas['CreateProjectFromServiceRequestRequest'];
 export type UpdateProjectInput = Schemas['UpdateProjectRequest'];
 
-export type ProjectPagination = Schemas['PaginationMeta'];
 export type PaginatedProjects = Schemas['PaginatedProjects'];
 export type ProjectsResponse = Response<PaginatedProjects>;
 export type ProjectResponse = Response<Project>;

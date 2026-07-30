@@ -3,6 +3,7 @@ import type { components } from './backend-types';
 export type Schemas = components['schemas'];
 
 export type ApiResponse = Schemas['ApiResponse'];
+export type Pagination = Schemas['PaginationMeta'];
 
 export type SuccessResponse<TData> = Omit<ApiResponse, 'data' | 'error' | 'success'> & {
   success: true;
