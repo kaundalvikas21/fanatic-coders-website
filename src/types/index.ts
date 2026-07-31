@@ -47,6 +47,18 @@ export type {
   ServiceRequestStatus,
 } from './enum';
 export type {
+  AdminDashboardAttentionTask,
+  AdminDashboardAttentionTasksResponse,
+  AdminDashboardLeadDistribution,
+  AdminDashboardLeadDistributionResponse,
+  AdminDashboardOverview,
+  AdminDashboardOverviewResponse,
+  AdminDashboardRecentLead,
+  AdminDashboardRecentLeadsResponse,
+  AdminDashboardTaskDistribution,
+  AdminDashboardTaskDistributionResponse,
+} from './dashboard';
+export type {
   GetInvitationsResponse,
   Invitation,
   InvitationListItem,
