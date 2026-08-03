@@ -135,24 +135,69 @@ export const otherServiceSpecificDataSchema = z.object({
   requestDetails: z.string().trim().min(10).max(2000),
 });
 
-export const seoServiceRequestDataSchema = commonServiceRequestDataSchema.merge(
-  seoServiceSpecificDataSchema,
-);
-export const googleAdsServiceRequestDataSchema = commonServiceRequestDataSchema.merge(
-  googleAdsServiceSpecificDataSchema,
-);
-export const webDevelopmentServiceRequestDataSchema = commonServiceRequestDataSchema.merge(
-  webDevelopmentServiceSpecificDataSchema,
-);
-export const mobileAppDevelopmentServiceRequestDataSchema = commonServiceRequestDataSchema.merge(
-  mobileAppDevelopmentServiceSpecificDataSchema,
-);
-export const generalMarketingServiceRequestDataSchema = commonServiceRequestDataSchema.merge(
-  generalMarketingServiceSpecificDataSchema,
-);
-export const otherServiceRequestDataSchema = commonServiceRequestDataSchema.merge(
-  otherServiceSpecificDataSchema,
-);
+export const seoServiceRequestDataSchema = z.object({
+  primaryDomain: requiredUrlSchema,
+  targetKeywords: z.string().trim().min(10).max(2000),
+  localSeoNeeds: longTextSchema,
+  currentOrganicTraffic: longTextSchema,
+  primaryBusinessGoals: z.string().trim().min(10).max(2000),
+  competitorUrls: longTextSchema,
+  inHouseContentCapability: longTextSchema,
+  previousSeoWork: longTextSchema,
+  budgetRange: requiredTextSchema,
+});
+export const googleAdsServiceRequestDataSchema = z.object({
+  campaignOffer: z.string().trim().min(10).max(2000),
+  conversionActions: z.string().trim().min(5).max(2000),
+  geographicTargeting: z.string().trim().min(2).max(2000),
+  previousAgencyExperience: longTextSchema,
+  targetCpaRoas: optionalTextSchema,
+  remarketingLists: longTextSchema,
+  landingPageUrls: longTextSchema,
+  budgetRange: requiredTextSchema,
+  timelineExpectations: optionalTextSchema,
+});
+export const webDevelopmentServiceRequestDataSchema = z.object({
+  industryVertical: requiredTextSchema,
+  projectType: requiredTextSchema,
+  websiteUrl: optionalUrlSchema,
+  sitemapWireframesNotes: longTextSchema,
+  primaryBusinessGoals: longTextSchema,
+  mediaAssetsAvailable: longTextSchema,
+  budgetRange: requiredTextSchema,
+  timelineExpectations: requiredTextSchema,
+  designReferenceUrls: longTextSchema,
+});
+export const mobileAppDevelopmentServiceRequestDataSchema = z.object({
+  industryVertical: requiredTextSchema,
+  backendRequirements: z.string().trim().min(10).max(2000),
+  websiteUrl: optionalUrlSchema,
+  featureList: longTextSchema,
+  targetPlatforms: optionalTextSchema,
+  authenticationMethod: longTextSchema,
+  prototypeLinks: longTextSchema,
+  budgetRange: requiredTextSchema,
+  timelineExpectations: requiredTextSchema,
+});
+export const generalMarketingServiceRequestDataSchema = z.object({
+  industryVertical: requiredTextSchema,
+  primaryBusinessGoals: z.string().trim().min(10).max(2000),
+  websiteUrl: optionalUrlSchema,
+  targetAudiencePersonas: longTextSchema,
+  activeMarketingChannels: longTextSchema,
+  campaignGoals: longTextSchema,
+  existingBrandAssets: longTextSchema,
+  budgetRange: requiredTextSchema,
+  timelineExpectations: requiredTextSchema,
+});
+export const otherServiceRequestDataSchema = z.object({
+  requestDetails: z.string().trim().min(10).max(2000),
+  currentSituation: z.string().trim().min(10).max(2000),
+  desiredOutcome: z.string().trim().min(10).max(2000),
+  existingMaterials: longTextSchema,
+  timelineExpectations: optionalTextSchema,
+  budgetRange: optionalTextSchema,
+});
 
 export const serviceRequestDataSchemas = {
   SEO: seoServiceRequestDataSchema,
