@@ -13,6 +13,7 @@ export type AccessModel =
   | 'member'
   | 'organization'
   | 'project'
+  | 'proposal'
   | 'revenue'
   | 'serviceRequest'
   | 'serviceRequestMessage'
