@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.3.1...v0.4.0) (2026-08-03)
+
+### Features
+
+- added proposal form component for creating invoice ([922bb32](https://github.com/kaundalvikas21/fanatic-coders-website/commit/922bb322adfd8c2d9262c021da30b6e6eb846d2b))
+- **data:** added queries and mutations for managing proposal ([7f8497a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/7f8497a739b062aeb7c19b03d3a00789b07dadc2))
+- **permission:** added persmission rbac hook for managing porposal ([095f5d6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/095f5d6389cb7dd857ad25f83e209c9de43337ae))
+- **types:** added types for proposal ([080b4a9](https://github.com/kaundalvikas21/fanatic-coders-website/commit/080b4a97b5b9eec40bea99c3e330098c20a2031e))
+
+### Bug Fixes
+
+- **error:** fix issue regarding safety check and error handling ([ee92349](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ee9234961dc2a81bb440778fe6b3d36c60ff6018))
+- **types:** added standard pagination types ([85b7311](https://github.com/kaundalvikas21/fanatic-coders-website/commit/85b7311dfb45f9538d4a2b3a35a033fa706a45ff))
+
+### Code Refactoring
+
+- **dashboard:** reorganize file struccture for dashbaord ([edacc83](https://github.com/kaundalvikas21/fanatic-coders-website/commit/edacc831c61cfbeb69cc5d974ba52d57e02797c9))
+
 ### [0.3.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.3.0...v0.3.1) (2026-07-28)
 
 ### Features
