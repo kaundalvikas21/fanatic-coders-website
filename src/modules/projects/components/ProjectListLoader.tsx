@@ -17,9 +17,12 @@ export async function ProjectListLoader({ filters }: { filters: GetProjectsInput
     );
   }
 
-  const data = response.data as PaginatedProjects;
+  const data = response.data as PaginatedProjects | null | undefined;
+  const projects = data?.items ?? [];
+  const pagination = data?.pagination;
+  const totalItems = pagination?.totalItems ?? projects.length;
 
-  if (data.pagination.totalItems === 0) {
+  if (totalItems === 0) {
     const hasFilters = Boolean(filters.name || filters.status || filters.serviceType);
 
     return (
@@ -36,11 +39,13 @@ export async function ProjectListLoader({ filters }: { filters: GetProjectsInput
 
   return (
     <div className="flex flex-col gap-4">
-      <ProjectList projects={data.items} />
-      <Pagination
-        pagination={data.pagination}
-        itemLabel={data.pagination.totalItems === 1 ? 'project' : 'projects'}
-      />
+      <ProjectList projects={projects} />
+      {pagination && (
+        <Pagination
+          pagination={pagination}
+          itemLabel={totalItems === 1 ? 'project' : 'projects'}
+        />
+      )}
     </div>
   );
 }

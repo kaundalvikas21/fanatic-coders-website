@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
+import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
 import {
   getServiceRequestPermissions,
@@ -9,12 +10,14 @@ import {
 import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/config/labels';
 import { getServiceRequestTemplate } from '@/modules/service-requests/config/templates';
 import { getServiceRequestById } from '@/modules/service-requests/data/queries';
-import type { ServiceRequest } from '@/types';
+import type { Proposal, ServiceRequest } from '@/types';
 import { ServiceRequestActionsCard } from '@/modules/service-requests/components/details/ServiceRequestActionsCard';
 import { ServiceRequestStatusCard } from '@/modules/service-requests/components/details/ServiceRequestStatusCard';
 import { ServiceRequestInfoCard } from '@/modules/service-requests/components/details/ServiceRequestInfoCard';
 import { ServiceRequestNotificationsCard } from '@/modules/service-requests/components/details/ServiceRequestNotificationsCard';
+import { ServiceRequestProjectAcknowledgement } from '@/modules/service-requests/components/details/ServiceRequestProjectAcknowledgement';
 import { CreateProjectFromServiceRequestForm } from '@/modules/projects';
+import { getServiceRequestProposal, ProposalPanel } from '@/modules/proposals';
 import { getCurrentAccess } from '@/lib/auth/current-access';
 import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
 import type { OrganizationMemberRole } from '@/types';
@@ -47,6 +50,13 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
   const managers = permissions.canUpdate
     ? await getOrganizationMembersByRole(PROJECT_MANAGER_ASSIGNMENT_ROLES)
     : [];
+  const proposalResponse = await getServiceRequestProposal(request.id);
+  const proposal =
+    proposalResponse.success && proposalResponse.data ? (proposalResponse.data as Proposal) : null;
+  const proposalError =
+    !proposalResponse.success && proposalResponse.error?.code !== 'PROPOSAL_NOT_FOUND'
+      ? proposalResponse.message
+      : null;
 
   return (
     <DetailPageLayout>
@@ -76,6 +86,21 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
       <DetailPageLayout.Aside>
         {/* Keep status as the dedicated top-level state display for every viewer. */}
         <ServiceRequestStatusCard request={request} />
+
+        {proposalError ? (
+          <ErrorState
+            title="Could not load proposal"
+            message={proposalError}
+          />
+        ) : (
+          <ProposalPanel
+            serviceRequestId={request.id}
+            initialProposal={proposal}
+          />
+        )}
+
+        {/* Point clients to delivery once this request becomes a project. */}
+        {request.project && <ServiceRequestProjectAcknowledgement projectId={request.project.id} />}
 
         {/* Show management controls below status only to viewers with update access. */}
         {permissions.canUpdate && <ServiceRequestActionsCard request={request} />}

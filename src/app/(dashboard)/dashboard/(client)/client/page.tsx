@@ -26,10 +26,12 @@ function getProjectProgress(tasks: Task[]) {
 
 export default async function ClientDashboardPage() {
   const projectsResponse = await getProjects({ pageSize: 100 });
-  const projects: Project[] =
+  const projectsData =
     projectsResponse.success && projectsResponse.data
-      ? (projectsResponse.data as PaginatedProjects).items
-      : [];
+      ? (projectsResponse.data as PaginatedProjects)
+      : null;
+  const projects: Project[] = Array.isArray(projectsData?.items) ? projectsData.items : [];
+
   const projectCards = await Promise.all(
     projects.map(async (project) => {
       const tasksResponse = await getProjectTasks(project.id);

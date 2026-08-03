@@ -12,6 +12,7 @@ export type {
   GetHealthResponse,
   HealthData,
   HealthResponse,
+  Pagination,
   RequestPasswordResetRequest,
   RequestPasswordResetResponse,
   Response,
@@ -46,6 +47,18 @@ export type {
   ServiceRequestStatus,
 } from './enum';
 export type {
+  AdminDashboardAttentionTask,
+  AdminDashboardAttentionTasksResponse,
+  AdminDashboardLeadDistribution,
+  AdminDashboardLeadDistributionResponse,
+  AdminDashboardOverview,
+  AdminDashboardOverviewResponse,
+  AdminDashboardRecentLead,
+  AdminDashboardRecentLeadsResponse,
+  AdminDashboardTaskDistribution,
+  AdminDashboardTaskDistributionResponse,
+} from './dashboard';
+export type {
   GetInvitationsResponse,
   Invitation,
   InvitationListItem,
@@ -67,7 +80,6 @@ export type {
   GetLeadsInput,
   GetLeadsResponse,
   Lead,
-  LeadPagination,
   LeadResponse,
   LeadsResponse,
   PaginatedLeads,
@@ -76,6 +88,14 @@ export type {
   UpdateLeadByIdResponse,
   UpdateLeadInput,
 } from './lead';
+export type {
+  CreateProposalRequest,
+  Proposal,
+  ProposalPaymentStatus,
+  ProposalResponse,
+  ProposalStatus,
+  UpdateProposalRequest,
+} from './proposal';
 export type {
   CreateProjectFromServiceRequestRequest,
   CreateProjectFromServiceRequestResponse,
@@ -91,7 +111,6 @@ export type {
   PaginatedProjects,
   Project,
   ProjectMember,
-  ProjectPagination,
   ProjectResponse,
   ProjectsResponse,
   UpdateProjectByIdParams,

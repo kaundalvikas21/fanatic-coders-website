@@ -18,9 +18,12 @@ export async function LeadsTableLoader({ filters }: { filters: GetLeadsInput }) 
     );
   }
 
-  const data = response.data as PaginatedLeads;
+  const data = response.data as PaginatedLeads | null | undefined;
+  const leads = data?.items ?? [];
+  const pagination = data?.pagination;
+  const totalItems = pagination?.totalItems ?? leads.length;
 
-  if (data.pagination.totalItems === 0) {
+  if (totalItems === 0) {
     const hasFilters = Boolean(filters.email || filters.status || filters.serviceType);
 
     return (
@@ -39,14 +42,16 @@ export async function LeadsTableLoader({ filters }: { filters: GetLeadsInput }) 
     <>
       <DataTable
         columns={leadColumns}
-        data={data.items}
+        data={leads}
         tableClassName="min-w-[920px]"
       />
 
-      <Pagination
-        pagination={data.pagination}
-        itemLabel={data.pagination.totalItems === 1 ? 'lead' : 'leads'}
-      />
+      {pagination && (
+        <Pagination
+          pagination={pagination}
+          itemLabel={totalItems === 1 ? 'lead' : 'leads'}
+        />
+      )}
     </>
   );
 }
