@@ -740,6 +740,11 @@ export interface components {
             service: components["schemas"]["ServiceInterest"];
             status: components["schemas"]["ServiceRequestStatus"];
             data?: components["schemas"]["ServiceRequestData"] | null;
+            /** @description Linked project reference once this service request has been converted into a project. */
+            project?: {
+                /** @example clx0000000000000000000011 */
+                id: string;
+            } | null;
             /**
              * Format: date-time
              * @example 2026-06-29T06:30:00.000Z

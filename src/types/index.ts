@@ -89,6 +89,14 @@ export type {
   UpdateLeadInput,
 } from './lead';
 export type {
+  CreateProposalRequest,
+  Proposal,
+  ProposalPaymentStatus,
+  ProposalResponse,
+  ProposalStatus,
+  UpdateProposalRequest,
+} from './proposal';
+export type {
   CreateProjectFromServiceRequestRequest,
   CreateProjectFromServiceRequestResponse,
   CreateProjectInput,
