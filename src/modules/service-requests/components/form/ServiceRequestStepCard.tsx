@@ -1,55 +1,58 @@
-import { CheckCircle2 } from 'lucide-react';
+import { Check, ClipboardCheck, MessageSquareText, SlidersHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Muted, Small } from '@/components/ui/typography';
+import { Small } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
+import type { ServiceRequestTemplateStep } from '@/modules/service-requests/config/templates';
 
 type ServiceRequestStepCardProps = {
-  stepNumber: number;
+  stepId: ServiceRequestTemplateStep['id'];
   title: string;
-  description: string;
   isActive: boolean;
   isCompleted: boolean;
   onSelect: () => void;
 };
 
+const stepIcons = {
+  'company-info': MessageSquareText,
+  'goals-scope': SlidersHorizontal,
+  'service-specific': SlidersHorizontal,
+  review: ClipboardCheck,
+} satisfies Record<ServiceRequestTemplateStep['id'], typeof MessageSquareText>;
+
 export function ServiceRequestStepCard({
-  stepNumber,
+  stepId,
   title,
-  description,
   isActive,
   isCompleted,
   onSelect,
 }: ServiceRequestStepCardProps) {
+  const StepIcon = stepIcons[stepId];
+
   return (
     <Button
       type="button"
-      variant="outline"
+      variant="ghost"
+      aria-current={isActive ? 'step' : undefined}
       className={cn(
-        'h-auto min-h-16 justify-start gap-3 whitespace-normal px-3 py-2 text-left text-sm',
-        isActive && 'border-primary bg-primary/10 text-primary dark:bg-primary/15',
-        isCompleted &&
-          'border-primary/30 bg-primary/5 text-foreground dark:border-primary/25 dark:bg-primary/10',
-        !isActive &&
-          !isCompleted &&
-          'text-muted-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+        'relative z-10 h-auto min-w-0 flex-1 flex-col gap-2 whitespace-normal bg-transparent px-2 py-0 text-center hover:bg-transparent',
+        isActive && 'text-primary',
+        isCompleted && 'text-foreground',
+        !isActive && !isCompleted && 'text-muted-foreground',
       )}
       onClick={onSelect}
     >
       <span
         className={cn(
-          'mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold',
-          isActive || isCompleted
-            ? 'border-primary bg-primary text-primary-foreground dark:border-primary/80'
-            : 'border-border dark:border-input',
+          'flex size-10 shrink-0 items-center justify-center rounded-full border-2 bg-card transition-colors duration-200 motion-reduce:transition-none',
+          isActive && 'border-primary bg-primary text-primary-foreground ring-4 ring-primary/10',
+          isCompleted && 'border-primary bg-primary text-primary-foreground',
+          !isActive && !isCompleted && 'border-border text-muted-foreground',
         )}
       >
-        {isCompleted ? <CheckCircle2 className="size-4" /> : stepNumber}
+        {isCompleted ? <Check className="size-4" /> : <StepIcon className="size-4" />}
       </span>
-      <span className="grid gap-0.5">
-        <Small className="leading-tight">{title}</Small>
-        <Muted className="line-clamp-2 text-xs leading-snug opacity-80">{description}</Muted>
-      </span>
+      <Small className="max-w-40 leading-tight">{title}</Small>
     </Button>
   );
 }
