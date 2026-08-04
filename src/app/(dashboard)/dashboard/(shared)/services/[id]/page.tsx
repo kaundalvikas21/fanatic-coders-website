@@ -93,12 +93,9 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
           title="Consultation"
           description="Discuss requirements, scope, timing, and next steps."
           trigger={
-            <ActionSheetButton
-              variant="outline"
-              className="w-full justify-start"
-            >
+            <ActionSheetButton className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 sm:right-6 sm:bottom-6">
               <MessageSquareText data-icon="inline-start" />
-              Open consultation
+              Consultation
             </ActionSheetButton>
           }
         >

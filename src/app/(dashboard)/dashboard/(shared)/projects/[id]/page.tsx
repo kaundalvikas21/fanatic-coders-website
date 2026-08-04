@@ -76,12 +76,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           title="Project chat"
           description="Coordinate delivery, tasks, and project decisions in real time."
           trigger={
-            <ActionSheetButton
-              variant="outline"
-              className="w-full justify-start"
-            >
+            <ActionSheetButton className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 sm:right-6 sm:bottom-6">
               <MessageSquareText data-icon="inline-start" />
-              Open project chat
+              Project chat
             </ActionSheetButton>
           }
         >
