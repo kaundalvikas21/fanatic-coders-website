@@ -1,4 +1,5 @@
 export { CreateProjectFromServiceRequestForm } from './components/CreateProjectFromServiceRequestForm';
+export { ProjectActionsCard } from './components/ProjectActionsCard';
 export { ProjectInfoCard } from './components/ProjectInfoCard';
 export { ProjectItemCard } from './components/ProjectItemCard';
 export { ProjectList } from './components/ProjectList';
