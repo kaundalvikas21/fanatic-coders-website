@@ -32,8 +32,8 @@ export default async function ServiceRequestByServicePage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title={`Start ${serviceLabels[service]} Request`}
-        description="Complete the details for your selected service."
+        title={serviceLabels[service]}
+        description="Tell us about your requirements."
         showBackButton
       />
       <ServiceRequestForm
