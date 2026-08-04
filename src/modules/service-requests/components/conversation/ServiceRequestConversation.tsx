@@ -5,10 +5,12 @@ import { ServiceRequestMessageThread } from './ServiceRequestMessageThread';
 
 type ServiceRequestConversationProps = {
   serviceRequestId: string;
+  showHeader?: boolean;
 };
 
 export async function ServiceRequestConversation({
   serviceRequestId,
+  showHeader = true,
 }: ServiceRequestConversationProps) {
   const response = await getServiceRequestMessages(serviceRequestId);
 
@@ -22,6 +24,10 @@ export async function ServiceRequestConversation({
       {response.message || 'Could not load consultation messages.'}
     </p>
   );
+
+  if (!showHeader) {
+    return content;
+  }
 
   return (
     <WidgetCard

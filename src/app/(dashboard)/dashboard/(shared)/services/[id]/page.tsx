@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation';
+import { MessageSquareText } from 'lucide-react';
+import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
@@ -58,7 +60,7 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
       : null;
 
   return (
-    <DetailPageLayout className="xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <DetailPageLayout>
       <DetailPageLayout.Main>
         {/* Describe the request according to the viewer's responsibilities. */}
         <PageHeader
@@ -86,8 +88,27 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
         {/* Keep status as the dedicated top-level state display for every viewer. */}
         <ServiceRequestStatusCard request={request} />
 
-        {/* Keep consultation visible with request status and actions. */}
-        <ServiceRequestConversation serviceRequestId={request.id} />
+        {/* Keep consultation available without crowding request actions. */}
+        <ActionSheet
+          title="Consultation"
+          description="Discuss requirements, scope, timing, and next steps."
+          trigger={
+            <ActionSheetButton
+              variant="outline"
+              className="w-full justify-start"
+            >
+              <MessageSquareText data-icon="inline-start" />
+              Open consultation
+            </ActionSheetButton>
+          }
+        >
+          <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
+            <ServiceRequestConversation
+              serviceRequestId={request.id}
+              showHeader={false}
+            />
+          </div>
+        </ActionSheet>
 
         {proposalError ? (
           <ErrorState
