@@ -16,7 +16,7 @@ export function ServiceRequestFormActions({
   onBack,
 }: ServiceRequestFormActionsProps) {
   return (
-    <div className="flex justify-end gap-2 py-4">
+    <div className="sticky bottom-0 z-10 -mx-2 flex justify-end gap-2 border-t bg-card/95 px-2 py-4 backdrop-blur-sm sm:static sm:mx-0 sm:border-t-0 sm:bg-transparent sm:px-0 sm:backdrop-blur-none">
       <Button
         type="button"
         variant="outline"

@@ -30,7 +30,6 @@ import { SERVICE_INTEREST_OPTIONS, type ServiceInterest } from '@/types';
 import { ServiceRequestFormActions } from './ServiceRequestFormActions';
 import { ServiceRequestProgress } from './ServiceRequestProgress';
 import { ServiceRequestReview } from './ServiceRequestReview';
-import { ServiceRequestStepCard } from './ServiceRequestStepCard';
 import { ServiceRequestObjectFieldTemplate } from './rjsf-templates';
 
 type ServiceRequestFormValues = {
@@ -76,6 +75,8 @@ export function ServiceRequestForm({
   const activeUiSchema = getServiceRequestStepUiSchema(activeFields);
   const isFirstStep = stepIndex === 0;
   const isLastStep = stepIndex === template.steps.length - 1;
+  const questionCount = activeFields.length;
+  const estimatedMinutes = Math.max(1, Math.ceil(questionCount / 3));
 
   // Move to the previous wizard step without going below the first step.
   function handleBack() {
@@ -209,21 +210,8 @@ export function ServiceRequestForm({
           <ServiceRequestProgress
             steps={template.steps}
             activeStepIndex={stepIndex}
+            onStepSelect={handleStepSelect}
           />
-
-          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-            {template.steps.map((step, index) => (
-              <ServiceRequestStepCard
-                key={step.id}
-                stepNumber={index + 1}
-                title={step.title}
-                description={step.description}
-                isActive={index === stepIndex}
-                isCompleted={index < stepIndex}
-                onSelect={() => handleStepSelect(index)}
-              />
-            ))}
-          </div>
 
           <FieldGroup>
             {stepIndex === 0 && !isServiceLocked && (
@@ -240,52 +228,65 @@ export function ServiceRequestForm({
               </Field>
             )}
 
-            <div>
+            <div
+              key={`${service}-${activeStep.id}-heading`}
+              className="animate-in fade-in slide-in-from-bottom-1 duration-200 motion-reduce:animate-none"
+            >
               <Small className="block">{activeStep.title}</Small>
               <Muted className="mt-1">{activeStep.description}</Muted>
+              <Muted className="mt-2 text-xs">
+                {activeStep.id === 'review'
+                  ? 'Check your answers before sending the request.'
+                  : `${questionCount} ${questionCount === 1 ? 'question' : 'questions'} · About ${estimatedMinutes} ${estimatedMinutes === 1 ? 'minute' : 'minutes'}`}
+              </Muted>
             </div>
 
-            {activeStep.id === 'review' ? (
-              <form
-                className="grid gap-5"
-                onSubmit={handleReviewSubmit}
-              >
-                <ServiceRequestReview
-                  template={template}
-                  service={service}
-                  data={formData}
-                />
+            <div
+              key={`${service}-${activeStep.id}-content`}
+              className="animate-in fade-in slide-in-from-bottom-1 duration-200 motion-reduce:animate-none"
+            >
+              {activeStep.id === 'review' ? (
+                <form
+                  className="grid gap-5"
+                  onSubmit={handleReviewSubmit}
+                >
+                  <ServiceRequestReview
+                    template={template}
+                    service={service}
+                    data={formData}
+                  />
 
-                <ServiceRequestFormActions
-                  isSubmitting={isSubmitting}
-                  isFirstStep={isFirstStep}
-                  isReviewStep
-                  onBack={handleBack}
-                />
-              </form>
-            ) : (
-              <Form
-                schema={activeSchema}
-                uiSchema={activeUiSchema}
-                validator={validator}
-                formData={formData}
-                disabled={isSubmitting}
-                noHtml5Validate
-                showErrorList={false}
-                templates={{ ObjectFieldTemplate: ServiceRequestObjectFieldTemplate }}
-                onChange={handleFormChange}
-                onSubmit={handleStepSubmit}
-                onError={() =>
-                  toast.error('Please complete the required fields before continuing.')
-                }
-              >
-                <ServiceRequestFormActions
-                  isSubmitting={isSubmitting}
-                  isFirstStep={isFirstStep}
-                  onBack={handleBack}
-                />
-              </Form>
-            )}
+                  <ServiceRequestFormActions
+                    isSubmitting={isSubmitting}
+                    isFirstStep={isFirstStep}
+                    isReviewStep
+                    onBack={handleBack}
+                  />
+                </form>
+              ) : (
+                <Form
+                  schema={activeSchema}
+                  uiSchema={activeUiSchema}
+                  validator={validator}
+                  formData={formData}
+                  disabled={isSubmitting}
+                  noHtml5Validate
+                  showErrorList={false}
+                  templates={{ ObjectFieldTemplate: ServiceRequestObjectFieldTemplate }}
+                  onChange={handleFormChange}
+                  onSubmit={handleStepSubmit}
+                  onError={() =>
+                    toast.error('Please complete the required fields before continuing.')
+                  }
+                >
+                  <ServiceRequestFormActions
+                    isSubmitting={isSubmitting}
+                    isFirstStep={isFirstStep}
+                    onBack={handleBack}
+                  />
+                </Form>
+              )}
+            </div>
           </FieldGroup>
         </div>
       )}
