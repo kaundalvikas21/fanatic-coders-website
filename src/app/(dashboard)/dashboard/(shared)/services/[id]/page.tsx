@@ -14,7 +14,6 @@ import type { Proposal, ServiceRequest } from '@/types';
 import { ServiceRequestActionsCard } from '@/modules/service-requests/components/details/ServiceRequestActionsCard';
 import { ServiceRequestStatusCard } from '@/modules/service-requests/components/details/ServiceRequestStatusCard';
 import { ServiceRequestInfoCard } from '@/modules/service-requests/components/details/ServiceRequestInfoCard';
-import { ServiceRequestNotificationsCard } from '@/modules/service-requests/components/details/ServiceRequestNotificationsCard';
 import { ServiceRequestProjectAcknowledgement } from '@/modules/service-requests/components/details/ServiceRequestProjectAcknowledgement';
 import { CreateProjectFromServiceRequestForm } from '@/modules/projects';
 import { getServiceRequestProposal, ProposalPanel } from '@/modules/proposals';
@@ -59,7 +58,7 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
       : null;
 
   return (
-    <DetailPageLayout>
+    <DetailPageLayout className="xl:grid-cols-[minmax(0,1fr)_24rem]">
       <DetailPageLayout.Main>
         {/* Describe the request according to the viewer's responsibilities. */}
         <PageHeader
@@ -73,19 +72,22 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
           backLabel="Services"
         />
 
+        {/* Present request context before its submitted requirement details. */}
+        <ServiceRequestInfoCard request={request} />
+
         {/* Keep submitted requirements available during consultation. */}
         <ServiceRequestSummarySections
           template={template}
           data={request.data ?? {}}
         />
-
-        {/* Keep client and management consultation with the original request. */}
-        <ServiceRequestConversation serviceRequestId={request.id} />
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
         {/* Keep status as the dedicated top-level state display for every viewer. */}
         <ServiceRequestStatusCard request={request} />
+
+        {/* Keep consultation visible with request status and actions. */}
+        <ServiceRequestConversation serviceRequestId={request.id} />
 
         {proposalError ? (
           <ErrorState
@@ -104,16 +106,17 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
 
         {/* Show management controls below status only to viewers with update access. */}
         {permissions.canUpdate && <ServiceRequestActionsCard request={request} />}
-        {permissions.canUpdate && request.status !== 'COMPLETED' && (
-          <CreateProjectFromServiceRequestForm
-            request={request}
-            managers={managers}
-            canAssignManager={access?.role === 'ADMIN'}
-          />
-        )}
-
-        <ServiceRequestInfoCard request={request} />
-        <ServiceRequestNotificationsCard />
+        {/* Start delivery only after the client accepts the proposal. */}
+        {permissions.canUpdate &&
+          proposal?.status === 'ACCEPTED' &&
+          request.status !== 'COMPLETED' &&
+          !request.project && (
+            <CreateProjectFromServiceRequestForm
+              request={request}
+              managers={managers}
+              canAssignManager={access?.role === 'ADMIN'}
+            />
+          )}
       </DetailPageLayout.Aside>
     </DetailPageLayout>
   );
