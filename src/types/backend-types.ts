@@ -257,30 +257,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/service-requests/{serviceRequestId}/messages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch service request messages
-         * @description Returns the consultation chronologically. Clients receive only shared messages from their own service request.
-         */
-        get: operations["getServiceRequestMessages"];
-        put?: never;
-        /**
-         * Create a service request message
-         * @description Adds a message to a service request consultation. Only Admin and Manager can create internal messages.
-         */
-        post: operations["createServiceRequestMessage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/service-requests/{serviceRequestId}/project": {
         parameters: {
             query?: never;
@@ -885,56 +861,6 @@ export interface components {
             budgetAmount?: number | null;
             currency?: components["schemas"]["ProjectCurrency"];
         };
-        ServiceRequestMessageAuthorUser: {
-            /** @example clx0000000000000000000000 */
-            id: string;
-            /** @example Akshay */
-            name: string;
-            /** @example https://example.com/avatar.png */
-            image?: string | null;
-        };
-        ServiceRequestMessageAuthor: {
-            /** @example seed-member-manager */
-            id: string;
-            role: components["schemas"]["OrganizationRole"];
-            user: components["schemas"]["ServiceRequestMessageAuthorUser"];
-        };
-        ServiceRequestMessage: {
-            /** @example clx0000000000000000000007 */
-            id: string;
-            /** @example clx0000000000000000000006 */
-            serviceRequestId: string;
-            /** @example seed-member-manager */
-            authorMemberId: string;
-            /** @example Could you confirm the target launch date? */
-            body: string;
-            /**
-             * @description Internal messages are visible only to Admin and Manager roles.
-             * @example false
-             */
-            isInternal: boolean;
-            /**
-             * Format: date-time
-             * @example 2026-07-15T06:30:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @example 2026-07-15T06:30:00.000Z
-             */
-            updatedAt: string;
-            author: components["schemas"]["ServiceRequestMessageAuthor"];
-        };
-        CreateServiceRequestMessageRequest: {
-            /** @example Could you confirm the target launch date? */
-            body: string;
-            /**
-             * @description Admin/Manager-only internal note. Clients cannot set this to true.
-             * @default false
-             * @example false
-             */
-            isInternal: boolean;
-        };
         RequestPasswordResetRequest: {
             /**
              * Format: email
@@ -1040,12 +966,6 @@ export interface components {
         ProjectResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Project"];
         };
-        ServiceRequestMessagesResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["ServiceRequestMessage"][];
-        };
-        ServiceRequestMessageResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["ServiceRequestMessage"];
-        };
         HealthResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["HealthData"];
         };
@@ -1086,8 +1006,6 @@ export interface components {
         LeadId: string;
         /** @example clx0000000000000000000006 */
         ServiceRequestId: string;
-        /** @example clx0000000000000000000006 */
-        ServiceRequestMessageServiceRequestId: string;
         /** @example clx0000000000000000000006 */
         ServiceRequestProjectServiceRequestId: string;
         /** @example clx0000000000000000000010 */
@@ -1582,87 +1500,6 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             /** @description Client profile has not been created. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiResponse"];
-                };
-            };
-        };
-    };
-    getServiceRequestMessages: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @example clx0000000000000000000006 */
-                serviceRequestId: components["parameters"]["ServiceRequestMessageServiceRequestId"];
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Service request messages fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ServiceRequestMessagesResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            /** @description Service request was not found or is not accessible to the current member. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiResponse"];
-                };
-            };
-        };
-    };
-    createServiceRequestMessage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @example clx0000000000000000000006 */
-                serviceRequestId: components["parameters"]["ServiceRequestMessageServiceRequestId"];
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateServiceRequestMessageRequest"];
-            };
-        };
-        responses: {
-            /** @description Service request message created successfully. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ServiceRequestMessageResponse"];
-                };
-            };
-            /** @description Invalid service request message payload. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            /** @description Service request was not found or is not accessible to the current member. */
             404: {
                 headers: {
                     [name: string]: unknown;

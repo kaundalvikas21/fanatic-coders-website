@@ -1,28 +1,26 @@
+'use client';
+
 import { MessageSquareText } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { getServiceRequestMessages } from '@/modules/service-requests/data/messages';
-import { ServiceRequestMessageThread } from './ServiceRequestMessageThread';
+import { LiveChatThread } from '@/modules/chat';
+import { useServiceRequestChatCapabilities } from '@/modules/service-requests/hooks/use-service-request-chat-capabilities';
 
 type ServiceRequestConversationProps = {
   serviceRequestId: string;
   showHeader?: boolean;
 };
 
-export async function ServiceRequestConversation({
+export function ServiceRequestConversation({
   serviceRequestId,
   showHeader = true,
 }: ServiceRequestConversationProps) {
-  const response = await getServiceRequestMessages(serviceRequestId);
-
-  const content = response.success ? (
-    <ServiceRequestMessageThread
-      serviceRequestId={serviceRequestId}
-      initialMessages={response.data}
+  const capabilities = useServiceRequestChatCapabilities();
+  const content = (
+    <LiveChatThread
+      channel={{ type: 'service-request', id: serviceRequestId }}
+      capabilities={capabilities}
+      ariaLabel="Service request consultation messages"
     />
-  ) : (
-    <p className="px-6 py-8 text-sm text-destructive">
-      {response.message || 'Could not load consultation messages.'}
-    </p>
   );
 
   if (!showHeader) {
