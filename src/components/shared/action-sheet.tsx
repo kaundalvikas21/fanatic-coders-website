@@ -3,6 +3,7 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
+import { useClient } from '@/hooks/useClient';
 import {
   Sheet,
   SheetContent,
@@ -28,6 +29,7 @@ type ActionSheetProps = {
 };
 
 export function ActionSheet({ trigger, title, description, children }: ActionSheetProps) {
+  const isClient = useClient();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   const value = useMemo(
@@ -38,6 +40,10 @@ export function ActionSheet({ trigger, title, description, children }: ActionShe
     }),
     [open],
   );
+
+  if (!isClient) {
+    return trigger;
+  }
 
   return (
     <SheetContext.Provider value={value}>
