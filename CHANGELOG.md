@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.4.0...v0.4.1) (2026-08-04)
+
+### Features
+
+- **project:** added card for manging for managing project status ([b77fea3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/b77fea39c801c85a0c77eb828bc08b52f417c6ea))
+
+### Bug Fixes
+
+- **date:** fix issue regarding navigation button and make then enabled ([9a4d42a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9a4d42a601c44acb517804bac8b857075b21cf01))
+- **sheet:** fix hydration issue on drawer ActionSheet component ([8e2faeb](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8e2faeb05c1b183d3e566052ac39162289e1b97a))
+
+### Code Refactoring
+
+- **detailItem:** extend interface and types for detail componnet ([3d044c8](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3d044c8bf02b0607fbb8147afd0542da34fbc97f))
+- **layout:** reorganize component structure ([2e72414](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2e724142183ca13ea8bb22a1ad3b0e7f0420a6de))
+- **questions:** refactor questions regarding WEBDEVELOPMENT_SERVICE, APP DEVELOPMENT service ([c733580](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c733580389cc2a655085ebcacd6610d5822c1e16))
+- **sheet:** added chat module in sheet button ([79ce4c1](https://github.com/kaundalvikas21/fanatic-coders-website/commit/79ce4c16887342d9cff6d41bf5d68bf01fa49da9))
+- **title:** change service request title ([a4eb762](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a4eb762b57d45d6a6bcd437daa275c3bdc175287))
+- **ui:** redesing progress form and enhance it using lines ([ea22bbb](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ea22bbbba287739f92b3e6098d8b4d2d169d851c))
+
 ## [0.4.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.3.1...v0.4.0) (2026-08-03)
 
 ### Features
