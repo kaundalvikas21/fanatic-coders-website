@@ -95,7 +95,7 @@ export function ServiceRequestMessageThread({
         {messages.length === 0 ? (
           <NoConversationFound />
         ) : (
-          <div className="divide-y divide-border overflow-y-scroll">
+          <div className="divide-y divide-border">
             {messages.map((message) => (
               <ServiceRequestMessageItem
                 key={message.id}

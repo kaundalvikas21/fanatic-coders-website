@@ -3,9 +3,11 @@ import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import {
   ProjectInfoCard,
+  ProjectActionsCard,
   ProjectMembersCard,
   ProjectTasksCard,
   TaskCreateForm,
+  createProjectPermissions,
 } from '@/modules/projects';
 import { getProjectById } from '@/modules/projects/data/queries';
 import { getProjectTasks } from '@/modules/projects/data/tasks';
@@ -27,6 +29,7 @@ const TASK_ASSIGNMENT_ROLES = [
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { id } = await params;
   const access = await getCurrentAccess();
+  const projectPermissions = createProjectPermissions(access);
   const canManageTasks = access?.role === 'ADMIN' || access?.role === 'MANAGER';
   const canUpdateTaskStatus = canManageTasks || access?.role === 'MEMBER';
   const { success, data: project } = (await getProjectById(id)) as {
@@ -65,6 +68,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
+        {projectPermissions.canUpdate && <ProjectActionsCard project={project} />}
         {canManageTasks && (
           <TaskCreateForm
             projectId={project.id}

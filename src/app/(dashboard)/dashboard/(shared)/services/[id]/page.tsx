@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation';
+import { MessageSquareText } from 'lucide-react';
+import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
@@ -14,7 +16,6 @@ import type { Proposal, ServiceRequest } from '@/types';
 import { ServiceRequestActionsCard } from '@/modules/service-requests/components/details/ServiceRequestActionsCard';
 import { ServiceRequestStatusCard } from '@/modules/service-requests/components/details/ServiceRequestStatusCard';
 import { ServiceRequestInfoCard } from '@/modules/service-requests/components/details/ServiceRequestInfoCard';
-import { ServiceRequestNotificationsCard } from '@/modules/service-requests/components/details/ServiceRequestNotificationsCard';
 import { ServiceRequestProjectAcknowledgement } from '@/modules/service-requests/components/details/ServiceRequestProjectAcknowledgement';
 import { CreateProjectFromServiceRequestForm } from '@/modules/projects';
 import { getServiceRequestProposal, ProposalPanel } from '@/modules/proposals';
@@ -73,19 +74,41 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
           backLabel="Services"
         />
 
+        {/* Present request context before its submitted requirement details. */}
+        <ServiceRequestInfoCard request={request} />
+
         {/* Keep submitted requirements available during consultation. */}
         <ServiceRequestSummarySections
           template={template}
           data={request.data ?? {}}
         />
-
-        {/* Keep client and management consultation with the original request. */}
-        <ServiceRequestConversation serviceRequestId={request.id} />
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
         {/* Keep status as the dedicated top-level state display for every viewer. */}
         <ServiceRequestStatusCard request={request} />
+
+        {/* Keep consultation available without crowding request actions. */}
+        <ActionSheet
+          title="Consultation"
+          description="Discuss requirements, scope, timing, and next steps."
+          trigger={
+            <ActionSheetButton
+              variant="outline"
+              className="w-full justify-start"
+            >
+              <MessageSquareText data-icon="inline-start" />
+              Open consultation
+            </ActionSheetButton>
+          }
+        >
+          <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
+            <ServiceRequestConversation
+              serviceRequestId={request.id}
+              showHeader={false}
+            />
+          </div>
+        </ActionSheet>
 
         {proposalError ? (
           <ErrorState
@@ -104,16 +127,17 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
 
         {/* Show management controls below status only to viewers with update access. */}
         {permissions.canUpdate && <ServiceRequestActionsCard request={request} />}
-        {permissions.canUpdate && request.status !== 'COMPLETED' && (
-          <CreateProjectFromServiceRequestForm
-            request={request}
-            managers={managers}
-            canAssignManager={access?.role === 'ADMIN'}
-          />
-        )}
-
-        <ServiceRequestInfoCard request={request} />
-        <ServiceRequestNotificationsCard />
+        {/* Start delivery only after the client accepts the proposal. */}
+        {permissions.canUpdate &&
+          proposal?.status === 'ACCEPTED' &&
+          request.status !== 'COMPLETED' &&
+          !request.project && (
+            <CreateProjectFromServiceRequestForm
+              request={request}
+              managers={managers}
+              canAssignManager={access?.role === 'ADMIN'}
+            />
+          )}
       </DetailPageLayout.Aside>
     </DetailPageLayout>
   );
