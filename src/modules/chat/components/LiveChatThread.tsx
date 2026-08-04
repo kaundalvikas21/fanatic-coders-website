@@ -11,8 +11,16 @@ import type { z } from 'zod';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
+import {
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageFooter,
+  MessageHeader,
+} from '@/components/ui/message';
 import { Textarea } from '@/components/ui/textarea';
 import { Toggle } from '@/components/ui/toggle';
+import { UserAvatar } from '@/components/shared/user-avatar';
 import { env } from '@/config/env';
 import { FCOP_AUTH_TOKEN_STORAGE_KEY } from '@/lib/auth/bearer-token';
 import { getRoleLabel } from '@/lib/auth/roles';
@@ -21,7 +29,6 @@ import {
   LIVE_CHAT_MESSAGE_MAX_LENGTH,
 } from '@/modules/chat/schemas/live-chat';
 import { EmptyLiveChat } from './EmptyLiveChat';
-import { LiveChatMessageItem } from './LiveChatMessageItem';
 
 export type LiveChatCapabilities = {
   canSend: boolean;
@@ -29,7 +36,7 @@ export type LiveChatCapabilities = {
 };
 
 export type LiveChatChannel = {
-  type: 'service-request';
+  type: 'service-request' | 'project';
   id: string;
 };
 
@@ -70,7 +77,7 @@ type ServerToClientEvents = {
 type ClientToServerEvents = {
   'chat:join': (
     payload: { channel: LiveChatChannel },
-    acknowledge: (response: ChatResponse) => void,
+    acknowledge: (response: ChatResponse<LiveChatMessage[]>) => void,
   ) => void;
   'chat:leave': (payload: { channel: LiveChatChannel }) => void;
   'chat:send': (
@@ -143,6 +150,7 @@ export function LiveChatThread({
           return;
         }
 
+        setMessages(response.data ?? []);
         setConnectionStatus('live');
       });
     };
@@ -216,16 +224,15 @@ export function LiveChatThread({
   }
 
   return (
-    <div>
-      <div className="flex items-start gap-3 border-b border-border bg-muted/40 px-6 py-3">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden">
+      <div className="shrink-0 flex items-start gap-3 border-b border-border bg-muted/40 px-6 py-3">
         <CircleAlert
           className="mt-0.5 size-4 shrink-0 text-muted-foreground"
           aria-hidden="true"
         />
         <div className="min-w-0 flex-1">
           <p className="text-xs leading-5 text-muted-foreground">
-            Live messages are temporary and are not saved. Refreshing or leaving this page clears
-            the conversation.
+            Recent messages are retained temporarily and may be removed after the retention period.
           </p>
           {connectionError && (
             <p
@@ -250,7 +257,7 @@ export function LiveChatThread({
 
       <div
         ref={messageLogRef}
-        className="max-h-[32rem] overflow-y-auto"
+        className="min-h-0 flex-1 overflow-y-auto"
         role="log"
         aria-label={ariaLabel}
         aria-live="polite"
@@ -258,36 +265,47 @@ export function LiveChatThread({
         {messages.length === 0 ? (
           <EmptyLiveChat />
         ) : (
-          <div className="divide-y divide-border">
+          <div className="space-y-4 p-4 sm:p-6">
             {messages.map((message) => (
-              <LiveChatMessageItem
+              <Message
                 key={message.id}
-                author={message.author.user}
-                label={getRoleLabel(message.author.role)}
-                meta={
-                  message.isInternal ? (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1"
-                    >
-                      <LockKeyhole aria-hidden="true" />
-                      Internal
-                    </Badge>
-                  ) : undefined
-                }
-                timestamp={
-                  <time
-                    dateTime={message.createdAt}
-                    className="text-xs text-muted-foreground"
-                    suppressHydrationWarning
-                  >
-                    {format(new Date(message.createdAt), 'MMM d, yyyy · h:mm a')}
-                  </time>
-                }
-                className={message.isInternal ? 'bg-muted/50' : undefined}
+                className={message.isInternal ? 'rounded-lg bg-muted/40 p-3' : undefined}
               >
-                {message.body}
-              </LiveChatMessageItem>
+                <MessageAvatar>
+                  <UserAvatar
+                    name={message.author.user.name}
+                    email={message.author.user.email}
+                    image={message.author.user.image}
+                    className="size-8"
+                  />
+                </MessageAvatar>
+                <MessageContent>
+                  <MessageHeader className="flex-wrap gap-x-2 gap-y-1 px-0">
+                    <span className="text-foreground">{message.author.user.name}</span>
+                    <span>{getRoleLabel(message.author.role)}</span>
+                    {message.isInternal && (
+                      <Badge
+                        variant="secondary"
+                        className="gap-1"
+                      >
+                        <LockKeyhole aria-hidden="true" />
+                        Internal
+                      </Badge>
+                    )}
+                  </MessageHeader>
+                  <div className="w-fit max-w-[75ch] whitespace-pre-wrap wrap-break-word rounded-lg bg-muted px-3 py-2 text-sm leading-6">
+                    {message.body}
+                  </div>
+                  <MessageFooter className="px-0">
+                    <time
+                      dateTime={message.createdAt}
+                      suppressHydrationWarning
+                    >
+                      {format(new Date(message.createdAt), 'MMM d, yyyy · h:mm a')}
+                    </time>
+                  </MessageFooter>
+                </MessageContent>
+              </Message>
             ))}
           </div>
         )}
@@ -299,7 +317,7 @@ export function LiveChatThread({
             const socket = socketRef.current;
             void form.handleSubmit((values) => submitMessage(values, socket))(event);
           }}
-          className="border-t border-border px-6 py-4"
+          className="shrink-0 border-t border-border bg-background px-6 py-4"
           noValidate
         >
           <Field data-invalid={Boolean(error)}>
