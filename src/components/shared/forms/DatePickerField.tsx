@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -31,9 +32,13 @@ export function DatePickerField({
   minDate,
 }: DatePickerFieldProps) {
   const selectedDate = parseDateInputValue(value);
+  const [open, setOpen] = useState(false);
 
   return (
-    <Popover>
+    <Popover
+      open={open}
+      onOpenChange={setOpen}
+    >
       <PopoverTrigger asChild>
         <Button
           id={id}
@@ -60,10 +65,12 @@ export function DatePickerField({
           mode="single"
           selected={selectedDate}
           defaultMonth={selectedDate ?? minDate}
+          startMonth={minDate}
           disabled={minDate ? { before: minDate } : undefined}
           onSelect={(date) => {
             if (date) {
               onChange(formatDateInputValue(date));
+              setOpen(false);
             }
           }}
         />
