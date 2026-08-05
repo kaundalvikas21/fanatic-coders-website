@@ -2,19 +2,19 @@
 
 import { MessageSquareText } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { LiveChatThread } from '@/modules/chat';
-import { useServiceRequestChatCapabilities } from '@/modules/service-requests/hooks/use-service-request-chat-capabilities';
+import { LiveChatThread, type LiveChatCapabilities } from '@/modules/chat';
 
 type ServiceRequestConversationProps = {
   serviceRequestId: string;
+  capabilities: LiveChatCapabilities;
   showHeader?: boolean;
 };
 
 export function ServiceRequestConversation({
   serviceRequestId,
+  capabilities,
   showHeader = true,
 }: ServiceRequestConversationProps) {
-  const capabilities = useServiceRequestChatCapabilities();
   const content = (
     <LiveChatThread
       channel={{ type: 'service-request', id: serviceRequestId }}

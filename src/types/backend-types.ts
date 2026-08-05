@@ -61,106 +61,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/dashboard/overview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin dashboard overview
-         * @description Returns organization-wide dashboard counts. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardOverview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/leads": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin lead distribution
-         * @description Returns lead counts grouped by status. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardLeadDistribution"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/tasks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin task distribution
-         * @description Returns task counts grouped by status. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardTaskDistribution"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/recent/leads": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch recent admin dashboard leads
-         * @description Returns the five newest leads. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardRecentLeads"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/attention/tasks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin dashboard attention tasks
-         * @description Returns five urgent or overdue unfinished tasks. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardAttentionTasks"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/invitations": {
         parameters: {
             query?: never;
@@ -255,6 +155,38 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v1/service-requests/{serviceRequestId}/proposal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch a proposal
+         * @description Returns the proposal for a service request. Clients can access only their own service request.
+         */
+        get: operations["getServiceRequestProposal"];
+        put?: never;
+        /**
+         * Create a proposal
+         * @description Creates the single draft proposal for a service request. Available to Admin and Manager roles.
+         */
+        post: operations["createServiceRequestProposal"];
+        /**
+         * Delete a proposal
+         * @description Deletes a draft or sent proposal. Accepted proposals are preserved as immutable records.
+         */
+        delete: operations["deleteServiceRequestProposal"];
+        options?: never;
+        head?: never;
+        /**
+         * Update a proposal
+         * @description Admin and Manager can change draft terms or set status to SENT. The owning Client can only set status to ACCEPTED. Accepted proposals are immutable.
+         */
+        patch: operations["updateServiceRequestProposal"];
         trace?: never;
     };
     "/api/v1/service-requests/{serviceRequestId}/project": {
@@ -376,6 +308,16 @@ export interface components {
          */
         ServiceRequestStatus: "NEW" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
         /**
+         * @example DRAFT
+         * @enum {string}
+         */
+        ProposalStatus: "DRAFT" | "SENT" | "ACCEPTED";
+        /**
+         * @example UNPAID
+         * @enum {string}
+         */
+        ProposalPaymentStatus: "UNPAID" | "PAID";
+        /**
          * @example PLANNING
          * @enum {string}
          */
@@ -391,16 +333,6 @@ export interface components {
          * @enum {string}
          */
         ProjectCurrency: "USD" | "AED";
-        /**
-         * @example TODO
-         * @enum {string}
-         */
-        TaskStatus: "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE";
-        /**
-         * @example URGENT
-         * @enum {string}
-         */
-        TaskPriority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
         /**
          * @example CLIENT
          * @enum {string}
@@ -467,65 +399,6 @@ export interface components {
         };
         MeResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Me"];
-        };
-        AdminDashboardOverview: {
-            totalLeads: number;
-            newLeads: number;
-            totalProjects: number;
-            activeProjects: number;
-            totalTasks: number;
-            openTasks: number;
-            completedTasks: number;
-            totalServiceRequests: number;
-            openServiceRequests: number;
-        };
-        LeadStatusDistribution: {
-            NEW: number;
-            QUALIFIED: number;
-            IN_PROGRESS: number;
-            DEAD: number;
-        };
-        TaskStatusDistribution: {
-            TODO: number;
-            IN_PROGRESS: number;
-            IN_REVIEW: number;
-            DONE: number;
-        };
-        AdminDashboardRecentLead: {
-            id: string;
-            name: string;
-            /** Format: email */
-            email: string;
-            companyName?: string | null;
-            status: components["schemas"]["LeadStatus"];
-            /** Format: date-time */
-            createdAt: string;
-        };
-        AdminDashboardAttentionTask: {
-            id: string;
-            projectId: string;
-            title: string;
-            priority: components["schemas"]["TaskPriority"];
-            /** Format: date-time */
-            dueDate?: string | null;
-            project: {
-                name: string;
-            };
-        };
-        AdminDashboardOverviewResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["AdminDashboardOverview"];
-        };
-        AdminDashboardLeadDistributionResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["LeadStatusDistribution"];
-        };
-        AdminDashboardTaskDistributionResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["TaskStatusDistribution"];
-        };
-        AdminDashboardRecentLeadsResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["AdminDashboardRecentLead"][];
-        };
-        AdminDashboardAttentionTasksResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["AdminDashboardAttentionTask"][];
         };
         User: {
             /** @example clx0000000000000000000000 */
@@ -716,6 +589,7 @@ export interface components {
             service: components["schemas"]["ServiceInterest"];
             status: components["schemas"]["ServiceRequestStatus"];
             data?: components["schemas"]["ServiceRequestData"] | null;
+            proposal?: components["schemas"]["Proposal"] | null;
             /** @description Linked project reference once this service request has been converted into a project. */
             project?: {
                 /** @example clx0000000000000000000011 */
@@ -739,6 +613,71 @@ export interface components {
         UpdateServiceRequestRequest: {
             status?: components["schemas"]["ServiceRequestStatus"];
             data?: components["schemas"]["ServiceRequestData"];
+        };
+        Proposal: {
+            /** @example clx0000000000000000000020 */
+            id: string;
+            /** @example clx0000000000000000000006 */
+            serviceRequestId: string;
+            /** @example seed-member-manager */
+            createdByMemberId: string;
+            /** @example Design and develop the agreed business website. */
+            description: string;
+            /**
+             * Format: decimal
+             * @example 5000
+             */
+            amount: number;
+            currency: components["schemas"]["ProjectCurrency"];
+            status: components["schemas"]["ProposalStatus"];
+            paymentStatus: components["schemas"]["ProposalPaymentStatus"];
+            /**
+             * Format: date-time
+             * @example 2026-07-30T10:00:00.000Z
+             */
+            acceptedAt?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-07-30T10:05:00.000Z
+             */
+            paidAt?: string | null;
+            /** @example in_1Example */
+            stripeInvoiceId?: string | null;
+            /** @example A1B2C3D4-0001 */
+            stripeInvoiceNumber?: string | null;
+            /**
+             * Format: uri
+             * @example https://invoice.stripe.com/i/example
+             */
+            stripeHostedInvoiceUrl?: string | null;
+            /**
+             * Format: uri
+             * @example https://pay.stripe.com/invoice/example/pdf
+             */
+            stripeInvoicePdfUrl?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-07-30T09:00:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-30T10:05:00.000Z
+             */
+            updatedAt: string;
+        };
+        CreateProposalRequest: {
+            /** @example Design and develop the agreed business website. */
+            description: string;
+            /** @example 5000 */
+            amount: number;
+            currency: components["schemas"]["ProjectCurrency"];
+        };
+        UpdateProposalRequest: {
+            description?: string;
+            amount?: number;
+            currency?: components["schemas"]["ProjectCurrency"];
+            status?: components["schemas"]["ProposalStatus"];
         };
         ProjectMember: {
             /** @example clx0000000000000000000011 */
@@ -956,6 +895,9 @@ export interface components {
         ServiceRequestResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["ServiceRequest"];
         };
+        ProposalResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Proposal"];
+        };
         ProjectsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["PaginatedProjects"];
         };
@@ -1006,6 +948,8 @@ export interface components {
         LeadId: string;
         /** @example clx0000000000000000000006 */
         ServiceRequestId: string;
+        /** @example clx0000000000000000000006 */
+        ServiceRequestProposalServiceRequestId: string;
         /** @example clx0000000000000000000006 */
         ServiceRequestProjectServiceRequestId: string;
         /** @example clx0000000000000000000010 */
@@ -1098,116 +1042,6 @@ export interface operations {
                     "application/json": components["schemas"]["ApiResponse"];
                 };
             };
-        };
-    };
-    getAdminDashboardOverview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin dashboard overview fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardOverviewResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardLeadDistribution: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin lead distribution fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardLeadDistributionResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardTaskDistribution: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin task distribution fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardTaskDistributionResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardRecentLeads: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Recent admin dashboard leads fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardRecentLeadsResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardAttentionTasks: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin dashboard attention tasks fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardAttentionTasksResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
         };
     };
     inviteMember: {
@@ -1501,6 +1335,203 @@ export interface operations {
             403: components["responses"]["Forbidden"];
             /** @description Client profile has not been created. */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Proposal fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request or proposal was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    createServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description Proposal created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            /** @description Invalid proposal payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description A proposal or project already exists for the service request. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Proposal deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request or proposal was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Accepted proposal cannot be deleted. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    updateServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description Proposal updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            /** @description Invalid or empty proposal update. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            /** @description Role is not allowed to perform the requested proposal transition or field update. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Service request or proposal was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Proposal state does not allow the requested update. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
