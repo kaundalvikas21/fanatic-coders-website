@@ -16,13 +16,7 @@ export const authClient = createAuthClient({
           : localStorage.getItem(FCOP_AUTH_TOKEN_STORAGE_KEY) || '',
     },
   },
-  plugins: [
-    organizationClient({
-      teams: {
-        enabled: true,
-      },
-    }),
-  ],
+  plugins: [organizationClient()],
 });
 
 export const {

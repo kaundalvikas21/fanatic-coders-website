@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 
-export const NoConversationFound = () => {
+export function EmptyLiveChat() {
   return (
     <div className="flex flex-col items-center px-6 py-12 text-center">
       <div className="mb-3 flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
@@ -12,4 +12,4 @@ export const NoConversationFound = () => {
       </p>
     </div>
   );
-};
+}

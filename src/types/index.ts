@@ -136,13 +136,6 @@ export type {
   UpdateServiceRequestByIdResponse,
   UpdateServiceRequestInput,
 } from './service-request';
-export type {
-  CreateServiceRequestMessageRequest,
-  ServiceRequestMessage,
-  ServiceRequestMessageAuthor,
-  ServiceRequestMessageResponse,
-  ServiceRequestMessagesResponse,
-} from './service-request-message';
 export { USER_SORT_FIELDS } from './user';
 export type {
   CreateTaskRequest,
