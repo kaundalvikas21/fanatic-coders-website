@@ -59,7 +59,6 @@ const webDevelopmentCompanyInfoFields = [
     defaultValue: '',
     placeholder: 'We provide accounting services to small businesses across the UAE.',
     description: 'A short explanation of what you offer and who you serve is enough.',
-    required: true,
   },
   {
     name: 'projectType',
@@ -67,12 +66,11 @@ const webDevelopmentCompanyInfoFields = [
     input: 'text',
     defaultValue: '',
     placeholder: 'We need a new website that explains our services and generates enquiries.',
-    required: true,
   },
   {
     name: 'websiteUrl',
     label: 'Do you have an existing website we should review?',
-    input: 'url',
+    input: 'text',
     defaultValue: '',
     placeholder: 'https://yourwebsite.com',
     description: 'Optional. Share it even if it is unfinished or due for replacement.',
@@ -82,12 +80,11 @@ const webDevelopmentCompanyInfoFields = [
 const seoSearchContextFields = [
   {
     name: 'primaryDomain',
-    label: 'Which website do you want people to find?',
-    input: 'url',
+    label: 'Do you have a website you want people to find?',
+    input: 'text',
     defaultValue: '',
-    placeholder: 'https://yourwebsite.com',
-    description: 'We will use this to review how the site currently appears in search.',
-    required: true,
+    placeholder: 'yourwebsite.com',
+    description: 'Optional. Leave this blank if you do not have a website yet.',
   },
   {
     name: 'targetKeywords',
@@ -96,7 +93,6 @@ const seoSearchContextFields = [
     defaultValue: '',
     placeholder: 'Office cleaning company, warehouse cleaning, and commercial cleaners near me.',
     description: 'Write this like a customer. You do not need to prepare an SEO keyword list.',
-    required: true,
   },
   {
     name: 'localSeoNeeds',
@@ -125,7 +121,6 @@ const seoCurrentPictureFields = [
     defaultValue: '',
     placeholder: 'Request a site visit and ask for a commercial cleaning quote.',
     description: 'This connects search visibility to a useful business action.',
-    required: true,
   },
   {
     name: 'competitorUrls',
@@ -160,7 +155,6 @@ const seoCurrentPictureFields = [
     placeholder: 'USD 1,500 to 3,000 per month',
     description:
       'A range helps us suggest a plan that can be maintained long enough to show progress.',
-    required: true,
   },
 ] as const satisfies readonly ServiceRequestTemplateField[];
 
@@ -172,7 +166,6 @@ const googleAdsCampaignFields = [
     defaultValue: '',
     placeholder: 'Our fixed-price company formation package for new businesses in Dubai.',
     description: 'Describe the product, service, or offer you want customers to see.',
-    required: true,
   },
   {
     name: 'conversionActions',
@@ -181,7 +174,6 @@ const googleAdsCampaignFields = [
     defaultValue: '',
     placeholder: 'Book a consultation or call our sales team.',
     description: 'Choose the action that would make the campaign valuable to your business.',
-    required: true,
   },
   {
     name: 'geographicTargeting',
@@ -191,7 +183,6 @@ const googleAdsCampaignFields = [
     placeholder: 'Dubai and Abu Dhabi, with English and Arabic speaking customers.',
     description:
       'Mention locations and languages that matter. Avoid targeting everywhere by default.',
-    required: true,
   },
 ] as const satisfies readonly ServiceRequestTemplateField[];
 
@@ -237,7 +228,6 @@ const googleAdsReadinessFields = [
     defaultValue: '',
     placeholder: 'USD 3,000 per month for ads, plus campaign management.',
     description: 'Separate advertising spend from service fees if you already know both amounts.',
-    required: true,
   },
   {
     name: 'timelineExpectations',
@@ -258,7 +248,6 @@ const otherRequestContextFields = [
     placeholder:
       'We need an internal dashboard that combines sales and support data for our managers.',
     description: 'Describe the request in your own words. Technical details are not required.',
-    required: true,
   },
   {
     name: 'currentSituation',
@@ -268,7 +257,6 @@ const otherRequestContextFields = [
     placeholder:
       'Managers export data from three systems and prepare the same report manually each week.',
     description: 'A real example helps us understand why the work matters.',
-    required: true,
   },
   {
     name: 'desiredOutcome',
@@ -279,7 +267,6 @@ const otherRequestContextFields = [
       'Managers should open one dashboard and see updated figures without preparing spreadsheets.',
     description:
       'Focus on what should become easier, faster, or possible after the work is complete.',
-    required: true,
   },
 ] as const satisfies readonly ServiceRequestTemplateField[];
 
@@ -344,7 +331,6 @@ const webDevelopmentGoalsScopeFields = [
     defaultValue: '',
     placeholder: 'USD 5,000 to 10,000',
     description: 'A range helps us recommend an approach that fits instead of guessing.',
-    required: true,
   },
   {
     name: 'timelineExpectations',
@@ -353,7 +339,6 @@ const webDevelopmentGoalsScopeFields = [
     defaultValue: '',
     placeholder: 'We would like to launch before our October product event.',
     description: 'Mention any event, campaign, or business commitment connected to the date.',
-    required: true,
   },
   {
     name: 'designReferenceUrls',
@@ -374,7 +359,6 @@ const mobileAppCompanyInfoFields = [
     defaultValue: '',
     placeholder: 'We provide home healthcare services to families across the UAE.',
     description: 'A short explanation of what you offer and who you serve is enough.',
-    required: true,
   },
   {
     name: 'backendRequirements',
@@ -383,12 +367,11 @@ const mobileAppCompanyInfoFields = [
     defaultValue: '',
     placeholder: 'Customers should be able to book a caregiver and track upcoming visits.',
     description: 'Focus on what users struggle with today and how the app should help.',
-    required: true,
   },
   {
     name: 'websiteUrl',
     label: 'Do you have an existing website or product we should review?',
-    input: 'url',
+    input: 'text',
     defaultValue: '',
     placeholder: 'https://yourproduct.com',
     description: 'Optional. This helps us understand what already exists.',
@@ -435,7 +418,6 @@ const mobileAppGoalsScopeFields = [
     defaultValue: '',
     placeholder: 'USD 15,000 to 25,000',
     description: 'A range helps us recommend an approach that fits instead of guessing.',
-    required: true,
   },
   {
     name: 'timelineExpectations',
@@ -444,7 +426,6 @@ const mobileAppGoalsScopeFields = [
     defaultValue: '',
     placeholder: 'We would like a first release ready before our January launch.',
     description: 'Mention any event, pilot, or business commitment connected to the date.',
-    required: true,
   },
 ] as const satisfies readonly ServiceRequestTemplateField[];
 
@@ -456,7 +437,6 @@ const generalMarketingCompanyInfoFields = [
     defaultValue: '',
     placeholder: 'We run a group of dental clinics serving families across Dubai.',
     description: 'A short explanation of what you offer and who you serve is enough.',
-    required: true,
   },
   {
     name: 'primaryBusinessGoals',
@@ -465,12 +445,11 @@ const generalMarketingCompanyInfoFields = [
     defaultValue: '',
     placeholder: 'We want more qualified appointment enquiries from families in our local area.',
     description: 'Focus on the result you need, not the marketing channel.',
-    required: true,
   },
   {
     name: 'websiteUrl',
     label: 'Do you have a website or social profile we should review?',
-    input: 'url',
+    input: 'text',
     defaultValue: '',
     placeholder: 'https://yourbusiness.com',
     description: 'Optional. Share the main online presence for your business.',
@@ -520,7 +499,6 @@ const generalMarketingGoalsScopeFields = [
     defaultValue: '',
     placeholder: 'USD 2,000 to 4,000 per month, including advertising spend',
     description: 'A range helps us suggest a realistic mix of work and advertising.',
-    required: true,
   },
   {
     name: 'timelineExpectations',
@@ -529,7 +507,6 @@ const generalMarketingGoalsScopeFields = [
     defaultValue: '',
     placeholder: 'We would like the campaign live three weeks before our September opening.',
     description: 'Mention any launch, event, seasonal period, or business commitment.',
-    required: true,
   },
 ] as const satisfies readonly ServiceRequestTemplateField[];
 
