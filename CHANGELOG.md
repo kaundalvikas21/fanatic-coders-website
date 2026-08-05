@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.4.1...v0.5.0) (2026-08-05)
+
+### Features
+
+- **action button:** change the position of chat component ([a21dffa](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a21dffa62e4b49014e2d36648a0db5c30961c700))
+- **components:** added copmponets fo rmanging chat conversation ([3b6901b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3b6901b1a9fd1017d2e4a22cf481be6137c8bb96))
+- **package:** added websocket for managing chat ([9879b61](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9879b61f16f11f63841c229d104abb5ffa9e420c))
+- **project:** support chat module to project ([1f201ec](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1f201ec648538e1fe0eab47d4d0ad499fdbd5d2a))
+
+### Code Refactoring
+
+- **serivce request:** removed module service request message ([65fdc7f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/65fdc7f454ed04f758469fc4d4238e1035e9e5b8))
+- **teams:** remove teams related features from better auth client ([3d8d680](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3d8d680485b1374a9ee869926051c8168ee7c5ae))
+
 ### [0.4.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.4.0...v0.4.1) (2026-08-04)
 
 ### Features
