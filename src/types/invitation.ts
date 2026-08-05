@@ -20,7 +20,6 @@ export type Invitation = {
   status: string;
   expiresAt: string;
   createdAt?: string;
-  teamId?: string;
 };
 
 export type InviteMemberResponse = Response<Invitation> | ApiResponse;

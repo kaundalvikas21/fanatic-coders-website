@@ -10,13 +10,7 @@ import { env } from '@/config/env';
 
 export const authServerClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_AUTH_URL,
-  plugins: [
-    organizationClient({
-      teams: {
-        enabled: true,
-      },
-    }),
-  ],
+  plugins: [organizationClient()],
 });
 
 export async function getServerAuthFetchOptions() {
