@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { MessageSquareText } from 'lucide-react';
+import { BellRing, MessageSquareText } from 'lucide-react';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
+import { Callout } from '@/components/shared/callout';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
@@ -88,6 +89,16 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
       <DetailPageLayout.Aside>
         {/* Keep status as the dedicated top-level state display for every viewer. */}
         <ServiceRequestStatusCard request={request} />
+
+        {/* Reassure clients that their request is active and updates will appear here. */}
+        {!permissions.isManagementView && !request.project && (
+          <Callout
+            icon={BellRing}
+            title="Request received"
+            description="We’ll notify you here as your request moves forward."
+            className="border-primary/25 bg-primary/[0.04] px-4 py-3"
+          />
+        )}
 
         {/* Keep consultation available without crowding request actions. */}
         <ActionSheet
