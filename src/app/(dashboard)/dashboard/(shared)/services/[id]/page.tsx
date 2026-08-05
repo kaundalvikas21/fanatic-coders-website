@@ -58,6 +58,7 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
     !proposalResponse.success && proposalResponse.error?.code !== 'PROPOSAL_NOT_FOUND'
       ? proposalResponse.message
       : null;
+  const chatTitle = permissions.isManagementView ? 'Chat with client' : 'Chat with our team';
 
   return (
     <DetailPageLayout>
@@ -90,12 +91,12 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
 
         {/* Keep consultation available without crowding request actions. */}
         <ActionSheet
-          title="Consultation"
+          title={chatTitle}
           description="Discuss requirements, scope, timing, and next steps."
           trigger={
             <ActionSheetButton className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 sm:right-6 sm:bottom-6">
               <MessageSquareText data-icon="inline-start" />
-              Consultation
+              {chatTitle}
             </ActionSheetButton>
           }
         >

@@ -19,7 +19,7 @@ export function ServiceRequestConversation({
     <LiveChatThread
       channel={{ type: 'service-request', id: serviceRequestId }}
       capabilities={capabilities}
-      ariaLabel="Service request consultation messages"
+      ariaLabel="Service request chat messages"
     />
   );
 
@@ -30,7 +30,7 @@ export function ServiceRequestConversation({
   return (
     <WidgetCard
       icon={MessageSquareText}
-      title="Consultation"
+      title="Request chat"
       description="Discuss requirements, scope, timing, and next steps for this request."
       contentClassNames="p-0"
     >
