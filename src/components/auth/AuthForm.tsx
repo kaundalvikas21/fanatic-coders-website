@@ -41,7 +41,7 @@ type AuthCopy = {
 const content = {
   login: {
     title: 'Sign in',
-    description: 'Use the account connected to your client workspace.',
+    description: 'Sign in to view your projects, requests, and account.',
     submit: 'Sign in',
     pending: 'Signing in',
     switchText: 'Need an account?',

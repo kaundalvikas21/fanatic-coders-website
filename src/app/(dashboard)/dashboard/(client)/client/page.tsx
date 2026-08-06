@@ -52,8 +52,8 @@ export default async function ClientDashboardPage() {
     <div className="space-y-8">
       <WidgetCard
         icon={BriefcaseBusiness}
-        title="Client workspace"
-        description="Review your projects, task progress, and next delivery steps."
+        title="Your projects"
+        description="Track project progress, completed work, and upcoming delivery steps."
         titleClassName="text-3xl"
       >
         <div className="grid gap-4 md:grid-cols-3">
@@ -83,7 +83,7 @@ export default async function ClientDashboardPage() {
         <WidgetCard
           icon={ClipboardList}
           title="No projects yet"
-          description="Your project workspaces will appear here once delivery starts."
+          description="Your projects will appear here once delivery begins."
         >
           <Button asChild>
             <Link href="/dashboard/services/new">Start a service request</Link>
