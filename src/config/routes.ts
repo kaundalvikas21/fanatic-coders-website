@@ -1,9 +1,9 @@
 import type { ComponentType } from 'react';
 import {
-  Blocks,
   BriefcaseBusiness,
   ClipboardList,
   CreditCard,
+  House,
   Inbox,
   LayoutDashboard,
   ListChecks,
@@ -12,7 +12,7 @@ import {
   ShieldCheck,
   UsersRound,
 } from 'lucide-react';
-import { ALL_ROLES, Role, type Role as DashboardRole } from '@/lib/auth/roles';
+import { Role, type Role as DashboardRole } from '@/lib/auth/roles';
 
 export type DashboardRoute = {
   title: string;
@@ -33,9 +33,10 @@ export type DashboardRouteGroup = {
 };
 
 const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
+const OVERVIEW_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
 const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
-const BILLING_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
+const BILLING_ROLES = [Role.ADMIN, Role.MANAGER] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 
 export const dashboardRouteGroups: DashboardRouteGroup[] = [
@@ -43,10 +44,16 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
     label: 'Business',
     items: [
       {
+        title: 'Home',
+        url: '/dashboard/client',
+        icon: House,
+        roles: [Role.CLIENT],
+      },
+      {
         title: 'Overview',
         url: '/dashboard',
         icon: LayoutDashboard,
-        roles: ALL_ROLES,
+        roles: OVERVIEW_ROLES,
       },
       {
         title: 'Leads',
@@ -125,17 +132,6 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         icon: Settings,
         roles: [Role.ADMIN],
         comingSoon: true,
-      },
-    ],
-  },
-  {
-    label: 'Account',
-    items: [
-      {
-        title: 'Client',
-        url: '/dashboard/client',
-        icon: Blocks,
-        roles: [Role.CLIENT],
       },
     ],
   },

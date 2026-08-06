@@ -3,13 +3,14 @@ import { ThemeToggle } from '@/components/shared/Toggle';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { getRoleLabel } from '@/lib/auth/roles';
 
 type DashboardHeaderProps = {
   organizationSlug?: string | null;
   role?: string | null;
 };
 
-export function DashboardHeader({ organizationSlug, role }: DashboardHeaderProps) {
+export function DashboardHeader({ role }: DashboardHeaderProps) {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4 transition-[left,height] duration-200 ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:left-(--sidebar-width) group-has-data-[collapsible=icon]/sidebar-wrapper:md:left-(--sidebar-width-icon)">
@@ -24,7 +25,7 @@ export function DashboardHeader({ organizationSlug, role }: DashboardHeaderProps
             variant="outline"
             className="hidden font-mono sm:inline-flex"
           >
-            {organizationSlug ?? 'no-org'} / {role ?? 'no-role'}
+            {getRoleLabel(role)}
           </Badge>
           <ThemeToggle />
         </div>
