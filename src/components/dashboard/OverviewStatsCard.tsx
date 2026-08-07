@@ -1,55 +1,66 @@
 import type { LucideIcon } from 'lucide-react';
 
-import { WidgetCard } from '@/components/shared/widget-card';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
+const statToneClasses = {
+  blue: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+  emerald: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  amber: 'bg-amber-500/15 text-amber-700 dark:text-amber-400',
+  violet: 'bg-violet-500/10 text-violet-600 dark:text-violet-400',
+} as const;
 
 export type OverviewStat = {
   label: string;
   value: number;
   supportingText: string;
   icon: LucideIcon;
+  tone?: keyof typeof statToneClasses;
 };
 
 type OverviewStatsCardProps = {
-  title?: string;
-  description?: string;
   stats: OverviewStat[];
   className?: string;
 };
 
-export function OverviewStatsCard({
-  title,
-  description,
-  stats,
-  className,
-}: OverviewStatsCardProps) {
+export function OverviewStatsCard({ stats, className }: OverviewStatsCardProps) {
   return (
-    <WidgetCard
-      title={title}
-      description={description}
-      className={className}
-    >
-      <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
+    <dl className={cn('grid gap-4 sm:grid-cols-2 xl:grid-cols-4', className)}>
+      {stats.map((stat) => {
+        const Icon = stat.icon;
+        const tone = stat.tone ?? 'blue';
 
-          return (
-            <div
-              key={stat.label}
-              className="rounded-lg bg-muted/50 p-4"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <dt className="text-sm text-muted-foreground">{stat.label}</dt>
+        return (
+          <Card
+            key={stat.label}
+            size="sm"
+            className="min-h-32 transition-colors duration-200 hover:bg-muted/20 motion-reduce:transition-none"
+          >
+            <CardContent className="flex h-full items-start justify-between gap-5">
+              <div className="flex min-w-0 flex-1 flex-col">
+                <dt className="text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                  {stat.label}
+                </dt>
+                <dd className="mt-2 text-3xl font-semibold tracking-tight tabular-nums">
+                  {stat.value}
+                </dd>
+                <p className="mt-auto pt-2 text-xs text-muted-foreground">{stat.supportingText}</p>
+              </div>
+              <span
+                className={cn(
+                  'flex size-11 shrink-0 items-center justify-center rounded-lg',
+                  statToneClasses[tone],
+                )}
+              >
                 <Icon
-                  className="size-4 shrink-0 text-primary"
+                  className="size-5"
                   aria-hidden="true"
                 />
-              </div>
-              <dd className="mt-3 text-3xl font-semibold tracking-tight">{stat.value}</dd>
-              <p className="mt-1 text-xs text-muted-foreground">{stat.supportingText}</p>
-            </div>
-          );
-        })}
-      </dl>
-    </WidgetCard>
+              </span>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </dl>
   );
 }
