@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.5.0...v0.5.1) (2026-08-07)
+
+### Features
+
+- **auth:** added toggle button to input field for better UX ([25a98e4](https://github.com/kaundalvikas21/fanatic-coders-website/commit/25a98e434b058458e7e9254a826c4a6a187fa010))
+- **callout:** added shadcn callout component for notification ([9d0cfd5](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9d0cfd5ac7803e50d48e9a12890f78f790683bc0))
+
+### Bug Fixes
+
+- **dashboard:** make position fixed for dashboard header ([091f8d0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/091f8d031bf6b337156a9e3f9f71ce3eabead236))
+- **form:** fix issue regarding validation make flow easy ([6ebb1bf](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6ebb1bffc82c818c23ed081af4fea451c1932d1b))
+- **service:** remove full service request message types and compoennt ([ac800bd](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ac800bd7bf106f923ddca3501bcefea700a60847))
+- **types:** added dashboard types to manage dashboard contracts ([9f855db](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9f855dbbd0cbf686d0e7f8068845cab1c12741e9))
+- **ui:** fix issue regarding ui input field ([68c9bda](https://github.com/kaundalvikas21/fanatic-coders-website/commit/68c9bdae8704fd634a334d458970b2e05c819346))
+
+### Code Refactoring
+
+- **chat:** change chat conversation Action Title ([88decec](https://github.com/kaundalvikas21/fanatic-coders-website/commit/88decec163e37ec1cc8c7f111bebdca79ee5b7b4))
+- **routes:** added new navigation routes for CLIENT role and made it clean ([446f246](https://github.com/kaundalvikas21/fanatic-coders-website/commit/446f2461d56ab222ed5335971067eba60fd72d3d))
+- **typo:** change typograhpy and name and title ([1168c4c](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1168c4c3de2f2350154a082ba78903ec9a2dd08c))
+
 ## [0.5.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.4.1...v0.5.0) (2026-08-05)
 
 ### Features
