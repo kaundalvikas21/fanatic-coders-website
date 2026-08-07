@@ -13,24 +13,28 @@ export async function WorkspaceStatsWidget() {
       value: overview?.activeProjects ?? 0,
       supportingText: `${overview?.totalProjects ?? 0} total`,
       icon: BriefcaseBusiness,
+      tone: 'blue' as const,
     },
     {
       label: 'Tasks',
       value: overview?.openTasks ?? 0,
       supportingText: `${overview?.completedTasks ?? 0} completed`,
       icon: ListChecks,
+      tone: 'emerald' as const,
     },
     {
       label: 'Requests',
       value: overview?.openServiceRequests ?? 0,
       supportingText: `${overview?.totalServiceRequests ?? 0} total`,
       icon: ClipboardList,
+      tone: 'amber' as const,
     },
     {
       label: 'Leads',
       value: overview?.totalLeads ?? 0,
       supportingText: `${overview?.newLeads ?? 0} new`,
       icon: Inbox,
+      tone: 'violet' as const,
     },
   ];
 
