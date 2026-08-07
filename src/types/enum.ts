@@ -99,11 +99,10 @@ export const PROJECT_STATUS_BADGE_VARIANTS = {
   ARCHIVED: 'destructive',
 } as const satisfies Record<ProjectStatus, 'default' | 'secondary' | 'outline' | 'destructive'>;
 
-export const PROJECT_CURRENCIES = ['USD', 'AED'] as const satisfies readonly ProjectCurrency[];
+export const PROJECT_CURRENCIES = ['USD'] as const satisfies readonly ProjectCurrency[];
 
 export const DEFAULT_PROJECT_CURRENCY = 'USD' satisfies ProjectCurrency;
 
 export const PROJECT_CURRENCY_OPTIONS = [
   { value: 'USD', label: 'USD' },
-  { value: 'AED', label: 'AED' },
 ] as const satisfies readonly { value: ProjectCurrency; label: string }[];
