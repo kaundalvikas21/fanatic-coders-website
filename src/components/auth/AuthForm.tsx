@@ -12,6 +12,7 @@ import { setFcopOrganizationActive } from '@/lib/auth/organization-client';
 import { getRoleHomePath } from '@/lib/auth/roles';
 import { storeFrontendBearerToken } from '@/lib/auth/token-client';
 import { AuthLayout } from './AuthLayout';
+import { PasswordInput } from './PasswordInput';
 import { AuthSubmitButton } from './AuthSubmitButton';
 import { AUTH_INPUT_CLASS_NAME } from './auth-styles';
 
@@ -41,7 +42,7 @@ type AuthCopy = {
 const content = {
   login: {
     title: 'Sign in',
-    description: 'Use the account connected to your client workspace.',
+    description: 'Sign in to view your projects, requests, and account.',
     submit: 'Sign in',
     pending: 'Signing in',
     switchText: 'Need an account?',
@@ -197,9 +198,8 @@ export function AuthForm({ mode }: AuthFormProps) {
           {/* Password for current login or new account creation. */}
           <Field data-invalid={Boolean(errors.password)}>
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               className={AUTH_INPUT_CLASS_NAME}
               placeholder="At least 8 characters"

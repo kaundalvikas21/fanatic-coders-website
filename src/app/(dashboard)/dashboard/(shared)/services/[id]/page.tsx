@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { MessageSquareText } from 'lucide-react';
+import { BellRing, MessageSquareText } from 'lucide-react';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
+import { Callout } from '@/components/shared/callout';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
@@ -58,6 +59,7 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
     !proposalResponse.success && proposalResponse.error?.code !== 'PROPOSAL_NOT_FOUND'
       ? proposalResponse.message
       : null;
+  const chatTitle = permissions.isManagementView ? 'Chat with client' : 'Chat with our team';
 
   return (
     <DetailPageLayout>
@@ -88,24 +90,40 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
         {/* Keep status as the dedicated top-level state display for every viewer. */}
         <ServiceRequestStatusCard request={request} />
 
-        {/* Keep consultation available without crowding request actions. */}
-        <ActionSheet
-          title="Consultation"
-          description="Discuss requirements, scope, timing, and next steps."
-          trigger={
-            <ActionSheetButton className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 sm:right-6 sm:bottom-6">
-              <MessageSquareText data-icon="inline-start" />
-              Consultation
-            </ActionSheetButton>
-          }
-        >
-          <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
-            <ServiceRequestConversation
-              serviceRequestId={request.id}
-              showHeader={false}
-            />
-          </div>
-        </ActionSheet>
+        {/* Reassure clients that their request is active and updates will appear here. */}
+        {!permissions.isManagementView && !request.project && (
+          <Callout
+            icon={BellRing}
+            title="Request received"
+            description="We’ll notify you here as your request moves forward."
+            className="border-primary/25 bg-primary/[0.04] px-4 py-3"
+          />
+        )}
+
+        {/* Keep service request consultation between the client and administrators. */}
+        {access?.role !== 'MANAGER' && (
+          <ActionSheet
+            title={chatTitle}
+            description="Discuss requirements, scope, timing, and next steps."
+            trigger={
+              <ActionSheetButton className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 sm:right-6 sm:bottom-6">
+                <MessageSquareText data-icon="inline-start" />
+                {chatTitle}
+              </ActionSheetButton>
+            }
+          >
+            <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
+              <ServiceRequestConversation
+                serviceRequestId={request.id}
+                capabilities={{
+                  canSend: true,
+                  canSendInternal: access?.role === 'ADMIN',
+                }}
+                showHeader={false}
+              />
+            </div>
+          </ActionSheet>
+        )}
 
         {proposalError ? (
           <ErrorState

@@ -25,7 +25,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <PermissionProvider permissions={access.permissions}>
       <DashboardProvider>
         <DashboardSidebar role={role} />
-        <SidebarInset className="dashboard-shell">
+        <SidebarInset className="min-h-svh bg-background text-foreground">
           <DashboardHeader
             organizationSlug={FCOP_ORGANIZATION_SLUG}
             role={role}

@@ -3,7 +3,6 @@ export { ServiceRequestSummarySections } from './components/details/ServiceReque
 export { ServiceRequestForm } from './components/form/ServiceRequestForm';
 export { ServiceCatalog } from './components/list/ServiceCatalog';
 export { ServiceRequestList } from './components/list/ServiceRequestList';
-export { useServiceRequestChatCapabilities } from './hooks/use-service-request-chat-capabilities';
 export { useServiceRequestPermissions } from './hooks/use-service-request-permissions';
 export { createServiceRequestPermissions } from './utils/permissions';
 export { getServiceRequestPermissions } from './data/permissions';

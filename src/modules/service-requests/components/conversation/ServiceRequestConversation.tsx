@@ -2,24 +2,24 @@
 
 import { MessageSquareText } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { LiveChatThread } from '@/modules/chat';
-import { useServiceRequestChatCapabilities } from '@/modules/service-requests/hooks/use-service-request-chat-capabilities';
+import { LiveChatThread, type LiveChatCapabilities } from '@/modules/chat';
 
 type ServiceRequestConversationProps = {
   serviceRequestId: string;
+  capabilities: LiveChatCapabilities;
   showHeader?: boolean;
 };
 
 export function ServiceRequestConversation({
   serviceRequestId,
+  capabilities,
   showHeader = true,
 }: ServiceRequestConversationProps) {
-  const capabilities = useServiceRequestChatCapabilities();
   const content = (
     <LiveChatThread
       channel={{ type: 'service-request', id: serviceRequestId }}
       capabilities={capabilities}
-      ariaLabel="Service request consultation messages"
+      ariaLabel="Service request chat messages"
     />
   );
 
@@ -30,7 +30,7 @@ export function ServiceRequestConversation({
   return (
     <WidgetCard
       icon={MessageSquareText}
-      title="Consultation"
+      title="Request chat"
       description="Discuss requirements, scope, timing, and next steps for this request."
       contentClassNames="p-0"
     >

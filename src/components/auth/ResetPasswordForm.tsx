@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { KeyRound } from 'lucide-react';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth/client';
 import { AuthLayout } from './AuthLayout';
+import { PasswordInput } from './PasswordInput';
 import { AuthSubmitButton } from './AuthSubmitButton';
 import { AUTH_INPUT_CLASS_NAME } from './auth-styles';
 
@@ -78,9 +78,8 @@ export function ResetPasswordForm() {
           {/* New password saved for the reset token. */}
           <Field data-invalid={Boolean(passwordError)}>
             <FieldLabel htmlFor="new-password">New password</FieldLabel>
-            <Input
+            <PasswordInput
               id="new-password"
-              type="password"
               autoComplete="new-password"
               className={AUTH_INPUT_CLASS_NAME}
               disabled={!token || isComplete}
@@ -104,9 +103,8 @@ export function ResetPasswordForm() {
           {/* Confirmation field prevents accidental password typos. */}
           <Field data-invalid={Boolean(confirmPasswordError)}>
             <FieldLabel htmlFor="confirm-password">Confirm password</FieldLabel>
-            <Input
+            <PasswordInput
               id="confirm-password"
-              type="password"
               autoComplete="new-password"
               className={AUTH_INPUT_CLASS_NAME}
               disabled={!token || isComplete}

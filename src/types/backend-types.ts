@@ -21,6 +21,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/dashboard/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch admin dashboard overview */
+        get: operations["getAdminDashboardOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard/leads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch admin lead status distribution */
+        get: operations["getAdminDashboardLeadDistribution"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch admin task status distribution */
+        get: operations["getAdminDashboardTaskDistribution"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard/recent/leads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch recent admin dashboard leads */
+        get: operations["getAdminDashboardRecentLeads"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard/attention/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch admin dashboard attention tasks */
+        get: operations["getAdminDashboardAttentionTasks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/request-password-reset": {
         parameters: {
             query?: never;
@@ -53,106 +138,6 @@ export interface paths {
          * @description Returns the authenticated user, active organization member, role, and permission statements for UI access checks.
          */
         get: operations["getMe"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/overview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin dashboard overview
-         * @description Returns organization-wide dashboard counts. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardOverview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/leads": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin lead distribution
-         * @description Returns lead counts grouped by status. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardLeadDistribution"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/tasks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin task distribution
-         * @description Returns task counts grouped by status. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardTaskDistribution"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/recent/leads": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch recent admin dashboard leads
-         * @description Returns the five newest leads. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardRecentLeads"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/dashboard/attention/tasks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Fetch admin dashboard attention tasks
-         * @description Returns five urgent or overdue unfinished tasks. Requires the ADMIN role.
-         */
-        get: operations["getAdminDashboardAttentionTasks"];
         put?: never;
         post?: never;
         delete?: never;
@@ -257,6 +242,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/service-requests/{serviceRequestId}/proposal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch a proposal
+         * @description Returns the proposal for a service request. Clients can access only their own service request.
+         */
+        get: operations["getServiceRequestProposal"];
+        put?: never;
+        /**
+         * Create a proposal
+         * @description Creates the single draft proposal for a service request. Available to Admin and Manager roles.
+         */
+        post: operations["createServiceRequestProposal"];
+        /**
+         * Delete a proposal
+         * @description Deletes a draft or sent proposal. Accepted proposals are preserved as immutable records.
+         */
+        delete: operations["deleteServiceRequestProposal"];
+        options?: never;
+        head?: never;
+        /**
+         * Update a proposal
+         * @description Admin and Manager can change draft terms or set status to SENT. The owning Client can only set status to ACCEPTED. Accepted proposals are immutable.
+         */
+        patch: operations["updateServiceRequestProposal"];
+        trace?: never;
+    };
     "/api/v1/service-requests/{serviceRequestId}/project": {
         parameters: {
             query?: never;
@@ -323,6 +340,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{projectId}/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch project tasks
+         * @description Returns tasks for a project visible to the current member. Members receive only tasks assigned to them.
+         */
+        get: operations["getProjectTasks"];
+        put?: never;
+        /**
+         * Create a project task
+         * @description Creates a task in an accessible project. Only Admin and Manager members can create and assign tasks.
+         */
+        post: operations["createProjectTask"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch visible tasks
+         * @description Returns tasks from accessible projects. Members receive only tasks assigned to them.
+         */
+        get: operations["getTasks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks/{taskId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update a task
+         * @description Updates an accessible task. Members can update assigned tasks but cannot change task assignments.
+         */
+        put: operations["updateTaskById"];
+        post?: never;
+        /**
+         * Delete a task
+         * @description Deletes an accessible task. Only Admin and Manager members can delete tasks.
+         */
+        delete: operations["deleteTaskById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/service-requests/{id}": {
         parameters: {
             query?: never;
@@ -376,6 +461,16 @@ export interface components {
          */
         ServiceRequestStatus: "NEW" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
         /**
+         * @example DRAFT
+         * @enum {string}
+         */
+        ProposalStatus: "DRAFT" | "SENT" | "ACCEPTED";
+        /**
+         * @example UNPAID
+         * @enum {string}
+         */
+        ProposalPaymentStatus: "UNPAID" | "PAID";
+        /**
          * @example PLANNING
          * @enum {string}
          */
@@ -397,10 +492,87 @@ export interface components {
          */
         TaskStatus: "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE";
         /**
-         * @example URGENT
+         * @example MEDIUM
          * @enum {string}
          */
         TaskPriority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+        AdminDashboardOverview: {
+            /** @example 24 */
+            totalLeads: number;
+            /** @example 5 */
+            newLeads: number;
+            /** @example 12 */
+            totalProjects: number;
+            /** @example 7 */
+            activeProjects: number;
+            /** @example 48 */
+            totalTasks: number;
+            /** @example 18 */
+            openTasks: number;
+            /** @example 30 */
+            completedTasks: number;
+            /** @example 16 */
+            totalServiceRequests: number;
+            /** @example 4 */
+            openServiceRequests: number;
+        };
+        LeadStatusDistribution: {
+            /** @example 0 */
+            NEW: number;
+            /** @example 0 */
+            QUALIFIED: number;
+            /** @example 0 */
+            IN_PROGRESS: number;
+            /** @example 0 */
+            DEAD: number;
+        };
+        TaskStatusDistribution: {
+            /** @example 0 */
+            TODO: number;
+            /** @example 0 */
+            IN_PROGRESS: number;
+            /** @example 0 */
+            IN_REVIEW: number;
+            /** @example 0 */
+            DONE: number;
+        };
+        AdminDashboardRecentLead: {
+            /** @example clx0000000000000000000004 */
+            id: string;
+            /** @example Akshay Kumar */
+            name: string;
+            /**
+             * Format: email
+             * @example akshay@example.com
+             */
+            email: string;
+            /** @example Fanatic Coders */
+            companyName: string | null;
+            status: components["schemas"]["LeadStatus"];
+            /**
+             * Format: date-time
+             * @example 2026-07-06T06:30:00.000Z
+             */
+            createdAt: string;
+        };
+        AdminDashboardAttentionTask: {
+            /** @example clx0000000000000000000030 */
+            id: string;
+            /** @example clx0000000000000000000010 */
+            projectId: string;
+            /** @example Review client feedback */
+            title: string;
+            priority: components["schemas"]["TaskPriority"];
+            /**
+             * Format: date-time
+             * @example 2026-07-08T06:30:00.000Z
+             */
+            dueDate: string | null;
+            project: {
+                /** @example FCOP Client Portal */
+                name: string;
+            };
+        };
         /**
          * @example CLIENT
          * @enum {string}
@@ -441,10 +613,6 @@ export interface components {
          *         "create",
          *         "read"
          *       ],
-         *       "serviceRequestMessage": [
-         *         "create",
-         *         "read"
-         *       ],
          *       "project": [
          *         "read"
          *       ],
@@ -467,65 +635,6 @@ export interface components {
         };
         MeResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Me"];
-        };
-        AdminDashboardOverview: {
-            totalLeads: number;
-            newLeads: number;
-            totalProjects: number;
-            activeProjects: number;
-            totalTasks: number;
-            openTasks: number;
-            completedTasks: number;
-            totalServiceRequests: number;
-            openServiceRequests: number;
-        };
-        LeadStatusDistribution: {
-            NEW: number;
-            QUALIFIED: number;
-            IN_PROGRESS: number;
-            DEAD: number;
-        };
-        TaskStatusDistribution: {
-            TODO: number;
-            IN_PROGRESS: number;
-            IN_REVIEW: number;
-            DONE: number;
-        };
-        AdminDashboardRecentLead: {
-            id: string;
-            name: string;
-            /** Format: email */
-            email: string;
-            companyName?: string | null;
-            status: components["schemas"]["LeadStatus"];
-            /** Format: date-time */
-            createdAt: string;
-        };
-        AdminDashboardAttentionTask: {
-            id: string;
-            projectId: string;
-            title: string;
-            priority: components["schemas"]["TaskPriority"];
-            /** Format: date-time */
-            dueDate?: string | null;
-            project: {
-                name: string;
-            };
-        };
-        AdminDashboardOverviewResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["AdminDashboardOverview"];
-        };
-        AdminDashboardLeadDistributionResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["LeadStatusDistribution"];
-        };
-        AdminDashboardTaskDistributionResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["TaskStatusDistribution"];
-        };
-        AdminDashboardRecentLeadsResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["AdminDashboardRecentLead"][];
-        };
-        AdminDashboardAttentionTasksResponse: components["schemas"]["ApiResponse"] & {
-            data: components["schemas"]["AdminDashboardAttentionTask"][];
         };
         User: {
             /** @example clx0000000000000000000000 */
@@ -716,6 +825,7 @@ export interface components {
             service: components["schemas"]["ServiceInterest"];
             status: components["schemas"]["ServiceRequestStatus"];
             data?: components["schemas"]["ServiceRequestData"] | null;
+            proposal?: components["schemas"]["Proposal"] | null;
             /** @description Linked project reference once this service request has been converted into a project. */
             project?: {
                 /** @example clx0000000000000000000011 */
@@ -739,6 +849,71 @@ export interface components {
         UpdateServiceRequestRequest: {
             status?: components["schemas"]["ServiceRequestStatus"];
             data?: components["schemas"]["ServiceRequestData"];
+        };
+        Proposal: {
+            /** @example clx0000000000000000000020 */
+            id: string;
+            /** @example clx0000000000000000000006 */
+            serviceRequestId: string;
+            /** @example seed-member-manager */
+            createdByMemberId: string;
+            /** @example Design and develop the agreed business website. */
+            description: string;
+            /**
+             * Format: decimal
+             * @example 5000
+             */
+            amount: number;
+            currency: components["schemas"]["ProjectCurrency"];
+            status: components["schemas"]["ProposalStatus"];
+            paymentStatus: components["schemas"]["ProposalPaymentStatus"];
+            /**
+             * Format: date-time
+             * @example 2026-07-30T10:00:00.000Z
+             */
+            acceptedAt?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-07-30T10:05:00.000Z
+             */
+            paidAt?: string | null;
+            /** @example in_1Example */
+            stripeInvoiceId?: string | null;
+            /** @example A1B2C3D4-0001 */
+            stripeInvoiceNumber?: string | null;
+            /**
+             * Format: uri
+             * @example https://invoice.stripe.com/i/example
+             */
+            stripeHostedInvoiceUrl?: string | null;
+            /**
+             * Format: uri
+             * @example https://pay.stripe.com/invoice/example/pdf
+             */
+            stripeInvoicePdfUrl?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-07-30T09:00:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-07-30T10:05:00.000Z
+             */
+            updatedAt: string;
+        };
+        CreateProposalRequest: {
+            /** @example Design and develop the agreed business website. */
+            description: string;
+            /** @example 5000 */
+            amount: number;
+            currency: components["schemas"]["ProjectCurrency"];
+        };
+        UpdateProposalRequest: {
+            description?: string;
+            amount?: number;
+            currency?: components["schemas"]["ProjectCurrency"];
+            status?: components["schemas"]["ProposalStatus"];
         };
         ProjectMember: {
             /** @example clx0000000000000000000011 */
@@ -861,6 +1036,120 @@ export interface components {
             budgetAmount?: number | null;
             currency?: components["schemas"]["ProjectCurrency"];
         };
+        TaskUser: {
+            /** @example seed-user-member */
+            id: string;
+            /** @example Delivery Member */
+            name: string;
+            /**
+             * Format: email
+             * @example member@example.com
+             */
+            email: string;
+            /**
+             * Format: uri
+             * @example https://example.com/avatar.png
+             */
+            image?: string | null;
+        };
+        TaskMember: {
+            /** @example seed-member-member */
+            id: string;
+            /** @example seed-user-member */
+            userId: string;
+            /** @example seed-org-fanatic-coders */
+            organizationId: string;
+            role: components["schemas"]["OrganizationRole"];
+            /**
+             * Format: date-time
+             * @example 2026-08-05T06:30:00.000Z
+             */
+            createdAt: string;
+            user: components["schemas"]["TaskUser"];
+        };
+        TaskProjectReference: {
+            /** @example clx0000000000000000000010 */
+            id: string;
+            /** @example Acme website redesign */
+            name: string;
+        };
+        TaskAssignee: {
+            /** @example clx0000000000000000000031 */
+            id: string;
+            /** @example clx0000000000000000000030 */
+            taskId: string;
+            /** @example clx0000000000000000000010 */
+            projectId: string;
+            /** @example seed-member-member */
+            memberId: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-05T06:30:00.000Z
+             */
+            createdAt: string;
+            member: components["schemas"]["TaskMember"];
+        };
+        Task: {
+            /** @example clx0000000000000000000030 */
+            id: string;
+            /** @example clx0000000000000000000010 */
+            projectId: string;
+            /** @example seed-member-manager */
+            createdByMemberId: string;
+            /** @example Build homepage wireframe */
+            title: string;
+            /** @example Create the desktop and mobile homepage wireframes. */
+            description?: string | null;
+            status: components["schemas"]["TaskStatus"];
+            priority: components["schemas"]["TaskPriority"];
+            /**
+             * Format: date-time
+             * @example 2026-08-15T00:00:00.000Z
+             */
+            dueDate?: string | null;
+            estimatedHours?: (string | number) | null;
+            /**
+             * Format: date-time
+             * @example 2026-08-05T06:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-05T06:30:00.000Z
+             */
+            updatedAt: string;
+            project: components["schemas"]["TaskProjectReference"];
+            createdBy: components["schemas"]["TaskMember"];
+            assignees: components["schemas"]["TaskAssignee"][];
+        };
+        CreateTaskRequest: {
+            /** @example Build homepage wireframe */
+            title: string;
+            description?: string | null;
+            status?: components["schemas"]["TaskStatus"];
+            priority?: components["schemas"]["TaskPriority"];
+            /** Format: date-time */
+            dueDate?: string;
+            estimatedHours?: number;
+            /** @default [] */
+            assigneeMemberIds: string[];
+        };
+        UpdateTaskRequest: {
+            title?: string;
+            description?: string | null;
+            status?: components["schemas"]["TaskStatus"];
+            priority?: components["schemas"]["TaskPriority"];
+            /** Format: date-time */
+            dueDate?: string | null;
+            estimatedHours?: number | null;
+            assigneeMemberIds?: string[];
+        };
+        TaskResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Task"];
+        };
+        TasksResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Task"][];
+        };
         RequestPasswordResetRequest: {
             /**
              * Format: email
@@ -956,6 +1245,9 @@ export interface components {
         ServiceRequestResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["ServiceRequest"];
         };
+        ProposalResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Proposal"];
+        };
         ProjectsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["PaginatedProjects"];
         };
@@ -1007,9 +1299,15 @@ export interface components {
         /** @example clx0000000000000000000006 */
         ServiceRequestId: string;
         /** @example clx0000000000000000000006 */
+        ServiceRequestProposalServiceRequestId: string;
+        /** @example clx0000000000000000000006 */
         ServiceRequestProjectServiceRequestId: string;
         /** @example clx0000000000000000000010 */
         ProjectId: string;
+        /** @example clx0000000000000000000010 */
+        TaskProjectId: string;
+        /** @example clx0000000000000000000030 */
+        TaskId: string;
     };
     requestBodies: never;
     headers: never;
@@ -1035,6 +1333,126 @@ export interface operations {
                     "application/json": components["schemas"]["HealthResponse"];
                 };
             };
+        };
+    };
+    getAdminDashboardOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetch admin dashboard overview successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"] & {
+                        data: components["schemas"]["AdminDashboardOverview"];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getAdminDashboardLeadDistribution: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetch admin lead status distribution successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"] & {
+                        data: components["schemas"]["LeadStatusDistribution"];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getAdminDashboardTaskDistribution: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetch admin task status distribution successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"] & {
+                        data: components["schemas"]["TaskStatusDistribution"];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getAdminDashboardRecentLeads: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetch recent admin dashboard leads successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"] & {
+                        data: components["schemas"]["AdminDashboardRecentLead"][];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getAdminDashboardAttentionTasks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetch admin dashboard attention tasks successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"] & {
+                        data: components["schemas"]["AdminDashboardAttentionTask"][];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
         };
     };
     requestPasswordReset: {
@@ -1098,116 +1516,6 @@ export interface operations {
                     "application/json": components["schemas"]["ApiResponse"];
                 };
             };
-        };
-    };
-    getAdminDashboardOverview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin dashboard overview fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardOverviewResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardLeadDistribution: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin lead distribution fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardLeadDistributionResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardTaskDistribution: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin task distribution fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardTaskDistributionResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardRecentLeads: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Recent admin dashboard leads fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardRecentLeadsResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-        };
-    };
-    getAdminDashboardAttentionTasks: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Admin dashboard attention tasks fetched successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminDashboardAttentionTasksResponse"];
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
         };
     };
     inviteMember: {
@@ -1510,6 +1818,203 @@ export interface operations {
             };
         };
     };
+    getServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Proposal fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request or proposal was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    createServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description Proposal created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            /** @description Invalid proposal payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description A proposal or project already exists for the service request. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Proposal deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Service request or proposal was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Accepted proposal cannot be deleted. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    updateServiceRequestProposal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000006 */
+                serviceRequestId: components["parameters"]["ServiceRequestProposalServiceRequestId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description Proposal updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalResponse"];
+                };
+            };
+            /** @description Invalid or empty proposal update. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            /** @description Role is not allowed to perform the requested proposal transition or field update. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Service request or proposal was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Proposal state does not allow the requested update. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
     createProjectFromServiceRequest: {
         parameters: {
             query?: never;
@@ -1757,6 +2262,208 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             /** @description Project was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getProjectTasks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                projectId: components["parameters"]["TaskProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tasks fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TasksResponse"];
+                };
+            };
+            /** @description Invalid project id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    createProjectTask: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                projectId: components["parameters"]["TaskProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTaskRequest"];
+            };
+        };
+        responses: {
+            /** @description Task created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Invalid task payload or assignee. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getTasks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tasks fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TasksResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    updateTaskById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTaskRequest"];
+            };
+        };
+        responses: {
+            /** @description Task updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Invalid or empty task update. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteTaskById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Task deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Invalid task id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
             404: {
                 headers: {
                     [name: string]: unknown;

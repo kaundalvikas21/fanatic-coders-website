@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LogIn, UserPlus } from 'lucide-react';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 import { AuthSubmitButton } from '@/components/auth/AuthSubmitButton';
+import { PasswordInput } from '@/components/auth/PasswordInput';
 import { AUTH_INPUT_CLASS_NAME } from '@/components/auth/auth-styles';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -208,10 +209,9 @@ export function AcceptInvitationFlow({
           {/* Password for signing in or creating the invited account. */}
           <Field>
             <FieldLabel htmlFor="invite-password">Password</FieldLabel>
-            <Input
+            <PasswordInput
               id="invite-password"
               name="password"
-              type="password"
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               className={AUTH_INPUT_CLASS_NAME}
               required
