@@ -56,7 +56,7 @@ export function ProposalForm({
     const payload = {
       description: values.description.trim(),
       amount: Number(values.amount),
-      currency: values.currency,
+      currency: values.currency ?? DEFAULT_PROJECT_CURRENCY,
       ...(send ? { status: 'SENT' as const } : {}),
     };
 
