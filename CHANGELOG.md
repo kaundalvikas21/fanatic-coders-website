@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.5.2...v0.6.0) (2026-08-08)
+
+### Features
+
+- **components:** added data table compoennts for managing payments ([8c7d563](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8c7d5635a31a5d48f0bba69d92ff2101cbc20756))
+- **page:** added route pages for managing data ([c284986](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c28498627674a1d448f42276e5552f459573face))
+- **queries:** added server function for retreiving data ([1a2fb3f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1a2fb3fe8032f56c662863affa472e66e1adf736))
+- **types:** added new types for payment ([e6d9a59](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e6d9a59dcbd371f9b698fa84a4c5a3159f0b72b6))
+
+### Bug Fixes
+
+- **currency:** fix currency formatter ([42cde1e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/42cde1eee19fef3244176a94ca094d6c403d3c0b))
+- **serach params:** added route pages , searchparams and other pages for manging routes ([570a0e7](https://github.com/kaundalvikas21/fanatic-coders-website/commit/570a0e706b8b6efd1c7f36e520fe7d0b3680a556))
+
 ### [0.5.2](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.5.1...v0.5.2) (2026-08-08)
 
 ### Features
