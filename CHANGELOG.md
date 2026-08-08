@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.2](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.5.1...v0.5.2) (2026-08-08)
+
+### Features
+
+- **error:** added error component for managing errors ([9b581fc](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9b581fc90019b1b1e21a30bc3f5a4a8208263818))
+
+### Bug Fixes
+
+- **dashboard:** redesign the dashboard widget stats card ([27d5773](https://github.com/kaundalvikas21/fanatic-coders-website/commit/27d5773754c50992052937ab855bec5b3b910910))
+- **invoice:** added default currency USD ([5f3c3af](https://github.com/kaundalvikas21/fanatic-coders-website/commit/5f3c3af0dad94a4d32dee38b5070e9731bc9cf53))
+
 ### [0.5.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.5.0...v0.5.1) (2026-08-07)
 
 ### Features
