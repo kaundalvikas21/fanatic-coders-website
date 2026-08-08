@@ -21,6 +21,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch payments
+         * @description Admin and Manager receive organization payment history. Client receives only payments for their own service requests.
+         */
+        get: operations["getPayments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/dashboard/overview": {
         parameters: {
             query?: never;
@@ -902,6 +922,45 @@ export interface components {
              */
             updatedAt: string;
         };
+        Payment: {
+            /** @example clx0000000000000000000020 */
+            id: string;
+            /** @example clx0000000000000000000020 */
+            proposalId: string;
+            /** @example clx0000000000000000000006 */
+            serviceRequestId: string;
+            client: {
+                /** @example clx0000000000000000000005 */
+                id: string;
+                /** @example Acme Ltd */
+                name: string;
+                /**
+                 * Format: email
+                 * @example billing@acme.example
+                 */
+                email: string;
+            };
+            /** @example Design and develop the agreed business website. */
+            description: string;
+            /** @example 5000.00 */
+            amount: string;
+            currency: components["schemas"]["ProjectCurrency"];
+            status: components["schemas"]["ProposalPaymentStatus"];
+            /** Format: date-time */
+            paidAt?: string | null;
+            /** @example in_1Example */
+            stripeInvoiceId: string;
+            /** @example A1B2C3D4-0001 */
+            stripeInvoiceNumber?: string | null;
+            /** Format: uri */
+            stripeHostedInvoiceUrl?: string | null;
+            /** Format: uri */
+            stripeInvoicePdfUrl?: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
         CreateProposalRequest: {
             /** @example Design and develop the agreed business website. */
             description: string;
@@ -1248,6 +1307,12 @@ export interface components {
         ProposalResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Proposal"];
         };
+        PaymentsResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["Payment"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
+        };
         ProjectsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["PaginatedProjects"];
         };
@@ -1333,6 +1398,48 @@ export interface operations {
                     "application/json": components["schemas"]["HealthResponse"];
                 };
             };
+        };
+    };
+    getPayments: {
+        parameters: {
+            query?: {
+                /** @description Filter by payment status. */
+                status?: components["schemas"]["ProposalPaymentStatus"];
+                /** @description Filter by payment currency. */
+                currency?: components["schemas"]["ProjectCurrency"];
+                /** @description Filter by client name or email. */
+                search?: string;
+                /** @description One-based page number. */
+                page?: number;
+                /** @description Number of payments per page. */
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Payments fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsResponse"];
+                };
+            };
+            /** @description Invalid payment filters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
         };
     };
     getAdminDashboardOverview: {
