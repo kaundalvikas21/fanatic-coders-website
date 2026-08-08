@@ -4,21 +4,17 @@ export type AccessOperation = 'create' | 'read' | 'update' | 'delete';
 
 export type AccessModel =
   | 'ac'
-  | 'billing'
   | 'comment'
   | 'dashboard'
-  | 'deliverable'
-  | 'file'
   | 'lead'
   | 'member'
   | 'organization'
+  | 'payment'
   | 'project'
   | 'proposal'
-  | 'revenue'
   | 'serviceRequest'
   | 'task'
-  | 'team'
-  | 'timeEntry';
+  | 'team';
 
 export type AccessPermissions = Partial<Record<AccessModel, readonly AccessOperation[]>>;
 

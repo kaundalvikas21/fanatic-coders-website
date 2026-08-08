@@ -97,6 +97,14 @@ export type {
   UpdateProposalRequest,
 } from './proposal';
 export type {
+  GetPaymentsInput,
+  GetPaymentsResponse,
+  PaginatedPayments,
+  Payment,
+  PaymentsResponse,
+  PaymentStatus,
+} from './payment';
+export type {
   CreateProjectFromServiceRequestRequest,
   CreateProjectFromServiceRequestResponse,
   CreateProjectInput,
