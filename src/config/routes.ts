@@ -36,7 +36,7 @@ const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
 const OVERVIEW_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
 const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
-const BILLING_ROLES = [Role.ADMIN, Role.MANAGER] as const;
+const PAYMENT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 
 export const dashboardRouteGroups: DashboardRouteGroup[] = [
@@ -100,8 +100,7 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         title: 'Payments',
         url: '/dashboard/payments',
         icon: CreditCard,
-        roles: BILLING_ROLES,
-        comingSoon: true,
+        roles: PAYMENT_ROLES,
       },
     ],
   },
