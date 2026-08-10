@@ -172,7 +172,7 @@ export function ServicesEngagementSection() {
                   </div>
 
                   <GradientButton
-                    href="/contact"
+                    href="/contact#contact-form"
                     variant={model.primary ? 'primary' : 'secondary'}
                     size="sm"
                     className="w-full mt-6"

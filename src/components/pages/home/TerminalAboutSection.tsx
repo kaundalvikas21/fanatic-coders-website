@@ -182,7 +182,7 @@ export default function TerminalAboutSection() {
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-            <GradientButton href="/contact">
+            <GradientButton href="/contact#contact-form">
               joinOurTeam
               <Users
                 size={16}

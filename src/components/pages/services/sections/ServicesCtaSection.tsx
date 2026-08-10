@@ -10,7 +10,7 @@ export function ServicesCtaSection() {
       heading="Not sure where to start?"
       body="Tell us the problem and we'll recommend the right mix of services with a clear plan to get there."
     >
-      <GradientButton href="/contact">
+      <GradientButton href="/contact#contact-form">
         bookADiscoveryCall
         <Send
           size={16}

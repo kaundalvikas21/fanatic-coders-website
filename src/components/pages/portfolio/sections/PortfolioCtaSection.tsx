@@ -10,7 +10,7 @@ export function PortfolioCtaSection() {
       heading="Your product could be next."
       body="Let's talk about what you're building and the outcome you're aiming for. We'll bring the team to make it real."
     >
-      <GradientButton href="/contact">
+      <GradientButton href="/contact#contact-form">
         startAConversation
         <Send
           size={16}

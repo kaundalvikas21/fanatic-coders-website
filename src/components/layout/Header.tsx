@@ -127,7 +127,7 @@ const megaMenu = {
     },
   ] as MegaMenuColumn[],
   featured: {
-    href: '/contact',
+    href: '/contact#contact-form',
     cta: 'startProject',
     description: "Tell us your vision and we'll respond within 24 hours.",
     stats: [
@@ -142,7 +142,7 @@ const navLinks = [
   { label: 'Portfolio', href: '/portfolio', Icon: Briefcase },
   { label: 'About', href: '/about', Icon: Users },
   { label: 'Blog', href: '/blog', Icon: Newspaper },
-  { label: 'Contact', href: '/contact', Icon: Mail },
+  { label: 'Contact', href: '/contact#contact-form', Icon: Mail },
 ];
 
 export default function Header() {
@@ -309,7 +309,7 @@ export default function Header() {
             </div>
 
             <div className="hidden sm:block">
-              <GradientButton href="/contact">
+              <GradientButton href="/contact#contact-form">
                 startProject
                 <ArrowRight
                   size={14}
@@ -536,7 +536,7 @@ export default function Header() {
 
           <div className="pt-3">
             <GradientButton
-              href="/contact"
+              href="/contact#contact-form"
               onClick={closeMobileMenu}
               className="w-full justify-center"
             >

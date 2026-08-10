@@ -28,7 +28,7 @@ export function ServiceHero({ service, group }: { service: ServiceItem; group: S
       <h1 className="hero-h1 mt-5 text-white text-balance">{service.heroTitle ?? service.title}</h1>
       <p className="mt-5 text-lg text-blue-100/75 leading-relaxed max-w-[60ch]">{service.intro}</p>
       <div className="mt-8 flex flex-col sm:flex-row gap-3">
-        <GradientButton href="/contact">
+        <GradientButton href="/contact#contact-form">
           startAProject
           <ArrowRight
             size={16}

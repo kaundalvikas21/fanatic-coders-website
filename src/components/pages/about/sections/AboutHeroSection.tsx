@@ -78,7 +78,7 @@ export function AboutHeroSection() {
 
         <RevealSection className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <GradientButton
-            href="/contact"
+            href="/contact#contact-form"
             className="w-full sm:w-auto"
           >
             startAProject
