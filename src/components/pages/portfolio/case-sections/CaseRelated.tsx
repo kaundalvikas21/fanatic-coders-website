@@ -59,6 +59,7 @@ export function CaseRelated({ project }: { project: PortfolioProject }) {
               <Link
                 key={p.id}
                 href={`/portfolio/${p.id}`}
+                scroll={false}
                 className="block h-full no-underline group/c"
               >
                 <article

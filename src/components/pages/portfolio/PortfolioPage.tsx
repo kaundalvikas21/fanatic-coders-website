@@ -1,5 +1,6 @@
 import PartnersSection from '@/components/pages/home/PartnersSection';
 import TestimonialsSection from '@/components/pages/home/TestimonialsSection';
+import { PortfolioScrollToTop } from './PortfolioScrollToTop';
 import {
   PortfolioHeroSection,
   PortfolioGridSection,
@@ -11,6 +12,7 @@ import {
 export function PortfolioPage() {
   return (
     <>
+      <PortfolioScrollToTop />
       <PortfolioHeroSection />
       <PortfolioGridSection />
       <PortfolioProcessSection />

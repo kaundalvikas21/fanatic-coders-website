@@ -247,6 +247,7 @@ export function PortfolioGridSection() {
               <Link
                 key={project.id}
                 href={`/portfolio/${project.id}`}
+                scroll={false}
                 className="no-underline group/card"
               >
                 <div

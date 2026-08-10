@@ -4,10 +4,12 @@ import { CaseHero } from './case-sections/CaseHero';
 import { CaseStory } from './case-sections/CaseStory';
 import { CaseQuote } from './case-sections/CaseQuote';
 import { CaseRelated } from './case-sections/CaseRelated';
+import { PortfolioScrollToTop } from './PortfolioScrollToTop';
 
 export function CaseStudyPage({ project }: { project: PortfolioProject }) {
   return (
     <>
+      <PortfolioScrollToTop />
       <CaseHero project={project} />
       <CaseStory project={project} />
       <CaseQuote project={project} />
