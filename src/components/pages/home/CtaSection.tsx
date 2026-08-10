@@ -11,7 +11,7 @@ export default function CtaSection() {
       heading="Ready to start your build?"
       body="Tell us what you want to build. Our senior team will bring a clear plan and ship it with you."
     >
-      <GradientButton href="/contact">
+      <GradientButton href="/contact#contact-form">
         dropUsALine
         <Send
           size={16}

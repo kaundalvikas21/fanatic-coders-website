@@ -181,7 +181,7 @@ export function ServicesOverviewSection() {
                 We&apos;ll help you pick the right service and scope it with you. No pressure.
               </p>
               <GradientButton
-                href="/contact"
+                href="/contact#contact-form"
                 variant="secondary"
                 size="sm"
               >

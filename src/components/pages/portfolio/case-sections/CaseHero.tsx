@@ -111,7 +111,7 @@ export function CaseHero({ project }: { project: PortfolioProject }) {
               </p>
             )}
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <GradientButton href="/contact">
+              <GradientButton href="/contact#contact-form">
                 startAProject
                 <ArrowRight
                   size={16}

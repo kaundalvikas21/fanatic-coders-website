@@ -53,7 +53,7 @@ export function PortfolioHeroSection() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <GradientButton href="/contact">
+            <GradientButton href="/contact#contact-form">
               startYourProject
               <ArrowRight
                 size={16}

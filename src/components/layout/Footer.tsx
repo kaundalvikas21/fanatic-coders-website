@@ -170,7 +170,7 @@ export default function Footer() {
               <p className="text-blue-100/70 mb-6">
                 Tell us what you&apos;re building and we&apos;ll bring the team to make it real.
               </p>
-              <GradientButton href="/contact">
+              <GradientButton href="/contact#contact-form">
                 startConversation
                 <MessageCircle
                   size={16}

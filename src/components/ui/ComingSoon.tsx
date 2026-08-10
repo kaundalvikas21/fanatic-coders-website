@@ -41,7 +41,7 @@ export function ComingSoon({ eyebrow, heading, headingSweep, note }: ComingSoonP
             {note}
           </p>
           <div className="mt-8 flex justify-center">
-            <GradientButton href="/contact">
+            <GradientButton href="/contact#contact-form">
               getInTouch
               <ArrowRight
                 size={16}

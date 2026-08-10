@@ -11,7 +11,7 @@ export function AboutCtaSection() {
       heading="Like how we think? Let's build together."
       body="Tell us what you're building. We'll bring a senior team and a clear plan to get it shipped."
     >
-      <GradientButton href="/contact">
+      <GradientButton href="/contact#contact-form">
         dropUsALine
         <Send
           size={16}
