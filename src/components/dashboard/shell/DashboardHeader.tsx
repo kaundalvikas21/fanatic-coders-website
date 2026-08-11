@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { getRoleLabel } from '@/lib/auth/roles';
+import { NotificationMenu } from '@/modules/notifications';
 
 type DashboardHeaderProps = {
   organizationSlug?: string | null;
@@ -27,6 +28,7 @@ export function DashboardHeader({ role }: DashboardHeaderProps) {
           >
             {getRoleLabel(role)}
           </Badge>
+          <NotificationMenu />
           <ThemeToggle />
         </div>
       </header>
