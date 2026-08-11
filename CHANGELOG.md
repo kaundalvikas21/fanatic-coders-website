@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.6.0...v0.7.0) (2026-08-11)
+
+### Features
+
+- **components:** added ui components for notifications ([e937355](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e9373552a17658689ad280c7c451839b63124b14))
+- **data:** added server function hooks for managing data ([e282109](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e28210992055eb9b37a2f0130fed7c678eee784a))
+- **factory:** added factory function for manging response ([6296684](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6296684fb9b12e75b4c162c82042842c211f8bf0))
+- **legal:** added legal pages ([e6b2839](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e6b2839b4780867ea737e3d0126c6310dab59943))
+- **swr:** added new pacakge for managing client side fetching ([2320fa2](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2320fa27015a4639b2b9622efd301b680e77e665))
+- **types:** added types for managing contracts ([5fe471b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/5fe471bd1bd6f0a20b1378f9c77a5ad26e0db938))
+
+### Bug Fixes
+
+- **contact:** added sroll navigation on contact page ([979d287](https://github.com/kaundalvikas21/fanatic-coders-website/commit/979d28762543c2d2a1a7e254829272f1a78d7751))
+- **portfolio:** fix portfolio scroll issue ([ac11df6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ac11df6f38ca16832542b0d6f8b3cbfa2ea22abd))
+
+### Code Refactoring
+
+- **CTA:** added CTA button link to contac form ([11a831e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/11a831ef4add1e718fcea1ea89044986aa6901da))
+
 ## [0.6.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.5.2...v0.6.0) (2026-08-08)
 
 ### Features
