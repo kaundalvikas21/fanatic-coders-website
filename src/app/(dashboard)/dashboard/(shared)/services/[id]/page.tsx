@@ -131,6 +131,7 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
           />
         ) : (
           <ProposalPanel
+            key={proposal ? `${proposal.id}:${proposal.updatedAt}` : 'no-proposal'}
             serviceRequestId={request.id}
             initialProposal={proposal}
           />

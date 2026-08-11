@@ -18,6 +18,7 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useNotifications } from '@/modules/notifications/hooks/use-notifications';
+import { useNotificationPageRefresh } from '@/modules/notifications/hooks/use-notification-page-refresh';
 import type { Notification } from '@/modules/notifications/types';
 
 const MAX_VISIBLE_UNREAD_COUNT = 99;
@@ -114,6 +115,8 @@ export function NotificationMenu() {
     mutate,
   } = useNotifications();
   const [isMarkingAll, setIsMarkingAll] = useState(false);
+
+  useNotificationPageRefresh({ notifications, isLoading });
 
   const unreadLabel =
     unreadCount > MAX_VISIBLE_UNREAD_COUNT ? `${MAX_VISIBLE_UNREAD_COUNT}+` : String(unreadCount);
