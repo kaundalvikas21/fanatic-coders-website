@@ -9,7 +9,7 @@ import {
 import { getNotifications } from '@/modules/notifications/data/queries';
 import type { GetNotificationsInput, NotificationsResponse } from '@/modules/notifications/types';
 
-const NOTIFICATIONS_REFRESH_INTERVAL = 30_000;
+const NOTIFICATIONS_REFRESH_INTERVAL = 5_000;
 
 export function useNotifications(input: GetNotificationsInput = {}) {
   const query = {

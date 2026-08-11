@@ -5,19 +5,16 @@ import { WidgetCard } from '@/components/shared/widget-card';
 import { LiveChatThread, type LiveChatCapabilities } from '@/modules/chat';
 
 type ServiceRequestConversationProps = {
-  serviceRequestId: string;
   capabilities: LiveChatCapabilities;
   showHeader?: boolean;
 };
 
 export function ServiceRequestConversation({
-  serviceRequestId,
   capabilities,
   showHeader = true,
 }: ServiceRequestConversationProps) {
   const content = (
     <LiveChatThread
-      channel={{ type: 'service-request', id: serviceRequestId }}
       capabilities={capabilities}
       ariaLabel="Service request chat messages"
     />

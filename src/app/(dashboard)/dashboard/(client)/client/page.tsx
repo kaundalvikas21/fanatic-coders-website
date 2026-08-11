@@ -3,6 +3,7 @@ import { BriefcaseBusiness, CheckCircle2, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { WidgetCard } from '@/components/shared/widget-card';
+import { ClientProjectStats } from '@/modules/dashboard/components/client/ClientProjectStats';
 import { getProjects } from '@/modules/projects/data/queries';
 import { getProjectTasks } from '@/modules/projects/data/tasks';
 import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/config/labels';
@@ -47,7 +48,6 @@ export default async function ClientDashboardPage() {
       };
     }),
   );
-
   return (
     <div className="space-y-8">
       <WidgetCard
@@ -56,27 +56,10 @@ export default async function ClientDashboardPage() {
         description="Track project progress, completed work, and upcoming delivery steps."
         titleClassName="text-3xl"
       >
-        <div className="grid gap-4 md:grid-cols-3">
-          <div>
-            <p className="text-2xl font-semibold">{projects.length}</p>
-            <p className="text-sm text-muted-foreground">Active projects</p>
-          </div>
-          <div>
-            <p className="text-2xl font-semibold">
-              {projectCards.reduce((total, item) => total + item.tasks.length, 0)}
-            </p>
-            <p className="text-sm text-muted-foreground">Tracked tasks</p>
-          </div>
-          <div>
-            <p className="text-2xl font-semibold">
-              {projectCards.reduce(
-                (total, item) => total + item.tasks.filter((task) => task.status === 'DONE').length,
-                0,
-              )}
-            </p>
-            <p className="text-sm text-muted-foreground">Completed tasks</p>
-          </div>
-        </div>
+        <ClientProjectStats
+          projectCount={projects.length}
+          projectTasks={projectCards.map(({ tasks }) => tasks)}
+        />
       </WidgetCard>
 
       {projectCards.length === 0 ? (
