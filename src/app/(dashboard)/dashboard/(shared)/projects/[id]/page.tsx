@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
-import { MessageSquareText } from 'lucide-react';
-import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
+import { ChatActionSheet, ChatProvider } from '@/modules/chat';
 import {
   ProjectInfoCard,
   ProjectActionsCard,
@@ -71,27 +70,35 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
+        {/* Project Actions */}
         {projectPermissions.canUpdate && <ProjectActionsCard project={project} />}
-        <ActionSheet
-          title="Project chat"
-          description="Coordinate delivery, tasks, and project decisions in real time."
-          trigger={
-            <ActionSheetButton className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 sm:right-6 sm:bottom-6">
-              <MessageSquareText data-icon="inline-start" />
-              Project chat
-            </ActionSheetButton>
-          }
-        >
-          <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
-            <ProjectConversation projectId={project.id} />
-          </div>
-        </ActionSheet>
+
+        {/* Chat Integration */}
+        {access && (
+          <ChatProvider
+            channel={{ type: 'project', id: project.id }}
+            currentMemberId={access.memberId}
+          >
+            <ChatActionSheet
+              title="Project chat"
+              description="Coordinate delivery, tasks, and project decisions in real time."
+              triggerLabel="Project chat"
+            >
+              <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
+                <ProjectConversation />
+              </div>
+            </ChatActionSheet>
+          </ChatProvider>
+        )}
+
+        {/* Task Form */}
         {canManageTasks && (
           <TaskCreateForm
             projectId={project.id}
             assignableMembers={assignableMembers}
           />
         )}
+
         <ProjectInfoCard project={project} />
         <ProjectMembersCard project={project} />
       </DetailPageLayout.Aside>

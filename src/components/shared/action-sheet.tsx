@@ -26,9 +26,16 @@ type ActionSheetProps = {
   title: string;
   description?: string;
   children: ReactNode;
+  onOpenChange?: (open: boolean) => void;
 };
 
-export function ActionSheet({ trigger, title, description, children }: ActionSheetProps) {
+export function ActionSheet({
+  trigger,
+  title,
+  description,
+  children,
+  onOpenChange,
+}: ActionSheetProps) {
   const isClient = useClient();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
@@ -49,7 +56,10 @@ export function ActionSheet({ trigger, title, description, children }: ActionShe
     <SheetContext.Provider value={value}>
       <Sheet
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          onOpenChange?.(nextOpen);
+        }}
       >
         <SheetTrigger asChild>{trigger}</SheetTrigger>
         <SheetContent>

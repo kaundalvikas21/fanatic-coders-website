@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
-import { BellRing, MessageSquareText } from 'lucide-react';
-import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
+import { BellRing } from 'lucide-react';
 import { Callout } from '@/components/shared/callout';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
+import { ChatActionSheet, ChatProvider } from '@/modules/chat';
 import {
   getServiceRequestPermissions,
   ServiceRequestConversation,
@@ -101,28 +101,27 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
         )}
 
         {/* Keep service request consultation between the client and administrators. */}
-        {access?.role !== 'MANAGER' && (
-          <ActionSheet
-            title={chatTitle}
-            description="Discuss requirements, scope, timing, and next steps."
-            trigger={
-              <ActionSheetButton className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 sm:right-6 sm:bottom-6">
-                <MessageSquareText data-icon="inline-start" />
-                {chatTitle}
-              </ActionSheetButton>
-            }
+        {access && access.role !== 'MANAGER' && (
+          <ChatProvider
+            channel={{ type: 'service-request', id: request.id }}
+            currentMemberId={access.memberId}
           >
-            <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
-              <ServiceRequestConversation
-                serviceRequestId={request.id}
-                capabilities={{
-                  canSend: true,
-                  canSendInternal: access?.role === 'ADMIN',
-                }}
-                showHeader={false}
-              />
-            </div>
-          </ActionSheet>
+            <ChatActionSheet
+              title={chatTitle}
+              description="Discuss requirements, scope, timing, and next steps."
+              triggerLabel={chatTitle}
+            >
+              <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
+                <ServiceRequestConversation
+                  capabilities={{
+                    canSend: true,
+                    canSendInternal: access.role === 'ADMIN',
+                  }}
+                  showHeader={false}
+                />
+              </div>
+            </ChatActionSheet>
+          </ChatProvider>
         )}
 
         {proposalError ? (
