@@ -126,6 +126,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch current member notifications */
+        get: operations["getNotifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/read-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Mark all current member notifications as read */
+        patch: operations["markAllNotificationsAsRead"];
+        trace?: never;
+    };
+    "/api/v1/notifications/{notificationId}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Mark one current member notification as read */
+        patch: operations["markNotificationAsRead"];
+        trace?: never;
+    };
     "/api/v1/auth/request-password-reset": {
         parameters: {
             query?: never;
@@ -201,7 +252,7 @@ export interface paths {
         put?: never;
         /**
          * Create a lead
-         * @description Creates a lead from an unauthenticated website form submission.
+         * @description Accepts an unauthenticated website enquiry. New contacts become leads; existing clients receive an email directing them to the authenticated service request flow.
          */
         post: operations["createLead"];
         delete?: never;
@@ -1291,12 +1342,54 @@ export interface components {
             /** @example 3 */
             totalPages: number;
         };
+        Notification: {
+            /** @example clx0000000000000000000040 */
+            id: string;
+            /** @example clx0000000000000000000002 */
+            memberId: string;
+            /** @example New task assigned */
+            title: string;
+            /** @example You were assigned to "Design homepage". */
+            message: string;
+            /** @example /dashboard/projects/clx0000000000000000000010 */
+            link: string | null;
+            /**
+             * Format: date-time
+             * @example null
+             */
+            readAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        NotificationResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Notification"];
+        };
+        NotificationsResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["Notification"][];
+                pagination: components["schemas"]["PaginationMeta"];
+                /** @example 3 */
+                unreadCount: number;
+            };
+        };
+        MarkAllNotificationsReadResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                /** @example 3 */
+                updatedCount: number;
+            };
+        };
         PaginatedLeads: {
             items: components["schemas"]["Lead"][];
             pagination: components["schemas"]["PaginationMeta"];
         };
         LeadResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Lead"];
+        };
+        LeadSubmissionResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                /** @enum {boolean} */
+                accepted: true;
+            };
         };
         ServiceRequestsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["ServiceRequest"][];
@@ -1373,6 +1466,8 @@ export interface components {
         TaskProjectId: string;
         /** @example clx0000000000000000000030 */
         TaskId: string;
+        /** @example clx0000000000000000000040 */
+        NotificationId: string;
     };
     requestBodies: never;
     headers: never;
@@ -1405,8 +1500,6 @@ export interface operations {
             query?: {
                 /** @description Filter by payment status. */
                 status?: components["schemas"]["ProposalPaymentStatus"];
-                /** @description Filter by payment currency. */
-                currency?: components["schemas"]["ProjectCurrency"];
                 /** @description Filter by client name or email. */
                 search?: string;
                 /** @description One-based page number. */
@@ -1560,6 +1653,97 @@ export interface operations {
             };
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+        };
+    };
+    getNotifications: {
+        parameters: {
+            query?: {
+                unreadOnly?: boolean;
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Notifications fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationsResponse"];
+                };
+            };
+            /** @description Invalid notification filters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    markAllNotificationsAsRead: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All notifications marked as read. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarkAllNotificationsReadResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    markNotificationAsRead: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000040 */
+                notificationId: components["parameters"]["NotificationId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Notification marked as read. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Notification was not found for the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
         };
     };
     requestPasswordReset: {
@@ -1724,13 +1908,13 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Lead captured successfully. */
+            /** @description Request received successfully. */
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LeadResponse"];
+                    "application/json": components["schemas"]["LeadSubmissionResponse"];
                 };
             };
             /** @description Invalid lead payload. */
