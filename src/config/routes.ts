@@ -140,3 +140,27 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
     ],
   },
 ];
+
+function matchesDashboardPath(pathname: string, routeUrl: string) {
+  if (routeUrl === '/dashboard') {
+    return pathname === routeUrl || pathname === `${routeUrl}/`;
+  }
+
+  return pathname === routeUrl || pathname.startsWith(`${routeUrl}/`);
+}
+
+export function getDashboardRouteRoles(pathname: string) {
+  const routes = dashboardRouteGroups.flatMap((group) =>
+    group.items.flatMap((item) => [
+      { url: item.url, roles: item.roles },
+      ...(item.subItems?.map((subItem) => ({
+        url: subItem.url,
+        roles: subItem.roles,
+      })) ?? []),
+    ]),
+  );
+
+  return routes
+    .filter((route) => matchesDashboardPath(pathname, route.url))
+    .sort((a, b) => b.url.length - a.url.length)[0]?.roles;
+}
