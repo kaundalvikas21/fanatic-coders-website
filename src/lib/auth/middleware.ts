@@ -1,7 +1,8 @@
 // Enforces route-level auth redirects for dashboard and auth-only pages.
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { getRole, getRoleHomePath } from './roles';
+import { getDashboardRouteRoles } from '@/config/routes';
+import { getRole, getRoleHomePath, hasAnyRole } from './roles';
 import { hasSession } from './session';
 
 export async function authMiddleware(request: NextRequest) {
@@ -32,6 +33,16 @@ export async function authMiddleware(request: NextRequest) {
 
     if (role) {
       return NextResponse.redirect(new URL(getRoleHomePath(role), request.url));
+    }
+  }
+
+  if (isDashboardPath && sessionExists) {
+    const role = await getRole(request.headers);
+    const allowedRoles = getDashboardRouteRoles(pathname);
+
+    // Permit only dashboard routes represented by navigation for the current role.
+    if (!allowedRoles || !hasAnyRole(role, allowedRoles)) {
+      return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
   }
 

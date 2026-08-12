@@ -217,6 +217,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update current user profile image */
+        put: operations["updateAvatar"];
+        post?: never;
+        /** Delete current user profile image */
+        delete: operations["deleteAvatar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/invitations": {
         parameters: {
             query?: never;
@@ -673,6 +691,30 @@ export interface components {
              * @example akshay@example.com
              */
             email: string;
+            /**
+             * Format: uri
+             * @example https://res.cloudinary.com/example/image/upload/v1/fcop/users/user-id/avatar.webp
+             */
+            image: string | null;
+        };
+        ProfileUser: {
+            /** @example clx0000000000000000000000 */
+            id: string;
+            /** @example Akshay */
+            name: string;
+            /**
+             * Format: email
+             * @example akshay@example.com
+             */
+            email: string;
+            /**
+             * Format: uri
+             * @example https://res.cloudinary.com/example/image/upload/v1/fcop/users/user-id/avatar.webp
+             */
+            image: string | null;
+        };
+        ProfileUserResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["ProfileUser"];
         };
         /**
          * @description Role permission statements keyed by resource. The values are allowed CRUD or domain actions.
@@ -1018,6 +1060,11 @@ export interface components {
             /** @example 5000 */
             amount: number;
             currency: components["schemas"]["ProjectCurrency"];
+            /**
+             * @example DRAFT
+             * @enum {string}
+             */
+            status?: "DRAFT" | "SENT";
         };
         UpdateProposalRequest: {
             description?: string;
@@ -1807,6 +1854,67 @@ export interface operations {
                     "application/json": components["schemas"]["ApiResponse"];
                 };
             };
+        };
+    };
+    updateAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description JPG, PNG, or WebP profile image up to 5 MB.
+                     */
+                    image: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Profile image updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfileUserResponse"];
+                };
+            };
+            /** @description Missing, unsupported, or oversized profile image. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    deleteAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Profile image deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfileUserResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
         };
     };
     inviteMember: {

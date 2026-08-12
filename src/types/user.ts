@@ -1,10 +1,15 @@
-import type { components } from './backend-types';
+import type { components, operations } from './backend-types';
 import type { Response } from './api';
 import type { InviteMemberRole } from './invitation';
 
 type Schemas = components['schemas'];
 
 export type User = Schemas['User'];
+export type ProfileUser = Schemas['ProfileUser'];
+export type UpdateAvatarResponse =
+  operations['updateAvatar']['responses'][200]['content']['application/json'];
+export type DeleteAvatarResponse =
+  operations['deleteAvatar']['responses'][200]['content']['application/json'];
 
 export const USER_SORT_FIELDS = ['createdAt', 'role', 'userId', 'id'] as const;
 

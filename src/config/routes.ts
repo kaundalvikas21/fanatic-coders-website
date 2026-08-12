@@ -38,6 +38,7 @@ const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
 const PAYMENT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
+const SETTINGS_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 
 export const dashboardRouteGroups: DashboardRouteGroup[] = [
   {
@@ -105,6 +106,17 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
     ],
   },
   {
+    label: 'Account',
+    items: [
+      {
+        title: 'Settings',
+        url: '/dashboard/settings',
+        icon: Settings,
+        roles: SETTINGS_ROLES,
+      },
+    ],
+  },
+  {
     label: 'Administration',
     items: [
       {
@@ -125,13 +137,30 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         icon: MailPlus,
         roles: [Role.ADMIN],
       },
-      {
-        title: 'Settings',
-        url: '/dashboard/admin/settings',
-        icon: Settings,
-        roles: [Role.ADMIN],
-        comingSoon: true,
-      },
     ],
   },
 ];
+
+function matchesDashboardPath(pathname: string, routeUrl: string) {
+  if (routeUrl === '/dashboard') {
+    return pathname === routeUrl || pathname === `${routeUrl}/`;
+  }
+
+  return pathname === routeUrl || pathname.startsWith(`${routeUrl}/`);
+}
+
+export function getDashboardRouteRoles(pathname: string) {
+  const routes = dashboardRouteGroups.flatMap((group) =>
+    group.items.flatMap((item) => [
+      { url: item.url, roles: item.roles },
+      ...(item.subItems?.map((subItem) => ({
+        url: subItem.url,
+        roles: subItem.roles,
+      })) ?? []),
+    ]),
+  );
+
+  return routes
+    .filter((route) => matchesDashboardPath(pathname, route.url))
+    .sort((a, b) => b.url.length - a.url.length)[0]?.roles;
+}
