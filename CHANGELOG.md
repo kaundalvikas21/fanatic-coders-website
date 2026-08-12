@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.7.0...v0.8.0) (2026-08-12)
+
+### Features
+
+- **axios:** added axois client formanging browser api ([e4eb96d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e4eb96da8ed7ef3e2f748cace9ab39745e1dbc69))
+- **fileupload:** added file upload component for managing uploads ([3c9bd1b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3c9bd1b5d4fb205a07c5f146908e508a7cf552bd))
+- **package:** added package for managing upload ([c2d36c1](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c2d36c185ec95185d0799fc36bc8d4b1fea5931c))
+- **setting:** added types for manging user metadata ([9b2cf1b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9b2cf1b60724433bef87a03b3fe5a42da9f8dbf3))
+- **types:** genereated new types for managing user profile data ([29d6630](https://github.com/kaundalvikas21/fanatic-coders-website/commit/29d663021b5cf0f30d9e1ac87d25ead78b9ad9ec))
+
+### Bug Fixes
+
+- **rbac:** fix rbac access issue unauthorized user is accessing the routes ([1848555](https://github.com/kaundalvikas21/fanatic-coders-website/commit/18485558a12755106a1921f3498250ab4158db17))
+- **swr:** fix staleness issue regarding notification and made it dynamic ([489cd5d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/489cd5d839d593a8278da0322573e0733d80ec50))
+
+### Code Refactoring
+
+- **chat:** reorganize chat module ([fef54c8](https://github.com/kaundalvikas21/fanatic-coders-website/commit/fef54c89d2089c9f243169fc69a29cd9cf702d55))
+
 ## [0.7.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.6.0...v0.7.0) (2026-08-11)
 
 ### Features
