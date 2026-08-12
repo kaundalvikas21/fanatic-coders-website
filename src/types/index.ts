@@ -164,10 +164,13 @@ export {
   TASK_STATUS_OPTIONS,
 } from './task';
 export type {
+  DeleteAvatarResponse,
   GetUserMemberResponse,
   GetUsersInput,
   GetUsersResponse,
   OrganizationMemberRole,
+  ProfileUser,
+  UpdateAvatarResponse,
   User,
   UserListItem,
   UserSortField,

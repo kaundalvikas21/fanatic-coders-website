@@ -38,6 +38,7 @@ const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
 const PAYMENT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
+const SETTINGS_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 
 export const dashboardRouteGroups: DashboardRouteGroup[] = [
   {
@@ -105,6 +106,17 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
     ],
   },
   {
+    label: 'Account',
+    items: [
+      {
+        title: 'Settings',
+        url: '/dashboard/settings',
+        icon: Settings,
+        roles: SETTINGS_ROLES,
+      },
+    ],
+  },
+  {
     label: 'Administration',
     items: [
       {
@@ -124,13 +136,6 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         url: '/dashboard/admin/invitations',
         icon: MailPlus,
         roles: [Role.ADMIN],
-      },
-      {
-        title: 'Settings',
-        url: '/dashboard/admin/settings',
-        icon: Settings,
-        roles: [Role.ADMIN],
-        comingSoon: true,
       },
     ],
   },

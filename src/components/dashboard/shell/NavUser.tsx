@@ -1,6 +1,7 @@
 'use client';
 
 import { BadgeCheck, ChevronsUpDown, LogOut, Settings } from 'lucide-react';
+import Link from 'next/link';
 import { UserAvatar } from '@/components/shared/user-avatar';
 import {
   DropdownMenu,
@@ -104,9 +105,11 @@ export function NavUser() {
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings />
-                Settings
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/settings">
+                  <Settings />
+                  Settings
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
