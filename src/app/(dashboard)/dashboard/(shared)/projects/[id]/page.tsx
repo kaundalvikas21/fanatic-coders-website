@@ -7,9 +7,10 @@ import {
   ProjectActionsCard,
   ProjectConversation,
   ProjectMembersCard,
+  ProjectProgressCard,
   ProjectTasksCard,
-  TaskCreateForm,
   createProjectPermissions,
+  createTaskPermissions,
 } from '@/modules/projects';
 import { getProjectById } from '@/modules/projects/data/queries';
 import { getProjectTasks } from '@/modules/projects/data/tasks';
@@ -32,8 +33,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const { id } = await params;
   const access = await getCurrentAccess();
   const projectPermissions = createProjectPermissions(access);
-  const canManageTasks = access?.role === 'ADMIN' || access?.role === 'MANAGER';
-  const canUpdateTaskStatus = canManageTasks || access?.role === 'MEMBER';
+  const taskPermissions = createTaskPermissions(access);
   const { success, data: project } = (await getProjectById(id)) as {
     success: boolean;
     data?: Project | null;
@@ -48,7 +48,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     tasksResponse.success && Array.isArray(tasksResponse.data)
       ? (tasksResponse.data as Task[])
       : [];
-  const assignableMembers = canManageTasks
+  const assignableMembers = taskPermissions.canCreate
     ? await getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
     : [];
 
@@ -62,10 +62,15 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           backLabel="Projects"
         />
 
-        <ProjectTasksCard
+        <ProjectProgressCard
+          project={project}
           tasks={tasks}
-          canManageTasks={canManageTasks}
-          canUpdateStatus={canUpdateTaskStatus}
+        />
+
+        <ProjectTasksCard
+          projectId={project.id}
+          tasks={tasks}
+          assignableMembers={assignableMembers}
         />
       </DetailPageLayout.Main>
 
@@ -89,14 +94,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               </div>
             </ChatActionSheet>
           </ChatProvider>
-        )}
-
-        {/* Task Form */}
-        {canManageTasks && (
-          <TaskCreateForm
-            projectId={project.id}
-            assignableMembers={assignableMembers}
-          />
         )}
 
         <ProjectInfoCard project={project} />

@@ -1,8 +1,11 @@
-import { ListChecks } from 'lucide-react';
+'use client';
+
+import { ListChecks, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { WidgetCard } from '@/components/shared/widget-card';
+import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { formatDate } from '@/utils/date';
-import type { Task } from '@/types';
+import type { Task, UserListItem } from '@/types';
 import {
   TASK_PRIORITY_BADGE_VARIANTS,
   TASK_PRIORITY_OPTIONS,
@@ -11,11 +14,13 @@ import {
 } from '@/types';
 import { TaskDeleteButton } from './TaskDeleteButton';
 import { TaskStatusSelect } from './TaskStatusSelect';
+import { TaskCreateForm } from './TaskCreateForm';
+import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 type ProjectTasksCardProps = {
+  projectId?: string;
   tasks: Task[];
-  canManageTasks: boolean;
-  canUpdateStatus?: boolean;
+  assignableMembers?: UserListItem[];
 };
 
 function getOptionLabel<TValue extends string>(
@@ -36,16 +41,39 @@ function getAssigneeLabel(task: Task) {
 }
 
 export function ProjectTasksCard({
+  projectId,
   tasks,
-  canManageTasks,
-  canUpdateStatus = true,
+  assignableMembers = [],
 }: ProjectTasksCardProps) {
+  const permissions = useTaskPermissions();
+
   return (
     <WidgetCard
       icon={ListChecks}
       title="Delivery tasks"
       description="Assign work and track progress inside this project."
       titleClassName="text-xl font-semibold"
+      actionSlot={
+        permissions.canCreate && projectId ? (
+          <ActionSheet
+            title="Create task"
+            description="Add delivery work to this project and optionally assign team members."
+            trigger={
+              <ActionSheetButton>
+                <Plus data-icon="inline-start" />
+                New task
+              </ActionSheetButton>
+            }
+          >
+            <div className="min-h-0 flex-1 overflow-y-auto pt-2">
+              <TaskCreateForm
+                projectId={projectId}
+                assignableMembers={assignableMembers}
+              />
+            </div>
+          </ActionSheet>
+        ) : undefined
+      }
     >
       {tasks.length === 0 ? (
         <p className="text-sm leading-6 text-muted-foreground">
@@ -88,17 +116,14 @@ export function ProjectTasksCard({
                   </div>
                 </div>
 
-                {(canUpdateStatus || canManageTasks) && (
+                {(permissions.canUpdate || permissions.canDelete) && (
                   <div className="flex shrink-0 items-center gap-2">
-                    {canUpdateStatus && (
+                    {permissions.canUpdate && (
                       <div className="w-44">
-                        <TaskStatusSelect
-                          task={task}
-                          canUpdateStatus={canUpdateStatus}
-                        />
+                        <TaskStatusSelect task={task} />
                       </div>
                     )}
-                    {canManageTasks && <TaskDeleteButton task={task} />}
+                    {permissions.canDelete && <TaskDeleteButton task={task} />}
                   </div>
                 )}
               </div>
