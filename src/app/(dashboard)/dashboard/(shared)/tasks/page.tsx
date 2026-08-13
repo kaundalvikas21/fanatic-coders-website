@@ -1,6 +1,6 @@
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
-import { TaskQueue } from '@/modules/projects';
+import { createTaskPermissions, TaskQueue } from '@/modules/projects';
 import { getTasks } from '@/modules/projects/data/tasks';
 import { getCurrentAccess } from '@/lib/auth/current-access';
 import type { Task } from '@/types';
@@ -13,8 +13,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function TasksPage() {
   const access = await getCurrentAccess();
-  const canManageTasks = access?.role === 'ADMIN' || access?.role === 'MANAGER';
-  const canUpdateTaskStatus = canManageTasks || access?.role === 'MEMBER';
+  const taskPermissions = createTaskPermissions(access);
   const response = await getTasks();
   const tasks: Task[] =
     response.success && Array.isArray(response.data) ? (response.data as Task[]) : [];
@@ -24,18 +23,14 @@ export default async function TasksPage() {
       <PageHeader
         title="Tasks"
         description={
-          canManageTasks
+          taskPermissions.canCreate
             ? 'Review delivery tasks across projects you can access.'
             : 'Track assigned delivery work and update task status.'
         }
       />
 
       {response.success ? (
-        <TaskQueue
-          tasks={tasks}
-          canManageTasks={canManageTasks}
-          canUpdateStatus={canUpdateTaskStatus}
-        />
+        <TaskQueue tasks={tasks} />
       ) : (
         <ErrorState
           title="Could not load tasks"

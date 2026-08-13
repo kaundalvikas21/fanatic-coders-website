@@ -5,19 +5,11 @@ import type { Task } from '@/types';
 
 type TaskQueueProps = {
   tasks: Task[];
-  canManageTasks: boolean;
-  canUpdateStatus?: boolean;
 };
 
-export function TaskQueue({ tasks, canManageTasks, canUpdateStatus = true }: TaskQueueProps) {
+export function TaskQueue({ tasks }: TaskQueueProps) {
   if (tasks.length === 0) {
-    return (
-      <ProjectTasksCard
-        tasks={[]}
-        canManageTasks={canManageTasks}
-        canUpdateStatus={canUpdateStatus}
-      />
-    );
+    return <ProjectTasksCard tasks={[]} />;
   }
 
   return (
@@ -39,11 +31,7 @@ export function TaskQueue({ tasks, canManageTasks, canUpdateStatus = true }: Tas
               </Button>
             </div>
           )}
-          <ProjectTasksCard
-            tasks={[task]}
-            canManageTasks={canManageTasks}
-            canUpdateStatus={canUpdateStatus}
-          />
+          <ProjectTasksCard tasks={[task]} />
         </div>
       ))}
     </div>
