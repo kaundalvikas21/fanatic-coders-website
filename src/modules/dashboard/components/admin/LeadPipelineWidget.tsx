@@ -1,3 +1,5 @@
+import { Inbox } from 'lucide-react';
+
 import { LeadStatusDonutChart } from '@/components/dashboard/charts/LeadStatusDonutChart';
 import { ErrorState } from '@/components/shared/error-state';
 import { WidgetCard } from '@/components/shared/widget-card';
@@ -31,6 +33,7 @@ export async function LeadPipelineWidget() {
 
   return (
     <WidgetCard
+      icon={Inbox}
       title="Lead pipeline"
       description="Current lead distribution by status."
       className="h-full"

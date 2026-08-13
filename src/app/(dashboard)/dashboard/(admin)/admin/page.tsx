@@ -1,4 +1,6 @@
 import { Suspense } from 'react';
+import Link from 'next/link';
+import { BriefcaseBusiness, Inbox } from 'lucide-react';
 import {
   AttentionTasksWidget,
   ChartWidgetSkeleton,
@@ -8,8 +10,10 @@ import {
   StatsWidgetSkeleton,
   TaskFlowWidget,
   WorkspaceStatsWidget,
+  DashboardOverviewHeader,
 } from '@/modules/dashboard';
-import { PageHeader } from '@/components/shared/page-header';
+import { Button } from '@/components/ui/button';
+import { formatCurrentDate } from '@/utils/date';
 
 export const metadata = {
   title: 'Admin | fanaticCoders',
@@ -18,20 +22,40 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default function AdminPage() {
+  const today = formatCurrentDate();
+
   return (
     <div className="space-y-8">
-      {/* Establish page context using the shared dashboard header. */}
-      <PageHeader
-        title="Admin workspace"
-        description="Manage workspace access, roles, and lead review from one place."
+      <DashboardOverviewHeader
+        title="Operations overview"
+        description="Monitor delivery health, incoming opportunities, and work that needs attention."
+        statusLabel="Workspace live"
+        meta={today}
+        actions={
+          <>
+            <Button
+              asChild
+              variant="outline"
+            >
+              <Link href="/dashboard/leads">
+                <Inbox data-icon="inline-start" />
+                View leads
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/dashboard/projects">
+                <BriefcaseBusiness data-icon="inline-start" />
+                Projects
+              </Link>
+            </Button>
+          </>
+        }
       />
 
-      {/* Present independent workspace totals before the analytical distributions. */}
       <Suspense fallback={<StatsWidgetSkeleton />}>
         <WorkspaceStatsWidget />
       </Suspense>
 
-      {/* Compare lead pipeline and task delivery flow side by side. */}
       <section
         aria-label="Workspace analytics"
         className="grid items-stretch gap-4 lg:grid-cols-2"
@@ -44,7 +68,6 @@ export default function AdminPage() {
         </Suspense>
       </section>
 
-      {/* Prioritize work needing action alongside the newest pipeline activity. */}
       <section className="grid gap-4 xl:grid-cols-2">
         <Suspense fallback={<ListWidgetSkeleton />}>
           <AttentionTasksWidget />

@@ -31,12 +31,12 @@ export function OverviewListCard({
       {items.length === 0 ? (
         <p className="text-sm text-muted-foreground">{emptyMessage}</p>
       ) : (
-        <div className="grid gap-1">
+        <div className="grid divide-y divide-border/60">
           {items.map((item) => (
             <Link
               key={item.id}
               href={item.href}
-              className="flex min-h-12 items-center justify-between gap-4 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex min-h-14 items-center justify-between gap-4 px-2 py-3 text-sm transition-colors first:pt-1 last:pb-1 hover:bg-muted/50 focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="min-w-0">
                 <span className="block truncate font-medium">{item.label}</span>

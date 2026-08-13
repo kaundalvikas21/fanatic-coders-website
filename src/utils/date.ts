@@ -18,6 +18,11 @@ export function formatDate(value?: Date | string): string {
   return format(new Date(value), 'PP');
 }
 
+/** Formats the current date for dashboard and page-level context. */
+export function formatCurrentDate(): string {
+  return format(new Date(), 'EEEE, d MMMM');
+}
+
 export function parseDateInputValue(value: string): Date | undefined {
   if (!value) {
     return undefined;

@@ -1,3 +1,5 @@
+import { ListChecks } from 'lucide-react';
+
 import { TaskStatusBarChart } from '@/components/dashboard/charts/TaskStatusBarChart';
 import { ErrorState } from '@/components/shared/error-state';
 import { WidgetCard } from '@/components/shared/widget-card';
@@ -31,6 +33,7 @@ export async function TaskFlowWidget() {
 
   return (
     <WidgetCard
+      icon={ListChecks}
       title="Task flow"
       description="Delivery tasks grouped by current status."
       className="h-full"

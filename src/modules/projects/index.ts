@@ -1,4 +1,5 @@
 export { CreateProjectFromServiceRequestForm } from './components/CreateProjectFromServiceRequestForm';
+export { ClientProjectCard } from './components/ClientProjectCard';
 export { ProjectActionsCard } from './components/ProjectActionsCard';
 export { ProjectConversation } from './components/ProjectConversation';
 export { ProjectInfoCard } from './components/ProjectInfoCard';
@@ -16,5 +17,7 @@ export { useTaskPermissions } from './hooks/use-task-permissions';
 export { createProjectPermissions } from './utils/permissions';
 export { createTaskPermissions } from './utils/task-permissions';
 export { getProjectPermissions } from './data/permissions';
+export { getProjectDeliverySummaries } from './data/delivery';
+export type { ProjectDeliverySummary } from './utils/progress';
 export type { ProjectPermissions } from './utils/permissions';
 export type { TaskPermissions } from './utils/task-permissions';

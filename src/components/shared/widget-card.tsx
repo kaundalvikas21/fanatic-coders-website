@@ -14,6 +14,7 @@ interface WidgetCardProps {
   titleClassName?: string;
   descriptionClassName?: string;
   contentClassNames?: string;
+  actionSlot?: ReactNode;
 }
 
 export function WidgetCard({
@@ -26,37 +27,47 @@ export function WidgetCard({
   titleClassName,
   descriptionClassName,
   contentClassNames,
+  actionSlot,
 }: WidgetCardProps) {
   const isDestructive = variant === 'destructive';
   const hasHeader = Icon || title || description;
 
   return (
-    <Card className={cn(isDestructive && 'border-destructive/30', className)}>
+    <Card
+      className={cn(
+        'border border-border/80 bg-card/80 transition-colors duration-200 hover:border-primary/20',
+        isDestructive && 'border-destructive/30',
+        className,
+      )}
+    >
       {hasHeader && (
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            {Icon && (
-              <div
-                className={cn(
-                  'flex size-10 items-center justify-center rounded-lg',
-                  isDestructive ? 'bg-destructive/10' : 'bg-primary/10',
+        <CardHeader className="border-b border-border/60 pb-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex min-w-0 items-center gap-3">
+              {Icon && (
+                <div
+                  className={cn(
+                    'flex size-10 items-center justify-center rounded-lg',
+                    isDestructive ? 'bg-destructive/10' : 'bg-primary/10',
+                  )}
+                >
+                  <Icon
+                    className={cn('size-5', isDestructive ? 'text-destructive' : 'text-primary')}
+                  />
+                </div>
+              )}
+              <div className="grid min-w-0 auto-rows-min grid-rows-[auto_auto] items-start gap-1.5">
+                {title && (
+                  <CardTitle className={cn(isDestructive && 'text-destructive', titleClassName)}>
+                    {title}
+                  </CardTitle>
                 )}
-              >
-                <Icon
-                  className={cn('size-5', isDestructive ? 'text-destructive' : 'text-primary')}
-                />
+                {description && (
+                  <CardDescription className={descriptionClassName}>{description}</CardDescription>
+                )}
               </div>
-            )}
-            <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-2">
-              {title && (
-                <CardTitle className={cn(isDestructive && 'text-destructive', titleClassName)}>
-                  {title}
-                </CardTitle>
-              )}
-              {description && (
-                <CardDescription className={descriptionClassName}>{description}</CardDescription>
-              )}
             </div>
+            {actionSlot && <div className="shrink-0">{actionSlot}</div>}
           </div>
         </CardHeader>
       )}
