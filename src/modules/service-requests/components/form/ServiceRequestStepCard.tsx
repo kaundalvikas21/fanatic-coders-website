@@ -1,33 +1,43 @@
-import { Check, ClipboardCheck, MessageSquareText, SlidersHorizontal } from 'lucide-react';
+import {
+  Building2,
+  Check,
+  ClipboardCheck,
+  PanelsTopLeft,
+  SlidersHorizontal,
+  Target,
+  type LucideIcon,
+} from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Small } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
-import type { ServiceRequestTemplateStep } from '@/modules/service-requests/config/templates';
 
 type ServiceRequestStepCardProps = {
-  stepId: ServiceRequestTemplateStep['id'];
+  stepId: string;
+  stepNumber: number;
   title: string;
   isActive: boolean;
   isCompleted: boolean;
   onSelect: () => void;
 };
 
-const stepIcons = {
-  'company-info': MessageSquareText,
-  'goals-scope': SlidersHorizontal,
+const stepIcons: Record<string, LucideIcon> = {
+  'choose-service': PanelsTopLeft,
+  'company-info': Building2,
+  'goals-scope': Target,
   'service-specific': SlidersHorizontal,
   review: ClipboardCheck,
-} satisfies Record<ServiceRequestTemplateStep['id'], typeof MessageSquareText>;
+};
 
 export function ServiceRequestStepCard({
   stepId,
+  stepNumber,
   title,
   isActive,
   isCompleted,
   onSelect,
 }: ServiceRequestStepCardProps) {
-  const StepIcon = stepIcons[stepId];
+  const StepIcon = stepIcons[stepId] ?? PanelsTopLeft;
 
   return (
     <Button
@@ -35,8 +45,9 @@ export function ServiceRequestStepCard({
       variant="ghost"
       aria-current={isActive ? 'step' : undefined}
       className={cn(
-        'relative z-10 h-auto min-w-0 flex-1 flex-col gap-2 whitespace-normal bg-transparent px-2 py-0 text-center hover:bg-transparent',
-        isActive && 'text-primary',
+        'group h-auto min-h-14 w-full justify-start gap-2.5 whitespace-normal rounded-lg border border-transparent bg-transparent px-2.5 py-2 text-left transition-[color,background-color,border-color] duration-200 ease-out hover:border-border hover:bg-accent hover:text-accent-foreground motion-reduce:transition-none',
+        isActive &&
+          'border-border bg-accent text-accent-foreground hover:border-border hover:bg-accent',
         isCompleted && 'text-foreground',
         !isActive && !isCompleted && 'text-muted-foreground',
       )}
@@ -44,15 +55,27 @@ export function ServiceRequestStepCard({
     >
       <span
         className={cn(
-          'flex size-10 shrink-0 items-center justify-center rounded-full border-2 bg-card transition-colors duration-200 motion-reduce:transition-none',
-          isActive && 'border-primary bg-primary text-primary-foreground ring-4 ring-primary/10',
+          'flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-200 group-hover:border-primary/60 group-hover:text-primary motion-reduce:transition-none',
+          isActive && 'border-primary bg-primary text-primary-foreground',
           isCompleted && 'border-primary bg-primary text-primary-foreground',
           !isActive && !isCompleted && 'border-border text-muted-foreground',
         )}
       >
-        {isCompleted ? <Check className="size-4" /> : <StepIcon className="size-4" />}
+        {isCompleted ? (
+          <Check className="size-4" />
+        ) : (
+          <StepIcon
+            className="size-4"
+            aria-label={`Step ${stepNumber}`}
+          />
+        )}
       </span>
-      <Small className="max-w-40 leading-tight">{title}</Small>
+      <span className="min-w-0">
+        <Small className="block truncate leading-tight text-inherit">{title}</Small>
+        <span className="mt-1 block text-xs font-normal text-muted-foreground">
+          {isCompleted ? 'Completed' : isActive ? 'In progress' : 'Up next'}
+        </span>
+      </span>
     </Button>
   );
 }
