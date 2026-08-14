@@ -19,7 +19,7 @@ export function ServicesCtaSection() {
         />
       </GradientButton>
       <GradientButton
-        href="/portfolio"
+        href="/login"
         variant="secondary"
       >
         seeCaseStudies

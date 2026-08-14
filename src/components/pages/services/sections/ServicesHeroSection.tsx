@@ -49,7 +49,7 @@ export function ServicesHeroSection() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <GradientButton href="/contact#contact-form">
+            <GradientButton href="/login">
               startAProject
               <ArrowRight
                 size={16}
@@ -58,7 +58,7 @@ export function ServicesHeroSection() {
               />
             </GradientButton>
             <GradientButton
-              href="/portfolio"
+              href="/login"
               variant="secondary"
             >
               seeOurWork

@@ -127,7 +127,7 @@ const megaMenu = {
     },
   ] as MegaMenuColumn[],
   featured: {
-    href: '/contact#contact-form',
+    href: '/login',
     cta: 'startProject',
     description: "Tell us your vision and we'll respond within 24 hours.",
     stats: [
@@ -309,7 +309,7 @@ export default function Header() {
             </div>
 
             <div className="hidden sm:block">
-              <GradientButton href="/contact#contact-form">
+              <GradientButton href="/login">
                 startProject
                 <ArrowRight
                   size={14}
@@ -536,7 +536,7 @@ export default function Header() {
 
           <div className="pt-3">
             <GradientButton
-              href="/contact#contact-form"
+              href="/login"
               onClick={closeMobileMenu}
               className="w-full justify-center"
             >

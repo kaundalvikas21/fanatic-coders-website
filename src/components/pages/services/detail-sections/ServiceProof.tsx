@@ -50,7 +50,7 @@ export function ServiceProof({ service, group }: { service: ServiceItem; group: 
 
         <RevealSection className="mt-14">
           <Link
-            href={`/portfolio/${project.id}`}
+            href="/login"
             className="group/case block no-underline"
           >
             <GlassCard className="p-8 md:p-10 transition-transform duration-300 ease-out group-hover/case:scale-[1.02]">
