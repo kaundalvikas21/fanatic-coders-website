@@ -1,10 +1,5 @@
 import { ErrorState } from '@/components/shared/error-state';
-import { WidgetCard } from '@/components/shared/widget-card';
-import {
-  getServiceRequestPermissions,
-  ServiceCatalog,
-  ServiceRequestList,
-} from '@/modules/service-requests';
+import { ServiceRequestList } from '@/modules/service-requests';
 import { getServiceRequests } from '@/modules/service-requests/data/queries';
 import {
   parseServiceRequestsSearchParams,
@@ -21,7 +16,6 @@ type ServicesPageProps = {
 };
 
 export default async function ServicesPage({ searchParams }: ServicesPageProps) {
-  const permissions = await getServiceRequestPermissions();
   const filters = parseServiceRequestsSearchParams(await searchParams);
   const { success, data, message } = await getServiceRequests(filters);
   const requests: ServiceRequest[] =
@@ -30,18 +24,6 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
 
   return (
     <>
-      {/* Service catalog for clients who can create requests. */}
-      {permissions.canCreate && (
-        <WidgetCard
-          title="Available services"
-          description="Choose a service to start a focused request."
-          titleClassName="text-base font-semibold tracking-normal"
-          contentClassNames="grid gap-2"
-        >
-          <ServiceCatalog />
-        </WidgetCard>
-      )}
-
       {/* Service request list or load failure for the current viewer. */}
       {success ? (
         <ServiceRequestList
