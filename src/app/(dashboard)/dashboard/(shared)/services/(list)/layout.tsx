@@ -17,6 +17,11 @@ export default async function ServicesLayout({ children }: { children: ReactNode
               : 'Choose a service or track your submitted requests.'
           }
           showBackButton
+          action={
+            permissions.canCreate
+              ? { label: 'New Request', href: '/dashboard/services/new' }
+              : undefined
+          }
         />
       }
     >
