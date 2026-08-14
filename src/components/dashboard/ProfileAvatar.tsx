@@ -7,7 +7,6 @@ import { toast } from 'sonner';
 
 import { UserAvatar } from '@/components/shared/user-avatar';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { deleteAvatar, updateAvatar } from '@/modules/uploads/data/avatar';
 import {
   DEFAULT_MAX_FILE_SIZE_BYTES,
@@ -85,16 +84,15 @@ export function ProfileAvatar() {
   });
 
   return (
-    <div className="space-y-4">
-      <Label>Profile image</Label>
-      <div className="flex items-center gap-4">
+    <div className="space-y-5">
+      <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center lg:flex-col lg:items-start xl:flex-row xl:items-center">
         <div className="relative shrink-0">
           <UserAvatar
             name={user?.name}
             email={user?.email}
             image={user?.image}
-            className="size-20 ring-1 ring-border"
-            fallbackClassName="text-xl"
+            className="size-24 ring-1 ring-border"
+            fallbackClassName="text-2xl"
           />
           {isBusy && (
             <div
@@ -110,7 +108,7 @@ export function ProfileAvatar() {
           )}
         </div>
 
-        <div className="min-w-0 space-y-2">
+        <div className="min-w-0 space-y-3">
           <input {...getInputProps({ name: 'image' })} />
           <div className="flex flex-wrap gap-2">
             <Button
@@ -134,7 +132,9 @@ export function ProfileAvatar() {
               </Button>
             )}
           </div>
-          <p className="text-xs leading-5 text-muted-foreground">JPG, PNG, or WebP. Max 5 MB.</p>
+          <p className="max-w-52 text-xs leading-5 text-muted-foreground">
+            JPG, PNG, or WebP. Maximum file size is 5 MB.
+          </p>
         </div>
       </div>
 
