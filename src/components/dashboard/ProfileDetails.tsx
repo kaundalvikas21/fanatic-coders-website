@@ -51,7 +51,7 @@ export function ProfileDetails() {
 
   return (
     <form
-      className="grid max-w-2xl content-start gap-4 border-t pt-6"
+      className="grid content-start gap-5"
       onSubmit={form.handleSubmit(handleSubmit)}
     >
       <Field data-invalid={Boolean(nameError)}>
@@ -86,7 +86,7 @@ export function ProfileDetails() {
 
       {rootError && <FieldError errors={[{ message: rootError }]} />}
 
-      <div>
+      <div className="flex justify-end border-t pt-5">
         <Button
           type="submit"
           disabled={isSubmitting || !form.formState.isDirty}
