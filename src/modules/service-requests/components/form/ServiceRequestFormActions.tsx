@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight, Loader2, Send } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 type ServiceRequestFormActionsProps = {
@@ -17,7 +18,18 @@ export function ServiceRequestFormActions({
 }: ServiceRequestFormActionsProps) {
   return (
     <div className="sticky bottom-0 z-10 -mx-5 mt-2 flex justify-end gap-2 border-t border-border/60 bg-card/95 px-5 py-4 backdrop-blur-sm sm:static sm:mx-0 sm:mt-4 sm:border-t sm:bg-transparent sm:px-0 sm:backdrop-blur-none">
-      {!isFirstStep && (
+      {isFirstStep ? (
+        <Button
+          asChild
+          variant="ghost"
+          className="min-h-11 min-w-24 text-muted-foreground hover:text-foreground"
+        >
+          <Link href="/dashboard/services">
+            <ChevronLeft data-icon="inline-start" />
+            Back to services
+          </Link>
+        </Button>
+      ) : (
         <Button
           type="button"
           variant="ghost"
