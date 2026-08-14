@@ -22,7 +22,7 @@ export function ServiceRequestFormActions({
         <Button
           asChild
           variant="ghost"
-          className="min-h-11 min-w-24 text-muted-foreground hover:text-foreground"
+          className="min-h-[46px] min-w-24 px-[22px] text-muted-foreground hover:text-foreground"
         >
           <Link href="/dashboard/services">
             <ChevronLeft data-icon="inline-start" />
@@ -33,7 +33,7 @@ export function ServiceRequestFormActions({
         <Button
           type="button"
           variant="ghost"
-          className="min-h-11 min-w-24 text-muted-foreground hover:text-foreground"
+          className="min-h-[46px] min-w-24 px-[22px] text-muted-foreground hover:text-foreground"
           disabled={isSubmitting}
           onClick={onBack}
         >
@@ -43,7 +43,7 @@ export function ServiceRequestFormActions({
       )}
       <Button
         type="submit"
-        className="min-h-11 min-w-32 bg-primary text-primary-foreground hover:bg-primary/90"
+        className="min-h-[46px] min-w-32 px-[22px] bg-primary text-primary-foreground hover:bg-primary/90"
         disabled={isSubmitting}
       >
         {isReviewStep ? (
