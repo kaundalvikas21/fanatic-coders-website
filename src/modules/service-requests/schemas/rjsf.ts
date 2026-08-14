@@ -12,7 +12,7 @@ function getFieldSchema(field: ServiceRequestTemplateField): RJSFSchema {
   }
 
   if (field.input === 'url') {
-    return { ...baseSchema, type: 'string', format: 'uri', minLength: field.required ? 1 : 0 };
+    return { ...baseSchema, type: 'string', minLength: field.required ? 2 : 0 };
   }
 
   if (field.input === 'number') {
@@ -54,7 +54,7 @@ function getFieldSchema(field: ServiceRequestTemplateField): RJSFSchema {
   return {
     ...baseSchema,
     type: 'string',
-    minLength: field.required ? 1 : 0,
+    minLength: field.required ? (field.input === 'textarea' ? 10 : 2) : 0,
     maxLength: field.input === 'textarea' ? 2000 : 255,
   };
 }

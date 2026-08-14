@@ -13,7 +13,6 @@ import {
   Smartphone,
   TrendingUp,
   ArrowRight,
-  LayoutDashboard,
   type LucideIcon,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -57,6 +56,7 @@ type ServiceRequestFormState = {
   formData: ServiceRequestFormData;
   isSubmitting: boolean;
   isSubmitted: boolean;
+  submittedRequestId: string | null;
 };
 
 type AnyTemplateField = ServiceRequestTemplateField;
@@ -101,9 +101,11 @@ export function ServiceRequestForm({
     formData: getServiceRequestDefaultValues(initialService),
     isSubmitting: false,
     isSubmitted: false,
+    submittedRequestId: null,
   }));
 
-  const { service, stepIndex, formData, isSubmitting, isSubmitted } = requestForm;
+  const { service, stepIndex, formData, isSubmitting, isSubmitted, submittedRequestId } =
+    requestForm;
   const template = getServiceRequestTemplate(service);
   const includesServiceStep = !isServiceLocked;
   const progressSteps = includesServiceStep
@@ -138,6 +140,7 @@ export function ServiceRequestForm({
       stepIndex: 0,
       formData: getServiceRequestDefaultValues(nextService),
       isSubmitted: false,
+      submittedRequestId: null,
     }));
   }
 
@@ -192,10 +195,25 @@ export function ServiceRequestForm({
         return;
       }
 
+      const responseData = response.data;
+      const createdRequestId =
+        typeof responseData === 'object' &&
+        responseData !== null &&
+        'id' in responseData &&
+        typeof responseData.id === 'string'
+          ? responseData.id
+          : null;
+
+      if (!createdRequestId) {
+        toast.error('The request was created, but its details could not be opened.');
+        return;
+      }
+
       toast.success('Service request created.');
       setRequestForm((current) => ({
         ...current,
         isSubmitted: true,
+        submittedRequestId: createdRequestId,
       }));
     } finally {
       setRequestForm((current) => ({
@@ -271,25 +289,26 @@ export function ServiceRequestForm({
               <ol className="mt-3 grid gap-2 text-sm text-muted-foreground">
                 <li>1. Our team reviews your request.</li>
                 <li>2. We reply with the next practical step.</li>
-                <li>3. You can continue the conversation from Services.</li>
+                <li>3. Track the status, updates, and conversation from your request page.</li>
               </ol>
             </div>
 
             <div className="mt-7 flex flex-col gap-2 sm:flex-row">
-              <Button asChild>
-                <Link href="/dashboard/services">
-                  View service requests
+              <Button
+                asChild
+                className="min-h-[46px] px-[22px]"
+              >
+                <Link href={`/dashboard/services/${submittedRequestId}`}>
+                  Track your request
                   <ArrowRight data-icon="inline-end" />
                 </Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
+                className="min-h-[46px] px-[22px]"
               >
-                <Link href="/dashboard/client">
-                  <LayoutDashboard data-icon="inline-start" />
-                  Return to dashboard
-                </Link>
+                <Link href="/dashboard/services">View all requests</Link>
               </Button>
             </div>
           </section>
@@ -423,6 +442,7 @@ export function ServiceRequestForm({
                 </form>
               ) : (
                 <Form
+                  className="[&_label]:font-semibold [&_input]:min-h-11 [&_input]:bg-background [&_input]:px-3 [&_textarea]:min-h-28 [&_textarea]:bg-background [&_textarea]:p-3"
                   schema={activeSchema}
                   uiSchema={activeUiSchema}
                   validator={validator}

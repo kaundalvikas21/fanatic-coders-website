@@ -9,7 +9,6 @@ import {
   ListChecks,
   MailPlus,
   Settings,
-  ShieldCheck,
   UsersRound,
 } from 'lucide-react';
 import { Role, type Role as DashboardRole } from '@/lib/auth/roles';
@@ -33,8 +32,8 @@ export type DashboardRouteGroup = {
 };
 
 const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
-const OVERVIEW_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
-const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
+const OVERVIEW_ROLES = [Role.ADMIN] as const;
+const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
 const PAYMENT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
@@ -52,7 +51,7 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
       },
       {
         title: 'Overview',
-        url: '/dashboard',
+        url: '/dashboard/admin',
         icon: LayoutDashboard,
         roles: OVERVIEW_ROLES,
       },
@@ -107,12 +106,6 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
   {
     label: 'Administration',
     items: [
-      {
-        title: 'Admin',
-        url: '/dashboard/admin',
-        icon: ShieldCheck,
-        roles: [Role.ADMIN],
-      },
       {
         title: 'Users',
         url: '/dashboard/admin/user',
