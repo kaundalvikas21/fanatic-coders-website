@@ -142,6 +142,7 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
 
         {/* Show management controls below status only to viewers with update access. */}
         {permissions.canUpdate && <ServiceRequestActionsCard request={request} />}
+
         {/* Start delivery only after the client accepts the proposal. */}
         {permissions.canUpdate &&
           proposal?.status === 'ACCEPTED' &&

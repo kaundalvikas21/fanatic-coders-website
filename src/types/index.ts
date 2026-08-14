@@ -134,6 +134,7 @@ export type {
   DeleteServiceRequestByIdResponse,
   GetServiceRequestByIdParams,
   GetServiceRequestByIdResponse,
+  GetServiceRequestsInput,
   GetServiceRequestsResponse,
   ServiceRequest,
   ServiceRequestData,

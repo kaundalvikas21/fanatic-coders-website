@@ -11,10 +11,11 @@ export type ServiceRequestPermissions = Readonly<{
 export function createServiceRequestPermissions(
   access: CurrentAccess | null | undefined,
 ): ServiceRequestPermissions {
+  const canCreate = access?.role === 'CLIENT' && access.can('serviceRequest', 'create');
   const canUpdate = access?.can('serviceRequest', 'update') ?? false;
 
   return {
-    canCreate: access?.can('serviceRequest', 'create') ?? false,
+    canCreate,
     canRead: access?.can('serviceRequest', 'read') ?? false,
     canUpdate,
     canDelete: access?.can('serviceRequest', 'delete') ?? false,

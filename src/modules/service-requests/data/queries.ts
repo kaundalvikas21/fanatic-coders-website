@@ -4,6 +4,7 @@ import { authApi } from '@/lib/axios/client';
 import { getApiError, unwrap } from '@/lib/axios/utils';
 import type {
   ApiResponse,
+  GetServiceRequestsInput,
   GetServiceRequestByIdResponse,
   GetServiceRequestsResponse,
 } from '@/types';
@@ -11,9 +12,13 @@ import type {
 /**
  * Fetch service requests visible to the signed-in client.
  */
-export async function getServiceRequests(): Promise<GetServiceRequestsResponse | ApiResponse> {
+export async function getServiceRequests(
+  filters: GetServiceRequestsInput = {},
+): Promise<GetServiceRequestsResponse | ApiResponse> {
   try {
-    return await unwrap<GetServiceRequestsResponse>(authApi.get('/api/v1/service-requests'));
+    return await unwrap<GetServiceRequestsResponse>(
+      authApi.get('/api/v1/service-requests', { params: filters }),
+    );
   } catch (error) {
     return getApiError(error);
   }

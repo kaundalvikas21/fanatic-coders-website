@@ -1,48 +1,70 @@
-import { BriefcaseBusiness, ClipboardCheck, ClipboardList } from 'lucide-react';
+import { Activity, BriefcaseBusiness, ClipboardCheck, FolderKanban } from 'lucide-react';
 
 import { OverviewStatsCard } from '@/components/dashboard/OverviewStatsCard';
-import type { Task } from '@/types';
+import { Progress } from '@/components/ui/progress';
+import type { ProjectDeliverySummary } from '@/modules/projects/utils/progress';
+import { getDeliveryOverview } from '@/modules/projects/utils/progress';
 
 type ClientProjectStatsProps = {
-  projectCount: number;
-  projectTasks: Task[][];
+  summaries: ProjectDeliverySummary[];
 };
 
-export function ClientProjectStats({ projectCount, projectTasks }: ClientProjectStatsProps) {
-  const tasks = projectTasks.flat();
-  const completedTasks = tasks.filter((task) => task.status === 'DONE').length;
-  const completionRate =
-    tasks.length > 0
-      ? `${Math.round((completedTasks / tasks.length) * 100)}% completion rate`
-      : 'No tasks completed yet';
+export function ClientProjectStats({ summaries }: ClientProjectStatsProps) {
+  const { projects, totalTasks, activeProjects, completedTasks, openTasks, completionRate } =
+    getDeliveryOverview(summaries);
   const stats = [
     {
-      label: 'Active projects',
-      value: projectCount,
-      supportingText: 'Currently in your workspace',
-      icon: BriefcaseBusiness,
+      label: 'Projects',
+      value: projects.length,
+      supportingText: 'Total delivery workspaces',
+      icon: FolderKanban,
       tone: 'blue' as const,
     },
     {
-      label: 'Tracked tasks',
-      value: tasks.length,
-      supportingText: 'Across all active projects',
-      icon: ClipboardList,
+      label: 'Active projects',
+      value: activeProjects,
+      supportingText: 'Currently in delivery',
+      icon: BriefcaseBusiness,
       tone: 'violet' as const,
     },
     {
-      label: 'Completed tasks',
+      label: 'Open tasks',
+      value: openTasks,
+      supportingText: 'Still moving through delivery',
+      icon: Activity,
+      tone: 'amber' as const,
+    },
+    {
+      label: 'Completed',
       value: completedTasks,
-      supportingText: completionRate,
+      supportingText: `${completionRate}% overall completion`,
       icon: ClipboardCheck,
       tone: 'emerald' as const,
     },
   ];
 
   return (
-    <OverviewStatsCard
-      stats={stats}
-      className="md:grid-cols-3 xl:grid-cols-3"
-    />
+    <div className="grid gap-5">
+      <OverviewStatsCard stats={stats} />
+
+      <div className="rounded-lg border border-border/80 bg-muted/25 px-4 py-3">
+        <div className="flex items-center justify-between gap-4 text-sm">
+          <div>
+            <p className="font-medium">Overall delivery</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {totalTasks === 0
+                ? 'Task progress will appear when delivery begins.'
+                : `${completedTasks} of ${totalTasks} tasks completed`}
+            </p>
+          </div>
+          <span className="font-semibold tabular-nums">{completionRate}%</span>
+        </div>
+        <Progress
+          value={completionRate}
+          aria-label={`Overall delivery is ${completionRate}% complete`}
+          className="mt-3 h-2"
+        />
+      </div>
+    </div>
   );
 }

@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { DatePickerField } from '@/components/shared/forms/DatePickerField';
 import { SelectField } from '@/components/shared/forms/SelectField';
-import { WidgetCard } from '@/components/shared/widget-card';
+import { useSheet } from '@/components/shared/action-sheet';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -31,6 +30,7 @@ type TaskCreateFormValues = {
 };
 
 export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormProps) {
+  const sheet = useSheet();
   const [message, setMessage] = useState<string | null>(null);
   const form = useForm<TaskCreateFormValues>({
     defaultValues: {
@@ -102,160 +102,156 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
       estimatedHours: '',
       assigneeMemberIds: [],
     });
+    sheet?.close();
   }
 
   return (
-    <WidgetCard
-      icon={Plus}
-      title="Create task"
-      description="Add delivery work inside this project."
-      className="overflow-visible"
-      titleClassName="text-xl font-semibold"
+    <form
+      className="px-4 pb-5"
+      onSubmit={form.handleSubmit(handleSubmit)}
     >
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="task-title">Title</FieldLabel>
-            <Input
-              id="task-title"
-              placeholder="Homepage wireframe"
-              disabled={isSubmitting}
-              aria-invalid={Boolean(titleError)}
-              {...form.register('title', {
-                required: 'Enter a task title.',
-              })}
-            />
-            {titleError && <FieldError errors={[{ message: titleError }]} />}
-          </Field>
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="task-title">Title</FieldLabel>
+          <Input
+            id="task-title"
+            placeholder="Homepage wireframe"
+            disabled={isSubmitting}
+            aria-invalid={Boolean(titleError)}
+            {...form.register('title', {
+              required: 'Enter a task title.',
+            })}
+          />
+          {titleError && <FieldError errors={[{ message: titleError }]} />}
+        </Field>
 
-          <Field>
-            <FieldLabel htmlFor="task-description">Description</FieldLabel>
-            <Textarea
-              id="task-description"
-              placeholder="Brief, acceptance notes, or links"
-              disabled={isSubmitting}
-              {...form.register('description')}
-            />
-          </Field>
+        <Field>
+          <FieldLabel htmlFor="task-description">Description</FieldLabel>
+          <Textarea
+            id="task-description"
+            placeholder="Brief, acceptance notes, or links"
+            disabled={isSubmitting}
+            {...form.register('description')}
+          />
+        </Field>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Field>
-              <FieldLabel>Priority</FieldLabel>
-              <Controller
-                control={form.control}
-                name="priority"
-                render={({ field }) => (
-                  <SelectField
-                    id="task-priority"
-                    value={field.value}
-                    options={TASK_PRIORITY_OPTIONS}
-                    onChange={(value) => field.onChange(value as TaskPriority)}
-                    ariaLabel="Task priority"
-                    disabled={isSubmitting}
-                  />
-                )}
-              />
-            </Field>
-            <Field>
-              <FieldLabel>Due date</FieldLabel>
-              <Controller
-                control={form.control}
-                name="dueDate"
-                render={({ field }) => (
-                  <DatePickerField
-                    id="task-due-date"
-                    value={field.value}
-                    onChange={field.onChange}
-                    placeholder="Pick due date"
-                    ariaLabel="Task due date"
-                    disabled={isSubmitting}
-                    minDate={today}
-                  />
-                )}
-              />
-            </Field>
-          </div>
-
+        <div className="grid gap-3 sm:grid-cols-2">
           <Field>
-            <FieldLabel htmlFor="task-estimated-hours">Estimated hours</FieldLabel>
-            <Input
-              id="task-estimated-hours"
-              type="number"
-              min="0"
-              step="0.25"
-              placeholder="8"
-              disabled={isSubmitting}
-              aria-invalid={Boolean(estimatedHoursError)}
-              {...form.register('estimatedHours')}
-            />
-            {estimatedHoursError && <FieldError errors={[{ message: estimatedHoursError }]} />}
-          </Field>
-
-          <Field>
-            <FieldLabel>Assignees</FieldLabel>
+            <FieldLabel>Priority</FieldLabel>
             <Controller
               control={form.control}
-              name="assigneeMemberIds"
+              name="priority"
               render={({ field }) => (
-                <div className="grid gap-2 rounded-lg border p-3">
-                  {assignableMembers.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
-                      No internal members available for assignment.
-                    </p>
-                  ) : (
-                    assignableMembers.map((member) => {
-                      const checked = field.value.includes(member.id);
-
-                      return (
-                        <label
-                          key={member.id}
-                          className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 text-sm hover:bg-muted"
-                        >
-                          <input
-                            type="checkbox"
-                            className="size-4"
-                            checked={checked}
-                            disabled={isSubmitting}
-                            onChange={(event) => {
-                              const nextValue = event.target.checked
-                                ? [...field.value, member.id]
-                                : field.value.filter((memberId) => memberId !== member.id);
-
-                              field.onChange(nextValue);
-                            }}
-                          />
-                          <span className="min-w-0">
-                            <span className="block truncate font-medium">{member.user.name}</span>
-                            <span className="block truncate text-muted-foreground">
-                              {member.user.email}
-                            </span>
-                          </span>
-                        </label>
-                      );
-                    })
-                  )}
-                </div>
+                <SelectField
+                  id="task-priority"
+                  value={field.value}
+                  options={TASK_PRIORITY_OPTIONS}
+                  onChange={(value) => field.onChange(value as TaskPriority)}
+                  ariaLabel="Task priority"
+                  disabled={isSubmitting}
+                />
               )}
             />
           </Field>
+          <Field>
+            <FieldLabel>Due date</FieldLabel>
+            <Controller
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <DatePickerField
+                  id="task-due-date"
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="Pick due date"
+                  ariaLabel="Task due date"
+                  disabled={isSubmitting}
+                  minDate={today}
+                />
+              )}
+            />
+          </Field>
+        </div>
 
-          {message && (
-            <p
-              className="text-sm text-destructive"
-              aria-live="polite"
-            >
-              {message}
-            </p>
-          )}
-
-          <Button
-            type="submit"
+        <Field>
+          <FieldLabel htmlFor="task-estimated-hours">Estimated hours</FieldLabel>
+          <Input
+            id="task-estimated-hours"
+            type="number"
+            min="0"
+            step="0.25"
+            placeholder="8"
             disabled={isSubmitting}
+            aria-invalid={Boolean(estimatedHoursError)}
+            {...form.register('estimatedHours')}
+          />
+          {estimatedHoursError && <FieldError errors={[{ message: estimatedHoursError }]} />}
+        </Field>
+
+        <Field>
+          <FieldLabel>Assignees</FieldLabel>
+          <Controller
+            control={form.control}
+            name="assigneeMemberIds"
+            render={({ field }) => (
+              <div className="grid gap-2 rounded-lg border p-3">
+                {assignableMembers.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No internal members available for assignment.
+                  </p>
+                ) : (
+                  assignableMembers.map((member) => {
+                    const checked = field.value.includes(member.id);
+
+                    return (
+                      <label
+                        key={member.id}
+                        className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 text-sm hover:bg-muted"
+                      >
+                        <input
+                          type="checkbox"
+                          className="size-4"
+                          checked={checked}
+                          disabled={isSubmitting}
+                          onChange={(event) => {
+                            const nextValue = event.target.checked
+                              ? [...field.value, member.id]
+                              : field.value.filter((memberId) => memberId !== member.id);
+
+                            field.onChange(nextValue);
+                          }}
+                        />
+                        <span className="min-w-0">
+                          <span className="block truncate font-medium">{member.user.name}</span>
+                          <span className="block truncate text-muted-foreground">
+                            {member.user.email}
+                          </span>
+                        </span>
+                      </label>
+                    );
+                  })
+                )}
+              </div>
+            )}
+          />
+        </Field>
+
+        {message && (
+          <p
+            className="text-sm text-destructive"
+            aria-live="polite"
           >
-            {isSubmitting ? 'Creating task' : 'Create task'}
-          </Button>
-        </FieldGroup>
-      </form>
-    </WidgetCard>
+            {message}
+          </p>
+        )}
+
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Creating task' : 'Create task'}
+        </Button>
+      </FieldGroup>
+    </form>
   );
 }

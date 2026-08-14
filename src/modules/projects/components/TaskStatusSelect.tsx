@@ -6,13 +6,14 @@ import { SelectField } from '@/components/shared/forms/SelectField';
 import { updateTaskById } from '@/modules/projects/data/tasks';
 import type { Task, TaskStatus } from '@/types';
 import { TASK_STATUS_OPTIONS } from '@/types';
+import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 type TaskStatusSelectProps = {
   task: Task;
-  canUpdateStatus: boolean;
 };
 
-export function TaskStatusSelect({ task, canUpdateStatus }: TaskStatusSelectProps) {
+export function TaskStatusSelect({ task }: TaskStatusSelectProps) {
+  const { canUpdate } = useTaskPermissions();
   const [status, setStatus] = useState<TaskStatus>(task.status);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -49,7 +50,7 @@ export function TaskStatusSelect({ task, canUpdateStatus }: TaskStatusSelectProp
       options={TASK_STATUS_OPTIONS}
       onChange={handleStatusChange}
       ariaLabel="Task status"
-      disabled={isUpdating || !canUpdateStatus}
+      disabled={isUpdating || !canUpdate}
       className="h-9"
     />
   );

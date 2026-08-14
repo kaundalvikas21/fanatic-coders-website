@@ -4,7 +4,7 @@ export function DashboardContent({ children }: { children: ReactNode }) {
   return (
     <main
       id="main-content"
-      className="flex flex-1 flex-col gap-4 p-4"
+      className="dashboard-canvas flex flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
     >
       {children}
     </main>

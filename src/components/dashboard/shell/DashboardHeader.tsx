@@ -14,7 +14,7 @@ type DashboardHeaderProps = {
 export function DashboardHeader({ role }: DashboardHeaderProps) {
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4 transition-[left,height] duration-200 ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:left-(--sidebar-width) group-has-data-[collapsible=icon]/sidebar-wrapper:md:left-(--sidebar-width-icon)">
+      <header className="fixed inset-x-0 top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b border-primary/15 bg-background/85 px-4 backdrop-blur-xl transition-[left,height] duration-200 ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:left-(--sidebar-width) md:px-6 group-has-data-[collapsible=icon]/sidebar-wrapper:md:left-(--sidebar-width-icon)">
         <SidebarTrigger className="-ml-1" />
         <Separator
           orientation="vertical"
@@ -24,7 +24,7 @@ export function DashboardHeader({ role }: DashboardHeaderProps) {
         <div className="ml-auto flex items-center gap-2">
           <Badge
             variant="outline"
-            className="hidden font-mono sm:inline-flex"
+            className="hidden border-primary/25 bg-primary/8 font-mono text-[0.6875rem] text-primary sm:inline-flex"
           >
             {getRoleLabel(role)}
           </Badge>

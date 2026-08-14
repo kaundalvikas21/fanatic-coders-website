@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { WidgetCard } from '@/components/shared/widget-card';
 import {
   SERVICE_REQUEST_SERVICE_LABELS,
   SERVICE_REQUEST_STATUS_LABELS,
@@ -14,6 +14,7 @@ import { SERVICE_REQUEST_STATUS_BADGE_VARIANTS, type ServiceRequest } from '@/ty
 
 type ServiceRequestListProps = {
   requests: ServiceRequest[];
+  hasFilters?: boolean;
 };
 
 type ServiceRequestWithClient = ServiceRequest & {
@@ -34,20 +35,21 @@ function getClientLabel(request: ServiceRequest) {
   return user?.name || user?.email || request.clientId;
 }
 
-export function ServiceRequestList({ requests }: ServiceRequestListProps) {
+export function ServiceRequestList({ requests, hasFilters = false }: ServiceRequestListProps) {
   const permissions = useServiceRequestPermissions();
 
   if (requests.length === 0) {
     return (
-      <WidgetCard
-        title={permissions.isManagementView ? 'Client service requests' : 'Submitted requests'}
-      >
-        <p className="text-sm leading-6 text-muted-foreground">
-          {permissions.isManagementView
-            ? 'Client-submitted service requests will appear here for review.'
-            : 'Your submitted service requests will appear here for follow-up.'}
-        </p>
-      </WidgetCard>
+      <EmptyState
+        entity="service requests"
+        description={
+          hasFilters
+            ? 'No service requests match the selected filters.'
+            : permissions.isManagementView
+              ? 'Client-submitted service requests will appear here for review.'
+              : 'Your submitted service requests will appear here for follow-up.'
+        }
+      />
     );
   }
 

@@ -59,6 +59,7 @@ function NavMainItem({ item, pathname, activeItemUrl }: NavMainItemProps) {
           asChild
           tooltip={item.title}
           isActive={isItemActive}
+          className="h-9 gap-2.5 border border-transparent px-2.5 font-medium text-sidebar-foreground/70 transition-[color,background-color,border-color] duration-150 hover:border-sidebar-border/60 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground data-[active=true]:border-sidebar-primary/30 data-[active=true]:bg-sidebar-primary/12 data-[active=true]:text-sidebar-foreground data-[active=true]:shadow-[inset_2px_0_0_var(--sidebar-primary)] data-[active=true]:[&_svg]:text-sidebar-primary group-data-[collapsible=icon]:data-[active=true]:shadow-none"
         >
           <Link href={item.url}>
             <item.icon />
@@ -80,11 +81,15 @@ function NavMainItem({ item, pathname, activeItemUrl }: NavMainItemProps) {
           <SidebarMenuButton
             tooltip={item.title}
             isActive={shouldOpen}
+            className="h-9 gap-2.5 border border-transparent px-2.5 font-medium text-sidebar-foreground/70 transition-[color,background-color,border-color] duration-150 hover:border-sidebar-border/60 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground data-[active=true]:border-sidebar-primary/30 data-[active=true]:bg-sidebar-primary/12 data-[active=true]:text-sidebar-foreground data-[active=true]:shadow-[inset_2px_0_0_var(--sidebar-primary)] data-[active=true]:[&_svg]:text-sidebar-primary group-data-[collapsible=icon]:data-[active=true]:shadow-none"
           >
             <item.icon />
             <span>{item.title}</span>
             <ChevronRight
-              className={cn('ml-auto transition-transform duration-200', isOpen && 'rotate-90')}
+              className={cn(
+                'ml-auto transition-transform duration-200 group-data-[collapsible=icon]:hidden',
+                isOpen && 'rotate-90',
+              )}
             />
           </SidebarMenuButton>
         </CollapsibleTrigger>
@@ -96,6 +101,7 @@ function NavMainItem({ item, pathname, activeItemUrl }: NavMainItemProps) {
                 <SidebarMenuSubButton
                   asChild
                   isActive={activeSubItemUrl === subItem.url}
+                  className="text-sidebar-foreground/60 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground data-[active=true]:bg-sidebar-primary/10 data-[active=true]:font-medium data-[active=true]:text-sidebar-primary"
                 >
                   <Link href={subItem.url}>
                     <span>{subItem.title}</span>
@@ -118,9 +124,14 @@ export function NavMain({ groups }: { groups: DashboardRouteGroup[] }) {
   return (
     <>
       {groups.map((group) => (
-        <SidebarGroup key={group.label}>
-          <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-          <SidebarMenu>
+        <SidebarGroup
+          key={group.label}
+          className="py-2"
+        >
+          <SidebarGroupLabel className="h-7 px-2.5 font-mono text-[0.6rem] font-semibold tracking-[0.14em] text-sidebar-foreground/40 uppercase">
+            {group.label}
+          </SidebarGroupLabel>
+          <SidebarMenu className="gap-0.5">
             {group.items.map((item) => (
               <NavMainItem
                 key={item.title}

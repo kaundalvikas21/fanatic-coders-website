@@ -53,12 +53,12 @@ function UserIdentityRow({ user }: { user: UserIdentity }) {
         name={user.name}
         email={user.email}
         image={user.image}
-        className="h-8 w-8 rounded-lg"
+        className="h-8 w-8 rounded-lg ring-1 ring-sidebar-border"
         fallbackClassName="rounded-lg"
       />
       <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium">{user.name}</span>
-        <span className="truncate text-xs">{user.email}</span>
+        <span className="truncate font-medium text-sidebar-foreground">{user.name}</span>
+        <span className="truncate text-xs text-sidebar-foreground/50">{user.email}</span>
       </div>
     </>
   );
@@ -82,7 +82,7 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="h-12 gap-2.5 rounded-lg border border-sidebar-border/70 bg-sidebar-accent/35 px-2.5 hover:border-sidebar-primary/25 hover:bg-sidebar-accent/70 data-[state=open]:border-sidebar-primary/30 data-[state=open]:bg-sidebar-primary/10 data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent"
             >
               <UserIdentityRow user={user} />
               <ChevronsUpDown className="ml-auto size-4" />
