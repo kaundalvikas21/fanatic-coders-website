@@ -89,7 +89,7 @@ export function ServiceCapabilities({
                 We&apos;ll scope the right slice of work with you.
               </p>
               <Link
-                href="/contact"
+                href="/contact#contact-form"
                 className="group/cta inline-flex items-center gap-1.5 text-sm font-mono no-underline"
                 style={{ color }}
               >

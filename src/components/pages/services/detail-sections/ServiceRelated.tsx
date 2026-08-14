@@ -28,7 +28,7 @@ export function ServiceRelated({ service, group }: { service: ServiceItem; group
           {related.map((item) => (
             <Link
               key={item.slug}
-              href={`/services/${item.slug}`}
+              href="/login"
               className="no-underline group/card"
             >
               <GlassCard

@@ -238,7 +238,7 @@ export default function HeroSection() {
           <div
             className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 cta-reveal${headingVisible ? ' visible' : ''}`}
           >
-            <GradientButton href="/contact#contact-form">
+            <GradientButton href="/login">
               startProject
               <ArrowRight
                 size={14}
