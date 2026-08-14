@@ -67,18 +67,6 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         url: '/dashboard/services',
         icon: ClipboardList,
         roles: SERVICE_REQUEST_ROLES,
-        subItems: [
-          {
-            title: 'All Services',
-            url: '/dashboard/services',
-            roles: SERVICE_REQUEST_ROLES,
-          },
-          {
-            title: 'New Request',
-            url: '/dashboard/services/new',
-            roles: [Role.CLIENT],
-          },
-        ],
       },
     ],
   },

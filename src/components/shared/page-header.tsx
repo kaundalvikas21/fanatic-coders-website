@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BackButton } from '@/components/shared/back-button';
@@ -12,6 +13,7 @@ type PageHeaderProps = {
   action?: {
     label: string;
     href: string;
+    icon?: LucideIcon;
   };
   actionSlot?: ReactNode;
 };
@@ -24,6 +26,8 @@ export function PageHeader({
   action,
   actionSlot,
 }: PageHeaderProps) {
+  const ActionIcon = action?.icon;
+
   return (
     <Card>
       <CardHeader className="gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
@@ -39,7 +43,10 @@ export function PageHeader({
             {actionSlot}
             {action && (
               <Button asChild>
-                <Link href={action.href}>{action.label}</Link>
+                <Link href={action.href}>
+                  {ActionIcon && <ActionIcon data-icon="inline-start" />}
+                  {action.label}
+                </Link>
               </Button>
             )}
           </CardAction>

@@ -9,6 +9,8 @@ import { WidgetCard } from '@/components/shared/widget-card';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useServiceRequestPermissions } from '@/modules/service-requests/hooks/use-service-request-permissions';
+import { cn } from '@/lib/utils';
 import {
   SERVICE_INTEREST_OPTIONS,
   SERVICE_INTERESTS,
@@ -35,6 +37,7 @@ const serviceOptions = [
 ] satisfies SelectOption[];
 
 export function ServiceRequestFilters() {
+  const permissions = useServiceRequestPermissions();
   const [filters, setFilters] = useQueryStates(filterParsers, { shallow: false });
   const [clientInput, setClientInput] = useState(filters.client);
   const debouncedClient = useDebounce(clientInput, 500);
@@ -54,18 +57,27 @@ export function ServiceRequestFilters() {
 
   return (
     <WidgetCard>
-      <FieldGroup className="grid gap-4 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
-        <Field>
-          <FieldLabel htmlFor="service-requests-client">Client</FieldLabel>
-          <Input
-            id="service-requests-client"
-            type="search"
-            value={clientInput}
-            onChange={(event) => setClientInput(event.target.value)}
-            placeholder="Search by name or email"
-            autoComplete="off"
-          />
-        </Field>
+      <FieldGroup
+        className={cn(
+          'grid gap-4 md:items-end',
+          permissions.isManagementView
+            ? 'md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto]'
+            : 'md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]',
+        )}
+      >
+        {permissions.isManagementView && (
+          <Field>
+            <FieldLabel htmlFor="service-requests-client">Client</FieldLabel>
+            <Input
+              id="service-requests-client"
+              type="search"
+              value={clientInput}
+              onChange={(event) => setClientInput(event.target.value)}
+              placeholder="Search by name or email"
+              autoComplete="off"
+            />
+          </Field>
+        )}
 
         <Field>
           <FieldLabel>Status</FieldLabel>
