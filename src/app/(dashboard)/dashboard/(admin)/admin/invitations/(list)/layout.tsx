@@ -11,15 +11,15 @@ export default function AdminInvitationsLayout({ children }: { children: ReactNo
       header={
         <PageHeader
           title="Invitations"
-          description="Track organization invites sent through Better Auth."
+          description="Invite teammates to your organization and track their invitation status."
           actionSlot={
             <ActionSheet
-              title="Create invitation"
-              description="Send a Better Auth organization invite."
+              title="Send invitation"
+              description="Invite user in our organization."
               trigger={
                 <ActionSheetButton>
                   <MailPlus data-icon="inline-start" />
-                  New invitation
+                  Send invitation
                 </ActionSheetButton>
               }
             >
