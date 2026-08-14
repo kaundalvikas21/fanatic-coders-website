@@ -11,6 +11,7 @@ const communicationChannels = ['EMAIL', 'PHONE', 'WHATSAPP', 'PORTAL'] as const;
 
 const textSchema = z.string().trim();
 const requiredTextSchema = textSchema.min(2).max(255);
+const requiredLongTextSchema = textSchema.min(10).max(2000);
 const longTextSchema = textSchema.max(2000).optional().default('');
 const optionalTextSchema = textSchema.optional().default('');
 const emailSchema = z.email();
@@ -137,19 +138,19 @@ export const otherServiceSpecificDataSchema = z.object({
 
 export const seoServiceRequestDataSchema = z.object({
   primaryDomain: optionalTextSchema,
-  targetKeywords: longTextSchema,
-  localSeoNeeds: longTextSchema,
+  targetKeywords: requiredLongTextSchema,
+  localSeoNeeds: requiredLongTextSchema,
   currentOrganicTraffic: longTextSchema,
-  primaryBusinessGoals: longTextSchema,
+  primaryBusinessGoals: requiredLongTextSchema,
   competitorUrls: longTextSchema,
   inHouseContentCapability: longTextSchema,
   previousSeoWork: longTextSchema,
   budgetRange: optionalTextSchema,
 });
 export const googleAdsServiceRequestDataSchema = z.object({
-  campaignOffer: longTextSchema,
-  conversionActions: longTextSchema,
-  geographicTargeting: longTextSchema,
+  campaignOffer: requiredLongTextSchema,
+  conversionActions: requiredLongTextSchema,
+  geographicTargeting: requiredLongTextSchema,
   previousAgencyExperience: longTextSchema,
   targetCpaRoas: optionalTextSchema,
   remarketingLists: longTextSchema,
@@ -158,32 +159,32 @@ export const googleAdsServiceRequestDataSchema = z.object({
   timelineExpectations: optionalTextSchema,
 });
 export const webDevelopmentServiceRequestDataSchema = z.object({
-  industryVertical: longTextSchema,
-  projectType: optionalTextSchema,
+  industryVertical: requiredLongTextSchema,
+  projectType: requiredTextSchema,
   websiteUrl: optionalTextSchema,
-  sitemapWireframesNotes: longTextSchema,
-  primaryBusinessGoals: longTextSchema,
+  sitemapWireframesNotes: requiredLongTextSchema,
+  primaryBusinessGoals: requiredLongTextSchema,
   mediaAssetsAvailable: longTextSchema,
   budgetRange: optionalTextSchema,
   timelineExpectations: optionalTextSchema,
   designReferenceUrls: longTextSchema,
 });
 export const mobileAppDevelopmentServiceRequestDataSchema = z.object({
-  industryVertical: longTextSchema,
-  backendRequirements: longTextSchema,
+  industryVertical: requiredLongTextSchema,
+  backendRequirements: requiredLongTextSchema,
   websiteUrl: optionalTextSchema,
-  featureList: longTextSchema,
-  targetPlatforms: optionalTextSchema,
+  featureList: requiredLongTextSchema,
+  targetPlatforms: requiredTextSchema,
   authenticationMethod: longTextSchema,
   prototypeLinks: longTextSchema,
   budgetRange: optionalTextSchema,
   timelineExpectations: optionalTextSchema,
 });
 export const generalMarketingServiceRequestDataSchema = z.object({
-  industryVertical: longTextSchema,
-  primaryBusinessGoals: longTextSchema,
+  industryVertical: requiredLongTextSchema,
+  primaryBusinessGoals: requiredLongTextSchema,
   websiteUrl: optionalTextSchema,
-  targetAudiencePersonas: longTextSchema,
+  targetAudiencePersonas: requiredLongTextSchema,
   activeMarketingChannels: longTextSchema,
   campaignGoals: longTextSchema,
   existingBrandAssets: longTextSchema,
@@ -191,9 +192,9 @@ export const generalMarketingServiceRequestDataSchema = z.object({
   timelineExpectations: optionalTextSchema,
 });
 export const otherServiceRequestDataSchema = z.object({
-  requestDetails: longTextSchema,
-  currentSituation: longTextSchema,
-  desiredOutcome: longTextSchema,
+  requestDetails: requiredLongTextSchema,
+  currentSituation: requiredLongTextSchema,
+  desiredOutcome: requiredLongTextSchema,
   existingMaterials: longTextSchema,
   timelineExpectations: optionalTextSchema,
   budgetRange: optionalTextSchema,

@@ -423,6 +423,7 @@ export function ServiceRequestForm({
                 </form>
               ) : (
                 <Form
+                  className="[&_label]:font-semibold [&_input]:min-h-11 [&_input]:bg-background [&_input]:px-3 [&_textarea]:min-h-28 [&_textarea]:bg-background [&_textarea]:p-3"
                   schema={activeSchema}
                   uiSchema={activeUiSchema}
                   validator={validator}
