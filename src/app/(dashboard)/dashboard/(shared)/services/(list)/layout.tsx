@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Plus } from 'lucide-react';
 import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import {
@@ -24,7 +25,7 @@ export default async function ServicesLayout({ children }: { children: ReactNode
           showBackButton
           action={
             permissions.canCreate
-              ? { label: 'New Request', href: '/dashboard/services/new' }
+              ? { label: 'New Request', href: '/dashboard/services/new', icon: Plus }
               : undefined
           }
         />
