@@ -1,7 +1,7 @@
 'use client';
 
 import { useToggle } from '@uidotdev/usehooks';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, LockKeyhole } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -14,9 +14,13 @@ export function PasswordInput({ className, disabled, ...props }: PasswordInputPr
 
   return (
     <div className="relative">
+      <LockKeyhole
+        className="pointer-events-none absolute bottom-4 left-3.5 z-10 size-4 text-slate-500"
+        aria-hidden
+      />
       <Input
         type={isPasswordVisible ? 'text' : 'password'}
-        className={cn(className, 'pr-11')}
+        className={cn(className, 'pr-11 pl-10')}
         disabled={disabled}
         {...props}
       />

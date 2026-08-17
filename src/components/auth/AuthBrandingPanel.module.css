@@ -1,0 +1,243 @@
+@keyframes contentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbDriftCyan {
+  from {
+    transform: translate3d(-5%, -4%, 0) scale(0.96);
+    opacity: 0.42;
+  }
+  to {
+    transform: translate3d(10%, 8%, 0) scale(1.08);
+    opacity: 0.66;
+  }
+}
+
+@keyframes orbDriftViolet {
+  from {
+    transform: translate3d(8%, 6%, 0) scale(1.05);
+    opacity: 0.34;
+  }
+  to {
+    transform: translate3d(-9%, -7%, 0) scale(0.92);
+    opacity: 0.58;
+  }
+}
+
+@keyframes livePulse {
+  50% {
+    opacity: 0.4;
+    transform: scale(0.72);
+  }
+}
+@keyframes cursorTravel {
+  0%,
+  24% {
+    transform: translateY(0);
+  }
+  34%,
+  57% {
+    transform: translateY(2.75rem);
+  }
+  67%,
+  90% {
+    transform: translateY(5.5rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes stageActivate {
+  0%,
+  24%,
+  100% {
+    filter: none;
+  }
+  4%,
+  18% {
+    filter: brightness(1.3);
+  }
+}
+@keyframes progressShift {
+  0%,
+  24% {
+    transform: scaleX(0.45);
+  }
+  34%,
+  57% {
+    transform: scaleX(1.35);
+  }
+  67%,
+  90% {
+    transform: scaleX(2.2);
+  }
+  100% {
+    transform: scaleX(0.45);
+  }
+}
+
+.root {
+  isolation: isolate;
+  background: rgb(13 13 31 / 0.88);
+  animation: contentEnter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.root::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  pointer-events: none;
+}
+
+.orbCyan {
+  top: -18%;
+  left: -14%;
+  width: 23rem;
+  height: 23rem;
+  background: color-mix(in oklab, var(--aurora-cyan) 22%, transparent);
+  animation: orbDriftCyan 10s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+
+.orbViolet {
+  right: -18%;
+  bottom: -20%;
+  width: 27rem;
+  height: 27rem;
+  background: color-mix(in oklab, var(--aurora-violet) 20%, transparent);
+  animation: orbDriftViolet 12s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+
+.activityTrack::before {
+  position: absolute;
+  top: 1.5rem;
+  bottom: 1.6rem;
+  left: 2.1rem;
+  width: 1px;
+  background: rgb(170 178 212 / 0.18);
+  content: '';
+}
+
+.activityCursor {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.85rem;
+  z-index: 2;
+  width: 0.58rem;
+  height: 0.58rem;
+  border: 2px solid #090914;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 14px rgb(34 211 238 / 0.85);
+  animation: cursorTravel 6s var(--ease-snappy) infinite;
+}
+
+.activityRow {
+  animation: stageActivate 6s var(--ease-snappy) infinite;
+  animation-delay: calc(var(--auth-stage) * 2s);
+}
+
+.liveDot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px rgb(52 211 153 / 0.56);
+  animation: livePulse 2.4s ease-in-out infinite;
+}
+
+.deliveryProgress {
+  width: 7rem;
+  height: 0.2rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: rgb(170 178 212 / 0.12);
+}
+
+.deliveryProgress::after {
+  display: block;
+  width: 45%;
+  height: 100%;
+  border-radius: inherit;
+  background: #22d3ee;
+  content: '';
+  transform-origin: left;
+  animation: progressShift 6s var(--ease-snappy) infinite;
+}
+
+.avatar {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  margin-left: -1rem;
+  place-items: center;
+  border: 2px solid #0d0d1f;
+  border-radius: 50%;
+}
+
+.avatar:first-child {
+  margin-left: 0;
+}
+
+.availability {
+  width: fit-content;
+  margin-left: auto;
+  transition:
+    color 180ms var(--ease-smooth),
+    transform 180ms var(--ease-snappy);
+}
+
+.availabilityDot {
+  transition:
+    transform 180ms var(--ease-snappy),
+    box-shadow 180ms var(--ease-smooth);
+}
+
+.availability:hover {
+  color: #6ee7b7;
+  transform: translateY(-0.125rem);
+}
+.availability:hover .availabilityDot {
+  box-shadow:
+    0 0 0 0.25rem rgb(52 211 153 / 0.12),
+    0 0 10px rgb(52 211 153 / 0.8);
+  transform: scale(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .orb,
+  .activityCursor,
+  .activityRow,
+  .liveDot,
+  .deliveryProgress::after {
+    animation: none;
+  }
+  .availability,
+  .availabilityDot {
+    transition: none;
+  }
+  .activityCursor {
+    transform: translateY(2.75rem);
+  }
+  .deliveryProgress::after {
+    transform: scaleX(1.35);
+    transform-origin: left;
+  }
+}
