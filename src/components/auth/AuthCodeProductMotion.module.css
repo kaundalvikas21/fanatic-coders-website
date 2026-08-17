@@ -1,0 +1,183 @@
+@keyframes codeWrite {
+  0%,
+  10% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  22%,
+  76% {
+    opacity: 1;
+    transform: none;
+  }
+  90%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes productBuild {
+  0%,
+  14% {
+    opacity: 0.14;
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(8px);
+  }
+  42%,
+  82% {
+    opacity: 1;
+    clip-path: inset(0);
+    transform: none;
+  }
+  100% {
+    opacity: 0.14;
+  }
+}
+
+@keyframes signalFlow {
+  from {
+    transform: translateX(-1.5rem);
+  }
+  to {
+    transform: translateX(6rem);
+  }
+}
+
+.root {
+  position: absolute;
+  top: 7rem;
+  right: 0.75rem;
+  z-index: 0;
+  width: min(38%, 15.5rem);
+  height: 15.5rem;
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.codeLines {
+  position: absolute;
+  top: 2.25rem;
+  left: 0;
+  color: #7782a4;
+  font:
+    0.625rem/1.8 var(--font-mono),
+    ui-monospace,
+    monospace;
+}
+
+.codeLines span {
+  display: block;
+  opacity: 0;
+  animation: codeWrite 7s var(--ease-snappy) infinite;
+}
+
+.codeLines span:nth-child(2) {
+  color: #c4b5fd;
+  animation-delay: 0.5s;
+}
+.codeLines span:nth-child(3) {
+  margin-top: 1rem;
+  color: #67e8f9;
+  animation-delay: 1s;
+}
+.codeLines span:nth-child(4) {
+  color: #67e8f9;
+  animation-delay: 1.5s;
+}
+
+.signal {
+  position: absolute;
+  top: 8.7rem;
+  left: 5.5rem;
+  width: 4rem;
+  height: 1px;
+  overflow: hidden;
+  background: rgb(34 211 238 / 0.2);
+}
+
+.signal::after {
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: #22d3ee;
+  box-shadow: 0 0 9px #22d3ee;
+  content: '';
+  animation: signalFlow 2.2s linear infinite;
+}
+
+.productWindow {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  width: 9rem;
+  height: 10.25rem;
+  overflow: hidden;
+  border: 1px solid rgb(34 211 238 / 0.38);
+  border-radius: 0.75rem;
+  background: rgb(18 18 42 / 0.95);
+  animation: productBuild 7s var(--ease-snappy) infinite;
+}
+
+.titlebar {
+  height: 1.7rem;
+  border-bottom: 1px solid rgb(170 178 212 / 0.13);
+}
+.titlebar::before {
+  display: block;
+  width: 0.32rem;
+  height: 0.32rem;
+  margin: 0.62rem 0 0 0.7rem;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow:
+    0.7rem 0 #7c3aed,
+    1.4rem 0 #2563eb;
+  content: '';
+}
+
+.accent {
+  width: 58%;
+  height: 0.35rem;
+  margin: 1rem 0.85rem 0;
+  border-radius: 1rem;
+  background: rgb(34 211 238 / 0.45);
+}
+.line {
+  height: 0.3rem;
+  margin: 0.65rem 0.85rem 0;
+  border-radius: 1rem;
+  background: rgb(170 178 212 / 0.16);
+}
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 1rem 0.85rem;
+}
+.cards i {
+  height: 3rem;
+  border-radius: 0.45rem;
+  background: rgb(255 255 255 / 0.045);
+}
+.status {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 0.55rem;
+  color: #34d399;
+  font-size: 0.5rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .codeLines span,
+  .productWindow,
+  .signal::after {
+    animation: none;
+  }
+  .codeLines span {
+    opacity: 1;
+  }
+  .productWindow {
+    opacity: 1;
+    clip-path: none;
+  }
+}

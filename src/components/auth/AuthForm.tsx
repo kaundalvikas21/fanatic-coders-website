@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { LogIn, type LucideIcon, UserPlus } from 'lucide-react';
+import { LogIn, Mail, type LucideIcon, UserPlus } from 'lucide-react';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth/client';
@@ -33,31 +33,22 @@ type AuthCopy = {
   description: string;
   submit: string;
   pending: string;
-  switchText: string;
-  switchHref: string;
-  switchLabel: string;
   icon: LucideIcon;
 };
 
 const content = {
   login: {
-    title: 'Sign in',
-    description: 'Sign in to view your projects, requests, and account.',
+    title: 'Welcome back',
+    description: 'Continue with your projects, requests, and team updates.',
     submit: 'Sign in',
     pending: 'Signing in',
-    switchText: 'Need an account?',
-    switchHref: '/signup',
-    switchLabel: 'Create one',
     icon: LogIn,
   },
   signup: {
-    title: 'Create account',
-    description: 'Start with your name, email, and password.',
+    title: 'Create your account',
+    description: 'Join your workspace and keep every project update in one place.',
     submit: 'Create account',
     pending: 'Creating account',
-    switchText: 'Already have an account?',
-    switchHref: '/login',
-    switchLabel: 'Sign in',
     icon: UserPlus,
   },
 } satisfies Record<AuthMode, AuthCopy>;
@@ -172,23 +163,29 @@ export function AuthForm({ mode }: AuthFormProps) {
           {/* Account email used for login/signup. */}
           <Field data-invalid={Boolean(errors.email)}>
             <FieldLabel htmlFor="email">Email</FieldLabel>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              className={AUTH_INPUT_CLASS_NAME}
-              placeholder="you@example.com"
-              aria-invalid={Boolean(errors.email)}
-              aria-describedby={errors.email ? 'email-error' : undefined}
-              {...register('email', {
-                setValueAs: (value) => String(value).trim(),
-                required: 'Enter your email.',
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Enter a valid email address.',
-                },
-              })}
-            />
+            <div className="relative">
+              <Mail
+                className="pointer-events-none absolute bottom-4 left-3.5 z-10 size-4 text-slate-500"
+                aria-hidden
+              />
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                className={`${AUTH_INPUT_CLASS_NAME} pl-10`}
+                placeholder="you@example.com"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'email-error' : undefined}
+                {...register('email', {
+                  setValueAs: (value) => String(value).trim(),
+                  required: 'Enter your email.',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Enter a valid email address.',
+                  },
+                })}
+              />
+            </div>
             <FieldError
               id="email-error"
               errors={[errors.email]}
@@ -197,7 +194,17 @@ export function AuthForm({ mode }: AuthFormProps) {
 
           {/* Password for current login or new account creation. */}
           <Field data-invalid={Boolean(errors.password)}>
-            <FieldLabel htmlFor="password">Password</FieldLabel>
+            <div className="flex items-center justify-between gap-4">
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              {mode === 'login' && (
+                <Link
+                  href="/forgot-password"
+                  className="text-sm font-semibold text-cyan-300 transition-colors hover:text-cyan-200"
+                >
+                  Forgot password?
+                </Link>
+              )}
+            </div>
             <PasswordInput
               id="password"
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
@@ -232,27 +239,6 @@ export function AuthForm({ mode }: AuthFormProps) {
           />
         </FieldGroup>
       </form>
-
-      <p className="mt-6 text-center text-sm text-slate-300">
-        {copy.switchText}{' '}
-        <Link
-          href={copy.switchHref}
-          className="font-semibold text-cyan-200 hover:text-cyan-100"
-        >
-          {copy.switchLabel}
-        </Link>
-      </p>
-
-      {mode === 'login' && (
-        <p className="mt-3 text-center text-sm">
-          <Link
-            href="/forgot-password"
-            className="font-semibold text-cyan-200 hover:text-cyan-100"
-          >
-            Forgot password?
-          </Link>
-        </p>
-      )}
     </AuthLayout>
   );
 }
