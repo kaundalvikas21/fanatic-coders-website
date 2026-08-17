@@ -46,19 +46,35 @@ function getUserIdentity(
   };
 }
 
-function UserIdentityRow({ user }: { user: UserIdentity }) {
+function UserIdentityRow({
+  user,
+  context = 'sidebar',
+}: {
+  user: UserIdentity;
+  context?: 'sidebar' | 'popover';
+}) {
+  const isPopover = context === 'popover';
+
   return (
     <>
       <UserAvatar
         name={user.name}
         email={user.email}
         image={user.image}
-        className="h-8 w-8 rounded-lg ring-1 ring-sidebar-border"
+        className={`h-8 w-8 rounded-lg ring-1 ${isPopover ? 'ring-border' : 'ring-sidebar-border'}`}
         fallbackClassName="rounded-lg"
       />
       <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium text-sidebar-foreground">{user.name}</span>
-        <span className="truncate text-xs text-sidebar-foreground/50">{user.email}</span>
+        <span
+          className={`truncate font-medium ${isPopover ? 'text-popover-foreground' : 'text-sidebar-foreground'}`}
+        >
+          {user.name}
+        </span>
+        <span
+          className={`truncate text-xs ${isPopover ? 'text-muted-foreground' : 'text-sidebar-foreground/60'}`}
+        >
+          {user.email}
+        </span>
       </div>
     </>
   );
@@ -82,30 +98,36 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="h-12 gap-2.5 rounded-lg border border-sidebar-border/70 bg-sidebar-accent/35 px-2.5 hover:border-sidebar-primary/25 hover:bg-sidebar-accent/70 data-[state=open]:border-sidebar-primary/30 data-[state=open]:bg-sidebar-primary/10 data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent"
+              className="h-12 cursor-pointer gap-2.5 rounded-lg border border-sidebar-border/70 bg-sidebar-accent/35 px-2.5 transition-[background-color,border-color,transform] duration-200 hover:-translate-y-px hover:border-sidebar-primary/25 hover:bg-sidebar-accent/70 data-[state=open]:translate-y-0 data-[state=open]:border-sidebar-primary/30 data-[state=open]:bg-sidebar-primary/10 data-[state=open]:text-sidebar-accent-foreground motion-reduce:transform-none group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent"
             >
               <UserIdentityRow user={user} />
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-lg shadow-background/20 ring-0"
             side={isMobile ? 'bottom' : 'right'}
             align="end"
-            sideOffset={4}
+            sideOffset={8}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <UserIdentityRow user={user} />
+            <DropdownMenuLabel className="p-0 font-normal text-popover-foreground">
+              <div className="flex items-center gap-2.5 px-2 py-2 text-left text-sm">
+                <UserIdentityRow
+                  user={user}
+                  context="popover"
+                />
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="my-1.5" />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer gap-2.5 px-2 py-2 transition-colors focus:bg-accent focus:text-accent-foreground">
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer gap-2.5 px-2 py-2 transition-colors focus:bg-accent focus:text-accent-foreground"
+              >
                 <Link href="/dashboard/settings">
                   <Settings />
                   Settings
@@ -115,6 +137,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               variant="destructive"
+              className="cursor-pointer gap-2.5 px-2 py-2 transition-colors"
               onSelect={handleSignOut}
             >
               <LogOut />
