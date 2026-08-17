@@ -6,6 +6,8 @@ import {
   ChartWidgetSkeleton,
   LeadPipelineWidget,
   ListWidgetSkeleton,
+  ProjectInsightsSkeleton,
+  ProjectInsightsWidget,
   RecentLeadsWidget,
   StatsWidgetSkeleton,
   TaskFlowWidget,
@@ -67,6 +69,10 @@ export default function AdminPage() {
           <TaskFlowWidget />
         </Suspense>
       </section>
+
+      <Suspense fallback={<ProjectInsightsSkeleton />}>
+        <ProjectInsightsWidget />
+      </Suspense>
 
       <section className="grid gap-4 xl:grid-cols-2">
         <Suspense fallback={<ListWidgetSkeleton />}>

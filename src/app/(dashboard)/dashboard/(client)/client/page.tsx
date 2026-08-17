@@ -1,11 +1,12 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { BriefcaseBusiness, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { WidgetCard } from '@/components/shared/widget-card';
-import { ClientProjectStats } from '@/modules/dashboard/components/client/ClientProjectStats';
-import { DashboardOverviewHeader } from '@/modules/dashboard';
-import { ClientProjectCard } from '@/modules/projects/components/ClientProjectCard';
-import { getProjectDeliverySummaries } from '@/modules/projects/data/delivery';
+import {
+  DashboardOverviewHeader,
+  ProjectInsightsSkeleton,
+  ProjectInsightsWidget,
+} from '@/modules/dashboard';
 
 export const metadata = {
   title: 'Client Dashboard | fanaticCoders',
@@ -13,8 +14,7 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function ClientDashboardPage() {
-  const projectSummaries = await getProjectDeliverySummaries();
+export default function ClientDashboardPage() {
   return (
     <div className="space-y-8">
       <DashboardOverviewHeader
@@ -42,35 +42,9 @@ export default async function ClientDashboardPage() {
         }
       />
 
-      <WidgetCard
-        icon={BriefcaseBusiness}
-        title="Delivery overview"
-        description="A summary of projects and task completion."
-        titleClassName="text-xl"
-      >
-        <ClientProjectStats summaries={projectSummaries} />
-      </WidgetCard>
-
-      {projectSummaries.length === 0 ? (
-        <WidgetCard
-          icon={ClipboardList}
-          title="No projects yet"
-          description="Your projects will appear here once delivery begins."
-        >
-          <Button asChild>
-            <Link href="/dashboard/services/new">Start a service request</Link>
-          </Button>
-        </WidgetCard>
-      ) : (
-        <section className="grid gap-4 xl:grid-cols-2">
-          {projectSummaries.map((summary) => (
-            <ClientProjectCard
-              key={summary.project.id}
-              summary={summary}
-            />
-          ))}
-        </section>
-      )}
+      <Suspense fallback={<ProjectInsightsSkeleton />}>
+        <ProjectInsightsWidget />
+      </Suspense>
     </div>
   );
 }

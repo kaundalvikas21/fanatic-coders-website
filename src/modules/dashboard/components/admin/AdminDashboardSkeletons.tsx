@@ -20,3 +20,7 @@ export function ChartWidgetSkeleton() {
 export function ListWidgetSkeleton() {
   return <Skeleton className="h-80 rounded-xl" />;
 }
+
+export function ProjectInsightsSkeleton() {
+  return <Skeleton className="h-96 rounded-xl" />;
+}

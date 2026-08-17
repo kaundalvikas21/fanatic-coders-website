@@ -57,6 +57,8 @@ export type {
   AdminDashboardRecentLeadsResponse,
   AdminDashboardTaskDistribution,
   AdminDashboardTaskDistributionResponse,
+  DashboardCurrentProjects,
+  DashboardCurrentProjectsResponse,
 } from './dashboard';
 export type {
   GetInvitationsResponse,

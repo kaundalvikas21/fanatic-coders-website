@@ -58,6 +58,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/dashboard/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch current dashboard projects */
+        get: operations["getDashboardCurrentProjects"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/dashboard/leads": {
         parameters: {
             query?: never;
@@ -604,6 +621,49 @@ export interface components {
             totalServiceRequests: number;
             /** @example 4 */
             openServiceRequests: number;
+        };
+        DashboardCurrentProjects: {
+            stats: {
+                /** @example 4 */
+                active: number;
+                /** @example 1 */
+                onHold: number;
+                /** @example 68 */
+                averageProgress: number;
+                /** @example 3 */
+                dueThisMonth: number;
+            };
+            projects: {
+                /** @example clx0000000000000000000010 */
+                id: string;
+                /** @example FCOP Client Portal */
+                name: string;
+                /** @example Fanatic Coders */
+                clientName: string;
+                status: components["schemas"]["ProjectStatus"];
+                /**
+                 * Format: date-time
+                 * @example 2026-08-30T00:00:00.000Z
+                 */
+                endDate: string | null;
+                /** @example 6 */
+                completedTasks: number;
+                /** @example 8 */
+                totalTasks: number;
+                /** @example 75 */
+                progressPercent: number;
+                nextTask: {
+                    /** @example clx0000000000000000000030 */
+                    id: string;
+                    /** @example Review responsive layouts */
+                    title: string;
+                    /**
+                     * Format: date-time
+                     * @example 2026-08-20T00:00:00.000Z
+                     */
+                    dueDate: string | null;
+                } | null;
+            }[];
         };
         LeadStatusDistribution: {
             /** @example 0 */
@@ -1606,6 +1666,30 @@ export interface operations {
             403: components["responses"]["Forbidden"];
         };
     };
+    getDashboardCurrentProjects: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetch current dashboard projects successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"] & {
+                        data: components["schemas"]["DashboardCurrentProjects"];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
     getAdminDashboardLeadDistribution: {
         parameters: {
             query?: never;
@@ -2153,7 +2237,14 @@ export interface operations {
     };
     getServiceRequests: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Filter management results by client name or email. */
+                client?: string;
+                /** @description Filter by service request status. */
+                status?: components["schemas"]["ServiceRequestStatus"];
+                /** @description Filter by requested service. */
+                serviceType?: components["schemas"]["ServiceInterest"];
+            };
             header?: never;
             path?: never;
             cookie?: never;
