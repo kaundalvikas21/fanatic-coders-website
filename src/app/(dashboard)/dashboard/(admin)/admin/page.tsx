@@ -15,6 +15,8 @@ import {
   DashboardOverviewHeader,
 } from '@/modules/dashboard';
 import { Button } from '@/components/ui/button';
+import { DashboardProjectsSection, DashboardProjectsSectionSkeleton } from '@/modules/projects';
+import type { ProjectsSearchParams } from '@/modules/projects/config/search-params';
 import { formatCurrentDate } from '@/utils/date';
 
 export const metadata = {
@@ -23,7 +25,11 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminPage() {
+export default function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<ProjectsSearchParams>;
+}) {
   const today = formatCurrentDate();
 
   return (
@@ -72,6 +78,10 @@ export default function AdminPage() {
 
       <Suspense fallback={<ProjectInsightsSkeleton />}>
         <ProjectInsightsWidget />
+      </Suspense>
+
+      <Suspense fallback={<DashboardProjectsSectionSkeleton />}>
+        <DashboardProjectsSection searchParams={searchParams} />
       </Suspense>
 
       <section className="grid gap-4 xl:grid-cols-2">

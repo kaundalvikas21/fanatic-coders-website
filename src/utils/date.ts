@@ -15,7 +15,9 @@ export function formatDate(value?: Date | string): string {
     return 'Unknown';
   }
 
-  return format(new Date(value), 'PP');
+  const date = new Date(value);
+
+  return isValid(date) ? format(date, 'PP') : 'Unknown';
 }
 
 /** Formats the current date for dashboard and page-level context. */

@@ -7,6 +7,8 @@ import {
   ProjectInsightsSkeleton,
   ProjectInsightsWidget,
 } from '@/modules/dashboard';
+import { DashboardProjectsSection, DashboardProjectsSectionSkeleton } from '@/modules/projects';
+import type { ProjectsSearchParams } from '@/modules/projects/config/search-params';
 
 export const metadata = {
   title: 'Client Dashboard | fanaticCoders',
@@ -14,7 +16,11 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default function ClientDashboardPage() {
+export default function ClientDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<ProjectsSearchParams>;
+}) {
   return (
     <div className="space-y-8">
       <DashboardOverviewHeader
@@ -44,6 +50,10 @@ export default function ClientDashboardPage() {
 
       <Suspense fallback={<ProjectInsightsSkeleton />}>
         <ProjectInsightsWidget />
+      </Suspense>
+
+      <Suspense fallback={<DashboardProjectsSectionSkeleton />}>
+        <DashboardProjectsSection searchParams={searchParams} />
       </Suspense>
     </div>
   );

@@ -8,24 +8,28 @@ export type ProjectDeliverySummary = {
   progressPercent: number;
 };
 
-export function getProjectTaskProgress(tasks: Task[]) {
-  const completedTasks = tasks.filter((task) => task.status === 'DONE').length;
+export function getProjectTaskProgress(tasks: Task[] | null | undefined) {
+  const safeTasks = tasks ?? [];
+  const completedTasks = safeTasks.filter((task) => task?.status === 'DONE').length;
 
   return {
     completedTasks,
-    openTasks: tasks.length - completedTasks,
-    progressPercent: tasks.length === 0 ? 0 : Math.round((completedTasks / tasks.length) * 100),
+    openTasks: safeTasks.length - completedTasks,
+    progressPercent:
+      safeTasks.length === 0 ? 0 : Math.round((completedTasks / safeTasks.length) * 100),
   };
 }
 
 export function createProjectDeliverySummary(
   project: Project,
-  tasks: Task[],
+  tasks: Task[] | null | undefined,
 ): ProjectDeliverySummary {
+  const safeTasks = tasks ?? [];
+
   return {
     project,
-    tasks,
-    ...getProjectTaskProgress(tasks),
+    tasks: safeTasks,
+    ...getProjectTaskProgress(safeTasks),
   };
 }
 

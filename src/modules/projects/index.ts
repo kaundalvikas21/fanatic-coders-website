@@ -1,5 +1,11 @@
 export { CreateProjectFromServiceRequestForm } from './components/CreateProjectFromServiceRequestForm';
 export { ClientProjectCard } from './components/ClientProjectCard';
+export {
+  DashboardProjectsSection,
+  DashboardProjectsSectionSkeleton,
+} from './components/DashboardProjectsSection';
+export { FilteredProjectsLoader } from './components/FilteredProjectsLoader';
+export { FilteredProjectsTable } from './components/FilteredProjectsTable';
 export { ProjectActionsCard } from './components/ProjectActionsCard';
 export { ProjectConversation } from './components/ProjectConversation';
 export { ProjectInfoCard } from './components/ProjectInfoCard';
