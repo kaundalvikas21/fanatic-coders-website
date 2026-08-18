@@ -1,6 +1,6 @@
 import { ImageIcon, UserRound } from 'lucide-react';
-import { ProfileAvatar } from '@/components/dashboard/ProfileAvatar';
-import { ProfileDetails } from '@/components/dashboard/ProfileDetails';
+import { ProfileAvatar } from '@/components/dashboard/profile/ProfileAvatar';
+import { ProfileDetails } from '@/components/dashboard/profile/ProfileDetails';
 import { WidgetCard } from '@/components/shared/widget-card';
 
 export const metadata = {
@@ -14,7 +14,7 @@ export default function ProfileSettingsPage() {
         icon={ImageIcon}
         title="Profile photo"
         description="Choose the image shown across your workspace."
-        className="w-full max-w-3xl"
+        className="w-full "
       >
         <ProfileAvatar />
       </WidgetCard>
@@ -23,7 +23,7 @@ export default function ProfileSettingsPage() {
         icon={UserRound}
         title="Personal details"
         description="Update your display name and review your account email."
-        className="w-full max-w-3xl"
+        className="w-full "
       >
         <ProfileDetails />
       </WidgetCard>
