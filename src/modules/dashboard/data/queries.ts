@@ -1,5 +1,6 @@
 'use server';
 
+import { cache } from 'react';
 import { authApi } from '@/lib/axios/client';
 import { getApiError, unwrap } from '@/lib/axios/utils';
 import type {
@@ -8,6 +9,7 @@ import type {
   AdminDashboardOverviewResponse,
   AdminDashboardRecentLeadsResponse,
   AdminDashboardTaskDistributionResponse,
+  DashboardCurrentProjectsResponse,
   Response,
 } from '@/types';
 
@@ -56,4 +58,13 @@ export async function getAdminDashboardAttentionTasks(): Promise<AdminDashboardA
     '/api/v1/dashboard/attention/tasks',
     'ADMIN_DASHBOARD_ATTENTION_TASKS_FAILED',
   );
+}
+
+const getCachedDashboardCurrentProjects = cache(
+  async (): Promise<DashboardCurrentProjectsResponse> =>
+    await getDashboardData('/api/v1/dashboard/projects', 'DASHBOARD_CURRENT_PROJECTS_FAILED'),
+);
+
+export async function getDashboardCurrentProjects(): Promise<DashboardCurrentProjectsResponse> {
+  return await getCachedDashboardCurrentProjects();
 }

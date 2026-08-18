@@ -27,6 +27,7 @@ type ActionSheetProps = {
   description?: string;
   children: ReactNode;
   onOpenChange?: (open: boolean) => void;
+  contentClassName?: string;
 };
 
 export function ActionSheet({
@@ -35,6 +36,7 @@ export function ActionSheet({
   description,
   children,
   onOpenChange,
+  contentClassName,
 }: ActionSheetProps) {
   const isClient = useClient();
   const [open, setOpen] = useState(false);
@@ -62,7 +64,7 @@ export function ActionSheet({
         }}
       >
         <SheetTrigger asChild>{trigger}</SheetTrigger>
-        <SheetContent>
+        <SheetContent className={contentClassName}>
           <SheetHeader>
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}

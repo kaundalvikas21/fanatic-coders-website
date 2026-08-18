@@ -31,13 +31,17 @@ function getOptionLabel<TValue extends string>(
 }
 
 function getAssigneeLabel(task: Task) {
-  if (task.assignees.length === 0) {
+  const assignees = task.assignees ?? [];
+
+  if (assignees.length === 0) {
     return 'Unassigned';
   }
 
-  return task.assignees
-    .map((assignee) => assignee.member.user.name || assignee.member.user.email)
-    .join(', ');
+  const labels = assignees
+    .map((assignee) => assignee?.member?.user?.name || assignee?.member?.user?.email)
+    .filter((label): label is string => Boolean(label));
+
+  return labels.length > 0 ? labels.join(', ') : 'Assigned member';
 }
 
 export function ProjectTasksCard({
@@ -46,6 +50,7 @@ export function ProjectTasksCard({
   assignableMembers = [],
 }: ProjectTasksCardProps) {
   const permissions = useTaskPermissions();
+  const safeTasks = tasks ?? [];
 
   return (
     <WidgetCard
@@ -75,13 +80,13 @@ export function ProjectTasksCard({
         ) : undefined
       }
     >
-      {tasks.length === 0 ? (
+      {safeTasks.length === 0 ? (
         <p className="text-sm leading-6 text-muted-foreground">
           No tasks yet. Create the first delivery task for this project.
         </p>
       ) : (
         <div className="grid gap-3">
-          {tasks.map((task) => (
+          {safeTasks.map((task) => (
             <article
               key={task.id}
               className="rounded-lg border p-4"

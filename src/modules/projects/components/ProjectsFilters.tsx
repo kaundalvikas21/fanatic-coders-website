@@ -9,6 +9,7 @@ import { WidgetCard } from '@/components/shared/widget-card';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import {
   PROJECT_STATUSES,
   PROJECT_STATUS_OPTIONS,
@@ -35,7 +36,7 @@ const serviceOptions = [
   ...SERVICE_INTEREST_OPTIONS,
 ] satisfies SelectOption[];
 
-export function ProjectsFilters() {
+export function ProjectsFilters({ showServiceFilter = true }: { showServiceFilter?: boolean }) {
   const [filters, setFilters] = useQueryStates(projectFiltersParsers, {
     shallow: false,
   });
@@ -81,7 +82,14 @@ export function ProjectsFilters() {
 
   return (
     <WidgetCard>
-      <FieldGroup className="grid gap-4 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
+      <FieldGroup
+        className={cn(
+          'grid gap-4 md:items-end',
+          showServiceFilter
+            ? 'md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto]'
+            : 'md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_auto]',
+        )}
+      >
         <Field>
           <FieldLabel htmlFor="projects-name">Project name</FieldLabel>
           <Input
@@ -105,16 +113,18 @@ export function ProjectsFilters() {
           />
         </Field>
 
-        <Field>
-          <FieldLabel>Service</FieldLabel>
-          <SelectField
-            id="projects-service"
-            value={filters.serviceType ?? ALL_FILTERS_VALUE}
-            options={serviceOptions}
-            onChange={handleServiceTypeChange}
-            ariaLabel="Filter projects by service"
-          />
-        </Field>
+        {showServiceFilter && (
+          <Field>
+            <FieldLabel>Service</FieldLabel>
+            <SelectField
+              id="projects-service"
+              value={filters.serviceType ?? ALL_FILTERS_VALUE}
+              options={serviceOptions}
+              onChange={handleServiceTypeChange}
+              ariaLabel="Filter projects by service"
+            />
+          </Field>
+        )}
 
         <Button
           type="button"

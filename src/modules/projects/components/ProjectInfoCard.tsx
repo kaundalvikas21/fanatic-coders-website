@@ -28,7 +28,7 @@ export function ProjectInfoCard({ project }: ProjectInfoCardProps) {
         <div className="flex items-center justify-between gap-4">
           <dt className="text-muted-foreground">Service</dt>
           <dd className="text-right font-medium">
-            {SERVICE_REQUEST_SERVICE_LABELS[project.service]}
+            {SERVICE_REQUEST_SERVICE_LABELS[project.service] ?? 'Not specified'}
           </dd>
         </div>
         <div className="flex items-center justify-between gap-4">

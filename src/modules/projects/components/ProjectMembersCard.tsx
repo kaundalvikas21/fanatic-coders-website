@@ -39,14 +39,14 @@ export function ProjectMembersCard({ project }: ProjectMembersCardProps) {
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">
-                    {user?.name || user?.email || assignment.memberId}
+                    {user?.name || user?.email || assignment.memberId || 'Assigned member'}
                   </p>
                   {user?.email && (
                     <p className="truncate text-xs text-muted-foreground">{user.email}</p>
                   )}
                 </div>
                 <Badge variant={assignment.role === 'MANAGER' ? 'secondary' : 'outline'}>
-                  {PROJECT_MEMBER_ROLE_LABELS[assignment.role]}
+                  {PROJECT_MEMBER_ROLE_LABELS[assignment.role] ?? 'Member'}
                 </Badge>
               </div>
             );
