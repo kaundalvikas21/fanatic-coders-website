@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.8.0...v0.9.0) (2026-08-18)
+
+### Features
+
+- **dashboard:** display project related status to overview and insights ([d3a954f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d3a954f6ecabc695349390132c42995ecc0ffc90))
+- **filter:** display necessary filter field for client and remove others ([8df40ea](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8df40ea3ec998c4d507eb848939e264a85fbea3f))
+- **filter:** display project filter on dashbaord page ([f6daf44](https://github.com/kaundalvikas21/fanatic-coders-website/commit/f6daf4468f7c83e5151ea17c4ad6851aaee0b0a0))
+- **navigation:** added button for quick back in services form ([8d6f20e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8d6f20e3c69cea63e4de868ed920b4122c5d648d))
+- **notifications:** added notification component for displaying notifications also ([456eae3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/456eae3defdfa1bd4173e829dcf2307642ebc291))
+- **PeageHeader:** added icon support for PageHeader component ([b8c3835](https://github.com/kaundalvikas21/fanatic-coders-website/commit/b8c383505ea0d58ec30ace8f11e057d80eb1ac9b))
+- **service:** added filter feature in services ([ec0981a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ec0981a82deb3e972b38f0e868e508890990353b))
+- **settings:** enable settings page ([ef0de73](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ef0de73b970467c7c8b523b33c6230c3d47c899a))
+- **shadcn:** added tab compoents for managing tab based data ([93ff4f4](https://github.com/kaundalvikas21/fanatic-coders-website/commit/93ff4f495989236b380a9814d7354ea4421f2bee))
+
+### Bug Fixes
+
+- **cta:** added meanig full cta ([967800e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/967800e223c7a6a823b5fcd653f986c4bea0f909))
+- **invitation:** fix name of button ([66c81cf](https://github.com/kaundalvikas21/fanatic-coders-website/commit/66c81cf1b776e6a2fe82f2cedb2f15c5b3a5047a))
+- **navigation:** revmove services navgaiton for sidebar for new request ([a3c47c1](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a3c47c11d483d1e29ec465984ef095f4ab4277f2))
+- **permissions:** created hook based approach for managing tasks permisssions ([281dbe9](https://github.com/kaundalvikas21/fanatic-coders-website/commit/281dbe96cec80b635bc003d1f4ecbdca11422fb0))
+- **validation:** added validatoin in form for collecting data ([7b8619d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/7b8619ddfc984eed8282e2bb0f96c75b5f350599))
+
+### Code Refactoring
+
+- **dashboar/sidebar:** redesign dashboard page and display projects and analytics also ([7ed0e9e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/7ed0e9e3040f31ca69aa53deb371c1533bbda693))
+- **profile:** display profile compoennt inside settings ([c179934](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c179934ac154fdacb33d37adb90f9e76f8f822c1))
+- **service:** change acknowledgement message from service request after submission ([dd5b449](https://github.com/kaundalvikas21/fanatic-coders-website/commit/dd5b44955e767c9e18f6af9e79056c72ef70b272))
+- **service:** redesign form ui enhance it more user rich ([1272529](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1272529ff9ed260e5143fb05d9a3b3bc4d351ade))
+- **ui:** fix style and token for sidebar account dropdown ([1bfef05](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1bfef05ec3c44b48e4d68f1bf78652bf77ffe739))
+- **ui:** redesign ui part ([f3dcfaf](https://github.com/kaundalvikas21/fanatic-coders-website/commit/f3dcfaff83b3dd19ee69f2f94400c423df4117e5))
+
 ## [0.8.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.7.0...v0.8.0) (2026-08-12)
 
 ### Features
