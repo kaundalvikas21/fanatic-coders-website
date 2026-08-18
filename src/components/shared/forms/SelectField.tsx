@@ -26,6 +26,7 @@ type SelectFieldProps = {
   error?: string;
   className?: string;
   disabled?: boolean;
+  size?: 'sm' | 'default' | 'lg';
 };
 
 export function SelectField({
@@ -38,6 +39,7 @@ export function SelectField({
   error,
   className,
   disabled,
+  size,
 }: SelectFieldProps) {
   return (
     <Select
@@ -50,6 +52,7 @@ export function SelectField({
         aria-label={ariaLabel}
         aria-invalid={Boolean(error)}
         disabled={disabled}
+        size={size}
         className={cn('w-full', className)}
       >
         <SelectValue placeholder={placeholder} />
