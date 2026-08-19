@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
-import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
+import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import {
   getServiceRequestPermissions,
@@ -22,7 +22,6 @@ export default async function ServicesLayout({ children }: { children: ReactNode
               ? 'Review client service requests and track their progress.'
               : 'Choose a service or track your submitted requests.'
           }
-          showBackButton
           action={
             permissions.canCreate
               ? { label: 'New Request', href: '/dashboard/services/new', icon: Plus }
@@ -42,8 +41,7 @@ export default async function ServicesLayout({ children }: { children: ReactNode
           <ServiceCatalog />
         </WidgetCard>
       )}
-      <ServiceRequestFilters />
-      {children}
+      <FilterLayout filters={<ServiceRequestFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );
 }

@@ -1,7 +1,11 @@
 import { WidgetCard } from '@/components/shared/widget-card';
 import { Badge } from '@/components/ui/badge';
 import { SERVICE_REQUEST_STATUS_LABELS } from '@/modules/service-requests/config/labels';
-import { SERVICE_REQUEST_STATUS_BADGE_VARIANTS, type ServiceRequest } from '@/types';
+import {
+  SERVICE_REQUEST_STATUS_BADGE_VARIANTS,
+  SERVICE_REQUEST_STATUS_COLORS,
+  type ServiceRequest,
+} from '@/types';
 
 type ServiceRequestStatusCardProps = {
   request: ServiceRequest;
@@ -15,7 +19,10 @@ export function ServiceRequestStatusCard({ request }: ServiceRequestStatusCardPr
       titleClassName="text-xl font-semibold"
       descriptionClassName="text-sm"
     >
-      <Badge variant={SERVICE_REQUEST_STATUS_BADGE_VARIANTS[request.status]}>
+      <Badge
+        variant={SERVICE_REQUEST_STATUS_BADGE_VARIANTS[request.status]}
+        color={SERVICE_REQUEST_STATUS_COLORS[request.status]}
+      >
         {SERVICE_REQUEST_STATUS_LABELS[request.status]}
       </Badge>
     </WidgetCard>

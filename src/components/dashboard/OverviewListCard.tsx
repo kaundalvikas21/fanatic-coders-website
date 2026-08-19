@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { LucideIcon } from 'lucide-react';
 
 import { WidgetCard } from '@/components/shared/widget-card';
 
@@ -11,6 +12,7 @@ export type OverviewListItem = {
 };
 
 type OverviewListCardProps = {
+  icon?: LucideIcon;
   title: string;
   description: string;
   emptyMessage: string;
@@ -18,6 +20,7 @@ type OverviewListCardProps = {
 };
 
 export function OverviewListCard({
+  icon: Icon,
   title,
   description,
   emptyMessage,
@@ -25,6 +28,7 @@ export function OverviewListCard({
 }: OverviewListCardProps) {
   return (
     <WidgetCard
+      icon={Icon}
       title={title}
       description={description}
     >

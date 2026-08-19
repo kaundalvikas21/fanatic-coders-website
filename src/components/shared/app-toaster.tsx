@@ -9,7 +9,7 @@ export function AppToaster(props: ToasterProps) {
   return (
     <Toaster
       theme={theme as ToasterProps['theme']}
-      position="bottom-right"
+      position="bottom-center"
       richColors
       closeButton
       {...props}

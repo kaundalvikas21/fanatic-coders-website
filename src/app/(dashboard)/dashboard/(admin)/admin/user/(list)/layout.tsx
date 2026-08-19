@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
+import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import { UsersFilters } from '@/components/dashboard/users/UsersFilters';
 
@@ -14,8 +14,7 @@ export default function AdminUsersLayout({ children }: { children: ReactNode }) 
         />
       }
     >
-      <UsersFilters />
-      {children}
+      <FilterLayout filters={<UsersFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );
 }

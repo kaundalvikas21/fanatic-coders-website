@@ -3,7 +3,9 @@ import { forwardRef, type ComponentPropsWithoutRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
-type InputFieldProps = ComponentPropsWithoutRef<'input'>;
+type InputFieldProps = Omit<ComponentPropsWithoutRef<'input'>, 'size'> & {
+  size?: 'default' | 'lg';
+};
 
 export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function InputField(
   { className, ...props },

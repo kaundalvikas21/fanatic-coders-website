@@ -9,6 +9,7 @@ import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import { updateProjectById } from '@/modules/projects/data/mutations';
 import {
   PROJECT_STATUS_BADGE_VARIANTS,
+  PROJECT_STATUS_COLORS,
   PROJECT_STATUS_OPTIONS,
   type Project,
   type ProjectStatus,
@@ -77,6 +78,7 @@ export function ProjectStatusForm({ projectId, initialStatus }: ProjectStatusFor
         render={(status) => (
           <Badge
             variant={PROJECT_STATUS_BADGE_VARIANTS[status]}
+            color={PROJECT_STATUS_COLORS[status]}
             className="w-fit"
           >
             {PROJECT_STATUS_LABELS[status]}

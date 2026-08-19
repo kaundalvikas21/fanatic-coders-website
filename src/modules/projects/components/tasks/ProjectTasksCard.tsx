@@ -6,7 +6,7 @@ import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet
 import type { Task, UserListItem } from '@/types';
 import { TaskCreateForm } from './TaskCreateForm';
 import { TaskKanbanBoard } from './TaskKanbanBoard';
-import { useTaskPermissions } from '../hooks/use-task-permissions';
+import { useTaskPermissions } from '../../hooks/use-task-permissions';
 
 type ProjectTasksCardProps = {
   projectId?: string;

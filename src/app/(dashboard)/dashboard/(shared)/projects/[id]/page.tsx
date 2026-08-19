@@ -13,7 +13,7 @@ import {
   createTaskPermissions,
 } from '@/modules/projects';
 import { getProjectById } from '@/modules/projects/data/queries';
-import { getProjectTasks } from '@/modules/projects/data/tasks';
+import { getProjectTasks } from '@/modules/projects/data/tasks/queries';
 import { getCurrentAccess } from '@/lib/auth/current-access';
 import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
 import type { OrganizationMemberRole, Project, Task } from '@/types';

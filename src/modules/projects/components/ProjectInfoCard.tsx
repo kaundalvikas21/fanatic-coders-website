@@ -4,7 +4,7 @@ import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/confi
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import { formatDate } from '@/utils/date';
 import { formatMoney } from '@/utils/money';
-import { PROJECT_STATUS_BADGE_VARIANTS, type Project } from '@/types';
+import { PROJECT_STATUS_BADGE_VARIANTS, PROJECT_STATUS_COLORS, type Project } from '@/types';
 
 type ProjectInfoCardProps = {
   project: Project;
@@ -20,7 +20,10 @@ export function ProjectInfoCard({ project }: ProjectInfoCardProps) {
         <div className="flex items-center justify-between gap-4">
           <dt className="text-muted-foreground">Status</dt>
           <dd>
-            <Badge variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}>
+            <Badge
+              variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}
+              color={PROJECT_STATUS_COLORS[project.status]}
+            >
               {PROJECT_STATUS_LABELS[project.status]}
             </Badge>
           </dd>

@@ -5,9 +5,9 @@ import { useDebounce } from '@uidotdev/usehooks';
 import { RotateCcw } from 'lucide-react';
 import { parseAsInteger, parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { SelectField, type SelectOption } from '@/components/shared/forms/SelectField';
-import { WidgetCard } from '@/components/shared/widget-card';
+import { FilterBar } from '@/components/shared/filter-bar';
 import { Button } from '@/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import {
@@ -81,7 +81,7 @@ export function ProjectsFilters({ showServiceFilter = true }: { showServiceFilte
   }
 
   return (
-    <WidgetCard>
+    <FilterBar>
       <FieldGroup
         className={cn(
           'grid gap-4 md:items-end',
@@ -91,37 +91,38 @@ export function ProjectsFilters({ showServiceFilter = true }: { showServiceFilte
         )}
       >
         <Field>
-          <FieldLabel htmlFor="projects-name">Project name</FieldLabel>
           <Input
             id="projects-name"
             type="search"
             value={nameInput}
             onChange={(event) => handleNameChange(event.target.value)}
-            placeholder="Search by name"
+            placeholder="Search projects by name"
+            aria-label="Search projects by name"
+            size="lg"
             autoComplete="off"
           />
         </Field>
 
         <Field>
-          <FieldLabel>Status</FieldLabel>
           <SelectField
             id="projects-status"
             value={filters.status ?? ALL_FILTERS_VALUE}
             options={statusOptions}
             onChange={handleStatusChange}
             ariaLabel="Filter projects by status"
+            size="lg"
           />
         </Field>
 
         {showServiceFilter && (
           <Field>
-            <FieldLabel>Service</FieldLabel>
             <SelectField
               id="projects-service"
               value={filters.serviceType ?? ALL_FILTERS_VALUE}
               options={serviceOptions}
               onChange={handleServiceTypeChange}
               ariaLabel="Filter projects by service"
+              size="lg"
             />
           </Field>
         )}
@@ -136,6 +137,6 @@ export function ProjectsFilters({ showServiceFilter = true }: { showServiceFilte
           Reset
         </Button>
       </FieldGroup>
-    </WidgetCard>
+    </FilterBar>
   );
 }

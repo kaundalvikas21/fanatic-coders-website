@@ -1,3 +1,4 @@
+import { Inbox } from 'lucide-react';
 import { OverviewListCard } from '@/components/dashboard/OverviewListCard';
 import { ErrorState } from '@/components/shared/error-state';
 import { getAdminDashboardRecentLeads } from '@/modules/dashboard/data/queries';
@@ -16,6 +17,7 @@ export async function RecentLeadsWidget() {
 
   return response.success ? (
     <OverviewListCard
+      icon={Inbox}
       title="Recent leads"
       description="Latest contact requests entering the pipeline."
       emptyMessage="No leads captured yet."

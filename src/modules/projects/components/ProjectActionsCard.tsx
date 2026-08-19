@@ -1,6 +1,6 @@
 import { WidgetCard } from '@/components/shared/widget-card';
 import type { Project } from '@/types';
-import { ProjectStatusForm } from './ProjectStatusForm';
+import { ProjectStatusForm } from './form/ProjectStatusForm';
 
 type ProjectActionsCardProps = {
   project: Project;

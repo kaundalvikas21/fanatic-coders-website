@@ -21,12 +21,16 @@ export function SettingsNavigation() {
 
   return (
     <Tabs value={activeTab}>
-      <TabsList aria-label="Settings sections">
+      <TabsList
+        aria-label="Settings sections"
+        className="gap-1 border-b-0"
+      >
         {SETTINGS_TABS.map(({ value, label, href, Icon }) => (
           <TabsTrigger
             key={value}
             value={value}
             asChild
+            className="rounded-md px-3 data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground data-[state=active]:after:hidden"
           >
             <Link href={href}>
               <Icon className="size-4" />

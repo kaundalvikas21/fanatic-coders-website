@@ -31,8 +31,6 @@ export default async function TasksLayout({ children }: { children: ReactNode })
       <PageHeader
         title="Tasks"
         description="Review and manage delivery tasks across projects."
-        showBackButton
-        backLabel="Go back"
         actionSlot={
           <Suspense fallback={null}>
             <TasksProjectToolbar

@@ -1,3 +1,4 @@
+import { ListChecks } from 'lucide-react';
 import { OverviewListCard } from '@/components/dashboard/OverviewListCard';
 import { ErrorState } from '@/components/shared/error-state';
 import { getAdminDashboardAttentionTasks } from '@/modules/dashboard/data/queries';
@@ -16,6 +17,7 @@ export async function AttentionTasksWidget() {
 
   return response.success ? (
     <OverviewListCard
+      icon={ListChecks}
       title="Needs attention"
       description="Urgent or overdue delivery tasks."
       emptyMessage="No urgent or overdue tasks."

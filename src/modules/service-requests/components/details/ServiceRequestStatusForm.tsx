@@ -8,6 +8,7 @@ import { SERVICE_REQUEST_STATUS_LABELS } from '@/modules/service-requests/config
 import { updateServiceRequestById } from '@/modules/service-requests/data/mutations';
 import {
   SERVICE_REQUEST_STATUS_BADGE_VARIANTS,
+  SERVICE_REQUEST_STATUS_COLORS,
   SERVICE_REQUEST_STATUS_OPTIONS,
   type ServiceRequest,
   type ServiceRequestStatus,
@@ -78,6 +79,7 @@ export function ServiceRequestStatusForm({
         render={(status) => (
           <Badge
             variant={SERVICE_REQUEST_STATUS_BADGE_VARIANTS[status]}
+            color={SERVICE_REQUEST_STATUS_COLORS[status]}
             className="w-fit"
           >
             {SERVICE_REQUEST_STATUS_LABELS[status]}

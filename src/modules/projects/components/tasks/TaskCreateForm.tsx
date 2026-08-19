@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { createProjectTask } from '@/modules/projects/data/tasks';
+import { createProjectTask } from '@/modules/projects/data/tasks/mutations';
 import type { CreateTaskRequest, TaskPriority, UserListItem } from '@/types';
 import { TASK_PRIORITY_OPTIONS } from '@/types';
 import { formatDateInputValue, startOfToday } from '@/utils/date';

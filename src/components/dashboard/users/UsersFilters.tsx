@@ -5,10 +5,10 @@ import { useDebounce } from '@uidotdev/usehooks';
 import { RotateCcw } from 'lucide-react';
 import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { Button } from '@/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { SelectField, type SelectOption } from '@/components/shared/forms/SelectField';
-import { WidgetCard } from '@/components/shared/widget-card';
+import { FilterBar } from '@/components/shared/filter-bar';
 import { USER_SORT_FIELDS, type UserSortField } from '@/types';
 
 const DEFAULT_FILTERS = {
@@ -69,37 +69,38 @@ export function UsersFilters() {
   }
 
   return (
-    <WidgetCard>
+    <FilterBar>
       <FieldGroup className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
         <Field>
-          <FieldLabel>Sort by</FieldLabel>
           <SelectField
             id="users-sort-by"
             value={filters.sortBy}
             options={sortByOptions}
             onChange={handleSortByChange}
             ariaLabel="Members sort field"
+            size="lg"
           />
         </Field>
 
         <Field>
-          <FieldLabel>Sort direction</FieldLabel>
           <SelectField
             id="users-sort-direction"
             value={filters.sortDirection}
             options={sortDirectionOptions}
             onChange={handleSortDirectionChange}
             ariaLabel="Members sort direction"
+            size="lg"
           />
         </Field>
 
         <Field>
-          <FieldLabel>Name</FieldLabel>
           <Input
             type="search"
             value={nameInput}
             onChange={(event) => handleNameChange(event.target.value)}
-            placeholder="Search by name"
+            placeholder="Search members by name"
+            aria-label="Search members by name"
+            size="lg"
           />
         </Field>
 
@@ -113,6 +114,6 @@ export function UsersFilters() {
           Reset
         </Button>
       </FieldGroup>
-    </WidgetCard>
+    </FilterBar>
   );
 }

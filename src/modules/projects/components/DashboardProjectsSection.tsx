@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
 
+import { FilterLayout } from '@/components/layout/dashboard/lists-layout';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   parseProjectsSearchParams,
   type ProjectsSearchParams,
 } from '@/modules/projects/config/search-params';
-import { FilteredProjectsLoader } from './FilteredProjectsLoader';
-import { ProjectsFilters } from './ProjectsFilters';
+import { FilteredProjectsLoader } from './list/FilteredProjectsLoader';
+import { ProjectsFilters } from './list/ProjectsFilters';
 
 export function DashboardProjectsSectionSkeleton() {
   return (
@@ -29,30 +30,13 @@ export async function DashboardProjectsSection({
   };
 
   return (
-    <section
-      className="space-y-4"
-      aria-labelledby="filtered-projects-title"
-    >
-      <header>
-        <h2
-          id="filtered-projects-title"
-          className="text-lg font-semibold tracking-[-0.01em]"
-        >
-          Projects
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Filter projects and review status, team, and delivery progress.
-        </p>
-      </header>
-
-      <ProjectsFilters showServiceFilter={false} />
-
+    <FilterLayout filters={<ProjectsFilters showServiceFilter={false} />}>
       <Suspense
         key={JSON.stringify(filters)}
         fallback={<Skeleton className="h-80 rounded-xl" />}
       >
         <FilteredProjectsLoader filters={filters} />
       </Suspense>
-    </section>
+    </FilterLayout>
   );
 }

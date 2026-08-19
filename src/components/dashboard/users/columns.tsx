@@ -2,18 +2,10 @@
 
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Eye, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, Eye } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import type { UserListItem } from '@/types';
 import { formatDate } from '@/utils/date';
 import { getInitials } from '@/utils/string';
@@ -97,34 +89,20 @@ export const userColumns: ColumnDef<UserListItem>[] = [
 
       return (
         <div className="flex justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={`Open actions for ${member.user.name}`}
-              >
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="w-40"
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+          >
+            <Link
+              href={`/dashboard/admin/user/${member.id}`}
+              prefetch={false}
+              aria-label={`View details for ${member.user.name}`}
+              title={`View details for ${member.user.name}`}
             >
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
-                  <Link
-                    href={`/dashboard/admin/user/${member.id}`}
-                    prefetch={false}
-                  >
-                    <Eye />
-                    View details
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <Eye />
+            </Link>
+          </Button>
         </div>
       );
     },

@@ -4,7 +4,7 @@ import { ErrorState } from '@/components/shared/error-state';
 import { Pagination } from '@/components/shared/Pagination';
 import { DataTable } from '@/components/ui/data-table';
 import type { GetPaymentsInput, PaginatedPayments } from '@/types';
-import { getPayments } from '../data/queries';
+import { getPayments } from '../../data/queries';
 import { paymentColumns } from './payment-columns';
 
 export async function PaymentsTableLoader({ filters }: { filters: GetPaymentsInput }) {

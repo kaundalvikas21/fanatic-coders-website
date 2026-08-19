@@ -34,6 +34,7 @@ export async function Users({ filters }: { filters: GetUsersInput }) {
       columns={userColumns}
       data={members}
       tableClassName="min-w-[820px]"
+      rowClassName="group"
     />
   );
 }

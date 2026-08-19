@@ -27,6 +27,7 @@ interface DataTableProps<TData, TValue> {
   emptyMessage?: string;
   pageSize?: number;
   tableClassName?: string;
+  rowClassName?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -35,6 +36,7 @@ export function DataTable<TData, TValue>({
   emptyMessage = 'No results.',
   pageSize = 10,
   tableClassName,
+  rowClassName,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -81,6 +83,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  className={rowClassName}
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (

@@ -12,6 +12,7 @@ import {
   StatsWidgetSkeleton,
   TaskFlowWidget,
   WorkspaceStatsWidget,
+  PaymentSummaryWidget,
   DashboardOverviewHeader,
 } from '@/modules/dashboard';
 import { Button } from '@/components/ui/button';
@@ -78,6 +79,10 @@ export default function AdminPage({
 
       <Suspense fallback={<ProjectInsightsSkeleton />}>
         <ProjectInsightsWidget />
+      </Suspense>
+
+      <Suspense fallback={<ListWidgetSkeleton />}>
+        <PaymentSummaryWidget />
       </Suspense>
 
       <Suspense fallback={<DashboardProjectsSectionSkeleton />}>
