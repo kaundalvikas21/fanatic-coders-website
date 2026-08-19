@@ -52,6 +52,7 @@ export function PaymentStatusBarChart({ data }: PaymentStatusBarChartProps) {
           tickLine={false}
           axisLine={false}
           tickMargin={8}
+          allowDecimals={false}
           tickFormatter={(value: number) => value.toLocaleString()}
         />
         <ChartTooltip

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowUpRight, CreditCard, ReceiptText } from 'lucide-react';
+import { ArrowUpRight, CreditCard, FileText, ReceiptText } from 'lucide-react';
 
 import { PaymentStatusBarChart } from '@/components/dashboard/charts/PaymentStatusBarChart';
 import { WidgetCard } from '@/components/shared/widget-card';
@@ -71,21 +71,43 @@ function PaymentSummaryContent({ summary }: { summary: AdminPaymentSummary }) {
           </Link>
         </div>
         {summary.recentTransactions.length > 0 ? (
-          <div className="divide-y divide-border/60 rounded-xl border border-border/70">
+          <div className="divide-y divide-border/60">
             {summary.recentTransactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-center justify-between gap-4 px-3.5 py-3.5 text-sm transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-muted/40"
+                className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-sm transition-colors hover:bg-muted/30 sm:grid-cols-[auto_minmax(0,1fr)_auto_auto]"
               >
+                <div className="flex size-9 items-center justify-center rounded-lg bg-muted/70 text-muted-foreground">
+                  <FileText
+                    className="size-4"
+                    aria-hidden="true"
+                  />
+                </div>
                 <div className="min-w-0">
                   <p className="truncate font-medium">{transaction.clientName}</p>
                   <p className="truncate text-xs text-muted-foreground">
-                    {transaction.description} · {formatDate(transaction.paidAt)}
+                    {transaction.description}
+                    {transaction.stripeInvoiceNumber && ` · ${transaction.stripeInvoiceNumber}`}
                   </p>
                 </div>
-                <p className="shrink-0 font-semibold tabular-nums">
-                  {formatMoney(transaction.amount, transaction.currency)}
+                <p className="shrink-0 text-xs text-muted-foreground sm:text-sm">
+                  {formatDate(transaction.paidAt)}
                 </p>
+                <div className="col-start-2 flex items-center justify-between gap-3 sm:col-start-auto">
+                  <p className="shrink-0 font-semibold tabular-nums text-emerald-500">
+                    +{formatMoney(transaction.amount, transaction.currency)}
+                  </p>
+                  <Link
+                    href={`/dashboard/services/${transaction.serviceRequestId}`}
+                    aria-label={`Open ${transaction.clientName} service request`}
+                    className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <ArrowUpRight
+                      className="size-4"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
