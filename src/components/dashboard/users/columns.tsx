@@ -93,7 +93,6 @@ export const userColumns: ColumnDef<UserListItem>[] = [
             asChild
             variant="ghost"
             size="icon"
-            className="text-destructive opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 hover:text-destructive"
           >
             <Link
               href={`/dashboard/admin/user/${member.id}`}
