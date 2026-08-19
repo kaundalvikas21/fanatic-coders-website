@@ -10,7 +10,6 @@ export default function LeadsLayout({ children }: { children: ReactNode }) {
         <PageHeader
           title="Leads"
           description="Review contact requests and track follow-up."
-          showBackButton
         />
       }
     >

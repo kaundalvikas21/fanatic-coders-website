@@ -11,7 +11,6 @@ export default function PaymentsLayout({ children }: { children: ReactNode }) {
         <PageHeader
           title="Payments"
           description="Review Stripe invoices and payment status."
-          showBackButton
         />
       }
     >

@@ -10,7 +10,6 @@ export default function ProjectsLayout({ children }: { children: ReactNode }) {
         <PageHeader
           title="Projects"
           description="Track delivery workspaces created from service requests."
-          showBackButton
         />
       }
     >

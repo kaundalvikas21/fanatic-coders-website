@@ -21,7 +21,7 @@ type PageHeaderProps = {
 export function PageHeader({
   title,
   description,
-  showBackButton = false,
+  showBackButton = true,
   backLabel = 'Back',
   action,
   actionSlot,
@@ -29,8 +29,16 @@ export function PageHeader({
   const ActionIcon = action?.icon;
 
   return (
-    <Card>
-      <CardHeader className="gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
+    <Card className="relative isolate overflow-hidden border-primary/20 bg-card/85 shadow-[inset_0_1px_0_rgb(255_255_255/0.05)]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_10%,color-mix(in_oklab,var(--aurora-violet)_16%,transparent),transparent_36%),radial-gradient(circle_at_88%_90%,color-mix(in_oklab,var(--aurora-blue)_12%,transparent),transparent_34%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-primary/55 to-transparent"
+      />
+      <CardHeader className="relative gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
         <div className="flex items-center gap-1">
           {showBackButton && <BackButton label={backLabel} />}
           <div className="flex flex-col items-start gap-2">
