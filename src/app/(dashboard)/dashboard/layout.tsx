@@ -12,7 +12,13 @@ import './global.css';
 
 export const dynamic = 'force-dynamic';
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({
+  children,
+  modal,
+}: {
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   await requireAuth();
   const access = await getCurrentAccess();
   const role = access?.role;
@@ -32,6 +38,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           />
           <DashboardContent>{children}</DashboardContent>
         </SidebarInset>
+        {modal}
       </DashboardProvider>
     </PermissionProvider>
   );

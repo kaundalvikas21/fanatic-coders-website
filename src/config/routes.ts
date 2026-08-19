@@ -39,6 +39,14 @@ const PAYMENT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SETTINGS_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 
+// Authorize shared dashboard destinations that do not belong in navigation.
+const dashboardUtilityRoutes = [
+  {
+    url: '/dashboard/photo',
+    roles: SETTINGS_ROLES,
+  },
+] as const;
+
 export const dashboardRouteGroups: DashboardRouteGroup[] = [
   {
     label: 'Business',
@@ -131,15 +139,18 @@ function matchesDashboardPath(pathname: string, routeUrl: string) {
 }
 
 export function getDashboardRouteRoles(pathname: string) {
-  const routes = dashboardRouteGroups.flatMap((group) =>
-    group.items.flatMap((item) => [
-      { url: item.url, roles: item.roles },
-      ...(item.subItems?.map((subItem) => ({
-        url: subItem.url,
-        roles: subItem.roles,
-      })) ?? []),
-    ]),
-  );
+  const routes = [
+    ...dashboardUtilityRoutes,
+    ...dashboardRouteGroups.flatMap((group) =>
+      group.items.flatMap((item) => [
+        { url: item.url, roles: item.roles },
+        ...(item.subItems?.map((subItem) => ({
+          url: subItem.url,
+          roles: subItem.roles,
+        })) ?? []),
+      ]),
+    ),
+  ];
 
   return routes
     .filter((route) => matchesDashboardPath(pathname, route.url))

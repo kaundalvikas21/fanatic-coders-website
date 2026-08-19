@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { UserRound } from 'lucide-react';
-
 import { MemberDetails } from '@/components/dashboard/users/MemberDetails';
+import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import { ProfileDetails } from '@/components/shared/profile-details';
 import { WidgetCard } from '@/components/shared/widget-card';
@@ -21,8 +21,8 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
   }
 
   return (
-    <div className="grid items-stretch gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
-      <div className="flex flex-col gap-6">
+    <DetailPageLayout>
+      <DetailPageLayout.Main>
         <PageHeader
           title={member.user.name}
           description={member.user.email}
@@ -37,9 +37,9 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
         >
           <MemberDetails member={member} />
         </WidgetCard>
-      </div>
+      </DetailPageLayout.Main>
 
-      <aside className="flex h-full flex-col gap-6">
+      <DetailPageLayout.Aside>
         <WidgetCard
           title="Profile"
           description="Account identity."
@@ -71,7 +71,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
             </div>
           </div>
         </WidgetCard>
-      </aside>
-    </div>
+      </DetailPageLayout.Aside>
+    </DetailPageLayout>
   );
 }

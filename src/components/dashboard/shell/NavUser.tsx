@@ -1,6 +1,6 @@
 'use client';
 
-import { BadgeCheck, ChevronsUpDown, LogOut, Settings } from 'lucide-react';
+import { ChevronsUpDown, LogOut, Settings, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { UserAvatar } from '@/components/shared/user-avatar';
 import {
@@ -120,9 +120,14 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="my-1.5" />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="cursor-pointer gap-2.5 px-2 py-2 transition-colors focus:bg-accent focus:text-accent-foreground">
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer gap-2.5 px-2 py-2 transition-colors focus:bg-accent focus:text-accent-foreground"
+              >
+                <Link href="/dashboard/settings/profile">
+                  <UserRound />
+                  Profile
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 asChild

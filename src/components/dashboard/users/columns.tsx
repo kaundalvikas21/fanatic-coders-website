@@ -50,6 +50,7 @@ export const userColumns: ColumnDef<UserListItem>[] = [
           <div className="min-w-0">
             <Link
               href={`/dashboard/admin/user/${member.id}`}
+              prefetch={false}
               className="truncate font-medium hover:underline"
             >
               {member.user.name}
@@ -113,7 +114,10 @@ export const userColumns: ColumnDef<UserListItem>[] = [
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                  <Link href={`/dashboard/admin/user/${member.id}`}>
+                  <Link
+                    href={`/dashboard/admin/user/${member.id}`}
+                    prefetch={false}
+                  >
                     <Eye />
                     View details
                   </Link>
