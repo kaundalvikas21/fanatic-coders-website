@@ -1,8 +1,6 @@
 import { Suspense } from 'react';
-import { BriefcaseBusiness } from 'lucide-react';
 
 import { FilterLayout } from '@/components/layout/dashboard/lists-layout';
-import { WidgetCard } from '@/components/shared/widget-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   parseProjectsSearchParams,
@@ -32,20 +30,13 @@ export async function DashboardProjectsSection({
   };
 
   return (
-    <WidgetCard
-      icon={BriefcaseBusiness}
-      title="Projects"
-      description="Filter projects and review status, team, and delivery progress."
-      contentClassNames="p-0"
-    >
-      <FilterLayout filters={<ProjectsFilters showServiceFilter={false} />}>
-        <Suspense
-          key={JSON.stringify(filters)}
-          fallback={<Skeleton className="h-80 rounded-xl" />}
-        >
-          <FilteredProjectsLoader filters={filters} />
-        </Suspense>
-      </FilterLayout>
-    </WidgetCard>
+    <FilterLayout filters={<ProjectsFilters showServiceFilter={false} />}>
+      <Suspense
+        key={JSON.stringify(filters)}
+        fallback={<Skeleton className="h-80 rounded-xl" />}
+      >
+        <FilteredProjectsLoader filters={filters} />
+      </Suspense>
+    </FilterLayout>
   );
 }

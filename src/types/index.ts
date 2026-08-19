@@ -56,6 +56,8 @@ export type {
   AdminDashboardLeadDistributionResponse,
   AdminDashboardOverview,
   AdminDashboardOverviewResponse,
+  AdminPaymentSummary,
+  AdminPaymentSummaryResponse,
   AdminDashboardRecentLead,
   AdminDashboardRecentLeadsResponse,
   AdminDashboardTaskDistribution,

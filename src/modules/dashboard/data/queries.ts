@@ -7,6 +7,7 @@ import type {
   AdminDashboardAttentionTasksResponse,
   AdminDashboardLeadDistributionResponse,
   AdminDashboardOverviewResponse,
+  AdminPaymentSummaryResponse,
   AdminDashboardRecentLeadsResponse,
   AdminDashboardTaskDistributionResponse,
   DashboardCurrentProjectsResponse,
@@ -36,6 +37,13 @@ async function getDashboardData<TData>(
 
 export async function getAdminDashboardOverview(): Promise<AdminDashboardOverviewResponse> {
   return await getDashboardData('/api/v1/dashboard/overview', 'ADMIN_DASHBOARD_OVERVIEW_FAILED');
+}
+
+export async function getAdminPaymentSummary(): Promise<AdminPaymentSummaryResponse> {
+  return await getDashboardData(
+    '/api/v1/dashboard/payment-summary',
+    'ADMIN_DASHBOARD_PAYMENT_SUMMARY_FAILED',
+  );
 }
 
 export async function getAdminDashboardLeadDistribution(): Promise<AdminDashboardLeadDistributionResponse> {
