@@ -65,7 +65,7 @@ export function ActionSheet({
       >
         <SheetTrigger asChild>{trigger}</SheetTrigger>
         <SheetContent className={contentClassName}>
-          <SheetHeader>
+          <SheetHeader className="sr-only">
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}
           </SheetHeader>
