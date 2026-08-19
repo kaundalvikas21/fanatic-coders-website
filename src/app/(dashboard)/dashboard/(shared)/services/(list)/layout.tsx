@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
-import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
+import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import {
   getServiceRequestPermissions,
@@ -42,8 +42,7 @@ export default async function ServicesLayout({ children }: { children: ReactNode
           <ServiceCatalog />
         </WidgetCard>
       )}
-      <ServiceRequestFilters />
-      {children}
+      <FilterLayout filters={<ServiceRequestFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );
 }

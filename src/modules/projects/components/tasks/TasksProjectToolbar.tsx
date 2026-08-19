@@ -7,7 +7,7 @@ import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet
 import { SelectField } from '@/components/shared/forms/SelectField';
 import type { Project, UserListItem } from '@/types';
 import { TaskCreateForm } from './TaskCreateForm';
-import { useTaskPermissions } from '../hooks/use-task-permissions';
+import { useTaskPermissions } from '../../hooks/use-task-permissions';
 
 const ALL_PROJECTS_VALUE = 'all';
 

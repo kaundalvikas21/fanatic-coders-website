@@ -19,13 +19,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { updateTaskById } from '@/modules/projects/data/tasks';
+import { updateTaskById } from '@/modules/projects/data/tasks/mutations';
+import { TaskDeleteButton } from './TaskDeleteButton';
 import type { Task, TaskStatus } from '@/types';
-import { TASK_PRIORITY_BADGE_VARIANTS, TASK_PRIORITY_OPTIONS, TASK_STATUS_OPTIONS } from '@/types';
+import {
+  TASK_PRIORITY_BADGE_VARIANTS,
+  TASK_PRIORITY_COLORS,
+  TASK_PRIORITY_OPTIONS,
+  TASK_STATUS_OPTIONS,
+} from '@/types';
 import { formatDate } from '@/utils/date';
 import { cn } from '@/lib/utils';
 import { useClient } from '@/hooks/useClient';
-import { useTaskPermissions } from '../hooks/use-task-permissions';
+import { useTaskPermissions } from '../../hooks/use-task-permissions';
 
 const TASK_STATUS_STYLES: Record<
   TaskStatus,
@@ -39,32 +45,32 @@ const TASK_STATUS_STYLES: Record<
   }
 > = {
   TODO: {
-    column: 'border-violet-500/25 bg-violet-500/5',
-    card: 'border-violet-500/20 bg-violet-500/[0.035]',
+    column: 'border-violet-200 bg-violet-50/70 dark:border-violet-500/25 dark:bg-violet-500/5',
+    card: 'border-violet-200/80 bg-white/80 dark:border-violet-500/20 dark:bg-violet-500/[0.035]',
     heading: 'text-violet-700 dark:text-violet-300',
     dot: 'bg-violet-500',
     count: 'border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300',
     drop: 'ring-violet-500',
   },
   IN_PROGRESS: {
-    column: 'border-blue-500/25 bg-blue-500/5',
-    card: 'border-blue-500/20 bg-blue-500/[0.035]',
+    column: 'border-blue-200 bg-blue-50/70 dark:border-blue-500/25 dark:bg-blue-500/5',
+    card: 'border-blue-200/80 bg-white/80 dark:border-blue-500/20 dark:bg-blue-500/[0.035]',
     heading: 'text-blue-700 dark:text-blue-300',
     dot: 'bg-blue-500',
     count: 'border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-300',
     drop: 'ring-blue-500',
   },
   IN_REVIEW: {
-    column: 'border-amber-500/30 bg-amber-500/5',
-    card: 'border-amber-500/25 bg-amber-500/[0.035]',
+    column: 'border-amber-200 bg-amber-50/70 dark:border-amber-500/30 dark:bg-amber-500/5',
+    card: 'border-amber-200/80 bg-white/80 dark:border-amber-500/25 dark:bg-amber-500/[0.035]',
     heading: 'text-amber-700 dark:text-amber-300',
     dot: 'bg-amber-500',
     count: 'border-amber-500/35 bg-amber-500/10 text-amber-700 dark:text-amber-300',
     drop: 'ring-amber-500',
   },
   DONE: {
-    column: 'border-emerald-500/25 bg-emerald-500/5',
-    card: 'border-emerald-500/20 bg-emerald-500/[0.035]',
+    column: 'border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/25 dark:bg-emerald-500/5',
+    card: 'border-emerald-200/80 bg-white/80 dark:border-emerald-500/20 dark:bg-emerald-500/[0.035]',
     heading: 'text-emerald-700 dark:text-emerald-300',
     dot: 'bg-emerald-500',
     count: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
@@ -97,12 +103,12 @@ function TaskCardContent({ task, showProject }: { task: Task; showProject: boole
     <>
       <CardHeader className="gap-3">
         <div className="flex items-center justify-between gap-3 pr-8">
-          <Badge variant={TASK_PRIORITY_BADGE_VARIANTS[task.priority]}>
+          <Badge
+            variant={TASK_PRIORITY_BADGE_VARIANTS[task.priority]}
+            color={TASK_PRIORITY_COLORS[task.priority]}
+          >
             {getPriorityLabel(task)}
           </Badge>
-          {task.estimatedHours !== null && task.estimatedHours !== undefined ? (
-            <span className="text-xs text-muted-foreground">{task.estimatedHours}h</span>
-          ) : null}
         </div>
         <CardTitle className="text-sm leading-5 tracking-normal">{task.title}</CardTitle>
         {showProject && task.project ? (
@@ -165,10 +171,14 @@ function TaskCardContent({ task, showProject }: { task: Task; showProject: boole
 function TaskCard({
   task,
   disabled,
+  canDelete,
+  onDeleted,
   showProject,
 }: {
   task: Task;
   disabled: boolean;
+  canDelete: boolean;
+  onDeleted: (taskId: string) => void;
   showProject: boolean;
 }) {
   const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, isDragging } =
@@ -204,6 +214,14 @@ function TaskCard({
       >
         <GripVertical />
       </Button>
+      {canDelete ? (
+        <div className="absolute top-2 right-10 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none">
+          <TaskDeleteButton
+            task={task}
+            onDeleted={onDeleted}
+          />
+        </div>
+      ) : null}
       <TaskCardContent
         task={task}
         showProject={showProject}
@@ -216,12 +234,16 @@ function KanbanColumn({
   status,
   tasks,
   canUpdate,
+  canDelete,
+  onDeleted,
   pendingTaskIds,
   showProjects,
 }: {
   status: TaskStatus;
   tasks: Task[];
   canUpdate: boolean;
+  canDelete: boolean;
+  onDeleted: (taskId: string) => void;
   pendingTaskIds: Set<string>;
   showProjects: boolean;
 }) {
@@ -271,6 +293,8 @@ function KanbanColumn({
               key={task.id}
               task={task}
               disabled={!canUpdate || pendingTaskIds.has(task.id)}
+              canDelete={canDelete}
+              onDeleted={onDeleted}
               showProject={showProjects}
             />
           ))
@@ -290,10 +314,14 @@ export function TaskKanbanBoard({
   showProjects = true,
 }: TaskKanbanBoardProps) {
   const isClient = useClient();
-  const { canUpdate } = useTaskPermissions();
+  const { canUpdate, canDelete } = useTaskPermissions();
   const [tasks, setTasks] = useState(initialTasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [pendingTaskIds, setPendingTaskIds] = useState(() => new Set<string>());
+
+  function handleDeleted(taskId: string) {
+    setTasks((current) => current.filter((task) => task.id !== taskId));
+  }
 
   async function handleDragEnd(event: DragEndEvent) {
     setActiveTask(null);
@@ -344,19 +372,19 @@ export function TaskKanbanBoard({
       onDragCancel={() => setActiveTask(null)}
       onDragEnd={handleDragEnd}
     >
-      <div className="overflow-x-auto pb-2">
-        <div className="grid min-w-[72rem] grid-cols-4 gap-4">
-          {TASK_STATUS_OPTIONS.map((status) => (
-            <KanbanColumn
-              key={status.value}
-              status={status.value}
-              tasks={tasks.filter((task) => task.status === status.value)}
-              canUpdate={canUpdate}
-              pendingTaskIds={pendingTaskIds}
-              showProjects={showProjects}
-            />
-          ))}
-        </div>
+      <div className="grid gap-4 pb-2 sm:grid-cols-2 xl:grid-cols-4">
+        {TASK_STATUS_OPTIONS.map((status) => (
+          <KanbanColumn
+            key={status.value}
+            status={status.value}
+            tasks={tasks.filter((task) => task.status === status.value)}
+            canUpdate={canUpdate}
+            canDelete={canDelete}
+            onDeleted={handleDeleted}
+            pendingTaskIds={pendingTaskIds}
+            showProjects={showProjects}
+          />
+        ))}
       </div>
       <DragOverlay>
         {activeTask ? (

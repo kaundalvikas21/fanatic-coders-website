@@ -2,7 +2,7 @@ import { Activity } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { PROJECT_STATUS_BADGE_VARIANTS } from '@/types';
+import { PROJECT_STATUS_BADGE_VARIANTS, PROJECT_STATUS_COLORS } from '@/types';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import type { Project, Task } from '@/types';
 
@@ -39,7 +39,10 @@ export function ProjectProgressCard({ project, tasks }: ProjectProgressCardProps
 
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">Project status</span>
-            <Badge variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}>
+            <Badge
+              variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}
+              color={PROJECT_STATUS_COLORS[project.status]}
+            >
               {PROJECT_STATUS_LABELS[project.status]}
             </Badge>
           </div>

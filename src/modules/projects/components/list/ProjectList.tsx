@@ -1,7 +1,7 @@
 'use client';
 
 import type { Project } from '@/types';
-import { ProjectItemCard } from './ProjectItemCard';
+import { ProjectItemCard } from '../ProjectItemCard';
 
 type ProjectListProps = {
   projects: Project[];

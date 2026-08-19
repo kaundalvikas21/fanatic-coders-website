@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ProjectListLoader } from '@/modules/projects';
+import { FilteredProjectsLoader } from '@/modules/projects';
 import {
   parseProjectsSearchParams,
   type ProjectsSearchParams,
@@ -28,13 +28,13 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
           {Array.from({ length: 3 }).map((_, index) => (
             <Skeleton
               key={index}
-              className="h-28 rounded-xl"
+              className="h-16 rounded-lg"
             />
           ))}
         </div>
       }
     >
-      <ProjectListLoader filters={filters} />
+      <FilteredProjectsLoader filters={filters} />
     </Suspense>
   );
 }

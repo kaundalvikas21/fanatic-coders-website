@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 import { RotateCcw } from 'lucide-react';
-import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
+import { parseAsInteger, parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { SelectField, type SelectOption } from '@/components/shared/forms/SelectField';
-import { WidgetCard } from '@/components/shared/widget-card';
+import { FilterBar } from '@/components/shared/filter-bar';
 import { Button } from '@/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useServiceRequestPermissions } from '@/modules/service-requests/hooks/use-service-request-permissions';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,7 @@ const filterParsers = {
   client: parseAsString.withDefault(''),
   status: parseAsStringLiteral(SERVICE_REQUEST_STATUSES),
   serviceType: parseAsStringLiteral(SERVICE_INTERESTS),
+  page: parseAsInteger.withDefault(1),
 };
 
 const ALL_FILTERS_VALUE = 'all';
@@ -46,17 +47,17 @@ export function ServiceRequestFilters() {
     const nextClient = debouncedClient.trim();
 
     if (nextClient !== filters.client) {
-      void setFilters({ client: nextClient || null });
+      void setFilters({ client: nextClient || null, page: null });
     }
   }, [debouncedClient, filters.client, setFilters]);
 
   function handleReset() {
-    void setFilters({ client: null, status: null, serviceType: null });
+    void setFilters({ client: null, status: null, serviceType: null, page: null });
     setClientInput('');
   }
 
   return (
-    <WidgetCard>
+    <FilterBar>
       <FieldGroup
         className={cn(
           'grid gap-4 md:items-end',
@@ -67,20 +68,20 @@ export function ServiceRequestFilters() {
       >
         {permissions.isManagementView && (
           <Field>
-            <FieldLabel htmlFor="service-requests-client">Client</FieldLabel>
             <Input
               id="service-requests-client"
               type="search"
               value={clientInput}
               onChange={(event) => setClientInput(event.target.value)}
-              placeholder="Search by name or email"
+              placeholder="Search clients by name or email"
+              aria-label="Search service requests by client name or email"
+              size="lg"
               autoComplete="off"
             />
           </Field>
         )}
 
         <Field>
-          <FieldLabel>Status</FieldLabel>
           <SelectField
             id="service-requests-status"
             value={filters.status ?? ALL_FILTERS_VALUE}
@@ -91,14 +92,15 @@ export function ServiceRequestFilters() {
                   value === ALL_FILTERS_VALUE
                     ? null
                     : (value as (typeof SERVICE_REQUEST_STATUSES)[number]),
+                page: null,
               })
             }
             ariaLabel="Filter service requests by status"
+            size="lg"
           />
         </Field>
 
         <Field>
-          <FieldLabel>Service</FieldLabel>
           <SelectField
             id="service-requests-service"
             value={filters.serviceType ?? ALL_FILTERS_VALUE}
@@ -109,9 +111,11 @@ export function ServiceRequestFilters() {
                   value === ALL_FILTERS_VALUE
                     ? null
                     : (value as (typeof SERVICE_INTERESTS)[number]),
+                page: null,
               })
             }
             ariaLabel="Filter service requests by service"
+            size="lg"
           />
         </Field>
 
@@ -125,6 +129,6 @@ export function ServiceRequestFilters() {
           Reset
         </Button>
       </FieldGroup>
-    </WidgetCard>
+    </FilterBar>
   );
 }

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
+import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import { ProjectsFilters } from '@/modules/projects';
 
@@ -14,8 +14,7 @@ export default function ProjectsLayout({ children }: { children: ReactNode }) {
         />
       }
     >
-      <ProjectsFilters />
-      {children}
+      <FilterLayout filters={<ProjectsFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );
 }

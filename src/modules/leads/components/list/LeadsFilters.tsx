@@ -5,9 +5,9 @@ import { useDebounce } from '@uidotdev/usehooks';
 import { RotateCcw } from 'lucide-react';
 import { parseAsInteger, parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { SelectField, type SelectOption } from '@/components/shared/forms/SelectField';
-import { WidgetCard } from '@/components/shared/widget-card';
+import { FilterBar } from '@/components/shared/filter-bar';
 import { Button } from '@/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
   LEAD_STATUSES,
@@ -80,39 +80,40 @@ export function LeadsFilters() {
   }
 
   return (
-    <WidgetCard>
+    <FilterBar>
       <FieldGroup className="grid gap-4 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
         <Field>
-          <FieldLabel htmlFor="leads-email">Email</FieldLabel>
           <Input
             id="leads-email"
             type="search"
             value={emailInput}
             onChange={(event) => handleEmailChange(event.target.value)}
-            placeholder="lead@example.com"
+            placeholder="Search leads by email"
+            aria-label="Search leads by email"
+            size="lg"
             autoComplete="off"
           />
         </Field>
 
         <Field>
-          <FieldLabel>Status</FieldLabel>
           <SelectField
             id="leads-status"
             value={filters.status ?? ALL_FILTERS_VALUE}
             options={statusOptions}
             onChange={handleStatusChange}
             ariaLabel="Filter leads by status"
+            size="lg"
           />
         </Field>
 
         <Field>
-          <FieldLabel>Service</FieldLabel>
           <SelectField
             id="leads-service"
             value={filters.serviceType ?? ALL_FILTERS_VALUE}
             options={serviceOptions}
             onChange={handleServiceTypeChange}
             ariaLabel="Filter leads by service"
+            size="lg"
           />
         </Field>
 
@@ -126,6 +127,6 @@ export function LeadsFilters() {
           Reset
         </Button>
       </FieldGroup>
-    </WidgetCard>
+    </FilterBar>
   );
 }

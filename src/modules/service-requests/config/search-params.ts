@@ -27,6 +27,7 @@ export function parseServiceRequestsSearchParams(
   const client = getParam(params, 'client')?.trim();
   const status = getParam(params, 'status');
   const serviceType = getParam(params, 'serviceType');
+  const rawPage = Number(getParam(params, 'page'));
 
   return {
     client: client || undefined,
@@ -36,5 +37,7 @@ export function parseServiceRequestsSearchParams(
     serviceType: includesValue(SERVICE_INTERESTS, serviceType)
       ? (serviceType as ServiceInterest)
       : undefined,
+    page: Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1,
+    pageSize: 10,
   };
 }

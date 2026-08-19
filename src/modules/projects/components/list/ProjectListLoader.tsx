@@ -2,7 +2,7 @@ import { EmptyState } from '@/components/shared/empty-state';
 import { ErrorState } from '@/components/shared/error-state';
 import { Pagination } from '@/components/shared/Pagination';
 import type { GetProjectsInput, PaginatedProjects } from '@/types';
-import { getProjects } from '../data/queries';
+import { getProjects } from '../../data/queries';
 import { ProjectList } from './ProjectList';
 
 export async function ProjectListLoader({ filters }: { filters: GetProjectsInput }) {

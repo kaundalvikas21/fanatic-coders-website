@@ -3,8 +3,8 @@ import { ErrorState } from '@/components/shared/error-state';
 import { Pagination } from '@/components/shared/Pagination';
 import { createProjectDeliverySummary } from '@/modules/projects/utils/progress';
 import type { GetProjectsInput, PaginatedProjects, Project, Task } from '@/types';
-import { getProjects } from '../data/queries';
-import { getProjectTasks } from '../data/tasks';
+import { getProjects } from '../../data/queries';
+import { getProjectTasks } from '../../data/tasks/queries';
 import { FilteredProjectsTable } from './FilteredProjectsTable';
 
 export async function FilteredProjectsLoader({ filters }: { filters: GetProjectsInput }) {

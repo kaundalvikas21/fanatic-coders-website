@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import type { ProjectDeliverySummary } from '@/modules/projects/utils/progress';
 import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/config/labels';
-import { PROJECT_STATUS_BADGE_VARIANTS } from '@/types';
+import { PROJECT_STATUS_BADGE_VARIANTS, PROJECT_STATUS_COLORS } from '@/types';
 import { formatDate } from '@/utils/date';
 
 export function ClientProjectCard({ summary }: { summary: ProjectDeliverySummary }) {
@@ -21,7 +21,10 @@ export function ClientProjectCard({ summary }: { summary: ProjectDeliverySummary
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2.5">
               <h2 className="truncate text-lg font-semibold tracking-[-0.01em]">{project.name}</h2>
-              <Badge variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}>
+              <Badge
+                variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}
+                color={PROJECT_STATUS_COLORS[project.status]}
+              >
                 {PROJECT_STATUS_LABELS[project.status]}
               </Badge>
             </div>

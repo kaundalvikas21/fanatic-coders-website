@@ -13,6 +13,8 @@ export type GetServiceRequestsInput = {
   client?: string;
   status?: ServiceRequestStatus;
   serviceType?: ServiceInterest;
+  page?: number;
+  pageSize?: number;
 };
 export type CreateServiceRequestRequest = CreateServiceRequestInput;
 export type CreateServiceRequestResponse = ServiceRequestResponse;

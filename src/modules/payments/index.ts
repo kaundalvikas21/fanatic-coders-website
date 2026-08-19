@@ -1,2 +1,2 @@
-export { PaymentsFilters } from './components/PaymentsFilters';
-export { PaymentsTableLoader } from './components/PaymentsTableLoader';
+export { PaymentsFilters } from './components/list/PaymentsFilters';
+export { PaymentsTableLoader } from './components/list/PaymentsTableLoader';

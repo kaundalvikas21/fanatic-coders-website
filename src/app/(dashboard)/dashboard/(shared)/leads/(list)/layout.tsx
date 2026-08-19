@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ListsLayout } from '@/components/layout/dashboard/lists-layout';
+import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
 import { LeadsFilters } from '@/modules/leads';
 
@@ -14,8 +14,7 @@ export default function LeadsLayout({ children }: { children: ReactNode }) {
         />
       }
     >
-      <LeadsFilters />
-      {children}
+      <FilterLayout filters={<LeadsFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );
 }

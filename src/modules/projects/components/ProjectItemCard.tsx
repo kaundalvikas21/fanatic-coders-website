@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import { useProjectPermissions } from '@/modules/projects/hooks/use-project-permissions';
 import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/config/labels';
-import { PROJECT_STATUS_BADGE_VARIANTS, type Project } from '@/types';
+import { PROJECT_STATUS_BADGE_VARIANTS, PROJECT_STATUS_COLORS, type Project } from '@/types';
 import { formatDate } from '@/utils/date';
 import { formatMoney } from '@/utils/money';
 
@@ -37,7 +37,10 @@ export function ProjectItemCard({ project }: { project: Project }) {
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-base font-semibold tracking-normal">{project.name}</h3>
-            <Badge variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}>
+            <Badge
+              variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}
+              color={PROJECT_STATUS_COLORS[project.status]}
+            >
               {PROJECT_STATUS_LABELS[project.status]}
             </Badge>
           </div>

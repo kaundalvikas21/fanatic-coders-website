@@ -30,6 +30,12 @@ export const LEAD_STATUS_BADGE_VARIANTS = {
   IN_PROGRESS: 'secondary',
   DEAD: 'outline',
 } as const satisfies Record<LeadStatus, 'default' | 'secondary' | 'outline'>;
+export const LEAD_STATUS_COLORS = {
+  NEW: 'blue',
+  QUALIFIED: 'green',
+  IN_PROGRESS: 'amber',
+  DEAD: 'gray',
+} as const;
 
 export const LEAD_SOURCES = ['CONTACT_FORM'] as const satisfies readonly LeadSource[];
 
@@ -74,6 +80,12 @@ export const SERVICE_REQUEST_STATUS_BADGE_VARIANTS = {
   ServiceRequestStatus,
   'default' | 'secondary' | 'outline' | 'destructive'
 >;
+export const SERVICE_REQUEST_STATUS_COLORS = {
+  NEW: 'blue',
+  IN_PROGRESS: 'amber',
+  COMPLETED: 'green',
+  CANCELLED: 'red',
+} as const;
 
 export const PROJECT_STATUSES = [
   'PLANNING',
@@ -98,6 +110,13 @@ export const PROJECT_STATUS_BADGE_VARIANTS = {
   COMPLETED: 'outline',
   ARCHIVED: 'destructive',
 } as const satisfies Record<ProjectStatus, 'default' | 'secondary' | 'outline' | 'destructive'>;
+export const PROJECT_STATUS_COLORS = {
+  PLANNING: 'blue',
+  ACTIVE: 'green',
+  ON_HOLD: 'amber',
+  COMPLETED: 'green',
+  ARCHIVED: 'gray',
+} as const;
 
 export const PROJECT_CURRENCIES = ['USD'] as const satisfies readonly ProjectCurrency[];
 

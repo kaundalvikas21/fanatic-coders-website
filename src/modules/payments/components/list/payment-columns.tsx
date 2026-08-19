@@ -1,7 +1,7 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { Download, ExternalLink } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Payment } from '@/types';
@@ -64,22 +64,6 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     enableSorting: false,
     cell: ({ row }) => (
       <div className="flex justify-end gap-2">
-        {row.original.stripeHostedInvoiceUrl && (
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-          >
-            <a
-              href={row.original.stripeHostedInvoiceUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <ExternalLink />
-              View
-            </a>
-          </Button>
-        )}
         {row.original.stripeInvoicePdfUrl && (
           <Button
             asChild

@@ -1,7 +1,7 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Eye } from 'lucide-react';
 import Link from 'next/link';
 
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
@@ -12,11 +12,11 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Progress } from '@/components/ui/progress';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
-import { PROJECT_STATUS_BADGE_VARIANTS, type Project } from '@/types';
+import { PROJECT_STATUS_COLORS, type Project } from '@/types';
 import type { ProjectDeliverySummary } from '@/modules/projects/utils/progress';
-import { ProjectInfoCard } from './ProjectInfoCard';
-import { ProjectMembersCard } from './ProjectMembersCard';
-import { ProjectProgressCard } from './ProjectProgressCard';
+import { ProjectInfoCard } from '../ProjectInfoCard';
+import { ProjectMembersCard } from '../ProjectMembersCard';
+import { ProjectProgressCard } from '../ProjectProgressCard';
 
 type ProjectMemberWithUser = NonNullable<Project['memberProjects']>[number] & {
   member?: {
@@ -94,7 +94,10 @@ const columns: ColumnDef<ProjectDeliverySummary>[] = [
     cell: ({ row }) => {
       const { status } = row.original.project;
       return (
-        <Badge variant={PROJECT_STATUS_BADGE_VARIANTS[status]}>
+        <Badge
+          variant="secondary"
+          color={PROJECT_STATUS_COLORS[status]}
+        >
           {PROJECT_STATUS_LABELS[status] ?? 'Unknown'}
         </Badge>
       );
@@ -131,13 +134,13 @@ const columns: ColumnDef<ProjectDeliverySummary>[] = [
   },
   {
     id: 'action',
-    header: () => <div className="text-right">Action</div>,
+    header: () => <div className="text-center">Action</div>,
     cell: ({ row }) => {
       const { project, tasks } = row.original;
       const projectName = project.name?.trim() || 'Untitled project';
 
       return (
-        <div className="text-right">
+        <div className="flex justify-center">
           <ActionSheet
             title={projectName}
             description={project.description?.trim() || 'Project delivery details.'}
@@ -145,9 +148,11 @@ const columns: ColumnDef<ProjectDeliverySummary>[] = [
             trigger={
               <ActionSheetButton
                 variant="ghost"
-                size="sm"
+                size="icon"
+                aria-label={`View ${projectName}`}
+                title={`View ${projectName}`}
               >
-                Open
+                <Eye />
               </ActionSheetButton>
             }
           >

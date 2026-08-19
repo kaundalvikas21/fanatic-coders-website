@@ -27,6 +27,12 @@ export const TASK_STATUS_BADGE_VARIANTS = {
   IN_REVIEW: 'default',
   DONE: 'outline',
 } as const satisfies Record<TaskStatus, 'default' | 'secondary' | 'outline'>;
+export const TASK_STATUS_COLORS = {
+  TODO: 'gray',
+  IN_PROGRESS: 'blue',
+  IN_REVIEW: 'amber',
+  DONE: 'green',
+} as const;
 
 export const TASK_PRIORITY_BADGE_VARIANTS = {
   LOW: 'outline',
@@ -34,6 +40,12 @@ export const TASK_PRIORITY_BADGE_VARIANTS = {
   HIGH: 'default',
   URGENT: 'destructive',
 } as const satisfies Record<TaskPriority, 'default' | 'secondary' | 'outline' | 'destructive'>;
+export const TASK_PRIORITY_COLORS = {
+  LOW: 'gray',
+  MEDIUM: 'blue',
+  HIGH: 'amber',
+  URGENT: 'red',
+} as const;
 
 export type TaskAssignee = {
   id: string;

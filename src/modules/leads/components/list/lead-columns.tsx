@@ -2,20 +2,17 @@
 
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Eye, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, Eye } from 'lucide-react';
 
+import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
+import { LeadInviteForm } from '../details/LeadInviteForm';
+import { LeadStatusForm } from '../details/LeadStatusForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { WidgetCard } from '@/components/shared/widget-card';
 import {
   LEAD_STATUS_BADGE_VARIANTS,
+  LEAD_STATUS_COLORS,
   LEAD_STATUS_OPTIONS,
   type Lead,
   type LeadStatus,
@@ -26,7 +23,14 @@ import { TypographyMuted } from '@/components/ui/typography';
 function LeadStatusBadge({ status }: { status: LeadStatus }) {
   const option = LEAD_STATUS_OPTIONS.find((item) => item.value === status);
 
-  return <Badge variant={LEAD_STATUS_BADGE_VARIANTS[status]}>{option?.label ?? status}</Badge>;
+  return (
+    <Badge
+      variant={LEAD_STATUS_BADGE_VARIANTS[status]}
+      color={LEAD_STATUS_COLORS[status]}
+    >
+      {option?.label ?? status}
+    </Badge>
+  );
 }
 
 function formatRelativeDate(value: string) {
@@ -139,31 +143,51 @@ export const leadColumns: ColumnDef<Lead>[] = [
 
       return (
         <div className="flex justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
+          <ActionSheet
+            title={lead.name}
+            description={lead.companyName || 'Lead details'}
+            contentClassName="sm:max-w-2xl"
+            trigger={
+              <ActionSheetButton
                 variant="ghost"
                 size="icon"
-                aria-label={`Open actions for ${lead.name}`}
+                aria-label={`View ${lead.name}`}
+                title={`View ${lead.name}`}
               >
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="w-40"
-            >
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
-                  <Link href={`/dashboard/leads/${lead.id}`}>
-                    <Eye />
-                    View lead
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <Eye />
+              </ActionSheetButton>
+            }
+          >
+            <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-5 text-left">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 px-1">
+                  <span className="text-sm text-muted-foreground">Status</span>
+                  <LeadStatusBadge status={lead.status} />
+                </div>
+                <WidgetCard
+                  title="Invite"
+                  description="Send client access to this lead."
+                  titleClassName="text-xl font-semibold"
+                >
+                  <LeadInviteForm
+                    leadEmail={lead.email}
+                    serviceInterest={lead.serviceInterest}
+                  />
+                </WidgetCard>
+                <WidgetCard
+                  title="Update status"
+                  description="Move this lead to another stage."
+                  titleClassName="text-xl font-semibold"
+                  className="overflow-visible"
+                >
+                  <LeadStatusForm
+                    leadId={lead.id}
+                    initialStatus={lead.status}
+                  />
+                </WidgetCard>
+              </div>
+            </div>
+          </ActionSheet>
         </div>
       );
     },
