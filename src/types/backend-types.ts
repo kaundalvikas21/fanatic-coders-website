@@ -58,6 +58,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/dashboard/payment-summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch admin payment summary */
+        get: operations["getAdminPaymentSummary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/dashboard/projects": {
         parameters: {
             query?: never;
@@ -446,6 +463,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{projectId}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch project media
+         * @description Returns project media records newest first. The secureUrl field can be rendered directly by the frontend.
+         */
+        get: operations["getProjectMedia"];
+        put?: never;
+        /**
+         * Upload project media
+         * @description Uploads one image or PDF (maximum 5 MB) to the project media folder and saves its delivery metadata.
+         */
+        post: operations["uploadProjectMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/media/{mediaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete project media
+         * @description Deletes the Cloudinary asset and then removes its project media record.
+         */
+        delete: operations["deleteProjectMedia"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{projectId}/tasks": {
         parameters: {
             query?: never;
@@ -621,6 +682,35 @@ export interface components {
             totalServiceRequests: number;
             /** @example 4 */
             openServiceRequests: number;
+        };
+        AdminPaymentSummary: {
+            /** @example 24 */
+            paidTransactions: number;
+            /** @example 3 */
+            unpaidTransactions: number;
+            byCurrency: {
+                currency: components["schemas"]["ProjectCurrency"];
+                /** @example 12500.00 */
+                totalAmount: string;
+                /** @example 520.83 */
+                averageAmount: string;
+                /** @example 24 */
+                transactionCount: number;
+            }[];
+            recentTransactions: {
+                id: string;
+                serviceRequestId: string;
+                clientName: string;
+                description: string;
+                /** @example 1500.00 */
+                amount: string;
+                currency: components["schemas"]["ProjectCurrency"];
+                /** @enum {string} */
+                status: "PAID";
+                /** Format: date-time */
+                paidAt: string;
+                stripeInvoiceNumber: string | null;
+            }[];
         };
         DashboardCurrentProjects: {
             stats: {
@@ -1194,6 +1284,39 @@ export interface components {
             updatedAt: string;
             memberProjects?: components["schemas"]["ProjectMember"][];
         };
+        Media: {
+            /** @example clx0000000000000000000050 */
+            id: string;
+            /**
+             * @example PROJECT
+             * @enum {string}
+             */
+            targetType: "PROJECT";
+            /** @example clx0000000000000000000010 */
+            targetId: string;
+            /** @example projects/clx0000000000000000000010/media/abc123 */
+            publicId: string;
+            /**
+             * Format: uri
+             * @example https://res.cloudinary.com/example/image/upload/v1/projects/clx0000000000000000000010/media/abc123.webp
+             */
+            secureUrl: string;
+            /**
+             * @example image
+             * @enum {string}
+             */
+            resourceType: "image" | "raw";
+            /**
+             * Format: date-time
+             * @example 2026-08-20T12:00:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-20T12:00:00.000Z
+             */
+            updatedAt: string;
+        };
         CreateProjectRequest: {
             /** @example clx0000000000000000000005 */
             clientId: string;
@@ -1523,6 +1646,15 @@ export interface components {
         ProjectResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Project"];
         };
+        MediaResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Media"];
+        };
+        ProjectMediaListResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["Media"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
+        };
         HealthResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["HealthData"];
         };
@@ -1569,6 +1701,10 @@ export interface components {
         ServiceRequestProjectServiceRequestId: string;
         /** @example clx0000000000000000000010 */
         ProjectId: string;
+        /** @example clx0000000000000000000010 */
+        MediaProjectId: string;
+        /** @example clx0000000000000000000050 */
+        MediaId: string;
         /** @example clx0000000000000000000010 */
         TaskProjectId: string;
         /** @example clx0000000000000000000030 */
@@ -1659,6 +1795,30 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ApiResponse"] & {
                         data: components["schemas"]["AdminDashboardOverview"];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getAdminPaymentSummary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetch admin payment summary successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"] & {
+                        data: components["schemas"]["AdminPaymentSummary"];
                     };
                 };
             };
@@ -2753,6 +2913,177 @@ export interface operations {
             403: components["responses"]["Forbidden"];
             /** @description Project was not found. */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getProjectMedia: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                projectId: components["parameters"]["MediaProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Project media fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectMediaListResponse"];
+                };
+            };
+            /** @description Invalid project id or pagination parameters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    uploadProjectMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                projectId: components["parameters"]["MediaProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description JPG, PNG, WebP, GIF, or PDF file. Maximum 5 MB.
+                     */
+                    media: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Project media uploaded successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaResponse"];
+                };
+            };
+            /** @description Media file is missing, unsupported, or larger than 5 MB. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Cloudinary rejected the upload. */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Cloudinary upload timed out. */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteProjectMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000010 */
+                projectId: components["parameters"]["MediaProjectId"];
+                /** @example clx0000000000000000000050 */
+                mediaId: components["parameters"]["MediaId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Project media deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaResponse"];
+                };
+            };
+            /** @description Invalid project or media id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Project or media was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Cloudinary asset deletion failed. */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
