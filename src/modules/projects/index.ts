@@ -18,6 +18,7 @@ export { ProjectsFilters } from './components/list/ProjectsFilters';
 export { ProjectMembersCard } from './components/ProjectMembersCard';
 export { ProjectProgressCard } from './components/ProjectProgressCard';
 export { ProjectTasksCard } from './components/tasks/ProjectTasksCard';
+export { ProjectTaskStats } from './components/tasks/ProjectTaskStats';
 export { TaskCreateForm } from './components/tasks/TaskCreateForm';
 export { TaskKanbanBoard } from './components/tasks/TaskKanbanBoard';
 export { TasksInformation } from './components/tasks/TasksInformation';
