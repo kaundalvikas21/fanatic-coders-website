@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.9.0...v0.10.0) (2026-08-20)
+
+### Features
+
+- **avatar:** added avatar component on project memebers details ([54f73c3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/54f73c3d3e43fc4f8316620808fa5cb23f3a1ea9))
+- **modal:** added dialog and interceptor based dialog for managing routes ([7fd94a9](https://github.com/kaundalvikas21/fanatic-coders-website/commit/7fd94a980d2f22c020eb5ea82d14fea814a19513))
+- **payment:** added payment revenue insights in dashboard ([5bf721e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/5bf721e0c035ef32cb22c795a0aeaf3818b87bb9))
+- **profile:** added dialog interactivity and fix css issue ([22355ba](https://github.com/kaundalvikas21/fanatic-coders-website/commit/22355ba733dddb9e5576a02b67507c492e9491c7))
+- **project media:** added feature for managing and media related to projects ([5c49b3d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/5c49b3d0c416ec136b7866b8afeacb5ba5fa32bd))
+- **skelton:** added suspense based skelton on all pages ([ba84569](https://github.com/kaundalvikas21/fanatic-coders-website/commit/ba8456946e9716740ec304324ced213819579223))
+- **tasks:** added compnoent for redesign tasks page ([7317f80](https://github.com/kaundalvikas21/fanatic-coders-website/commit/7317f80904bbba7bebf60de4a8559e025371db92))
+- **types:** added types for managing project media ([1959038](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1959038df9ea21e41df830e46c6defa7d2f7097a))
+- **ui:** added gradient to component ([156a2d2](https://github.com/kaundalvikas21/fanatic-coders-website/commit/156a2d2ab828f82201145f5e03aa8748817c2fe9))
+
+### Bug Fixes
+
+- **api:** remove browser client and follow server first approach ([7942766](https://github.com/kaundalvikas21/fanatic-coders-website/commit/794276670211d90839c22f4508523a6fafed361f))
+- **avatar:** refactor code regarding Avatar ([328fda0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/328fda037bb30a9ea4791ce2ce2a0e009bf2a73c))
+- **payment:** fix dashboard payment issue ([44be2af](https://github.com/kaundalvikas21/fanatic-coders-website/commit/44be2afd9e5efe56edb545f03efcf226f9b7d24c))
+- **tasks:** remove delete tasks button component ([6563c49](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6563c49653dfdf6015e41478c2bf310a0be38fb1))
+- **typo:** fix hook typo from dialog ([9f2cff7](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9f2cff77c7470cec55332362a950a37127070d09))
+- **users:** display list with eye ([c50c6c7](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c50c6c75003c8925913f373f3007cf90e7aa77b8))
+
+### Code Refactoring
+
+- **kanban,layout,tasks:** added kanban board support ([a5c9392](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a5c9392427af1212e3824712485a53ea3d17d362))
+- **settings:** redeisng route buttons of settings page ([d651950](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d651950f134c8b947867eb0312a7625751c347d7))
+- **sheet:** remove title and descriptions from the sheet ([0c9b3f4](https://github.com/kaundalvikas21/fanatic-coders-website/commit/0c9b3f4dc6c56d45ddf9213ad9c8aa261c2ef03e))
+- **toast:** change toaster position to center ([52e60fd](https://github.com/kaundalvikas21/fanatic-coders-website/commit/52e60fd38212d7d05c9a6cb22d85d1b23ebdabe5))
+- **ui:** added size lg support on select field ([28bbbf0](https://github.com/kaundalvikas21/fanatic-coders-website/commit/28bbbf0f05a87c81e7aa8de556fe5e4480722a00))
+
 ## [0.9.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.8.0...v0.9.0) (2026-08-18)
 
 ### Features
