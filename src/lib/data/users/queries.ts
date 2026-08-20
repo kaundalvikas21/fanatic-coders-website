@@ -10,7 +10,7 @@ import type {
   UserListItem,
 } from '@/types';
 import { ApiResponse, HttpStatus } from '@/utils/api-response';
-import { isOrganizationMemberRole } from '@/lib/auth/roles';
+import { isOrganizationMemberRole, parseRoles } from '@/lib/auth/roles';
 
 const USERS_PAGE_LIMIT = 10;
 
@@ -21,7 +21,7 @@ export async function getUsers(input: GetUsersInput = {}): Promise<GetUsersRespo
     const result = await authServerClient.organization.listMembers({
       query: {
         organizationSlug: FCOP_ORGANIZATION_SLUG,
-        limit: name ? 100 : USERS_PAGE_LIMIT,
+        limit: name ? 100 : Math.min(Math.max(input.limit ?? USERS_PAGE_LIMIT, 1), 100),
         offset: 0,
         sortBy: input.sortBy ?? 'createdAt',
         sortDirection: input.sortDirection ?? 'desc',
@@ -97,10 +97,9 @@ export async function getOrganizationMembersByRole(
   }
 
   return response.data.members.filter((member) =>
-    member.role
-      .split(',')
-      .map((role) => role.trim())
-      .some((role) => isOrganizationMemberRole(role) && allowedRoles.has(role)),
+    parseRoles(member.role).some(
+      (role) => isOrganizationMemberRole(role) && allowedRoles.has(role),
+    ),
   );
 }
 
