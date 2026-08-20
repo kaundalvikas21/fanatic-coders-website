@@ -9,7 +9,7 @@ import type { ProfileUser } from '@/types';
 type AvatarUploaderProps = {
   className?: string;
   disabled?: boolean;
-  onChange: (url: string | null) => void;
+  onChange: (url: string | null) => void | Promise<void>;
   value: string | null;
 };
 
@@ -28,7 +28,9 @@ export function AvatarUploader({ className, disabled, onChange, value }: AvatarU
       maxSizeBytes={5 * 1024 * 1024}
       name="image"
       onUpload={async (file) => {
-        const response = await updateAvatar(file);
+        const formData = new FormData();
+        formData.append('image', file);
+        const response = await updateAvatar(formData);
 
         if (!response.success || !response.data) {
           throw new Error(response.message || 'Profile image upload failed.');
@@ -36,8 +38,8 @@ export function AvatarUploader({ className, disabled, onChange, value }: AvatarU
 
         return response.data;
       }}
-      onUploadSuccess={(user) => {
-        onChange(user.image);
+      onUploadSuccess={async (user) => {
+        await onChange(user.image);
         toast.success('Profile image updated.');
       }}
       onRemove={async () => {
@@ -47,7 +49,7 @@ export function AvatarUploader({ className, disabled, onChange, value }: AvatarU
           throw new Error(response.message || 'Profile image removal failed.');
         }
 
-        onChange(response.data.image);
+        await onChange(response.data.image);
         toast.success('Profile image removed.');
       }}
     />

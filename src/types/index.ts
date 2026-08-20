@@ -112,6 +112,13 @@ export type {
   PaymentStatus,
 } from './payment';
 export type {
+  GetProjectMediaInput,
+  Media,
+  ProjectMediaList,
+  ProjectMediaListResponse,
+  ProjectMediaResponse,
+} from './media';
+export type {
   CreateProjectFromServiceRequestRequest,
   CreateProjectFromServiceRequestResponse,
   CreateProjectInput,

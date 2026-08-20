@@ -7,16 +7,18 @@ import {
   ProjectActionsCard,
   ProjectConversation,
   ProjectMembersCard,
+  ProjectMediaPanel,
   ProjectProgressCard,
   ProjectTasksCard,
   createProjectPermissions,
   createTaskPermissions,
 } from '@/modules/projects';
 import { getProjectById } from '@/modules/projects/data/queries';
+import { getProjectMedia } from '@/modules/projects/data/media';
 import { getProjectTasks } from '@/modules/projects/data/tasks/queries';
 import { getCurrentAccess } from '@/lib/auth/current-access';
 import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
-import type { OrganizationMemberRole, Project, Task } from '@/types';
+import type { Media, OrganizationMemberRole, Project, Task } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,7 +45,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     notFound();
   }
 
-  const tasksResponse = await getProjectTasks(project.id);
+  const [tasksResponse, mediaResponse] = await Promise.all([
+    getProjectTasks(project.id),
+    getProjectMedia(project.id, { page: 1, pageSize: 20 }),
+  ]);
   const tasks: Task[] =
     tasksResponse.success && Array.isArray(tasksResponse.data)
       ? (tasksResponse.data as Task[])
@@ -51,6 +56,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const assignableMembers = taskPermissions.canCreate
     ? await getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
     : [];
+  const media: Media[] = mediaResponse.success ? mediaResponse.data.items : [];
 
   return (
     <DetailPageLayout>
@@ -71,6 +77,11 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           projectId={project.id}
           tasks={tasks}
           assignableMembers={assignableMembers}
+        />
+
+        <ProjectMediaPanel
+          projectId={project.id}
+          media={media}
         />
       </DetailPageLayout.Main>
 
