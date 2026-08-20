@@ -1,14 +1,33 @@
-import { browserApi } from '@/lib/axios/browser-client';
-import { unwrap } from '@/lib/axios/utils';
+'use server';
+
+import { revalidatePath } from 'next/cache';
+
+import { authApi } from '@/lib/axios/client';
+import { getApiError, unwrap } from '@/lib/axios/utils';
 import type { DeleteAvatarResponse, UpdateAvatarResponse } from '@/types';
 
-export function updateAvatar(file: File) {
-  const formData = new FormData();
-  formData.append('image', file);
+export async function updateAvatar(formData: FormData): Promise<UpdateAvatarResponse> {
+  try {
+    const response = await unwrap<UpdateAvatarResponse>(
+      authApi.put('/api/v1/me/avatar', formData, { timeout: 60_000 }),
+    );
 
-  return unwrap(browserApi.put<UpdateAvatarResponse>('/api/me/avatar', formData));
+    revalidatePath('/dashboard/profile');
+
+    return response;
+  } catch (error) {
+    return getApiError(error) as UpdateAvatarResponse;
+  }
 }
 
-export function deleteAvatar() {
-  return unwrap(browserApi.delete<DeleteAvatarResponse>('/api/me/avatar'));
+export async function deleteAvatar(): Promise<DeleteAvatarResponse> {
+  try {
+    const response = await unwrap<DeleteAvatarResponse>(authApi.delete('/api/v1/me/avatar'));
+
+    revalidatePath('/dashboard/profile');
+
+    return response;
+  } catch (error) {
+    return getApiError(error) as DeleteAvatarResponse;
+  }
 }
