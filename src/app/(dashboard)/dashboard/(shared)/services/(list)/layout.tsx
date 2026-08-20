@@ -1,16 +1,25 @@
 import type { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
 import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
+import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
 import {
   getServiceRequestPermissions,
   ServiceCatalog,
   ServiceRequestFilters,
+  ServiceRequestStatusStats,
 } from '@/modules/service-requests';
 import { WidgetCard } from '@/components/shared/widget-card';
+import { getServiceRequests } from '@/modules/service-requests/data/queries';
+import type { ServiceRequest } from '@/types';
 
 export default async function ServicesLayout({ children }: { children: ReactNode }) {
-  const permissions = await getServiceRequestPermissions();
+  const [permissions, response] = await Promise.all([
+    getServiceRequestPermissions(),
+    getServiceRequests(),
+  ]);
+  const requests =
+    response.success && Array.isArray(response.data) ? (response.data as ServiceRequest[]) : [];
 
   return (
     <ListsLayout
@@ -30,6 +39,14 @@ export default async function ServicesLayout({ children }: { children: ReactNode
         />
       }
     >
+      {response.success ? (
+        <ServiceRequestStatusStats requests={requests} />
+      ) : (
+        <ErrorState
+          title="Could not load service totals"
+          message={response.message}
+        />
+      )}
       {/* Service catalog for clients who can create requests. */}
       {permissions.canCreate && (
         <WidgetCard
