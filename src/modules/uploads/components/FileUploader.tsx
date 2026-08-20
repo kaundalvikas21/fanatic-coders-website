@@ -24,8 +24,10 @@ export type FileUploaderProps<TResult = unknown> = {
   name?: string;
   onRemove?: () => void | Promise<void>;
   onUpload: (file: File) => Promise<TResult>;
-  onUploadSuccess?: (result: TResult) => void;
+  onUploadSuccess?: (result: TResult) => void | Promise<void>;
 };
+
+const emptySelection = { file: null as File | null, previewUrl: null as string | null };
 
 export function FileUploader<TResult = unknown>({
   accept,
@@ -40,72 +42,66 @@ export function FileUploader<TResult = unknown>({
   onUploadSuccess,
 }: FileUploaderProps<TResult>) {
   const inputId = useId();
-  const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl ?? null);
-  const [error, setError] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [isRemoving, setIsRemoving] = useState(false);
+  const [selection, setSelection] = useState(emptySelection);
+  const [request, setRequest] = useState({ isPending: false, error: null as string | null });
+  const previewUrl = selection.previewUrl ?? currentUrl ?? null;
 
   useEffect(() => {
-    if (!file || !file.type.startsWith('image/')) {
-      setPreviewUrl(currentUrl ?? null);
-      return;
-    }
+    return () => {
+      if (selection.previewUrl) URL.revokeObjectURL(selection.previewUrl);
+    };
+  }, [selection.previewUrl]);
 
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [currentUrl, file]);
-
-  const uploadFile = async (acceptedFile: File) => {
-    setFile(acceptedFile);
-    setError(null);
-    setIsUploading(true);
+  const runRequest = async (action: () => Promise<void>) => {
+    setRequest({ isPending: true, error: null });
 
     try {
-      const result = await onUpload(acceptedFile);
-      onUploadSuccess?.(result);
-    } catch (uploadError) {
-      setError(getUploadErrorMessage(uploadError));
-    } finally {
-      setIsUploading(false);
+      await action();
+      setRequest({ isPending: false, error: null });
+    } catch (error) {
+      setRequest({ isPending: false, error: getUploadErrorMessage(error) });
     }
+  };
+
+  const uploadFile = async (acceptedFile: File) => {
+    setSelection({
+      file: acceptedFile,
+      previewUrl: acceptedFile.type.startsWith('image/') ? URL.createObjectURL(acceptedFile) : null,
+    });
+    await runRequest(async () => {
+      const result = await onUpload(acceptedFile);
+      await onUploadSuccess?.(result);
+    });
   };
 
   const { getInputProps, getRootProps, isDragAccept, isDragActive, isDragReject } = useDropzone({
     accept,
-    disabled: disabled || isUploading || isRemoving,
+    disabled: disabled || request.isPending,
     maxFiles: 1,
     maxSize: maxSizeBytes,
     multiple: false,
     onDropAccepted: ([acceptedFile]) => {
       if (acceptedFile) void uploadFile(acceptedFile);
     },
-    onDropRejected: (rejections) => setError(getFileRejectionMessage(rejections, maxSizeBytes)),
+    onDropRejected: (rejections) =>
+      setRequest({
+        isPending: false,
+        error: getFileRejectionMessage(rejections, maxSizeBytes),
+      }),
   });
 
   const handleRemove = async () => {
     if (!onRemove) {
-      setFile(null);
-      setPreviewUrl(currentUrl ?? null);
-      setError(null);
+      setSelection(emptySelection);
+      setRequest({ isPending: false, error: null });
       return;
     }
 
-    try {
-      setIsRemoving(true);
-      setError(null);
+    await runRequest(async () => {
       await onRemove();
-      setFile(null);
-      setPreviewUrl(null);
-    } catch (removeError) {
-      setError(getUploadErrorMessage(removeError));
-    } finally {
-      setIsRemoving(false);
-    }
+      setSelection(emptySelection);
+    });
   };
-
-  const isBusy = isUploading || isRemoving;
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -116,14 +112,14 @@ export function FileUploader<TResult = unknown>({
             'hover:border-primary/60 hover:bg-primary/5 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40',
             isDragAccept && 'border-primary bg-primary/10',
             isDragReject && 'border-destructive bg-destructive/5',
-            (disabled || isBusy) && 'cursor-not-allowed opacity-60',
+            (disabled || request.isPending) && 'cursor-not-allowed opacity-60',
           ),
-          'aria-describedby': `${inputId}-help${error ? ` ${inputId}-error` : ''}`,
+          'aria-describedby': `${inputId}-help${request.error ? ` ${inputId}-error` : ''}`,
         })}
       >
         <input {...getInputProps({ id: inputId, name })} />
 
-        {isBusy ? (
+        {request.isPending ? (
           <div
             className="flex items-center gap-2 text-sm text-muted-foreground"
             role="status"
@@ -132,7 +128,7 @@ export function FileUploader<TResult = unknown>({
               className="size-4 animate-spin motion-reduce:animate-none"
               aria-hidden="true"
             />
-            {isRemoving ? 'Removing…' : 'Uploading…'}
+            Updating...
           </div>
         ) : previewUrl ? (
           <Image
@@ -143,13 +139,13 @@ export function FileUploader<TResult = unknown>({
             unoptimized
             className="max-h-44 w-auto rounded-lg object-contain"
           />
-        ) : file ? (
+        ) : selection.file ? (
           <div className="flex min-w-0 flex-col items-center gap-2">
             <FileIcon
               className="size-7 text-primary"
               aria-hidden="true"
             />
-            <span className="max-w-full truncate text-sm font-medium">{file.name}</span>
+            <span className="max-w-full truncate text-sm font-medium">{selection.file.name}</span>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
@@ -161,7 +157,7 @@ export function FileUploader<TResult = unknown>({
           </div>
         )}
 
-        {!isBusy && (previewUrl || file) ? (
+        {!request.isPending && (previewUrl || selection.file) ? (
           <Button
             type="button"
             size="icon-sm"
@@ -185,13 +181,13 @@ export function FileUploader<TResult = unknown>({
         Maximum file size: {formatFileSize(maxSizeBytes)}
       </p>
 
-      {error ? (
+      {request.error ? (
         <p
           id={`${inputId}-error`}
           className="text-sm text-destructive"
           role="alert"
         >
-          {error}
+          {request.error}
         </p>
       ) : null}
     </div>
