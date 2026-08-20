@@ -28,7 +28,9 @@ export function AvatarUploader({ className, disabled, onChange, value }: AvatarU
       maxSizeBytes={5 * 1024 * 1024}
       name="image"
       onUpload={async (file) => {
-        const response = await updateAvatar(file);
+        const formData = new FormData();
+        formData.append('image', file);
+        const response = await updateAvatar(formData);
 
         if (!response.success || !response.data) {
           throw new Error(response.message || 'Profile image upload failed.');

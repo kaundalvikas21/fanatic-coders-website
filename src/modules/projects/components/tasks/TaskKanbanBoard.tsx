@@ -4,9 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { DndContext, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
-import { CalendarDays, Clock3, GripVertical } from 'lucide-react';
+import { CalendarDays, Clock3, GripVertical, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { ActionDialog } from '@/components/shared/action-dialog';
 import { Badge } from '@/components/ui/badge';
 import { AvatarGroup, AvatarGroupCount } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -19,8 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { updateTaskById } from '@/modules/projects/data/tasks/mutations';
-import { TaskDeleteButton } from './TaskDeleteButton';
+import { deleteTaskById, updateTaskById } from '@/modules/projects/data/tasks/mutations';
 import type { Task, TaskStatus } from '@/types';
 import {
   TASK_PRIORITY_BADGE_VARIANTS,
@@ -112,7 +112,7 @@ function TaskCardContent({ task, showProject }: { task: Task; showProject: boole
         </div>
         <CardTitle className="text-sm leading-5 tracking-normal">{task.title}</CardTitle>
         {showProject && task.project ? (
-          <CardDescription className="font-mono text-[0.6875rem]">
+          <CardDescription className="font-mono text-xs">
             <Link
               href={`/dashboard/projects/${task.project.id}`}
               className="hover:text-foreground hover:underline"
@@ -187,6 +187,26 @@ function TaskCard({
       data: { task },
       disabled,
     });
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  async function handleDelete(close: () => void) {
+    setIsDeleting(true);
+
+    try {
+      const response = await deleteTaskById(task.id, task.projectId);
+
+      if (!response.success) {
+        toast.error(response.message || 'Could not delete task.');
+        return;
+      }
+
+      toast.success('Task deleted.');
+      onDeleted(task.id);
+      close();
+    } finally {
+      setIsDeleting(false);
+    }
+  }
 
   return (
     <Card
@@ -216,10 +236,42 @@ function TaskCard({
       </Button>
       {canDelete ? (
         <div className="absolute top-2 right-10 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none">
-          <TaskDeleteButton
-            task={task}
-            onDeleted={onDeleted}
-          />
+          <ActionDialog
+            title="Delete this task?"
+            description="The task will be removed from this project."
+            trigger={
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                aria-label="Delete task"
+                title="Delete task"
+              >
+                <Trash2 />
+              </Button>
+            }
+          >
+            {({ close }) => (
+              <div className="flex justify-end gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isDeleting}
+                  onClick={close}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  disabled={isDeleting}
+                  onClick={() => void handleDelete(close)}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete'}
+                </Button>
+              </div>
+            )}
+          </ActionDialog>
         </div>
       ) : null}
       <TaskCardContent
