@@ -33,10 +33,10 @@ const TASK_ASSIGNMENT_ROLES = [
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { id } = await params;
-  const access = await getCurrentAccess();
+  const [access, projectResponse] = await Promise.all([getCurrentAccess(), getProjectById(id)]);
   const projectPermissions = createProjectPermissions(access);
   const taskPermissions = createTaskPermissions(access);
-  const { success, data: project } = (await getProjectById(id)) as {
+  const { success, data: project } = projectResponse as {
     success: boolean;
     data?: Project | null;
   };
@@ -45,17 +45,17 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     notFound();
   }
 
-  const [tasksResponse, mediaResponse] = await Promise.all([
+  const [tasksResponse, mediaResponse, assignableMembers] = await Promise.all([
     getProjectTasks(project.id),
     getProjectMedia(project.id, { page: 1, pageSize: 20 }),
+    taskPermissions.canCreate
+      ? getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
+      : Promise.resolve([]),
   ]);
   const tasks: Task[] =
     tasksResponse.success && Array.isArray(tasksResponse.data)
       ? (tasksResponse.data as Task[])
       : [];
-  const assignableMembers = taskPermissions.canCreate
-    ? await getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
-    : [];
   const media: Media[] = mediaResponse.success ? mediaResponse.data.items : [];
 
   return (
