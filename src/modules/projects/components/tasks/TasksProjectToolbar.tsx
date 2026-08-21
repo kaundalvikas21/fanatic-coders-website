@@ -2,10 +2,9 @@
 
 import { useTransition } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ListTodo, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { SelectField } from '@/components/shared/forms/SelectField';
-import { WidgetCard } from '@/components/shared/widget-card';
 import type { Project, UserListItem } from '@/types';
 import { TaskCreateForm } from './TaskCreateForm';
 import { useTaskPermissions } from '../../hooks/use-task-permissions';
@@ -64,18 +63,10 @@ export function TasksProjectToolbar({ projects, assignableMembers }: TasksProjec
           }
         >
           <div className="min-h-0 flex-1 p-3">
-            <WidgetCard
-              icon={ListTodo}
-              title="New task"
-              description="Enter the task details and choose who will work on it."
-              className="gap-3 [--card-spacing:--spacing(3)]"
-              contentClassNames="px-3"
-            >
-              <TaskCreateForm
-                projectId={selectedProjectId}
-                assignableMembers={assignableMembers}
-              />
-            </WidgetCard>
+            <TaskCreateForm
+              projectId={selectedProjectId}
+              assignableMembers={assignableMembers}
+            />
           </div>
         </ActionSheet>
       ) : null}
