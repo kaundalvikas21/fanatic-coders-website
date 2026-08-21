@@ -1,6 +1,8 @@
 import { Ban, CircleCheckBig, CircleDashed, Inbox } from 'lucide-react';
 
 import { OverviewStatsCard, type OverviewStat } from '@/components/dashboard/OverviewStatsCard';
+import { ErrorState } from '@/components/shared/error-state';
+import { getServiceRequests } from '@/modules/service-requests/data/queries';
 import type { ServiceRequest, ServiceRequestStatus } from '@/types';
 
 type ServiceRequestStatusStatsProps = {
@@ -51,4 +53,19 @@ export function ServiceRequestStatusStats({ requests }: ServiceRequestStatusStat
   ];
 
   return <OverviewStatsCard stats={stats} />;
+}
+
+export async function ServiceRequestStatusStatsLoader() {
+  const response = await getServiceRequests();
+
+  if (!response.success || !Array.isArray(response.data)) {
+    return (
+      <ErrorState
+        title="Could not load service totals"
+        message={response.message}
+      />
+    );
+  }
+
+  return <ServiceRequestStatusStats requests={response.data as ServiceRequest[]} />;
 }

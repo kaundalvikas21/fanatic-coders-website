@@ -1,6 +1,8 @@
 import { BadgeCheck, CircleX, PhoneCall, UserPlus } from 'lucide-react';
 
 import { OverviewStatsCard, type OverviewStat } from '@/components/dashboard/OverviewStatsCard';
+import { ErrorState } from '@/components/shared/error-state';
+import { getAdminDashboardLeadDistribution } from '@/modules/dashboard/data/queries';
 import type { AdminDashboardLeadDistribution } from '@/types';
 
 type LeadStatusStatsProps = {
@@ -41,4 +43,19 @@ export function LeadStatusStats({ distribution }: LeadStatusStatsProps) {
   ];
 
   return <OverviewStatsCard stats={stats} />;
+}
+
+export async function LeadStatusStatsLoader() {
+  const response = await getAdminDashboardLeadDistribution();
+
+  if (!response.success) {
+    return (
+      <ErrorState
+        title="Could not load lead totals"
+        message={response.message}
+      />
+    );
+  }
+
+  return <LeadStatusStats distribution={response.data} />;
 }

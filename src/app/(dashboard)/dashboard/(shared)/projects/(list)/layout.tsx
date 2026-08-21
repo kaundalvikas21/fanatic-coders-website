@@ -1,14 +1,10 @@
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
+import { OverviewStatsSkeleton } from '@/components/dashboard/OverviewStatsCard';
 import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
-import { ProjectsFilters, ProjectTaskStats } from '@/modules/projects';
-import { getTasks } from '@/modules/projects/data/tasks/queries';
-import type { Task } from '@/types';
+import { ProjectsFilters, ProjectTaskStatsLoader } from '@/modules/projects';
 
-export default async function ProjectsLayout({ children }: { children: ReactNode }) {
-  const response = await getTasks();
-  const tasks = response.success && Array.isArray(response.data) ? (response.data as Task[]) : [];
-
+export default function ProjectsLayout({ children }: { children: ReactNode }) {
   return (
     <ListsLayout
       header={
@@ -18,7 +14,9 @@ export default async function ProjectsLayout({ children }: { children: ReactNode
         />
       }
     >
-      <ProjectTaskStats tasks={tasks} />
+      <Suspense fallback={<OverviewStatsSkeleton />}>
+        <ProjectTaskStatsLoader />
+      </Suspense>
       <FilterLayout filters={<ProjectsFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );

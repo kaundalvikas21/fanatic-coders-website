@@ -1,13 +1,10 @@
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
+import { OverviewStatsSkeleton } from '@/components/dashboard/OverviewStatsCard';
 import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
-import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
-import { LeadsFilters, LeadStatusStats } from '@/modules/leads';
-import { getAdminDashboardLeadDistribution } from '@/modules/dashboard/data/queries';
+import { LeadsFilters, LeadStatusStatsLoader } from '@/modules/leads';
 
-export default async function LeadsLayout({ children }: { children: ReactNode }) {
-  const response = await getAdminDashboardLeadDistribution();
-
+export default function LeadsLayout({ children }: { children: ReactNode }) {
   return (
     <ListsLayout
       header={
@@ -17,14 +14,9 @@ export default async function LeadsLayout({ children }: { children: ReactNode })
         />
       }
     >
-      {response.success ? (
-        <LeadStatusStats distribution={response.data} />
-      ) : (
-        <ErrorState
-          title="Could not load lead totals"
-          message={response.message}
-        />
-      )}
+      <Suspense fallback={<OverviewStatsSkeleton />}>
+        <LeadStatusStatsLoader />
+      </Suspense>
       <FilterLayout filters={<LeadsFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );

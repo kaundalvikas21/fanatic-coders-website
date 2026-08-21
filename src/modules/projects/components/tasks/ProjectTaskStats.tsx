@@ -1,6 +1,8 @@
 import { CircleCheckBig, CircleDashed, ListTodo, ScanSearch } from 'lucide-react';
 
 import { OverviewStatsCard, type OverviewStat } from '@/components/dashboard/OverviewStatsCard';
+import { ErrorState } from '@/components/shared/error-state';
+import { getTasks } from '@/modules/projects/data/tasks/queries';
 import type { Task, TaskStatus } from '@/types';
 
 type ProjectTaskStatsProps = {
@@ -51,4 +53,19 @@ export function ProjectTaskStats({ tasks }: ProjectTaskStatsProps) {
   ];
 
   return <OverviewStatsCard stats={stats} />;
+}
+
+export async function ProjectTaskStatsLoader() {
+  const response = await getTasks();
+
+  if (!response.success || !Array.isArray(response.data)) {
+    return (
+      <ErrorState
+        title="Could not load task totals"
+        message={response.message}
+      />
+    );
+  }
+
+  return <ProjectTaskStats tasks={response.data as Task[]} />;
 }
