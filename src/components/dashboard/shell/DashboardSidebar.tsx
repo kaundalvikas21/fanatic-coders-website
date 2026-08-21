@@ -22,7 +22,7 @@ export function DashboardSidebar({ role, ...props }: DashboardSidebarProps) {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-sidebar-border/70 [&_[data-sidebar=sidebar]]:relative [&_[data-sidebar=sidebar]]:isolate [&_[data-sidebar=sidebar]]:overflow-hidden"
+      className="border-sidebar-border/70 [&_[data-sidebar=sidebar]]:relative [&_[data-sidebar=sidebar]]:isolate [&_[data-sidebar=sidebar]]:overflow-hidden [&_[data-sidebar=sidebar]]:rounded-r-lg"
       {...props}
     >
       <div

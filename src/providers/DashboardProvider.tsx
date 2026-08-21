@@ -10,7 +10,7 @@ type DashboardProviderProps = {
 
 export function DashboardProvider({ children }: DashboardProviderProps) {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="bg-background">
       <TooltipProvider>{children}</TooltipProvider>
     </SidebarProvider>
   );
