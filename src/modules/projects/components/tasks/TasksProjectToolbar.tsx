@@ -63,7 +63,7 @@ export function TasksProjectToolbar({ projects, assignableMembers }: TasksProjec
             </ActionSheetButton>
           }
         >
-          <div className="min-h-0 flex-1 overflow-y-auto p-3">
+          <div className="min-h-0 flex-1 p-3">
             <WidgetCard
               icon={ListTodo}
               title="New task"

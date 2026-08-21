@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { DatePickerField } from '@/components/shared/forms/DatePickerField';
 import { MultiSelectField } from '@/components/shared/forms/MultiSelectField';
 import { SelectField } from '@/components/shared/forms/SelectField';
@@ -13,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { createProjectTask } from '@/modules/projects/data/tasks/mutations';
 import {
   taskCreateSchema,
   type TaskCreateFormInput,
@@ -42,9 +40,9 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
       assigneeMemberIds: [],
     },
   });
+
   const isSubmitting = form.formState.isSubmitting;
   const titleError = form.formState.errors.title?.message;
-  const dueDateError = form.formState.errors.dueDate?.message;
   const estimatedHoursError = form.formState.errors.estimatedHours?.message;
   const today = startOfToday();
   const assigneeOptions = assignableMembers.map((member) => ({
@@ -58,26 +56,27 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
   async function handleSubmit(values: TaskCreateFormValues) {
     const payload: CreateTaskRequest = values;
 
-    setMessage(null);
+    console.log(payload);
+    // setMessage(null);
 
-    try {
-      const response = await createProjectTask(projectId, payload);
+    // try {
+    //   const response = await createProjectTask(projectId, payload);
 
-      if (!response.success) {
-        setMessage(response.message || 'Could not create task.');
-        return;
-      }
+    //   if (!response.success) {
+    //     setMessage(response.message || 'Could not create task.');
+    //     return;
+    //   }
 
-      toast.success('Task created.');
-      form.reset();
-      sheet?.close();
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Could not create task.');
-    }
+    //   toast.success('Task created.');
+    //   form.reset();
+    //   sheet?.close();
+    // } catch (error) {
+    //   setMessage(error instanceof Error ? error.message : 'Could not create task.');
+    // }
   }
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form onSubmit={(event) => event.preventDefault()}>
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="task-title">Title</FieldLabel>
@@ -124,20 +123,22 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
             <Controller
               control={form.control}
               name="dueDate"
-              render={({ field }) => (
-                <DatePickerField
-                  id="task-due-date"
-                  value={field.value}
-                  onChange={field.onChange}
-                  placeholder="Pick due date"
-                  ariaLabel="Task due date"
-                  disabled={isSubmitting}
-                  minDate={today}
-                  error={dueDateError}
-                />
+              render={({ field, fieldState }) => (
+                <>
+                  <DatePickerField
+                    id="task-due-date"
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Pick due date"
+                    ariaLabel="Task due date"
+                    disabled={isSubmitting}
+                    minDate={today}
+                    error={fieldState.error?.message}
+                  />
+                  {fieldState.error && <FieldError errors={[fieldState.error]} />}
+                </>
               )}
             />
-            {dueDateError && <FieldError errors={[{ message: dueDateError }]} />}
           </Field>
         </div>
 
@@ -156,12 +157,12 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
           {estimatedHoursError && <FieldError errors={[{ message: estimatedHoursError }]} />}
         </Field>
 
-        <Field>
-          <FieldLabel htmlFor="task-assignees">Assignees</FieldLabel>
-          <Controller
-            control={form.control}
-            name="assigneeMemberIds"
-            render={({ field }) => (
+        <Controller
+          control={form.control}
+          name="assigneeMemberIds"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="task-assignees">Assignees</FieldLabel>
               <MultiSelectField
                 id="task-assignees"
                 options={assigneeOptions}
@@ -170,29 +171,28 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
                 placeholder="Select assignees"
                 noOptionsMessage="No internal members available for assignment."
                 ariaLabel="Task assignees"
+                invalid={fieldState.invalid}
                 disabled={isSubmitting || assigneeOptions.length === 0}
                 renderOption={(option, context) =>
                   context === 'value' ? (
                     option.label
                   ) : (
-                    <div className="flex min-w-0 items-center gap-2 cursor-pointer">
+                    <div className="flex min-w-0 items-center gap-2">
                       <UserAvatar
                         name={option.name}
                         email={option.email}
                         image={option.image}
                         className="size-7"
                       />
-                      <div className="min-w-0">
-                        <p className="truncate font-medium">{option.label}</p>
-                        <p className="truncate text-xs opacity-70">{option.email}</p>
-                      </div>
+                      <span className="truncate">{option.label}</span>
                     </div>
                   )
                 }
               />
-            )}
-          />
-        </Field>
+              {fieldState.error && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
 
         {message && (
           <p
@@ -204,8 +204,9 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
         )}
 
         <Button
-          type="submit"
+          type="button"
           disabled={isSubmitting}
+          onClick={() => form.handleSubmit(handleSubmit)()}
         >
           {isSubmitting ? 'Creating task' : 'Create task'}
         </Button>

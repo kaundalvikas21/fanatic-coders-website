@@ -27,7 +27,7 @@ export const taskCreateSchema = z.object({
       'Enter valid hours greater than or equal to 0.',
     )
     .transform((value) => (value ? Number(value) : undefined)),
-  assigneeMemberIds: z.array(z.string()),
+  assigneeMemberIds: z.array(z.string()).min(1, 'Select at least one assignee.'),
 });
 
 export type TaskCreateFormInput = z.input<typeof taskCreateSchema>;

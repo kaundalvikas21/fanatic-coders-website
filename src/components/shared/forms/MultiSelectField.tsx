@@ -9,8 +9,6 @@ export type MultiSelectOption = {
   value: string;
 };
 
-export type MultiSelectRenderContext = 'menu' | 'value';
-
 type MultiSelectFieldProps<TOption extends MultiSelectOption> = {
   id: string;
   options: readonly TOption[];
@@ -20,8 +18,9 @@ type MultiSelectFieldProps<TOption extends MultiSelectOption> = {
   noOptionsMessage?: string;
   ariaLabel?: string;
   disabled?: boolean;
+  invalid?: boolean;
   className?: string;
-  renderOption?: (option: TOption, context: MultiSelectRenderContext) => ReactNode;
+  renderOption?: (option: TOption, context: 'menu' | 'value') => ReactNode;
 };
 
 export function MultiSelectField<TOption extends MultiSelectOption>({
@@ -33,6 +32,7 @@ export function MultiSelectField<TOption extends MultiSelectOption>({
   noOptionsMessage = 'No options found.',
   ariaLabel,
   disabled = false,
+  invalid = false,
   className,
   renderOption,
 }: MultiSelectFieldProps<TOption>) {
@@ -47,9 +47,6 @@ export function MultiSelectField<TOption extends MultiSelectOption>({
       inputId={id}
       instanceId={id}
       isMulti
-      isClearable
-      closeMenuOnSelect={false}
-      hideSelectedOptions={false}
       options={options}
       value={selectedOptions}
       onChange={handleChange}
@@ -57,27 +54,29 @@ export function MultiSelectField<TOption extends MultiSelectOption>({
       noOptionsMessage={() => noOptionsMessage}
       formatOptionLabel={(option, meta) => renderOption?.(option, meta.context) ?? option.label}
       aria-label={ariaLabel}
+      aria-invalid={invalid}
       isDisabled={disabled}
       unstyled
       className={className}
       classNames={{
-        control: ({ isFocused }) =>
+        control: ({ isFocused, isDisabled }) =>
           cn(
-            'min-h-9 rounded-lg border border-input bg-transparent px-1 text-sm shadow-xs transition-colors',
+            'min-h-8 rounded-lg border border-input bg-transparent px-1 text-sm transition-colors',
             isFocused && 'border-ring ring-3 ring-ring/50',
+            isDisabled && 'cursor-not-allowed bg-input/50 opacity-50',
+            invalid && 'border-destructive ring-3 ring-destructive/20',
           ),
         valueContainer: () => 'gap-1 px-1.5 py-1',
         placeholder: () => 'text-muted-foreground',
         input: () => 'text-foreground',
         multiValue: () => 'rounded-md bg-muted text-foreground',
-        multiValueLabel: () => 'px-2 py-0.5 text-xs font-medium',
+        multiValueLabel: () => 'px-1.5 py-0.5 text-xs',
         multiValueRemove: () =>
           'rounded-r-md px-1 text-muted-foreground hover:bg-destructive/15 hover:text-destructive',
         indicatorsContainer: () => 'text-muted-foreground',
-        clearIndicator: () => 'cursor-pointer p-1 hover:text-foreground',
-        dropdownIndicator: () => 'cursor-pointer p-1 hover:text-foreground',
+        dropdownIndicator: () => 'cursor-pointer p-1.5 hover:text-foreground',
         menu: () =>
-          'z-50 mt-1 overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10',
+          'mt-1 overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10',
         menuList: () => 'max-h-60 p-1',
         option: ({ isFocused, isSelected }) =>
           cn(
