@@ -1,38 +1,38 @@
 'use client';
 
 import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { DatePickerField } from '@/components/shared/forms/DatePickerField';
+import { MultiSelectField } from '@/components/shared/forms/MultiSelectField';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import { useSheet } from '@/components/shared/action-sheet';
+import { UserAvatar } from '@/components/shared/user-avatar';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createProjectTask } from '@/modules/projects/data/tasks/mutations';
+import {
+  taskCreateSchema,
+  type TaskCreateFormInput,
+  type TaskCreateFormValues,
+} from '@/modules/projects/schemas/task';
 import type { CreateTaskRequest, TaskPriority, UserListItem } from '@/types';
 import { TASK_PRIORITY_OPTIONS } from '@/types';
-import { formatDateInputValue, startOfToday } from '@/utils/date';
+import { startOfToday } from '@/utils/date';
 
 type TaskCreateFormProps = {
   projectId: string;
   assignableMembers: UserListItem[];
 };
 
-type TaskCreateFormValues = {
-  title: string;
-  description: string;
-  priority: TaskPriority;
-  dueDate: string;
-  estimatedHours: string;
-  assigneeMemberIds: string[];
-};
-
 export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormProps) {
   const sheet = useSheet();
   const [message, setMessage] = useState<string | null>(null);
-  const form = useForm<TaskCreateFormValues>({
+  const form = useForm<TaskCreateFormInput, unknown, TaskCreateFormValues>({
+    resolver: zodResolver(taskCreateSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -44,72 +44,40 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
   });
   const isSubmitting = form.formState.isSubmitting;
   const titleError = form.formState.errors.title?.message;
+  const dueDateError = form.formState.errors.dueDate?.message;
   const estimatedHoursError = form.formState.errors.estimatedHours?.message;
   const today = startOfToday();
-  const todayValue = formatDateInputValue(today);
+  const assigneeOptions = assignableMembers.map((member) => ({
+    label: member.user.name || member.user.email,
+    value: member.id,
+    name: member.user.name,
+    email: member.user.email,
+    image: member.user.image,
+  }));
 
   async function handleSubmit(values: TaskCreateFormValues) {
-    const title = values.title.trim();
-    const description = values.description.trim();
-    const estimatedHours = values.estimatedHours.trim();
-    const payload: CreateTaskRequest = {
-      title,
-      priority: values.priority,
-      assigneeMemberIds: values.assigneeMemberIds,
-    };
+    const payload: CreateTaskRequest = values;
 
     setMessage(null);
 
-    if (description) {
-      payload.description = description;
-    }
+    try {
+      const response = await createProjectTask(projectId, payload);
 
-    if (values.dueDate) {
-      if (values.dueDate < todayValue) {
-        setMessage('Due date cannot be in the past.');
+      if (!response.success) {
+        setMessage(response.message || 'Could not create task.');
         return;
       }
 
-      payload.dueDate = values.dueDate;
+      toast.success('Task created.');
+      form.reset();
+      sheet?.close();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Could not create task.');
     }
-
-    if (estimatedHours) {
-      const parsedHours = Number(estimatedHours);
-
-      if (!Number.isFinite(parsedHours) || parsedHours < 0) {
-        form.setError('estimatedHours', {
-          message: 'Enter valid hours greater than or equal to 0.',
-        });
-        return;
-      }
-
-      payload.estimatedHours = parsedHours;
-    }
-
-    const response = await createProjectTask(projectId, payload);
-
-    if (!response.success) {
-      setMessage(response.message || 'Could not create task.');
-      return;
-    }
-
-    toast.success('Task created.');
-    form.reset({
-      title: '',
-      description: '',
-      priority: 'MEDIUM',
-      dueDate: '',
-      estimatedHours: '',
-      assigneeMemberIds: [],
-    });
-    sheet?.close();
   }
 
   return (
-    <form
-      className="px-4 pb-5"
-      onSubmit={form.handleSubmit(handleSubmit)}
-    >
+    <form onSubmit={form.handleSubmit(handleSubmit)}>
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="task-title">Title</FieldLabel>
@@ -118,9 +86,7 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
             placeholder="Homepage wireframe"
             disabled={isSubmitting}
             aria-invalid={Boolean(titleError)}
-            {...form.register('title', {
-              required: 'Enter a task title.',
-            })}
+            {...form.register('title')}
           />
           {titleError && <FieldError errors={[{ message: titleError }]} />}
         </Field>
@@ -154,7 +120,7 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
             />
           </Field>
           <Field>
-            <FieldLabel>Due date</FieldLabel>
+            <FieldLabel htmlFor="task-due-date">Due date</FieldLabel>
             <Controller
               control={form.control}
               name="dueDate"
@@ -167,9 +133,11 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
                   ariaLabel="Task due date"
                   disabled={isSubmitting}
                   minDate={today}
+                  error={dueDateError}
                 />
               )}
             />
+            {dueDateError && <FieldError errors={[{ message: dueDateError }]} />}
           </Field>
         </div>
 
@@ -189,49 +157,39 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
         </Field>
 
         <Field>
-          <FieldLabel>Assignees</FieldLabel>
+          <FieldLabel htmlFor="task-assignees">Assignees</FieldLabel>
           <Controller
             control={form.control}
             name="assigneeMemberIds"
             render={({ field }) => (
-              <div className="grid gap-2 rounded-lg border p-3">
-                {assignableMembers.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    No internal members available for assignment.
-                  </p>
-                ) : (
-                  assignableMembers.map((member) => {
-                    const checked = field.value.includes(member.id);
-
-                    return (
-                      <label
-                        key={member.id}
-                        className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 text-sm hover:bg-muted"
-                      >
-                        <input
-                          type="checkbox"
-                          className="size-4"
-                          checked={checked}
-                          disabled={isSubmitting}
-                          onChange={(event) => {
-                            const nextValue = event.target.checked
-                              ? [...field.value, member.id]
-                              : field.value.filter((memberId) => memberId !== member.id);
-
-                            field.onChange(nextValue);
-                          }}
-                        />
-                        <span className="min-w-0">
-                          <span className="block truncate font-medium">{member.user.name}</span>
-                          <span className="block truncate text-muted-foreground">
-                            {member.user.email}
-                          </span>
-                        </span>
-                      </label>
-                    );
-                  })
-                )}
-              </div>
+              <MultiSelectField
+                id="task-assignees"
+                options={assigneeOptions}
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="Select assignees"
+                noOptionsMessage="No internal members available for assignment."
+                ariaLabel="Task assignees"
+                disabled={isSubmitting || assigneeOptions.length === 0}
+                renderOption={(option, context) =>
+                  context === 'value' ? (
+                    option.label
+                  ) : (
+                    <div className="flex min-w-0 items-center gap-2 cursor-pointer">
+                      <UserAvatar
+                        name={option.name}
+                        email={option.email}
+                        image={option.image}
+                        className="size-7"
+                      />
+                      <div className="min-w-0">
+                        <p className="truncate font-medium">{option.label}</p>
+                        <p className="truncate text-xs opacity-70">{option.email}</p>
+                      </div>
+                    </div>
+                  )
+                }
+              />
             )}
           />
         </Field>

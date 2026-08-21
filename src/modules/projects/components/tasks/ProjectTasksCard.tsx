@@ -1,6 +1,6 @@
 'use client';
 
-import { ListChecks, Plus } from 'lucide-react';
+import { ListChecks, ListTodo, Plus } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import type { Task, UserListItem } from '@/types';
@@ -40,11 +40,19 @@ export function ProjectTasksCard({
               </ActionSheetButton>
             }
           >
-            <div className="min-h-0 flex-1 overflow-y-auto pt-2">
-              <TaskCreateForm
-                projectId={projectId}
-                assignableMembers={assignableMembers}
-              />
+            <div className="min-h-0 flex-1 overflow-y-auto p-3">
+              <WidgetCard
+                icon={ListTodo}
+                title="New task"
+                description="Enter the task details and choose who will work on it."
+                className="gap-3 [--card-spacing:--spacing(3)]"
+                contentClassNames="px-3"
+              >
+                <TaskCreateForm
+                  projectId={projectId}
+                  assignableMembers={assignableMembers}
+                />
+              </WidgetCard>
             </div>
           </ActionSheet>
         ) : undefined

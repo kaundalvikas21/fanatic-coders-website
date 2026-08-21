@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import Select, { type MultiValue } from 'react-select';
 import { cn } from '@/lib/utils';
 
@@ -8,9 +9,11 @@ export type MultiSelectOption = {
   value: string;
 };
 
-type MultiSelectFieldProps = {
+export type MultiSelectRenderContext = 'menu' | 'value';
+
+type MultiSelectFieldProps<TOption extends MultiSelectOption> = {
   id: string;
-  options: readonly MultiSelectOption[];
+  options: readonly TOption[];
   value: readonly string[];
   onChange: (value: string[]) => void;
   placeholder?: string;
@@ -18,9 +21,10 @@ type MultiSelectFieldProps = {
   ariaLabel?: string;
   disabled?: boolean;
   className?: string;
+  renderOption?: (option: TOption, context: MultiSelectRenderContext) => ReactNode;
 };
 
-export function MultiSelectField({
+export function MultiSelectField<TOption extends MultiSelectOption>({
   id,
   options,
   value,
@@ -30,15 +34,16 @@ export function MultiSelectField({
   ariaLabel,
   disabled = false,
   className,
-}: MultiSelectFieldProps) {
+  renderOption,
+}: MultiSelectFieldProps<TOption>) {
   const selectedOptions = options.filter((option) => value.includes(option.value));
 
-  function handleChange(selected: MultiValue<MultiSelectOption>) {
+  function handleChange(selected: MultiValue<TOption>) {
     onChange(selected.map((option) => option.value));
   }
 
   return (
-    <Select<MultiSelectOption, true>
+    <Select<TOption, true>
       inputId={id}
       instanceId={id}
       isMulti
@@ -50,6 +55,7 @@ export function MultiSelectField({
       onChange={handleChange}
       placeholder={placeholder}
       noOptionsMessage={() => noOptionsMessage}
+      formatOptionLabel={(option, meta) => renderOption?.(option, meta.context) ?? option.label}
       aria-label={ariaLabel}
       isDisabled={disabled}
       unstyled
