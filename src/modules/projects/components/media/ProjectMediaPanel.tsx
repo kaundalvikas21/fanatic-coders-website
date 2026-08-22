@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Images, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -12,7 +13,16 @@ import type { Media } from '@/types';
 import { FileCard } from './FileCard';
 import { ImageCard } from './ImageCard';
 import { MediaCardFooter } from './MediaCardFooter';
-import { ProjectMediaUploader } from './ProjectMediaUploader';
+
+const ProjectMediaUploader = dynamic(
+  () => import('./ProjectMediaUploader').then((module) => module.ProjectMediaUploader),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-52 animate-pulse rounded-lg bg-muted motion-reduce:animate-none" />
+    ),
+  },
+);
 
 type ProjectMediaPanelProps = {
   projectId: string;
