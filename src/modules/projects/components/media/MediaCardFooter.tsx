@@ -4,7 +4,7 @@ import { Download, Eye, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { ActionDialog, useDialog } from '@/components/shared/action-dialog';
+import { ActionDialog, useActionDialog } from '@/components/shared/action-dialog';
 import { Button } from '@/components/ui/button';
 
 type MediaCardFooterProps = {
@@ -21,7 +21,7 @@ type DeleteActionProps = {
 };
 
 function DeleteAction({ onDelete }: DeleteActionProps) {
-  const dialog = useDialog();
+  const dialog = useActionDialog();
   const [isPending, setIsPending] = useState(false);
 
   async function handleDelete() {
@@ -29,7 +29,7 @@ function DeleteAction({ onDelete }: DeleteActionProps) {
 
     try {
       await onDelete();
-      dialog?.close();
+      dialog.close();
     } finally {
       setIsPending(false);
     }
@@ -41,7 +41,7 @@ function DeleteAction({ onDelete }: DeleteActionProps) {
         type="button"
         variant="outline"
         disabled={isPending}
-        onClick={() => dialog?.close()}
+        onClick={dialog.close}
       >
         Cancel
       </Button>

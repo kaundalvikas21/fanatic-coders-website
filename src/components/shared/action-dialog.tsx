@@ -21,7 +21,7 @@ const DialogContext = createContext<DialogContextValue | null>(null);
 
 type ActionDialogProps = {
   title: string;
-  children: ReactNode | ((controls: DialogContextValue) => ReactNode);
+  children: ReactNode;
   trigger?: ReactNode;
   description?: string;
   defaultOpen?: boolean;
@@ -65,13 +65,19 @@ export function ActionDialog({
             <DialogTitle>{title}</DialogTitle>
             {description ? <DialogDescription>{description}</DialogDescription> : null}
           </DialogHeader>
-          {typeof children === 'function' ? children(value) : children}
+          {children}
         </DialogContent>
       </Dialog>
     </DialogContext.Provider>
   );
 }
 
-export function useDialog() {
-  return useContext(DialogContext);
+export function useActionDialog() {
+  const context = useContext(DialogContext);
+
+  if (!context) {
+    throw new Error('useActionDialog must be used within ActionDialog.');
+  }
+
+  return context;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { useDialog } from '@/components/shared/action-dialog';
+import { useActionDialog } from '@/components/shared/action-dialog';
 import { uploadProjectMedia } from '@/modules/projects/data/media';
 import { FileUploader } from '@/modules/uploads';
 import type { Media } from '@/types';
@@ -11,7 +11,7 @@ type ProjectMediaDialogProps = {
 };
 
 export function ProjectMediaUploader({ projectId }: ProjectMediaDialogProps) {
-  const dialog = useDialog();
+  const dialog = useActionDialog();
 
   return (
     <FileUploader<Media>
@@ -38,7 +38,7 @@ export function ProjectMediaUploader({ projectId }: ProjectMediaDialogProps) {
       }}
       onUploadSuccess={() => {
         toast.success('Project media uploaded.');
-        dialog?.close();
+        dialog.close();
       }}
     />
   );
