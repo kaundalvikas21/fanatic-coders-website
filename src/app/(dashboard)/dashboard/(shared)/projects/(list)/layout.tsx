@@ -2,7 +2,8 @@ import { Suspense, type ReactNode } from 'react';
 import { OverviewStatsSkeleton } from '@/components/dashboard/OverviewStatsCard';
 import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
-import { ProjectsFilters, ProjectTaskStatsLoader } from '@/modules/projects';
+import { ProjectsFilters } from '@/modules/projects';
+import { ProjectTaskStatsLoader } from '@/modules/tasks';
 
 export default function ProjectsLayout({ children }: { children: ReactNode }) {
   return (

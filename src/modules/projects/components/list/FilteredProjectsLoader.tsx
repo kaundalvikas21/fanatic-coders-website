@@ -4,7 +4,7 @@ import { Pagination } from '@/components/shared/Pagination';
 import { createProjectDeliverySummary } from '@/modules/projects/utils/progress';
 import type { GetProjectsInput, PaginatedProjects, Project, Task } from '@/types';
 import { getProjects } from '../../data/queries';
-import { getProjectTasks } from '../../data/tasks/queries';
+import { getProjectTasks } from '@/modules/tasks/data/queries';
 import { FilteredProjectsTable } from './FilteredProjectsTable';
 
 export async function FilteredProjectsLoader({ filters }: { filters: GetProjectsInput }) {

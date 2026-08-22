@@ -1,7 +1,7 @@
 import { Suspense, type ReactNode } from 'react';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
-import { TasksProjectToolbar, createTaskPermissions } from '@/modules/projects';
+import { TasksProjectToolbar, createTaskPermissions } from '@/modules/tasks';
 import { getProjects } from '@/modules/projects/data/queries';
 import { getCurrentAccess } from '@/lib/auth/current-access';
 import { getOrganizationMembersByRole } from '@/lib/data/users/queries';

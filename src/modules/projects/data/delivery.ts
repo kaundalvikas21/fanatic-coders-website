@@ -1,6 +1,6 @@
 import type { PaginatedProjects, Project, Task } from '@/types';
 import { getProjects } from './queries';
-import { getProjectTasks } from './tasks';
+import { getProjectTasks } from '@/modules/tasks/data/queries';
 import { createProjectDeliverySummary, type ProjectDeliverySummary } from '../utils/progress';
 
 export async function getProjectDeliverySummaries(): Promise<ProjectDeliverySummary[]> {

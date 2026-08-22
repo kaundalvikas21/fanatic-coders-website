@@ -28,7 +28,30 @@ export const taskCreateSchema = z.object({
     )
     .transform((value) => (value ? Number(value) : undefined)),
   assigneeMemberIds: z.array(z.string()).min(1, 'Select at least one assignee.'),
+  addOnTasks: z
+    .array(
+      z.object({
+        name: z.string().trim().max(255, 'Keep add-on names under 255 characters.'),
+      }),
+    )
+    .max(5, 'Add up to 5 add-ons.')
+    .transform((items) => items.filter((item) => item.name.length > 0)),
 });
 
 export type TaskCreateFormInput = z.input<typeof taskCreateSchema>;
 export type TaskCreateFormValues = z.output<typeof taskCreateSchema>;
+
+export const taskAddOnUpdateSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, 'Enter an add-on name.')
+    .max(255, 'Keep the name under 255 characters.'),
+});
+
+export type TaskAddOnUpdateFormInput = z.input<typeof taskAddOnUpdateSchema>;
+export type TaskAddOnUpdateFormValues = z.output<typeof taskAddOnUpdateSchema>;
+
+export const taskAddOnCreateSchema = taskAddOnUpdateSchema;
+export type TaskAddOnCreateFormInput = z.input<typeof taskAddOnCreateSchema>;
+export type TaskAddOnCreateFormValues = z.output<typeof taskAddOnCreateSchema>;

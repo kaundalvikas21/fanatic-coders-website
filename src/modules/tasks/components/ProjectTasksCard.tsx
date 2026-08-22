@@ -5,8 +5,8 @@ import { ListChecks, Plus } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import type { Task, UserListItem } from '@/types';
-import { TaskKanbanBoard } from './TaskKanbanBoard';
-import { useTaskPermissions } from '../../hooks/use-task-permissions';
+import { TaskKanbanBoard } from './task-kanban';
+import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 const TaskCreateForm = dynamic(
   () => import('./TaskCreateForm').then((module) => module.TaskCreateForm),

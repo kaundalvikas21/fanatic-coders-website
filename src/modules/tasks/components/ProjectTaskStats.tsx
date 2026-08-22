@@ -2,7 +2,7 @@ import { CircleCheckBig, CircleDashed, ListTodo, ScanSearch } from 'lucide-react
 
 import { OverviewStatsCard, type OverviewStat } from '@/components/dashboard/OverviewStatsCard';
 import { ErrorState } from '@/components/shared/error-state';
-import { getTasks } from '@/modules/projects/data/tasks/queries';
+import { getTasks } from '@/modules/tasks/data/queries';
 import type { Task, TaskStatus } from '@/types';
 
 type ProjectTaskStatsProps = {

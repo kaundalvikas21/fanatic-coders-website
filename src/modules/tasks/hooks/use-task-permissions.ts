@@ -1,7 +1,7 @@
 'use client';
 
 import { usePermissions } from '@/providers/PermissionProvider';
-import type { TaskPermissions } from '@/modules/projects/utils/task-permissions';
+import type { TaskPermissions } from '@/modules/tasks/utils/permissions';
 
 export function useTaskPermissions(): TaskPermissions {
   const { can } = usePermissions();

@@ -1,6 +1,6 @@
 import { ErrorState } from '@/components/shared/error-state';
-import { TaskKanbanBoard, TasksInformation } from '@/modules/projects';
-import { getTasks } from '@/modules/projects/data/tasks/queries';
+import { TaskKanbanBoard, TasksInformation } from '@/modules/tasks';
+import { getTasks } from '@/modules/tasks/data/queries';
 import type { Task } from '@/types';
 
 export const metadata = {

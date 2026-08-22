@@ -161,6 +161,9 @@ export type {
 } from './service-request';
 export { USER_SORT_FIELDS } from './user';
 export type {
+  AddOnTask,
+  AddOnTaskResponse,
+  CreateAddOnTaskRequest,
   CreateTaskRequest,
   Task,
   TaskAssignee,
@@ -168,6 +171,7 @@ export type {
   TaskResponse,
   TasksResponse,
   TaskStatus,
+  UpdateAddOnTaskRequest,
   UpdateTaskRequest,
 } from './task';
 export {

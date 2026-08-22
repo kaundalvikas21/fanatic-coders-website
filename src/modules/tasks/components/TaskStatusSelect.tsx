@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { SelectField } from '@/components/shared/forms/SelectField';
-import { updateTaskById } from '@/modules/projects/data/tasks/mutations';
+import { updateTaskById } from '@/modules/tasks/data/mutations';
 import type { Task, TaskStatus } from '@/types';
 import { TASK_STATUS_OPTIONS } from '@/types';
-import { useTaskPermissions } from '../../hooks/use-task-permissions';
+import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 type TaskStatusSelectProps = {
   task: Task;

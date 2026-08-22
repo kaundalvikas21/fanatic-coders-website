@@ -9,13 +9,12 @@ import {
   ProjectMembersCard,
   ProjectMediaPanel,
   ProjectProgressCard,
-  ProjectTasksCard,
   createProjectPermissions,
-  createTaskPermissions,
 } from '@/modules/projects';
+import { ProjectTasksCard, createTaskPermissions } from '@/modules/tasks';
 import { getProjectById } from '@/modules/projects/data/queries';
 import { getProjectMedia } from '@/modules/projects/data/media';
-import { getProjectTasks } from '@/modules/projects/data/tasks/queries';
+import { getProjectTasks } from '@/modules/tasks/data/queries';
 import { getCurrentAccess } from '@/lib/auth/current-access';
 import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
 import type { Media, OrganizationMemberRole, Project, Task } from '@/types';
