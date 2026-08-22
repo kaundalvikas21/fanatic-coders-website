@@ -1,12 +1,22 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { ListChecks, Plus } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import type { Task, UserListItem } from '@/types';
-import { TaskCreateForm } from './TaskCreateForm';
-import { TaskKanbanBoard } from './TaskKanbanBoard';
-import { useTaskPermissions } from '../../hooks/use-task-permissions';
+import { TaskKanbanBoard } from './task-kanban';
+import { useTaskPermissions } from '../hooks/use-task-permissions';
+
+const TaskCreateForm = dynamic(
+  () => import('./TaskCreateForm').then((module) => module.TaskCreateForm),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-96 animate-pulse rounded-lg bg-muted motion-reduce:animate-none" />
+    ),
+  },
+);
 
 type ProjectTasksCardProps = {
   projectId?: string;
@@ -40,7 +50,7 @@ export function ProjectTasksCard({
               </ActionSheetButton>
             }
           >
-            <div className="min-h-0 flex-1 overflow-y-auto pt-2">
+            <div className="min-h-0 flex-1 p-3">
               <TaskCreateForm
                 projectId={projectId}
                 assignableMembers={assignableMembers}

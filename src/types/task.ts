@@ -56,6 +56,16 @@ export type TaskAssignee = {
   member: UserListItem;
 };
 
+export type AddOnTask = {
+  id: string;
+  taskId: string;
+  projectId: string;
+  name: string;
+  isCompleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Task = {
   id: string;
   projectId: string;
@@ -69,6 +79,7 @@ export type Task = {
   createdAt: string;
   updatedAt: string;
   assignees: TaskAssignee[];
+  addOnTasks: AddOnTask[];
   createdBy?: UserListItem;
   project?: {
     id: string;
@@ -84,9 +95,22 @@ export type CreateTaskRequest = {
   dueDate?: string;
   estimatedHours?: number;
   assigneeMemberIds?: string[];
+  addOnTasks?: Array<{
+    name: string;
+  }>;
 };
 
-export type UpdateTaskRequest = Partial<CreateTaskRequest>;
+export type UpdateTaskRequest = Partial<Omit<CreateTaskRequest, 'addOnTasks'>>;
+
+export type UpdateAddOnTaskRequest = {
+  name?: string;
+  isCompleted?: boolean;
+};
+
+export type CreateAddOnTaskRequest = {
+  name: string;
+};
 
 export type TaskResponse = Response<Task>;
 export type TasksResponse = Response<Task[]>;
+export type AddOnTaskResponse = Response<AddOnTask>;

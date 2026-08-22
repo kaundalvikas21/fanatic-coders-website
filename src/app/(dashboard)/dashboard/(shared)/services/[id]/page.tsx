@@ -36,9 +36,12 @@ type ServiceRequestDetailPageProps = {
 
 export default async function ServiceRequestDetailPage({ params }: ServiceRequestDetailPageProps) {
   const { id } = await params;
-  const permissions = await getServiceRequestPermissions();
-  const access = await getCurrentAccess();
-  const { success, data: request } = (await getServiceRequestById(id)) as {
+  const [permissions, access, requestResponse] = await Promise.all([
+    getServiceRequestPermissions(),
+    getCurrentAccess(),
+    getServiceRequestById(id),
+  ]);
+  const { success, data: request } = requestResponse as {
     success: boolean;
     data?: ServiceRequest | null;
   };
@@ -49,10 +52,12 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
   }
 
   const template = getServiceRequestTemplate(request.service);
-  const managers = permissions.canUpdate
-    ? await getOrganizationMembersByRole(PROJECT_MANAGER_ASSIGNMENT_ROLES)
-    : [];
-  const proposalResponse = await getServiceRequestProposal(request.id);
+  const [managers, proposalResponse] = await Promise.all([
+    permissions.canUpdate
+      ? getOrganizationMembersByRole(PROJECT_MANAGER_ASSIGNMENT_ROLES)
+      : Promise.resolve([]),
+    getServiceRequestProposal(request.id),
+  ]);
   const proposal =
     proposalResponse.success && proposalResponse.data ? (proposalResponse.data as Proposal) : null;
   const proposalError =

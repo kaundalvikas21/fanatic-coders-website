@@ -7,7 +7,7 @@ import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet
 import { SelectField } from '@/components/shared/forms/SelectField';
 import type { Project, UserListItem } from '@/types';
 import { TaskCreateForm } from './TaskCreateForm';
-import { useTaskPermissions } from '../../hooks/use-task-permissions';
+import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 const ALL_PROJECTS_VALUE = 'all';
 
@@ -62,7 +62,7 @@ export function TasksProjectToolbar({ projects, assignableMembers }: TasksProjec
             </ActionSheetButton>
           }
         >
-          <div className="min-h-0 flex-1 overflow-y-auto pt-2">
+          <div className="min-h-0 flex-1 p-3">
             <TaskCreateForm
               projectId={selectedProjectId}
               assignableMembers={assignableMembers}

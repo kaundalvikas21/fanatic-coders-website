@@ -9,13 +9,12 @@ import {
   ProjectMembersCard,
   ProjectMediaPanel,
   ProjectProgressCard,
-  ProjectTasksCard,
   createProjectPermissions,
-  createTaskPermissions,
 } from '@/modules/projects';
+import { ProjectTasksCard, createTaskPermissions } from '@/modules/tasks';
 import { getProjectById } from '@/modules/projects/data/queries';
 import { getProjectMedia } from '@/modules/projects/data/media';
-import { getProjectTasks } from '@/modules/projects/data/tasks/queries';
+import { getProjectTasks } from '@/modules/tasks/data/queries';
 import { getCurrentAccess } from '@/lib/auth/current-access';
 import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
 import type { Media, OrganizationMemberRole, Project, Task } from '@/types';
@@ -33,10 +32,10 @@ const TASK_ASSIGNMENT_ROLES = [
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { id } = await params;
-  const access = await getCurrentAccess();
+  const [access, projectResponse] = await Promise.all([getCurrentAccess(), getProjectById(id)]);
   const projectPermissions = createProjectPermissions(access);
   const taskPermissions = createTaskPermissions(access);
-  const { success, data: project } = (await getProjectById(id)) as {
+  const { success, data: project } = projectResponse as {
     success: boolean;
     data?: Project | null;
   };
@@ -45,17 +44,17 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     notFound();
   }
 
-  const [tasksResponse, mediaResponse] = await Promise.all([
+  const [tasksResponse, mediaResponse, assignableMembers] = await Promise.all([
     getProjectTasks(project.id),
     getProjectMedia(project.id, { page: 1, pageSize: 20 }),
+    taskPermissions.canCreate
+      ? getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
+      : Promise.resolve([]),
   ]);
   const tasks: Task[] =
     tasksResponse.success && Array.isArray(tasksResponse.data)
       ? (tasksResponse.data as Task[])
       : [];
-  const assignableMembers = taskPermissions.canCreate
-    ? await getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
-    : [];
   const media: Media[] = mediaResponse.success ? mediaResponse.data.items : [];
 
   return (

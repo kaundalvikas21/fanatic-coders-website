@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 const statToneClasses = {
@@ -84,5 +85,36 @@ export function OverviewStatsCard({ stats, className }: OverviewStatsCardProps) 
         );
       })}
     </dl>
+  );
+}
+
+type OverviewStatsSkeletonProps = {
+  count?: number;
+  className?: string;
+};
+
+export function OverviewStatsSkeleton({ count = 4, className }: OverviewStatsSkeletonProps) {
+  return (
+    <div
+      className={cn('grid gap-4 sm:grid-cols-2 xl:grid-cols-4', className)}
+      aria-hidden="true"
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <Card
+          key={index}
+          size="sm"
+          className="min-h-36 border border-border/80 bg-card/80"
+        >
+          <CardContent className="flex min-h-30 justify-between gap-5">
+            <div className="flex flex-1 flex-col justify-between gap-3">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-9 w-14" />
+              <Skeleton className="h-3 w-32" />
+            </div>
+            <Skeleton className="size-11 rounded-lg" />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 }

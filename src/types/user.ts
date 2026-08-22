@@ -18,6 +18,7 @@ export type GetUsersInput = {
   sortBy?: UserSortField;
   sortDirection?: 'asc' | 'desc';
   name?: string;
+  limit?: number;
 };
 
 export type UserListItem = {

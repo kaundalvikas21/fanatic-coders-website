@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Images, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -12,7 +13,16 @@ import type { Media } from '@/types';
 import { FileCard } from './FileCard';
 import { ImageCard } from './ImageCard';
 import { MediaCardFooter } from './MediaCardFooter';
-import { ProjectMediaUploader } from './ProjectMediaUploader';
+
+const ProjectMediaUploader = dynamic(
+  () => import('./ProjectMediaUploader').then((module) => module.ProjectMediaUploader),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-52 animate-pulse rounded-lg bg-muted motion-reduce:animate-none" />
+    ),
+  },
+);
 
 type ProjectMediaPanelProps = {
   projectId: string;
@@ -24,7 +34,7 @@ function getDownloadHref(href: string, resourceType: Media['resourceType']) {
   return href.replace(uploadSegment, `${uploadSegment}fl_attachment/`);
 }
 
-export function ProjectMediaPanel({ projectId, media }: ProjectMediaPanelProps) {
+export function ProjectMediaPanel({ projectId, media = [] }: ProjectMediaPanelProps) {
   const { canUpdate } = useProjectPermissions();
 
   async function handleDelete(mediaId: string) {
@@ -63,7 +73,7 @@ export function ProjectMediaPanel({ projectId, media }: ProjectMediaPanelProps) 
       }
     >
       {media.length ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] gap-3">
           {media.map((item) =>
             item.resourceType === 'image' ? (
               <ImageCard

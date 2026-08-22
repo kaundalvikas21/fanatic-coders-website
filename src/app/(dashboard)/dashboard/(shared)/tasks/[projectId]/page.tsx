@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import { ErrorState } from '@/components/shared/error-state';
-import { TaskKanbanBoard, TasksInformation } from '@/modules/projects';
+import { TaskKanbanBoard, TasksInformation } from '@/modules/tasks';
 import { getProjectById } from '@/modules/projects/data/queries';
-import { getProjectTasks } from '@/modules/projects/data/tasks/queries';
+import { getProjectTasks } from '@/modules/tasks/data/queries';
 import type { Project, Task } from '@/types';
 
 type ProjectTasksPageProps = {

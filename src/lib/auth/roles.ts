@@ -27,7 +27,7 @@ export function parseRoles(role?: string | null): Role[] {
 
   return role
     .split(',')
-    .map((item) => item.trim())
+    .map((item) => item.trim().toUpperCase())
     .filter((item): item is Role => Object.values(Role).includes(item as Role));
 }
 

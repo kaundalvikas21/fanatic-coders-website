@@ -4,6 +4,7 @@ import { createContext, useContext, useMemo, useState } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { useClient } from '@/hooks/useClient';
+import { cn } from '@/lib/utils';
 import {
   Sheet,
   SheetContent,
@@ -64,7 +65,12 @@ export function ActionSheet({
         }}
       >
         <SheetTrigger asChild>{trigger}</SheetTrigger>
-        <SheetContent className={contentClassName}>
+        <SheetContent
+          className={cn(
+            'rounded-l-lg duration-100 [[data-slot=sheet-overlay]:has(~_&)]:duration-100 motion-reduce:duration-0',
+            contentClassName,
+          )}
+        >
           <SheetHeader className="sr-only">
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}

@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
+import { OverviewStatsSkeleton } from '@/components/dashboard/OverviewStatsCard';
 import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
-import { LeadsFilters } from '@/modules/leads';
+import { LeadsFilters, LeadStatusStatsLoader } from '@/modules/leads';
 
 export default function LeadsLayout({ children }: { children: ReactNode }) {
   return (
@@ -13,6 +14,9 @@ export default function LeadsLayout({ children }: { children: ReactNode }) {
         />
       }
     >
+      <Suspense fallback={<OverviewStatsSkeleton />}>
+        <LeadStatusStatsLoader />
+      </Suspense>
       <FilterLayout filters={<LeadsFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );

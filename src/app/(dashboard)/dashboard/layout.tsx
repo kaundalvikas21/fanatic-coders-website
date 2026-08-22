@@ -31,7 +31,7 @@ export default async function DashboardLayout({
     <PermissionProvider permissions={access.permissions}>
       <DashboardProvider>
         <DashboardSidebar role={role} />
-        <SidebarInset className="min-h-svh bg-background text-foreground">
+        <SidebarInset className="min-h-svh rounded-l-lg bg-background text-foreground">
           <DashboardHeader
             organizationSlug={FCOP_ORGANIZATION_SLUG}
             role={role}
