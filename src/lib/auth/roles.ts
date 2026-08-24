@@ -47,6 +47,10 @@ export function hasAnyRole(role: string | null | undefined, allowedRoles: readon
   return roles.some((item) => allowedRoles.includes(item));
 }
 
+export function isAdmin(role: string | null | undefined) {
+  return role === Role.ADMIN;
+}
+
 export function getRoleHomePath(role: string | null | undefined) {
   switch (role) {
     case Role.ADMIN:

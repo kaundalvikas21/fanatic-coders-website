@@ -3,9 +3,13 @@ import { Suspense, type ReactNode } from 'react';
 import { OverviewStatsSkeleton } from '@/components/dashboard/OverviewStatsCard';
 import { FilterLayout, ListsLayout } from '@/components/layout/dashboard/lists-layout';
 import { PageHeader } from '@/components/shared/page-header';
+import { getCurrentAccess } from '@/lib/auth/current-access';
+import { isAdmin } from '@/lib/auth/roles';
 import { PaymentsFilters, PaymentStatusStatsLoader } from '@/modules/payments';
 
-export default function PaymentsLayout({ children }: { children: ReactNode }) {
+export default async function PaymentsLayout({ children }: { children: ReactNode }) {
+  const access = await getCurrentAccess();
+
   return (
     <ListsLayout
       header={
@@ -15,16 +19,19 @@ export default function PaymentsLayout({ children }: { children: ReactNode }) {
         />
       }
     >
-      <Suspense
-        fallback={
-          <OverviewStatsSkeleton
-            count={3}
-            className="xl:grid-cols-3"
-          />
-        }
-      >
-        <PaymentStatusStatsLoader />
-      </Suspense>
+      {/* CURRENT USER IS ADMIN THEN HE CAN ACCESS  */}
+      {isAdmin(access?.role) ? (
+        <Suspense
+          fallback={
+            <OverviewStatsSkeleton
+              count={3}
+              className="xl:grid-cols-3"
+            />
+          }
+        >
+          <PaymentStatusStatsLoader />
+        </Suspense>
+      ) : null}
       <FilterLayout filters={<PaymentsFilters />}>{children}</FilterLayout>
     </ListsLayout>
   );
