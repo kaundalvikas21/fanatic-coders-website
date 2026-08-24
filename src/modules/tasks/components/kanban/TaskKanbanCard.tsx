@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useDraggable } from '@dnd-kit/core';
-import { CalendarDays, Clock3, GripVertical, Trash2 } from 'lucide-react';
+import { CalendarDays, Clock3, GripVertical, Pencil, Trash2 } from 'lucide-react';
+import { ActionSheet } from '@/components/shared/action-sheet';
 import { ActionDialog } from '@/components/shared/action-dialog';
 import { UserAvatar } from '@/components/shared/user-avatar';
 import { AvatarGroup, AvatarGroupCount } from '@/components/ui/avatar';
@@ -11,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import type { Task } from '@/types';
+import type { Task, UserListItem } from '@/types';
 import { TASK_PRIORITY_BADGE_VARIANTS, TASK_PRIORITY_COLORS, TASK_PRIORITY_OPTIONS } from '@/types';
 import { formatDate } from '@/utils/date';
 import { TaskAddOnSection } from './TaskAddOnSection';
@@ -28,6 +29,13 @@ const TaskDeleteActions = dynamic(
     ),
   },
 );
+
+const TaskForm = dynamic(() => import('../forms').then((module) => module.TaskForm), {
+  ssr: false,
+  loading: () => (
+    <div className="h-96 animate-pulse rounded-lg bg-muted motion-reduce:animate-none" />
+  ),
+});
 
 function getPriorityLabel(task: Task) {
   return (
@@ -122,7 +130,13 @@ export function TaskKanbanCardContent({ preview = false }: { preview?: boolean }
   );
 }
 
-export function TaskKanbanCard({ task }: { task: Task }) {
+export function TaskKanbanCard({
+  task,
+  assignableMembers,
+}: {
+  task: Task;
+  assignableMembers: UserListItem[];
+}) {
   const { canUpdate, canDelete, pendingTaskIds } = useTaskKanban();
   const disabled = !canUpdate || pendingTaskIds.has(task.id);
   const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, isDragging } =
@@ -161,6 +175,39 @@ export function TaskKanbanCard({ task }: { task: Task }) {
         >
           <GripVertical />
         </Button>
+        {canUpdate ? (
+          <div
+            className={cn(
+              'absolute top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none',
+              canDelete ? 'right-[4.75rem]' : 'right-10',
+            )}
+          >
+            <ActionSheet
+              title="Edit task"
+              description="Update this task's details and assignees."
+              trigger={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  disabled={pendingTaskIds.has(task.id)}
+                  aria-label="Edit task"
+                  title="Edit task"
+                >
+                  <Pencil />
+                </Button>
+              }
+            >
+              <div className="min-h-0 flex-1 p-3">
+                <TaskForm
+                  projectId={task.projectId}
+                  assignableMembers={assignableMembers}
+                  task={task}
+                />
+              </div>
+            </ActionSheet>
+          </div>
+        ) : null}
         {canDelete ? (
           <div className="absolute top-2 right-10 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none">
             <ActionDialog

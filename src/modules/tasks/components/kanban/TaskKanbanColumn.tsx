@@ -11,12 +11,20 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import type { Task, TaskStatus } from '@/types';
+import type { Task, TaskStatus, UserListItem } from '@/types';
 import { TASK_STATUS_OPTIONS } from '@/types';
 import { TaskKanbanCard } from './TaskKanbanCard';
 import { TASK_STATUS_STYLES } from './task-kanban-styles';
 
-export function TaskKanbanColumn({ status, tasks }: { status: TaskStatus; tasks: Task[] }) {
+export function TaskKanbanColumn({
+  status,
+  tasks,
+  assignableMembers,
+}: {
+  status: TaskStatus;
+  tasks: Task[];
+  assignableMembers: UserListItem[];
+}) {
   const option = TASK_STATUS_OPTIONS.find((item) => item.value === status);
   const styles = TASK_STATUS_STYLES[status];
   const { setNodeRef, isOver } = useDroppable({
@@ -60,8 +68,9 @@ export function TaskKanbanColumn({ status, tasks }: { status: TaskStatus; tasks:
         ) : (
           tasks.map((task) => (
             <TaskKanbanCard
-              key={task.id}
+              key={`${task.id}:${task.updatedAt}:${task.addOnTasks.map((item) => `${item.id}:${item.updatedAt}`).join(',')}`}
               task={task}
+              assignableMembers={assignableMembers}
             />
           ))
         )}

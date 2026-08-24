@@ -1,9 +1,21 @@
 import { notFound } from 'next/navigation';
 import { ErrorState } from '@/components/shared/error-state';
-import { TaskKanbanBoard, TasksInformation } from '@/modules/tasks';
+import {
+  TaskKanbanBoard,
+  TasksInformation,
+  createTaskPermissions,
+  getTaskKanbanKey,
+} from '@/modules/tasks';
 import { getProjectById } from '@/modules/projects/data/queries';
 import { getProjectTasks } from '@/modules/tasks/data/queries';
-import type { Project, Task } from '@/types';
+import { getCurrentAccess } from '@/lib/auth/current-access';
+import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
+import type { OrganizationMemberRole, Project, Task } from '@/types';
+
+const TASK_ASSIGNMENT_ROLES = [
+  'MANAGER',
+  'MEMBER',
+] as const satisfies readonly OrganizationMemberRole[];
 
 type ProjectTasksPageProps = {
   params: Promise<{ projectId: string }>;
@@ -11,7 +23,10 @@ type ProjectTasksPageProps = {
 
 export default async function ProjectTasksPage({ params }: ProjectTasksPageProps) {
   const { projectId } = await params;
-  const projectResponse = await getProjectById(projectId);
+  const [projectResponse, access] = await Promise.all([
+    getProjectById(projectId),
+    getCurrentAccess(),
+  ]);
   const project = projectResponse.success ? (projectResponse.data as Project | null) : null;
 
   if (!project) {
@@ -30,6 +45,9 @@ export default async function ProjectTasksPage({ params }: ProjectTasksPageProps
   }
 
   const tasks = Array.isArray(tasksResponse.data) ? (tasksResponse.data as Task[]) : [];
+  const assignableMembers = createTaskPermissions(access).canUpdate
+    ? await getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
+    : [];
 
   return (
     <div className="flex flex-col gap-5">
@@ -38,9 +56,10 @@ export default async function ProjectTasksPage({ params }: ProjectTasksPageProps
         project={project}
       />
       <TaskKanbanBoard
-        key={`${project.id}:${tasks.map((task) => `${task.id}:${task.status}`).join('|')}`}
+        key={`${project.id}:${getTaskKanbanKey(tasks)}`}
         tasks={tasks}
         showProjects={false}
+        assignableMembers={assignableMembers}
       />
     </div>
   );

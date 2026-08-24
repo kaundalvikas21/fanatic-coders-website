@@ -6,7 +6,7 @@ import { Plus } from 'lucide-react';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import type { Project, UserListItem } from '@/types';
-import { TaskCreateForm } from './TaskCreateForm';
+import { TaskForm } from './forms';
 import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 const ALL_PROJECTS_VALUE = 'all';
@@ -63,7 +63,7 @@ export function TasksProjectToolbar({ projects, assignableMembers }: TasksProjec
           }
         >
           <div className="min-h-0 flex-1 p-3">
-            <TaskCreateForm
+            <TaskForm
               projectId={selectedProjectId}
               assignableMembers={assignableMembers}
             />

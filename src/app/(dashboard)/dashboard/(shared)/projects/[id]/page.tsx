@@ -47,7 +47,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const [tasksResponse, mediaResponse, assignableMembers] = await Promise.all([
     getProjectTasks(project.id),
     getProjectMedia(project.id, { page: 1, pageSize: 20 }),
-    taskPermissions.canCreate
+    taskPermissions.canCreate || taskPermissions.canUpdate
       ? getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
       : Promise.resolve([]),
   ]);

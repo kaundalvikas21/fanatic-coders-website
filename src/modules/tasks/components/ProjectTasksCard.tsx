@@ -5,18 +5,16 @@ import { ListChecks, Plus } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import type { Task, UserListItem } from '@/types';
-import { TaskKanbanBoard } from './task-kanban';
+import { TaskKanbanBoard } from './kanban';
+import { getTaskKanbanKey } from '../utils/task-kanban-key';
 import { useTaskPermissions } from '../hooks/use-task-permissions';
 
-const TaskCreateForm = dynamic(
-  () => import('./TaskCreateForm').then((module) => module.TaskCreateForm),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-96 animate-pulse rounded-lg bg-muted motion-reduce:animate-none" />
-    ),
-  },
-);
+const TaskForm = dynamic(() => import('./forms').then((module) => module.TaskForm), {
+  ssr: false,
+  loading: () => (
+    <div className="h-96 animate-pulse rounded-lg bg-muted motion-reduce:animate-none" />
+  ),
+});
 
 type ProjectTasksCardProps = {
   projectId?: string;
@@ -51,7 +49,7 @@ export function ProjectTasksCard({
             }
           >
             <div className="min-h-0 flex-1 p-3">
-              <TaskCreateForm
+              <TaskForm
                 projectId={projectId}
                 assignableMembers={assignableMembers}
               />
@@ -61,9 +59,10 @@ export function ProjectTasksCard({
       }
     >
       <TaskKanbanBoard
-        key={safeTasks.map((task) => `${task.id}:${task.status}`).join('|')}
+        key={getTaskKanbanKey(safeTasks)}
         tasks={safeTasks}
         showProjects={false}
+        assignableMembers={assignableMembers}
       />
     </WidgetCard>
   );

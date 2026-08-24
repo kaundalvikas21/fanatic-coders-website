@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { toast } from 'sonner';
@@ -8,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import { useClient } from '@/hooks/useClient';
 import { updateTaskById } from '@/modules/tasks/data/mutations';
 import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
-import type { AddOnTask, Task, TaskStatus } from '@/types';
+import type { Task, TaskStatus, UserListItem } from '@/types';
 import { TASK_STATUS_OPTIONS } from '@/types';
 import { TaskKanbanCardContent } from './TaskKanbanCard';
 import { TaskCardProvider } from './TaskCardContext';
@@ -18,13 +19,16 @@ import { TaskKanbanProvider } from './TaskKanbanContext';
 type TaskKanbanBoardProps = {
   tasks: Task[];
   showProjects?: boolean;
+  assignableMembers?: UserListItem[];
 };
 
 export function TaskKanbanBoard({
   tasks: initialTasks,
   showProjects = true,
+  assignableMembers = [],
 }: TaskKanbanBoardProps) {
   const isClient = useClient();
+  const router = useRouter();
   const { canUpdate, canDelete } = useTaskPermissions();
   const [tasks, setTasks] = useState(initialTasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
@@ -33,46 +37,6 @@ export function TaskKanbanBoard({
   useEffect(() => {
     setTasks(initialTasks);
   }, [initialTasks]);
-
-  function handleDeleted(taskId: string) {
-    setTasks((current) => current.filter((task) => task.id !== taskId));
-  }
-
-  function handleAddOnUpdated(taskId: string, updatedAddOnTask: AddOnTask) {
-    setTasks((current) =>
-      current.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              addOnTasks: task.addOnTasks.map((addOnTask) =>
-                addOnTask.id === updatedAddOnTask.id ? updatedAddOnTask : addOnTask,
-              ),
-            }
-          : task,
-      ),
-    );
-  }
-
-  function handleAddOnCreated(taskId: string, createdAddOnTask: AddOnTask) {
-    setTasks((current) =>
-      current.map((task) =>
-        task.id === taskId ? { ...task, addOnTasks: [...task.addOnTasks, createdAddOnTask] } : task,
-      ),
-    );
-  }
-
-  function handleAddOnDeleted(taskId: string, addOnTaskId: string) {
-    setTasks((current) =>
-      current.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              addOnTasks: task.addOnTasks.filter((addOnTask) => addOnTask.id !== addOnTaskId),
-            }
-          : task,
-      ),
-    );
-  }
 
   async function handleDragEnd(event: DragEndEvent) {
     setActiveTask(null);
@@ -111,6 +75,7 @@ export function TaskKanbanBoard({
     }
 
     toast.success('Task status updated.');
+    router.refresh();
   }
 
   if (!isClient) return null;
@@ -122,10 +87,6 @@ export function TaskKanbanBoard({
         canDelete,
         showProjects,
         pendingTaskIds,
-        onTaskDeleted: handleDeleted,
-        onTaskAddOnCreated: handleAddOnCreated,
-        onTaskAddOnUpdated: handleAddOnUpdated,
-        onTaskAddOnDeleted: handleAddOnDeleted,
       }}
     >
       <DndContext
@@ -141,6 +102,7 @@ export function TaskKanbanBoard({
               key={status.value}
               status={status.value}
               tasks={tasks.filter((task) => task.status === status.value)}
+              assignableMembers={assignableMembers}
             />
           ))}
         </div>
