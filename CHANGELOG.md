@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.10.0...v0.10.1) (2026-08-24)
+
+### Features
+
+- **leads:** display overview stats card on leads page ([76250fb](https://github.com/kaundalvikas21/fanatic-coders-website/commit/76250fbda967151dcde1ce6359db730406475afb))
+- **project:** display overview stats card on projects page ([35410d6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/35410d6174a9c66941193a387cbfd06d90ba8b6f))
+- **select:** added compoennt for managing multiple value ([c18a647](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c18a647cd011a450da4e6ed85178accf4cb25194))
+- **services:** display overview stats card on services page ([86e20cd](https://github.com/kaundalvikas21/fanatic-coders-website/commit/86e20cdfec94020b42e71483fe2e1c579c30c8e0))
+- **tasks:** add checklist management and extract task module ([a559f6b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a559f6b546208d72a84530837c7ab7711cb0d78a))
+- **users:** display overview stats card on users page ([417a94a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/417a94a685f831622a21400dd612070cc1b8117f))
+
+### Bug Fixes
+
+- **others:** remove widget card from task form ([aa094f3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/aa094f3884a5e0075beba4107e577e3e03c059aa))
+- **sidebar:** enahce action sheet and make it's corner rounded ([88114c8](https://github.com/kaundalvikas21/fanatic-coders-website/commit/88114c8dedf753e5483b9f7913f9f72caaeea19a))
+- **suspense:** added skelton and streamed all component asynchrously ([c665c74](https://github.com/kaundalvikas21/fanatic-coders-website/commit/c665c743f268fd393095362e8b522114573deb7b))
+- **tasks:** fix tasks create form validation issue ([33e628b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/33e628b0e67a665aae4f7fc94d076a3a17ecd4f5))
+- **tasks:** fix tasks issue related to form and enhanced ui ([605d8a3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/605d8a377cf58ade75c91693b0eb9af373a4f745))
+
+### Performance
+
+- **projects:** lazy load secondary project actions ([a667ab8](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a667ab80599d75518fa5fcdf0d9b837a2b8ca9a5))
+
+### Code Refactoring
+
+- **performance:** optmize code based on execution when to execution ([cdef949](https://github.com/kaundalvikas21/fanatic-coders-website/commit/cdef949f26ddca7f922c24b99ea3cc96fae65f80))
+- **tasks:** reorganize folder structure for lead ([cedea2b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/cedea2bbd25ff62d9ce85f9e88262cf18498ff42))
+- **ui:** simplify dialogs and add collapsible actions ([51cf644](https://github.com/kaundalvikas21/fanatic-coders-website/commit/51cf644905913a348b5fb7fb9ccb5c6e072477fc))
+
 ## [0.10.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.9.0...v0.10.0) (2026-08-20)
 
 ### Features
