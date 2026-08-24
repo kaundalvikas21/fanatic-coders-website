@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Pencil, Trash2, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -27,14 +28,9 @@ import type { AddOnTask } from '@/types';
 import { useTaskCard } from './TaskCardContext';
 import { useTaskKanban } from './TaskKanbanContext';
 
-function DeleteAddOnActions({
-  addOnTask,
-  onDeleted,
-}: {
-  addOnTask: AddOnTask;
-  onDeleted: (addOnTaskId: string) => void;
-}) {
+function DeleteAddOnActions({ addOnTask }: { addOnTask: AddOnTask }) {
   const task = useTaskCard();
+  const router = useRouter();
   const { close } = useActionDialog();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -49,9 +45,9 @@ function DeleteAddOnActions({
         return;
       }
 
-      onDeleted(addOnTask.id);
       toast.success('Add-on deleted.');
       close();
+      router.refresh();
     } finally {
       setIsDeleting(false);
     }
@@ -79,16 +75,9 @@ function DeleteAddOnActions({
   );
 }
 
-function TaskAddOnRow({
-  addOnTask,
-  onUpdated,
-  onDeleted,
-}: {
-  addOnTask: AddOnTask;
-  onUpdated: (addOnTask: AddOnTask) => void;
-  onDeleted: (addOnTaskId: string) => void;
-}) {
+function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
   const task = useTaskCard();
+  const router = useRouter();
   const { canUpdate, canDelete: canManage } = useTaskKanban();
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -113,7 +102,7 @@ function TaskAddOnRow({
         return;
       }
 
-      onUpdated(response.data as AddOnTask);
+      router.refresh();
     } finally {
       setIsPending(false);
     }
@@ -130,9 +119,9 @@ function TaskAddOnRow({
         return;
       }
 
-      onUpdated(response.data as AddOnTask);
       setIsEditing(false);
       toast.success('Add-on updated.');
+      router.refresh();
     } finally {
       setIsPending(false);
     }
@@ -237,10 +226,7 @@ function TaskAddOnRow({
               </Button>
             }
           >
-            <DeleteAddOnActions
-              addOnTask={addOnTask}
-              onDeleted={onDeleted}
-            />
+            <DeleteAddOnActions addOnTask={addOnTask} />
           </ActionDialog>
         </div>
       ) : null}
@@ -250,12 +236,8 @@ function TaskAddOnRow({
 
 export function TaskAddOnList() {
   const task = useTaskCard();
-  const {
-    canDelete: canManage,
-    onTaskAddOnCreated,
-    onTaskAddOnUpdated,
-    onTaskAddOnDeleted,
-  } = useTaskKanban();
+  const router = useRouter();
+  const { canDelete: canManage } = useTaskKanban();
   const addOnTasks = task.addOnTasks ?? [];
   const form = useForm<TaskAddOnCreateFormInput, unknown, TaskAddOnCreateFormValues>({
     resolver: zodResolver(taskAddOnCreateSchema),
@@ -273,9 +255,9 @@ export function TaskAddOnList() {
       return;
     }
 
-    onTaskAddOnCreated(task.id, response.data as AddOnTask);
     form.reset();
     toast.success('Checklist item added.');
+    router.refresh();
   }
 
   return (
@@ -315,10 +297,8 @@ export function TaskAddOnList() {
           <div className="space-y-2.5">
             {addOnTasks.map((addOnTask) => (
               <TaskAddOnRow
-                key={addOnTask.id}
+                key={`${addOnTask.id}:${addOnTask.updatedAt}`}
                 addOnTask={addOnTask}
-                onUpdated={(updated) => onTaskAddOnUpdated(task.id, updated)}
-                onDeleted={(addOnTaskId) => onTaskAddOnDeleted(task.id, addOnTaskId)}
               />
             ))}
           </div>

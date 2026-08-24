@@ -1,10 +1,11 @@
 export { ProjectTaskStats, ProjectTaskStatsLoader } from './components/ProjectTaskStats';
 export { ProjectTasksCard } from './components/ProjectTasksCard';
-export { TaskCreateForm } from './components/TaskCreateForm';
+export { TaskForm } from './components/forms';
 export { TaskStatusSelect } from './components/TaskStatusSelect';
 export { TasksInformation } from './components/TasksInformation';
 export { TasksProjectToolbar } from './components/TasksProjectToolbar';
-export { TaskKanbanBoard } from './components/task-kanban';
+export { TaskKanbanBoard } from './components/kanban';
+export { getTaskKanbanKey } from './utils/task-kanban-key';
 export { useTaskPermissions } from './hooks/use-task-permissions';
 export { createTaskPermissions } from './utils/permissions';
 export type { TaskPermissions } from './utils/permissions';

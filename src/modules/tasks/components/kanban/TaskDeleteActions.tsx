@@ -1,17 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useActionDialog } from '@/components/shared/action-dialog';
 import { Button } from '@/components/ui/button';
 import { deleteTaskById } from '@/modules/tasks/data/mutations';
 import { useTaskCard } from './TaskCardContext';
-import { useTaskKanban } from './TaskKanbanContext';
 
 export function TaskDeleteActions() {
   const task = useTaskCard();
+  const router = useRouter();
   const { close } = useActionDialog();
-  const { onTaskDeleted } = useTaskKanban();
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleDelete() {
@@ -26,8 +26,8 @@ export function TaskDeleteActions() {
       }
 
       toast.success('Task deleted.');
-      onTaskDeleted(task.id);
       close();
+      router.refresh();
     } finally {
       setIsDeleting(false);
     }

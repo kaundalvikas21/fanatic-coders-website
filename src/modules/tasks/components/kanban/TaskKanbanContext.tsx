@@ -1,17 +1,12 @@
 'use client';
 
 import { createContext, useContext, type ReactNode } from 'react';
-import type { AddOnTask } from '@/types';
 
 type TaskKanbanContextValue = {
   canUpdate: boolean;
   canDelete: boolean;
   showProjects: boolean;
   pendingTaskIds: Set<string>;
-  onTaskDeleted: (taskId: string) => void;
-  onTaskAddOnCreated: (taskId: string, addOnTask: AddOnTask) => void;
-  onTaskAddOnUpdated: (taskId: string, addOnTask: AddOnTask) => void;
-  onTaskAddOnDeleted: (taskId: string, addOnTaskId: string) => void;
 };
 
 const TaskKanbanContext = createContext<TaskKanbanContextValue | null>(null);

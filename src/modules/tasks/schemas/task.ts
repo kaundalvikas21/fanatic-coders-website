@@ -38,8 +38,17 @@ export const taskCreateSchema = z.object({
     .transform((items) => items.filter((item) => item.name.length > 0)),
 });
 
-export type TaskCreateFormInput = z.input<typeof taskCreateSchema>;
-export type TaskCreateFormValues = z.output<typeof taskCreateSchema>;
+export type TaskFormInput = z.input<typeof taskCreateSchema>;
+export type TaskFormValues = z.output<typeof taskCreateSchema>;
+
+export const taskUpdateSchema = taskCreateSchema.extend({
+  dueDate: z
+    .string()
+    .refine((value) => !value || dateInputPattern.test(value), 'Enter a valid due date.')
+    .transform((value) => value || undefined),
+});
+export type TaskUpdateFormInput = z.input<typeof taskUpdateSchema>;
+export type TaskUpdateFormValues = z.output<typeof taskUpdateSchema>;
 
 export const taskAddOnUpdateSchema = z.object({
   name: z

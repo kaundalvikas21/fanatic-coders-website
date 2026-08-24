@@ -5,10 +5,10 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import type { TaskCreateFormInput } from '@/modules/tasks/schemas/task';
+import type { TaskFormInput } from '@/modules/tasks/schemas/task';
 
 export function TaskCreateAddOnFields() {
-  const form = useFormContext<TaskCreateFormInput>();
+  const form = useFormContext<TaskFormInput>();
   const addOnTasks = useFieldArray({
     control: form.control,
     name: 'addOnTasks',

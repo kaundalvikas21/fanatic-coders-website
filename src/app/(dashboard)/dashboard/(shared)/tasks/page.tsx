@@ -1,7 +1,19 @@
 import { ErrorState } from '@/components/shared/error-state';
-import { TaskKanbanBoard, TasksInformation } from '@/modules/tasks';
+import {
+  TaskKanbanBoard,
+  TasksInformation,
+  createTaskPermissions,
+  getTaskKanbanKey,
+} from '@/modules/tasks';
 import { getTasks } from '@/modules/tasks/data/queries';
-import type { Task } from '@/types';
+import { getCurrentAccess } from '@/lib/auth/current-access';
+import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
+import type { OrganizationMemberRole, Task } from '@/types';
+
+const TASK_ASSIGNMENT_ROLES = [
+  'MANAGER',
+  'MEMBER',
+] as const satisfies readonly OrganizationMemberRole[];
 
 export const metadata = {
   title: 'Tasks | fanaticCoders',
@@ -10,7 +22,7 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function TasksPage() {
-  const response = await getTasks();
+  const [response, access] = await Promise.all([getTasks(), getCurrentAccess()]);
 
   if (!response.success) {
     return (
@@ -22,13 +34,17 @@ export default async function TasksPage() {
   }
 
   const tasks = Array.isArray(response.data) ? (response.data as Task[]) : [];
+  const assignableMembers = createTaskPermissions(access).canUpdate
+    ? await getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
+    : [];
 
   return (
     <div className="flex flex-col gap-5">
       <TasksInformation tasks={tasks} />
       <TaskKanbanBoard
-        key={tasks.map((task) => `${task.id}:${task.status}`).join('|')}
+        key={getTaskKanbanKey(tasks)}
         tasks={tasks}
+        assignableMembers={assignableMembers}
       />
     </div>
   );

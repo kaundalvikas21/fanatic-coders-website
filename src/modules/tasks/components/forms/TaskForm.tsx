@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -15,32 +16,42 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
   taskCreateSchema,
-  type TaskCreateFormInput,
-  type TaskCreateFormValues,
+  type TaskFormInput,
+  type TaskFormValues,
+  taskUpdateSchema,
 } from '@/modules/tasks/schemas/task';
-import { createProjectTask } from '@/modules/tasks/data/mutations';
-import type { CreateTaskRequest, TaskPriority, UserListItem } from '@/types';
+import { createProjectTask, updateTaskById } from '@/modules/tasks/data/mutations';
+import type {
+  CreateTaskRequest,
+  Task,
+  TaskPriority,
+  UpdateTaskRequest,
+  UserListItem,
+} from '@/types';
 import { TASK_PRIORITY_OPTIONS } from '@/types';
 import { startOfToday } from '@/utils/date';
 import { TaskCreateAddOnFields } from './TaskCreateAddOnFields';
 
-type TaskCreateFormProps = {
+type TaskFormProps = {
   projectId: string;
   assignableMembers: UserListItem[];
+  task?: Task;
 };
 
-export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormProps) {
+export function TaskForm({ projectId, assignableMembers, task }: TaskFormProps) {
+  const router = useRouter();
   const sheet = useSheet();
+  const isEditing = Boolean(task);
   const [message, setMessage] = useState<string | null>(null);
-  const form = useForm<TaskCreateFormInput, unknown, TaskCreateFormValues>({
-    resolver: zodResolver(taskCreateSchema),
+  const form = useForm<TaskFormInput, unknown, TaskFormValues>({
+    resolver: zodResolver(isEditing ? taskUpdateSchema : taskCreateSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      priority: 'MEDIUM',
-      dueDate: '',
-      estimatedHours: '',
-      assigneeMemberIds: [],
+      title: task?.title ?? '',
+      description: task?.description ?? '',
+      priority: task?.priority ?? 'MEDIUM',
+      dueDate: task?.dueDate?.slice(0, 10) ?? '',
+      estimatedHours: task?.estimatedHours?.toString() ?? '',
+      assigneeMemberIds: task?.assignees.map((assignee) => assignee.memberId) ?? [],
       addOnTasks: [{ name: '' }],
     },
   });
@@ -56,11 +67,26 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
     image: member.user.image,
   }));
 
-  async function handleSubmit(values: TaskCreateFormValues) {
-    const payload: CreateTaskRequest = values;
+  async function handleSubmit(values: TaskFormValues) {
     setMessage(null);
 
     try {
+      if (task) {
+        const { addOnTasks: _addOnTasks, ...payload } = values;
+        const response = await updateTaskById(task.id, projectId, payload as UpdateTaskRequest);
+
+        if (!response.success) {
+          setMessage(response.message || 'Could not update task.');
+          return;
+        }
+
+        toast.success('Task updated.');
+        sheet.close();
+        router.refresh();
+        return;
+      }
+
+      const payload: CreateTaskRequest = values;
       const response = await createProjectTask(projectId, payload);
 
       if (!response.success) {
@@ -196,7 +222,7 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
             )}
           />
 
-          <TaskCreateAddOnFields />
+          {!isEditing ? <TaskCreateAddOnFields /> : null}
 
           {message && (
             <p
@@ -212,7 +238,13 @@ export function TaskCreateForm({ projectId, assignableMembers }: TaskCreateFormP
             disabled={isSubmitting}
             onClick={() => form.handleSubmit(handleSubmit)()}
           >
-            {isSubmitting ? 'Creating task' : 'Create task'}
+            {isSubmitting
+              ? isEditing
+                ? 'Saving task'
+                : 'Creating task'
+              : isEditing
+                ? 'Save changes'
+                : 'Create task'}
           </Button>
         </FieldGroup>
       </form>
