@@ -38,7 +38,7 @@ type AuthCopy = {
 
 const content = {
   login: {
-    title: 'Welcome back',
+    title: 'Welcome',
     description: 'Continue with your projects, requests, and team updates.',
     submit: 'Sign in',
     pending: 'Signing in',
