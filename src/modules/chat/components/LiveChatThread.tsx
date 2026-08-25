@@ -95,13 +95,17 @@ export function LiveChatThread({
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
-      <div className="shrink-0 flex items-start gap-3 border-b border-border bg-muted/40 px-6 py-3">
+      <div
+        className="shrink-0 flex items-start gap-3 border-b border-amber-500/25 bg-amber-500/10 px-6 py-3"
+        role="note"
+        aria-label="Message retention notice"
+      >
         <CircleAlert
-          className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+          className="mt-0.5 size-4 shrink-0 text-amber-700 dark:text-amber-300"
           aria-hidden="true"
         />
         <div className="min-w-0 flex-1">
-          <p className="text-xs leading-5 text-muted-foreground">
+          <p className="text-xs font-medium leading-5 text-foreground">
             Recent messages are retained temporarily and may be removed after the retention period.
           </p>
           {connectionError && (
@@ -202,6 +206,21 @@ export function LiveChatThread({
               {...form.register('body', {
                 onChange: () => form.clearErrors('root.server'),
               })}
+              onKeyDown={(event) => {
+                if (
+                  event.key !== 'Enter' ||
+                  event.shiftKey ||
+                  event.nativeEvent.isComposing ||
+                  isSubmitting ||
+                  connectionStatus !== 'live' ||
+                  body.trim().length === 0
+                ) {
+                  return;
+                }
+
+                event.preventDefault();
+                event.currentTarget.form?.requestSubmit();
+              }}
             />
 
             <div className="flex flex-wrap items-center gap-2">
@@ -227,7 +246,8 @@ export function LiveChatThread({
                 id={hintId}
                 className="mr-auto text-xs"
               >
-                {body.length.toLocaleString()} / {LIVE_CHAT_MESSAGE_MAX_LENGTH.toLocaleString()}
+                Enter to send · Shift+Enter for a new line · {body.length.toLocaleString()} /{' '}
+                {LIVE_CHAT_MESSAGE_MAX_LENGTH.toLocaleString()}
               </FieldDescription>
 
               <Button
