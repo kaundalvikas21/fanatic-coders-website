@@ -1,12 +1,11 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import type { Payment } from '@/types';
 import { formatDate } from '@/utils/date';
 import { formatMoney } from '@/utils/money';
+import { PaymentInvoiceActions } from '../PaymentInvoiceActions';
 
 export const paymentColumns: ColumnDef<Payment>[] = [
   {
@@ -15,8 +14,8 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     cell: ({ row }) => (
       <div className="flex min-w-40 flex-col gap-1">
         <span className="font-medium">{row.original.stripeInvoiceNumber ?? 'Pending number'}</span>
-        <span className="font-mono text-xs text-muted-foreground">
-          {row.original.stripeInvoiceId}
+        <span className="max-w-64 truncate text-xs text-muted-foreground">
+          {row.original.description}
         </span>
       </div>
     ),
@@ -62,25 +61,6 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     id: 'actions',
     header: () => <div className="text-right">Actions</div>,
     enableSorting: false,
-    cell: ({ row }) => (
-      <div className="flex justify-end gap-2">
-        {row.original.stripeInvoicePdfUrl && (
-          <Button
-            asChild
-            variant="ghost"
-            size="icon-sm"
-          >
-            <a
-              href={row.original.stripeInvoicePdfUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Download invoice ${row.original.stripeInvoiceNumber ?? ''}`.trim()}
-            >
-              <Download />
-            </a>
-          </Button>
-        )}
-      </div>
-    ),
+    cell: ({ row }) => <PaymentInvoiceActions {...row.original} />,
   },
 ];
