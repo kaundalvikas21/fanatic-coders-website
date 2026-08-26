@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import { PageHeader } from '@/components/shared/page-header';
-import { getProjectTaskById } from '@/modules/tasks/data/queries';
+import { getProjectTaskById, getTaskComments } from '@/modules/tasks/data/queries';
 import { getTaskMedia } from '@/modules/tasks/data/media';
 import { TaskDetailView } from '@/modules/tasks';
-import type { Media } from '@/types';
+import type { Media, TaskCommentList } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,9 +13,10 @@ type TaskDetailPageProps = {
 
 export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   const { id: projectId, taskId } = await params;
-  const [task, mediaResponse] = await Promise.all([
+  const [task, mediaResponse, commentsResponse] = await Promise.all([
     getProjectTaskById(projectId, taskId),
     getTaskMedia(taskId, { page: 1, pageSize: 20 }),
+    getTaskComments(taskId, { page: 1, pageSize: 20 }),
   ]);
 
   if (!task) {
@@ -23,6 +24,9 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   }
 
   const attachments: Media[] = mediaResponse.success ? mediaResponse.data.items : [];
+  const comments: TaskCommentList = commentsResponse.success
+    ? commentsResponse.data
+    : { items: [], pagination: { page: 1, pageSize: 20, totalItems: 0, totalPages: 0 } };
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,6 +38,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       <TaskDetailView
         task={task}
         attachments={attachments}
+        comments={comments}
       />
     </div>
   );

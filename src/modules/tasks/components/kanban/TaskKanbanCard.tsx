@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import type { Task, UserListItem } from '@/types';
 import { TASK_PRIORITY_BADGE_VARIANTS, TASK_PRIORITY_COLORS, TASK_PRIORITY_OPTIONS } from '@/types';
 import { formatDate } from '@/utils/date';
+import { getTaskDetailPath } from '@/modules/tasks/utils/task-path';
 import { TaskCardProvider, useTaskCard } from '@/modules/tasks/context/task-card-context';
 import { useTaskKanban } from '@/modules/tasks/context/task-kanban-context';
 import { TASK_STATUS_STYLES } from './task-kanban-styles';
@@ -195,7 +196,7 @@ export function TaskKanbanCard({
           className="absolute top-2 right-10 z-10"
         >
           <Link
-            href={`/dashboard/projects/${task.projectId}/tasks/${task.id}`}
+            href={getTaskDetailPath(task.projectId, task.id)}
             aria-label={`View ${task.title} details`}
             title="View task details"
           >

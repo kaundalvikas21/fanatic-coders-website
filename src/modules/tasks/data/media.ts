@@ -3,10 +3,8 @@
 import { revalidatePath } from 'next/cache';
 import { authApi } from '@/lib/axios/client';
 import { getApiError, unwrap } from '@/lib/axios/utils';
+import { getTaskDetailPath } from '@/modules/tasks/utils/task-path';
 import type { GetTaskMediaInput, TaskMediaListResponse, TaskMediaResponse } from '@/types';
-
-const taskPath = (projectId: string, taskId: string) =>
-  `/dashboard/projects/${projectId}/tasks/${taskId}`;
 
 export async function uploadTaskMedia(
   projectId: string,
@@ -19,7 +17,7 @@ export async function uploadTaskMedia(
         timeout: 60_000,
       }),
     );
-    revalidatePath(taskPath(projectId, taskId));
+    revalidatePath(getTaskDetailPath(projectId, taskId));
     return response;
   } catch (error) {
     return getApiError(error) as TaskMediaResponse;
@@ -51,7 +49,7 @@ export async function deleteTaskMedia(
         { timeout: 60_000 },
       ),
     );
-    revalidatePath(taskPath(projectId, taskId));
+    revalidatePath(getTaskDetailPath(projectId, taskId));
     return response;
   } catch (error) {
     return getApiError(error) as TaskMediaResponse;
