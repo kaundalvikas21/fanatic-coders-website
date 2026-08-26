@@ -12,9 +12,9 @@ import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 import type { Task, TaskStatus, UserListItem } from '@/types';
 import { TASK_STATUS_OPTIONS } from '@/types';
 import { TaskKanbanCardContent } from './TaskKanbanCard';
-import { TaskCardProvider } from './TaskCardContext';
+import { TaskCardProvider } from '@/modules/tasks/context/task-card-context';
 import { TaskKanbanColumn } from './TaskKanbanColumn';
-import { TaskKanbanProvider } from './TaskKanbanContext';
+import { TaskKanbanProvider } from '@/modules/tasks/context/task-kanban-context';
 
 type TaskKanbanBoardProps = {
   tasks: Task[];
@@ -113,7 +113,10 @@ export function TaskKanbanBoard({
                 size="sm"
                 className="w-72 shadow-lg"
               >
-                <TaskKanbanCardContent preview />
+                <TaskKanbanCardContent
+                  preview
+                  showProjects={showProjects}
+                />
               </Card>
             </TaskCardProvider>
           ) : null}
