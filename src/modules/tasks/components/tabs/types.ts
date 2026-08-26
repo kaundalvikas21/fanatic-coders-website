@@ -1,1 +1,1 @@
-export type TaskDetailTab = 'overview' | 'checklist' | 'attachments';
+export type TaskDetailTab = 'overview' | 'checklist' | 'comments' | 'attachments';
