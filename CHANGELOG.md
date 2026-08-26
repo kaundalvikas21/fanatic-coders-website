@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.2](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.10.1...v0.10.2) (2026-08-26)
+
+### Features
+
+- **api:** added api endpoint server functions for managing tasks ([1405abf](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1405abfe751abbe5504ef804b9c0efed20571d2d))
+- **payment:** added charst implementation on payments ([4b7f5f5](https://github.com/kaundalvikas21/fanatic-coders-website/commit/4b7f5f53ab6aecc8c7a4cdbc1bdbdc31c43df038))
+- **tasks:** added single task attachment feature ([09364bf](https://github.com/kaundalvikas21/fanatic-coders-website/commit/09364bf62aadc762abe9719c8d89744c44337bed))
+- **types:** added types for managing task related stuff ([1b1e291](https://github.com/kaundalvikas21/fanatic-coders-website/commit/1b1e29180c3ccb3a4f2116e72b04b153cebbb1c3))
+
+### Bug Fixes
+
+- **auth:** fix type in auth make it generic ([8d59cde](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8d59cde526a838802aafaa8addf93e852eda57a7))
+- **payments:** prevent payments stats to other roles only admin can access ([175bc7f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/175bc7f1585c44d1173549cbb95901bcc3030b11))
+
+### Code Refactoring
+
+- **chat:** added warning color ([e9330ef](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e9330efab7bba9e58a4d50666926809045396bfa))
+- **media:** added shared media attachment components ([e6a4b23](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e6a4b239011f526afdcf63e680e9f2cc8b10b500))
+
 ### [0.10.1](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.10.0...v0.10.1) (2026-08-24)
 
 ### Features
