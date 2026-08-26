@@ -575,6 +575,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tasks/{taskId}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch task attachments
+         * @description Returns task attachment records newest first. The secureUrl field can be rendered directly by the frontend.
+         */
+        get: operations["getTaskMedia"];
+        put?: never;
+        /**
+         * Upload task attachment
+         * @description Uploads one image or PDF (maximum 5 MB) to the task media folder and saves its delivery metadata.
+         */
+        post: operations["uploadTaskMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks/{taskId}/media/{mediaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete task attachment
+         * @description Deletes the Cloudinary asset and then removes its task attachment record.
+         */
+        delete: operations["deleteTaskMedia"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/service-requests/{id}": {
         parameters: {
             query?: never;
@@ -696,6 +740,19 @@ export interface components {
                 averageAmount: string;
                 /** @example 24 */
                 transactionCount: number;
+            }[];
+            /** @description Daily paid-invoice revenue for the trailing 365 days, grouped by currency. */
+            revenueTrend: {
+                /**
+                 * Format: date
+                 * @example 2026-08-25
+                 */
+                date: string;
+                currency: components["schemas"]["ProjectCurrency"];
+                /** @example 1500.00 */
+                revenue: string;
+                /** @example 2 */
+                invoiceCount: number;
             }[];
             recentTransactions: {
                 id: string;
@@ -1291,7 +1348,7 @@ export interface components {
              * @example PROJECT
              * @enum {string}
              */
-            targetType: "PROJECT";
+            targetType: "PROJECT" | "TASK";
             /** @example clx0000000000000000000010 */
             targetId: string;
             /** @example projects/clx0000000000000000000010/media/abc123 */
@@ -1650,6 +1707,12 @@ export interface components {
             data: components["schemas"]["Media"];
         };
         ProjectMediaListResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["Media"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
+        };
+        TaskMediaListResponse: components["schemas"]["ApiResponse"] & {
             data: {
                 items: components["schemas"]["Media"][];
                 pagination: components["schemas"]["PaginationMeta"];
@@ -3286,6 +3349,177 @@ export interface operations {
             403: components["responses"]["Forbidden"];
             /** @description Task was not found or is unavailable to the current member. */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getTaskMedia: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Task attachments fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskMediaListResponse"];
+                };
+            };
+            /** @description Invalid task id or pagination parameters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    uploadTaskMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description JPG, PNG, WebP, GIF, or PDF file. Maximum 5 MB.
+                     */
+                    media: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Task attachment uploaded successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaResponse"];
+                };
+            };
+            /** @description Media file is missing, unsupported, or larger than 5 MB. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Cloudinary rejected the upload. */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Cloudinary upload timed out. */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteTaskMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+                /** @example clx0000000000000000000050 */
+                mediaId: components["parameters"]["MediaId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Task attachment deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaResponse"];
+                };
+            };
+            /** @description Invalid task or media id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task or attachment was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Cloudinary asset deletion failed. */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
