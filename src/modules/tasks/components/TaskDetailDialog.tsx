@@ -2,16 +2,22 @@
 
 import { useRouter } from 'next/navigation';
 import { ActionDialog } from '@/components/shared/action-dialog';
-import type { Media, Task } from '@/types';
+import type { Media, Task, TaskCommentList } from '@/types';
 import { TaskDetailView } from './TaskDetailView';
 
 type TaskDetailDialogProps = {
   task: Task;
   projectName: string;
   attachments: Media[];
+  comments: TaskCommentList;
 };
 
-export function TaskDetailDialog({ task, projectName, attachments }: TaskDetailDialogProps) {
+export function TaskDetailDialog({
+  task,
+  projectName,
+  attachments,
+  comments,
+}: TaskDetailDialogProps) {
   const router = useRouter();
 
   return (
@@ -27,6 +33,7 @@ export function TaskDetailDialog({ task, projectName, attachments }: TaskDetailD
       <TaskDetailView
         task={task}
         attachments={attachments}
+        comments={comments}
       />
     </ActionDialog>
   );

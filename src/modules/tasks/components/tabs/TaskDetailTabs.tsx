@@ -1,16 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { ClipboardList, FileText, Paperclip } from 'lucide-react';
+import { ClipboardList, FileText, MessageSquare, Paperclip } from 'lucide-react';
 import { SectionTabs } from '@/components/shared/section-tabs';
-import type { Media, Task } from '@/types';
+import type { Media, Task, TaskCommentList } from '@/types';
 import { TaskAttachmentsTab } from './TaskAttachmentsTab';
 import { TaskChecklistTab } from './TaskChecklistTab';
+import { TaskCommentsTab } from './TaskCommentsTab';
 import { TaskOverviewTab } from './TaskOverviewTab';
 import type { TaskDetailTab } from './types';
 
-export function TaskDetailTabs({ task, attachments }: { task: Task; attachments: Media[] }) {
+export function TaskDetailTabs({
+  task,
+  attachments,
+  comments,
+}: {
+  task: Task;
+  attachments: Media[];
+  comments: TaskCommentList;
+}) {
   const [activeTab, setActiveTab] = useState<TaskDetailTab>('overview');
+  const [commentCount, setCommentCount] = useState(comments.pagination.totalItems);
   const addOnTasks = task.addOnTasks ?? [];
   const completedAddOns = addOnTasks.filter((item) => item.isCompleted).length;
   const tabs = [
@@ -20,6 +30,13 @@ export function TaskDetailTabs({ task, attachments }: { task: Task; attachments:
       label: 'Checklist',
       Icon: ClipboardList,
       count: `${completedAddOns}/${addOnTasks.length}`,
+      compactLabel: true,
+    },
+    {
+      value: 'comments',
+      label: 'Comments',
+      Icon: MessageSquare,
+      count: commentCount,
       compactLabel: true,
     },
     {
@@ -44,6 +61,12 @@ export function TaskDetailTabs({ task, attachments }: { task: Task; attachments:
         activeTab={activeTab}
       />
       <TaskChecklistTab activeTab={activeTab} />
+      <TaskCommentsTab
+        task={task}
+        comments={comments}
+        activeTab={activeTab}
+        onCountChange={setCommentCount}
+      />
       <TaskAttachmentsTab
         task={task}
         attachments={attachments}

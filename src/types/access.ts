@@ -14,6 +14,7 @@ export type AccessModel =
   | 'proposal'
   | 'serviceRequest'
   | 'task'
+  | 'taskComment'
   | 'team';
 
 export type AccessPermissions = Partial<Record<AccessModel, readonly AccessOperation[]>>;

@@ -3,15 +3,73 @@
 import { revalidatePath } from 'next/cache';
 import { authApi } from '@/lib/axios/client';
 import { getApiError, unwrap } from '@/lib/axios/utils';
+import { getTaskDetailPath } from '@/modules/tasks/utils/task-path';
 import type {
   AddOnTaskResponse,
   ApiResponse,
   CreateAddOnTaskRequest,
+  CreateTaskCommentRequest,
   CreateTaskRequest,
   TaskResponse,
+  TaskCommentResponse,
   UpdateAddOnTaskRequest,
+  UpdateTaskCommentRequest,
   UpdateTaskRequest,
 } from '@/types';
+
+export async function createTaskComment(
+  projectId: string,
+  taskId: string,
+  payload: CreateTaskCommentRequest,
+): Promise<TaskCommentResponse> {
+  try {
+    const response = await unwrap<TaskCommentResponse>(
+      authApi.post(`/api/v1/tasks/${encodeURIComponent(taskId)}/comments`, payload),
+    );
+    revalidatePath(getTaskDetailPath(projectId, taskId));
+    return response;
+  } catch (error) {
+    return getApiError(error) as TaskCommentResponse;
+  }
+}
+
+export async function updateTaskComment(
+  projectId: string,
+  taskId: string,
+  commentId: string,
+  payload: UpdateTaskCommentRequest,
+): Promise<TaskCommentResponse> {
+  try {
+    const response = await unwrap<TaskCommentResponse>(
+      authApi.put(
+        `/api/v1/tasks/${encodeURIComponent(taskId)}/comments/${encodeURIComponent(commentId)}`,
+        payload,
+      ),
+    );
+    revalidatePath(getTaskDetailPath(projectId, taskId));
+    return response;
+  } catch (error) {
+    return getApiError(error) as TaskCommentResponse;
+  }
+}
+
+export async function deleteTaskComment(
+  projectId: string,
+  taskId: string,
+  commentId: string,
+): Promise<TaskCommentResponse> {
+  try {
+    const response = await unwrap<TaskCommentResponse>(
+      authApi.delete(
+        `/api/v1/tasks/${encodeURIComponent(taskId)}/comments/${encodeURIComponent(commentId)}`,
+      ),
+    );
+    revalidatePath(getTaskDetailPath(projectId, taskId));
+    return response;
+  } catch (error) {
+    return getApiError(error) as TaskCommentResponse;
+  }
+}
 
 export async function createTaskAddOn(
   taskId: string,

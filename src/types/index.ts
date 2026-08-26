@@ -178,6 +178,15 @@ export type {
   UpdateAddOnTaskRequest,
   UpdateTaskRequest,
 } from './task';
+export type {
+  CreateTaskCommentRequest,
+  GetTaskCommentsInput,
+  TaskComment,
+  TaskCommentList,
+  TaskCommentResponse,
+  TaskCommentsResponse,
+  UpdateTaskCommentRequest,
+} from './task-comment';
 export {
   TASK_PRIORITIES,
   TASK_PRIORITY_BADGE_VARIANTS,

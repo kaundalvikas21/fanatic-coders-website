@@ -28,7 +28,11 @@ export default async function DashboardLayout({
   }
 
   return (
-    <PermissionProvider permissions={access.permissions}>
+    <PermissionProvider
+      permissions={access.permissions}
+      memberId={access.memberId}
+      role={access.role}
+    >
       <DashboardProvider>
         <DashboardSidebar role={role} />
         <SidebarInset className="min-h-svh rounded-l-lg bg-background text-foreground">

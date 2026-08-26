@@ -619,6 +619,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tasks/{taskId}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch task comments
+         * @description Returns task comments in chronological order for a task visible to the current member.
+         */
+        get: operations["getTaskComments"];
+        put?: never;
+        /**
+         * Create a task comment
+         * @description Creates a comment on a task visible to the current member.
+         */
+        post: operations["createTaskComment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks/{taskId}/comments/{commentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update a task comment
+         * @description Updates a comment when the current member is its author or an Admin/Manager moderator.
+         */
+        put: operations["updateTaskComment"];
+        post?: never;
+        /**
+         * Delete a task comment
+         * @description Deletes a comment when the current member is its author or an Admin/Manager moderator.
+         */
+        delete: operations["deleteTaskComment"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/service-requests/{id}": {
         parameters: {
             query?: never;
@@ -1464,6 +1512,52 @@ export interface components {
             createdAt: string;
             user: components["schemas"]["TaskUser"];
         };
+        TaskCommentUser: {
+            /** @example seed-user-member */
+            id: string;
+            /** @example Delivery Member */
+            name: string;
+            /**
+             * Format: uri
+             * @example https://example.com/avatar.png
+             */
+            image?: string | null;
+        };
+        TaskCommentMember: {
+            /** @example seed-member-member */
+            id: string;
+            role: components["schemas"]["OrganizationRole"];
+            user: components["schemas"]["TaskCommentUser"];
+        };
+        TaskComment: {
+            /** @example clx0000000000000000000060 */
+            id: string;
+            /** @example clx0000000000000000000030 */
+            taskId: string;
+            /** @example seed-member-member */
+            memberId: string | null;
+            /** @example The first draft is ready for review. */
+            content: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-26T12:00:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-26T12:00:00.000Z
+             */
+            updatedAt: string;
+            member: components["schemas"]["TaskCommentMember"] | null;
+        };
+        CreateTaskCommentRequest: {
+            /** @example The first draft is ready for review. */
+            content: string;
+        };
+        UpdateTaskCommentRequest: {
+            /** @example The revised draft is ready for review. */
+            content: string;
+        };
         TaskProjectReference: {
             /** @example clx0000000000000000000010 */
             id: string;
@@ -1543,6 +1637,15 @@ export interface components {
         };
         TaskResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Task"];
+        };
+        TaskCommentResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["TaskComment"];
+        };
+        TaskCommentsResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["TaskComment"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
         };
         TasksResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Task"][];
@@ -1772,6 +1875,8 @@ export interface components {
         TaskProjectId: string;
         /** @example clx0000000000000000000030 */
         TaskId: string;
+        /** @example clx0000000000000000000060 */
+        TaskCommentId: string;
         /** @example clx0000000000000000000040 */
         NotificationId: string;
     };
@@ -3520,6 +3625,209 @@ export interface operations {
             };
             /** @description Cloudinary asset deletion failed. */
             500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getTaskComments: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Task comments fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskCommentsResponse"];
+                };
+            };
+            /** @description Invalid task id or pagination parameters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    createTaskComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTaskCommentRequest"];
+            };
+        };
+        responses: {
+            /** @description Task comment created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskCommentResponse"];
+                };
+            };
+            /** @description Invalid task id or comment payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    updateTaskComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+                /** @example clx0000000000000000000060 */
+                commentId: components["parameters"]["TaskCommentId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTaskCommentRequest"];
+            };
+        };
+        responses: {
+            /** @description Task comment updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskCommentResponse"];
+                };
+            };
+            /** @description Invalid task id, comment id, or comment payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            /** @description The current member cannot modify this comment. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Task or comment was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    deleteTaskComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+                /** @example clx0000000000000000000060 */
+                commentId: components["parameters"]["TaskCommentId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Task comment deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskCommentResponse"];
+                };
+            };
+            /** @description Invalid task or comment id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            /** @description The current member cannot delete this comment. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Task or comment was not found. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

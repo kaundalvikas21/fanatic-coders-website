@@ -5,6 +5,8 @@ import type { AccessModel, AccessOperation, AccessPermissions } from '@/types';
 
 type PermissionContextValue = {
   permissions: AccessPermissions;
+  memberId: string;
+  role: string;
   can: (model: AccessModel, operation: AccessOperation) => boolean;
 };
 
@@ -12,12 +14,21 @@ const PermissionContext = createContext<PermissionContextValue | null>(null);
 
 type PermissionProviderProps = {
   permissions: AccessPermissions;
+  memberId: string;
+  role: string;
   children: ReactNode;
 };
 
-export function PermissionProvider({ permissions, children }: PermissionProviderProps) {
+export function PermissionProvider({
+  permissions,
+  memberId,
+  role,
+  children,
+}: PermissionProviderProps) {
   const value: PermissionContextValue = {
     permissions,
+    memberId,
+    role,
     can(model, operation) {
       return permissions[model]?.includes(operation) ?? false;
     },
