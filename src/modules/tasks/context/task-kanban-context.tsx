@@ -9,6 +9,10 @@ type TaskKanbanContextValue = {
   pendingTaskIds: Set<string>;
 };
 
+/**
+ * Shares Kanban-only interaction state: task permissions, project-label mode,
+ * and pending task IDs used to disable actions during board updates.
+ */
 const TaskKanbanContext = createContext<TaskKanbanContextValue | null>(null);
 
 export function TaskKanbanProvider({

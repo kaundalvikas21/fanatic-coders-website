@@ -1,0 +1,1 @@
+export { TaskDetailTabs } from './TaskDetailTabs';

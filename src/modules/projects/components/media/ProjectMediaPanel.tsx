@@ -7,12 +7,12 @@ import { toast } from 'sonner';
 import { ActionDialog } from '@/components/shared/action-dialog';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { Button } from '@/components/ui/button';
+import { FileCard } from '@/components/shared/media/FileCard';
+import { ImageCard } from '@/components/shared/media/ImageCard';
+import { MediaCardFooter } from '@/components/shared/media/MediaCardFooter';
 import { deleteProjectMedia } from '@/modules/projects/data/media';
 import { useProjectPermissions } from '@/modules/projects/hooks/use-project-permissions';
 import type { Media } from '@/types';
-import { FileCard } from './FileCard';
-import { ImageCard } from './ImageCard';
-import { MediaCardFooter } from './MediaCardFooter';
 
 const ProjectMediaUploader = dynamic(
   () => import('./ProjectMediaUploader').then((module) => module.ProjectMediaUploader),

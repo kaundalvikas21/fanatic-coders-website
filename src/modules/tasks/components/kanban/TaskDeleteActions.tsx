@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { useActionDialog } from '@/components/shared/action-dialog';
 import { Button } from '@/components/ui/button';
 import { deleteTaskById } from '@/modules/tasks/data/mutations';
-import { useTaskCard } from './TaskCardContext';
+import { useTaskCard } from '@/modules/tasks/context/task-card-context';
 
 export function TaskDeleteActions() {
   const task = useTaskCard();

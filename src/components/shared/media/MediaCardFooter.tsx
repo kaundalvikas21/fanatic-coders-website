@@ -14,6 +14,7 @@ type MediaCardFooterProps = {
   title: string;
   viewHref?: string;
   onDelete?: () => void | Promise<void>;
+  deleteDescription?: string;
 };
 
 type DeleteActionProps = {
@@ -64,6 +65,7 @@ export function MediaCardFooter({
   title,
   viewHref,
   onDelete,
+  deleteDescription = 'This attachment will be permanently removed.',
 }: MediaCardFooterProps) {
   return (
     <div className="flex min-h-12 items-center gap-2 border-t bg-card px-3 py-2">
@@ -108,7 +110,7 @@ export function MediaCardFooter({
         {onDelete ? (
           <ActionDialog
             title={`Delete ${title.toLowerCase()}?`}
-            description="This attachment will be permanently removed from the project."
+            description={deleteDescription}
             trigger={
               <Button
                 type="button"

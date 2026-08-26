@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useDraggable } from '@dnd-kit/core';
-import { CalendarDays, Clock3, GripVertical, Pencil, Trash2 } from 'lucide-react';
+import { CalendarDays, Clock3, Eye, GripVertical, ListChecks, Pencil, Trash2 } from 'lucide-react';
 import { ActionSheet } from '@/components/shared/action-sheet';
 import { ActionDialog } from '@/components/shared/action-dialog';
 import { UserAvatar } from '@/components/shared/user-avatar';
@@ -15,9 +15,8 @@ import { cn } from '@/lib/utils';
 import type { Task, UserListItem } from '@/types';
 import { TASK_PRIORITY_BADGE_VARIANTS, TASK_PRIORITY_COLORS, TASK_PRIORITY_OPTIONS } from '@/types';
 import { formatDate } from '@/utils/date';
-import { TaskAddOnSection } from './TaskAddOnSection';
-import { TaskCardProvider, useTaskCard } from './TaskCardContext';
-import { useTaskKanban } from './TaskKanbanContext';
+import { TaskCardProvider, useTaskCard } from '@/modules/tasks/context/task-card-context';
+import { useTaskKanban } from '@/modules/tasks/context/task-kanban-context';
 import { TASK_STATUS_STYLES } from './task-kanban-styles';
 
 const TaskDeleteActions = dynamic(
@@ -54,11 +53,18 @@ function getAssigneeLabel(task: Task) {
   return `${assignees.length} assignees`;
 }
 
-export function TaskKanbanCardContent({ preview = false }: { preview?: boolean }) {
+export function TaskKanbanCardContent({
+  preview = false,
+  showProjects = false,
+}: {
+  preview?: boolean;
+  showProjects?: boolean;
+}) {
   const task = useTaskCard();
-  const { showProjects } = useTaskKanban();
   const assignee = task.assignees?.[0]?.member?.user;
   const assignees = task.assignees ?? [];
+  const addOnTasks = task.addOnTasks ?? [];
+  const completedAddOns = addOnTasks.filter((item) => item.isCompleted).length;
 
   return (
     <>
@@ -87,7 +93,14 @@ export function TaskKanbanCardContent({ preview = false }: { preview?: boolean }
         {task.description ? (
           <p className="line-clamp-2 text-xs leading-5 text-muted-foreground">{task.description}</p>
         ) : null}
-        {!preview ? <TaskAddOnSection /> : null}
+        {!preview && addOnTasks.length > 0 ? (
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ListChecks aria-hidden="true" />
+            <span>
+              {completedAddOns}/{addOnTasks.length} checklist items
+            </span>
+          </div>
+        ) : null}
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <AvatarGroup aria-label={`Assignees: ${getAssigneeLabel(task)}`}>
             {assignees.length > 0 ? (
@@ -137,7 +150,7 @@ export function TaskKanbanCard({
   task: Task;
   assignableMembers: UserListItem[];
 }) {
-  const { canUpdate, canDelete, pendingTaskIds } = useTaskKanban();
+  const { canUpdate, canDelete, pendingTaskIds, showProjects } = useTaskKanban();
   const disabled = !canUpdate || pendingTaskIds.has(task.id);
   const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -175,11 +188,25 @@ export function TaskKanbanCard({
         >
           <GripVertical />
         </Button>
+        <Button
+          asChild
+          variant="ghost"
+          size="icon-sm"
+          className="absolute top-2 right-10 z-10"
+        >
+          <Link
+            href={`/dashboard/projects/${task.projectId}/tasks/${task.id}`}
+            aria-label={`View ${task.title} details`}
+            title="View task details"
+          >
+            <Eye />
+          </Link>
+        </Button>
         {canUpdate ? (
           <div
             className={cn(
               'absolute top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none',
-              canDelete ? 'right-[4.75rem]' : 'right-10',
+              canDelete ? 'right-[7rem]' : 'right-[4.75rem]',
             )}
           >
             <ActionSheet
@@ -209,7 +236,7 @@ export function TaskKanbanCard({
           </div>
         ) : null}
         {canDelete ? (
-          <div className="absolute top-2 right-10 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none">
+          <div className="absolute top-2 right-[4.75rem] z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none">
             <ActionDialog
               title="Delete this task?"
               description="The task will be removed from this project."
@@ -229,7 +256,7 @@ export function TaskKanbanCard({
             </ActionDialog>
           </div>
         ) : null}
-        <TaskKanbanCardContent />
+        <TaskKanbanCardContent showProjects={showProjects} />
       </Card>
     </TaskCardProvider>
   );

@@ -113,10 +113,14 @@ export type {
 } from './payment';
 export type {
   GetProjectMediaInput,
+  GetTaskMediaInput,
   Media,
   ProjectMediaList,
   ProjectMediaListResponse,
   ProjectMediaResponse,
+  TaskMediaList,
+  TaskMediaListResponse,
+  TaskMediaResponse,
 } from './media';
 export type {
   CreateProjectFromServiceRequestRequest,

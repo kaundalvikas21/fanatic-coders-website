@@ -24,6 +24,12 @@ export type AdminPaymentSummary = {
     averageAmount: string;
     transactionCount: number;
   }>;
+  revenueTrend: Array<{
+    date: string;
+    currency: ProjectCurrency;
+    revenue: string;
+    invoiceCount: number;
+  }>;
   recentTransactions: Array<{
     id: string;
     serviceRequestId: string;

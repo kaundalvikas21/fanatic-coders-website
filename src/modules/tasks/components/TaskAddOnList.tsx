@@ -24,9 +24,9 @@ import {
   type TaskAddOnUpdateFormInput,
   type TaskAddOnUpdateFormValues,
 } from '@/modules/tasks/schemas/task';
+import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 import type { AddOnTask } from '@/types';
-import { useTaskCard } from './TaskCardContext';
-import { useTaskKanban } from './TaskKanbanContext';
+import { useTaskCard } from '@/modules/tasks/context/task-card-context';
 
 function DeleteAddOnActions({ addOnTask }: { addOnTask: AddOnTask }) {
   const task = useTaskCard();
@@ -78,7 +78,7 @@ function DeleteAddOnActions({ addOnTask }: { addOnTask: AddOnTask }) {
 function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
   const task = useTaskCard();
   const router = useRouter();
-  const { canUpdate, canDelete: canManage } = useTaskKanban();
+  const { canUpdate, canDelete } = useTaskPermissions();
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const form = useForm<TaskAddOnUpdateFormInput, unknown, TaskAddOnUpdateFormValues>({
@@ -199,35 +199,39 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
       >
         {addOnTask.name}
       </span>
-      {canManage ? (
-        <div className="flex opacity-0 transition-opacity group-hover/addon:opacity-100 group-focus-within/addon:opacity-100">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            disabled={isPending}
-            aria-label={`Edit ${addOnTask.name}`}
-            onClick={() => setIsEditing(true)}
-          >
-            <Pencil aria-hidden="true" />
-          </Button>
-          <ActionDialog
-            title="Delete this add-on?"
-            description="This checklist item will be removed from the task."
-            trigger={
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-xs"
-                disabled={isPending}
-                aria-label={`Delete ${addOnTask.name}`}
-              >
-                <Trash2 aria-hidden="true" />
-              </Button>
-            }
-          >
-            <DeleteAddOnActions addOnTask={addOnTask} />
-          </ActionDialog>
+      {canUpdate || canDelete ? (
+        <div className="flex">
+          {canUpdate ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-xs"
+              disabled={isPending}
+              aria-label={`Edit ${addOnTask.name}`}
+              onClick={() => setIsEditing(true)}
+            >
+              <Pencil aria-hidden="true" />
+            </Button>
+          ) : null}
+          {canDelete ? (
+            <ActionDialog
+              title="Delete this add-on?"
+              description="This checklist item will be removed from the task."
+              trigger={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-xs"
+                  disabled={isPending}
+                  aria-label={`Delete ${addOnTask.name}`}
+                >
+                  <Trash2 aria-hidden="true" />
+                </Button>
+              }
+            >
+              <DeleteAddOnActions addOnTask={addOnTask} />
+            </ActionDialog>
+          ) : null}
         </div>
       ) : null}
     </div>
@@ -237,7 +241,7 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
 export function TaskAddOnList() {
   const task = useTaskCard();
   const router = useRouter();
-  const { canDelete: canManage } = useTaskKanban();
+  const { canCreate } = useTaskPermissions();
   const addOnTasks = task.addOnTasks ?? [];
   const form = useForm<TaskAddOnCreateFormInput, unknown, TaskAddOnCreateFormValues>({
     resolver: zodResolver(taskAddOnCreateSchema),
@@ -262,7 +266,7 @@ export function TaskAddOnList() {
 
   return (
     <div className="space-y-5">
-      {canManage ? (
+      {canCreate ? (
         <form
           className="space-y-2"
           onSubmit={form.handleSubmit(createAddOn)}
