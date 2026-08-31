@@ -21,31 +21,32 @@ export function ProjectProgressCard({ project, tasks }: ProjectProgressCardProps
       icon={Activity}
       title="Project progress"
       description="Completion based on delivery tasks."
-      titleClassName="text-xl font-semibold"
+      actionSlot={
+        <Badge
+          variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}
+          color={PROJECT_STATUS_COLORS[project.status]}
+        >
+          {PROJECT_STATUS_LABELS[project.status]}
+        </Badge>
+      }
     >
-      <div className="grid gap-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="grid gap-3">
+        <div className="flex items-center justify-between gap-4 text-sm">
           <div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-semibold tabular-nums">{progressPercent}%</span>
-              <span className="text-sm text-muted-foreground">complete</span>
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="font-medium text-foreground">
+              {tasks.length === 0
+                ? 'No delivery tasks yet'
+                : `${completedTasks} of ${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'} complete`}
+            </p>
+            <p className="mt-0.5 text-muted-foreground">
               {tasks.length === 0
                 ? 'Progress begins when the first task is added.'
-                : `${completedTasks} of ${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'} completed`}
+                : 'Calculated from completed delivery tasks.'}
             </p>
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Project status</span>
-            <Badge
-              variant={PROJECT_STATUS_BADGE_VARIANTS[project.status]}
-              color={PROJECT_STATUS_COLORS[project.status]}
-            >
-              {PROJECT_STATUS_LABELS[project.status]}
-            </Badge>
-          </div>
+          <span className="shrink-0 font-mono font-semibold tabular-nums text-foreground">
+            {progressPercent}%
+          </span>
         </div>
 
         <Progress
