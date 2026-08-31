@@ -19,7 +19,7 @@ import type {
   UpdateTaskCommentRequest,
 } from '@/types';
 import { TaskCommentItem } from './TaskCommentItem';
-import { TaskDetailTabPanel } from './TaskDetailTabPanel';
+import { TaskDetailTabPanel, TaskTabEmptyState } from './TaskDetailTabPanel';
 import type { TaskDetailTab } from './types';
 
 const PAGE_SIZE = 20;
@@ -143,16 +143,11 @@ export function TaskCommentsTab({
             })}
           </div>
         ) : (
-          <div className="py-6 text-center">
-            <MessageSquare
-              className="mx-auto size-8 text-muted-foreground/60"
-              aria-hidden="true"
-            />
-            <p className="mt-3 text-sm font-medium">No comments yet</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Start the conversation with a progress update or question.
-            </p>
-          </div>
+          <TaskTabEmptyState
+            icon={MessageSquare}
+            title="No comments yet"
+            description="Start the conversation with a progress update or question."
+          />
         )}
 
         {pagination.page < pagination.totalPages ? (

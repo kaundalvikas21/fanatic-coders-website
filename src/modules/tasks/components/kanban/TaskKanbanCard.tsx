@@ -54,7 +54,7 @@ function getAssigneeLabel(task: Task) {
   return `${assignees.length} assignees`;
 }
 
-export function TaskCardDetails({
+function TaskCardDetails({
   preview = false,
   showProjects = false,
 }: {

@@ -1,14 +1,22 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { TabsContent } from '@/components/ui/tabs';
+import { Paperclip, Plus } from 'lucide-react';
+import { ActionDialog } from '@/components/shared/action-dialog';
+import { Button } from '@/components/ui/button';
+import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 import type { Media, Task } from '@/types';
-import { TaskTabSkeleton } from './TaskDetailTabPanel';
+import { TaskDetailTabPanel, TaskTabEmptyState, TaskTabSkeleton } from './TaskDetailTabPanel';
 import type { TaskDetailTab } from './types';
 
 const TaskAttachmentsPanel = dynamic(
   () => import('../TaskAttachmentsPanel').then((module) => module.TaskAttachmentsPanel),
   { loading: () => <TaskTabSkeleton /> },
+);
+
+const TaskMediaUploader = dynamic(
+  () => import('../TaskMediaUploader').then((module) => module.TaskMediaUploader),
+  { ssr: false },
 );
 
 export function TaskAttachmentsTab({
@@ -20,15 +28,53 @@ export function TaskAttachmentsTab({
   attachments: Media[];
   activeTab: TaskDetailTab;
 }) {
+  const { canUpdate } = useTaskPermissions();
+
   return (
-    <TabsContent value="attachments">
-      {activeTab === 'attachments' ? (
+    <TaskDetailTabPanel
+      value="attachments"
+      activeTab={activeTab}
+      icon={Paperclip}
+      title="Attachments"
+      description="Images and PDFs attached to this task."
+      actionSlot={
+        canUpdate ? (
+          <ActionDialog
+            title="Add task attachment"
+            description="Upload one image or PDF to this task."
+            contentClassName="sm:max-w-lg"
+            trigger={
+              <Button
+                size="sm"
+                type="button"
+              >
+                <Plus data-icon="inline-start" />
+                Add attachment
+              </Button>
+            }
+          >
+            <TaskMediaUploader
+              projectId={task.projectId}
+              taskId={task.id}
+            />
+          </ActionDialog>
+        ) : undefined
+      }
+      lazy
+    >
+      {attachments.length ? (
         <TaskAttachmentsPanel
           projectId={task.projectId}
           taskId={task.id}
           attachments={attachments}
         />
-      ) : null}
-    </TabsContent>
+      ) : (
+        <TaskTabEmptyState
+          icon={Paperclip}
+          title="No attachments yet"
+          description="Add an image or PDF that supports this task."
+        />
+      )}
+    </TaskDetailTabPanel>
   );
 }
