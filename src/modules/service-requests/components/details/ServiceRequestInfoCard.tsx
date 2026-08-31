@@ -1,9 +1,8 @@
 'use client';
 
-import { BriefcaseBusiness, Calendar, Mail, RefreshCw, UserRound } from 'lucide-react';
+import { Calendar, ClipboardList, Mail, RefreshCw, UserRound } from 'lucide-react';
 import { DetailItem } from '@/components/shared/detail-item';
 import { WidgetCard } from '@/components/shared/widget-card';
-import { SERVICE_REQUEST_SERVICE_LABELS } from '@/modules/service-requests/config/labels';
 import { useServiceRequestPermissions } from '@/modules/service-requests/hooks/use-service-request-permissions';
 import type { ServiceRequest } from '@/types';
 import { formatDate } from '@/utils/date';
@@ -12,8 +11,8 @@ type ServiceRequestInfoCardProps = {
   request: ServiceRequest;
 };
 
-const requestInfoItemClassName = 'min-w-0 flex-row items-start gap-3 border-0 bg-muted/40';
-const requestInfoIconClassName = 'bg-background text-muted-foreground ring-1 ring-foreground/10';
+const requestInfoItemClassName = 'min-w-0 flex-row items-start gap-3 border-0 p-0';
+const requestInfoIconClassName = 'size-8 rounded-md bg-muted text-muted-foreground';
 
 type ServiceRequestWithClient = ServiceRequest & {
   client?: {
@@ -42,19 +41,11 @@ export function ServiceRequestInfoCard({ request }: ServiceRequestInfoCardProps)
 
   return (
     <WidgetCard
+      icon={ClipboardList}
       title="Request info"
-      description="Service and timeline."
-      titleClassName="text-xl font-semibold"
-      descriptionClassName="text-sm"
+      description="Client and request timeline."
     >
-      <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-3">
-        <DetailItem
-          label="Service"
-          value={SERVICE_REQUEST_SERVICE_LABELS[request.service]}
-          icon={BriefcaseBusiness}
-          className={requestInfoItemClassName}
-          iconClassName={requestInfoIconClassName}
-        />
+      <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-x-6 gap-y-5">
         {permissions.isManagementView && (
           <>
             <DetailItem

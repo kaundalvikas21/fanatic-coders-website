@@ -88,12 +88,17 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
         <ServiceRequestSummarySections
           template={template}
           data={request.data ?? {}}
+          variant="detail"
         />
       </DetailPageLayout.Main>
 
       <DetailPageLayout.Aside>
-        {/* Keep status as the dedicated top-level state display for every viewer. */}
-        <ServiceRequestStatusCard request={request} />
+        {/* Give each viewer one status surface: read-only context or management controls. */}
+        {permissions.canUpdate ? (
+          <ServiceRequestActionsCard request={request} />
+        ) : (
+          <ServiceRequestStatusCard request={request} />
+        )}
 
         {/* Reassure clients that their request is active and updates will appear here. */}
         {!permissions.isManagementView && !request.project && (
@@ -144,9 +149,6 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
 
         {/* Point clients to delivery once this request becomes a project. */}
         {request.project && <ServiceRequestProjectAcknowledgement projectId={request.project.id} />}
-
-        {/* Show management controls below status only to viewers with update access. */}
-        {permissions.canUpdate && <ServiceRequestActionsCard request={request} />}
 
         {/* Start delivery only after the client accepts the proposal. */}
         {permissions.canUpdate &&
