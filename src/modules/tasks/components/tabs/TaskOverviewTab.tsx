@@ -12,7 +12,7 @@ import {
 } from '@/types';
 import { TaskDetailTabPanel } from './TaskDetailTabPanel';
 import type { TaskDetailTab } from './types';
-import { TaskKanbanCardContent } from '../kanban/TaskKanbanCard';
+import { TaskCardDetails } from '../kanban/TaskKanbanCard';
 
 export function TaskOverviewTab({ task, activeTab }: { task: Task; activeTab: TaskDetailTab }) {
   const status = TASK_STATUS_OPTIONS.find((option) => option.value === task.status)?.label;
@@ -27,7 +27,7 @@ export function TaskOverviewTab({ task, activeTab }: { task: Task; activeTab: Ta
       description="Scope and delivery requirements for this task."
       before={
         <Card size="sm">
-          <TaskKanbanCardContent />
+          <TaskCardDetails />
         </Card>
       }
       actionSlot={
