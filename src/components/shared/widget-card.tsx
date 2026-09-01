@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 
+import { CardIcon } from '@/components/shared/card-icon';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -45,16 +46,10 @@ export function WidgetCard({
           <div className="flex items-center justify-between gap-4">
             <div className="flex min-w-0 items-center gap-3">
               {Icon && (
-                <div
-                  className={cn(
-                    'flex size-10 items-center justify-center rounded-lg',
-                    isDestructive ? 'bg-destructive/10' : 'bg-primary/10',
-                  )}
-                >
-                  <Icon
-                    className={cn('size-5', isDestructive ? 'text-destructive' : 'text-primary')}
-                  />
-                </div>
+                <CardIcon
+                  icon={Icon}
+                  variant={variant}
+                />
               )}
               <div className="grid min-w-0 auto-rows-min grid-rows-[auto_auto] items-start gap-1.5">
                 {title && (

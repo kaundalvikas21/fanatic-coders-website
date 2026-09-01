@@ -1,4 +1,4 @@
-import type { Response } from './api';
+import type { Response, Schemas } from './api';
 import type { UserListItem } from './user';
 
 export const TASK_STATUSES = ['TODO', 'IN_PROGRESS', 'IN_REVIEW', 'DONE'] as const;
@@ -113,4 +113,6 @@ export type CreateAddOnTaskRequest = {
 
 export type TaskResponse = Response<Task>;
 export type TasksResponse = Response<Task[]>;
+export type TaskStats = Schemas['TaskStats'];
+export type TaskStatsResponse = Response<TaskStats>;
 export type AddOnTaskResponse = Response<AddOnTask>;

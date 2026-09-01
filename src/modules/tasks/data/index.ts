@@ -1,4 +1,4 @@
-export { getProjectTasks, getTasks } from './queries';
+export { getProjectTasks, getTasks, getTasksByMemberId, getTaskStatsByMemberId } from './queries';
 export {
   createProjectTask,
   deleteTaskAddOnById,
