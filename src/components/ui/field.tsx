@@ -7,12 +7,19 @@ import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 
-function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
+type FieldSetProps = React.ComponentProps<'fieldset'> & {
+  loading?: boolean;
+};
+
+function FieldSet({ className, loading = false, disabled, ...props }: FieldSetProps) {
   return (
     <fieldset
       data-slot="field-set"
+      data-loading={loading || undefined}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={cn(
-        'flex flex-col gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
+        'flex min-w-0 flex-col gap-4 border-0 p-0 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3 data-[loading=true]:[&_:disabled]:cursor-progress',
         className,
       )}
       {...props}
