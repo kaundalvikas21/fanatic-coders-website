@@ -82,3 +82,59 @@
   content: '';
   pointer-events: none;
 }
+
+@utility dashboard-glow-surface {
+  isolation: isolate;
+  border: 1px solid color-mix(in oklch, var(--border) 80%, transparent);
+  background-color: color-mix(in oklch, var(--card) 95%, transparent);
+  box-shadow: 0 6px 8px rgb(0 0 0 / 0.12);
+  backdrop-filter: blur(24px);
+}
+
+.dashboard-glow-surface::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: radial-gradient(
+    circle at top right,
+    color-mix(in oklch, var(--primary) 10%, transparent),
+    transparent 42%
+  );
+  background-position: 100% 0%;
+  background-size: 180% 180%;
+  content: '';
+  pointer-events: none;
+}
+
+.dashboard-glow-surface:not([data-state]) {
+  position: relative;
+}
+
+.dashboard-glow-surface:is(:focus-within, [data-state='open'])::before {
+  animation: dashboard-glow-orbit 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dashboard-glow-orbit {
+  0% {
+    background-position: 100% 0%;
+  }
+
+  33% {
+    background-position: 0% 0%;
+  }
+
+  66% {
+    background-position: 0% 100%;
+  }
+
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-glow-surface:is(:focus-within, [data-state='open'])::before {
+    animation: none;
+  }
+}

@@ -21,8 +21,9 @@ export function DashboardSidebar({ role, ...props }: DashboardSidebarProps) {
 
   return (
     <Sidebar
+      variant="floating"
       collapsible="icon"
-      className="border-sidebar-border/70 [&_[data-sidebar=sidebar]]:relative [&_[data-sidebar=sidebar]]:isolate [&_[data-sidebar=sidebar]]:overflow-hidden [&_[data-sidebar=sidebar]]:rounded-r-lg"
+      className="[&_[data-sidebar=sidebar]]:relative [&_[data-sidebar=sidebar]]:isolate [&_[data-sidebar=sidebar]]:overflow-hidden [&_[data-sidebar=sidebar]]:rounded-xl [&_[data-sidebar=sidebar]]:border [&_[data-sidebar=sidebar]]:border-sidebar-border/80 [&_[data-sidebar=sidebar]]:bg-sidebar/90 [&_[data-sidebar=sidebar]]:shadow-[0_6px_8px_rgb(0_0_0/0.08)] [&_[data-sidebar=sidebar]]:ring-0 [&_[data-sidebar=sidebar]]:backdrop-blur-xl"
       {...props}
     >
       <div

@@ -10,8 +10,7 @@ export function FilterBar({ children, className }: FilterBarProps) {
   return (
     <div
       className={cn(
-        'rounded-xl border border-border/80 bg-card/80 px-3 py-6 shadow-sm transition-colors duration-200',
-        'rounded-b-none border-b-0 shadow-none',
+        'dashboard-glow-surface rounded-xl px-3 py-6 transition-[border-color,background-color,box-shadow] duration-200',
         className,
       )}
     >

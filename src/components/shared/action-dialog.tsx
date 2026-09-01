@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useClient } from '@/hooks/useClient';
+import { cn } from '@/lib/utils';
 
 type DialogContextValue = {
   close: () => void;
@@ -24,6 +25,7 @@ type ActionDialogProps = {
   children: ReactNode;
   trigger?: ReactNode;
   description?: string;
+  open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   contentClassName?: string;
@@ -34,19 +36,21 @@ export function ActionDialog({
   children,
   trigger,
   description,
+  open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
   contentClassName,
 }: ActionDialogProps) {
   const isClient = useClient();
-  const [open, setOpenState] = useState(defaultOpen);
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const open = controlledOpen ?? internalOpen;
 
   const setOpen = useCallback(
     (nextOpen: boolean) => {
-      setOpenState(nextOpen);
+      if (controlledOpen === undefined) setInternalOpen(nextOpen);
       onOpenChange?.(nextOpen);
     },
-    [onOpenChange],
+    [controlledOpen, onOpenChange],
   );
   const close = useCallback(() => setOpen(false), [setOpen]);
   const value = useMemo(() => ({ close }), [close]);
@@ -60,7 +64,7 @@ export function ActionDialog({
         onOpenChange={setOpen}
       >
         {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-        <DialogContent className={contentClassName}>
+        <DialogContent className={cn('dashboard-glow-surface ring-0', contentClassName)}>
           <DialogHeader className="pr-8">
             <DialogTitle>{title}</DialogTitle>
             {description ? <DialogDescription>{description}</DialogDescription> : null}
