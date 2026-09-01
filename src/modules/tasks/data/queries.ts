@@ -7,6 +7,7 @@ import type {
   GetTaskCommentsInput,
   Task,
   TaskCommentsResponse,
+  TaskStatsResponse,
   TasksResponse,
 } from '@/types';
 
@@ -36,6 +37,26 @@ export async function getTasks(): Promise<TasksResponse | ApiResponse> {
     return await unwrap<TasksResponse>(authApi.get('/api/v1/tasks'));
   } catch (error) {
     return getApiError(error);
+  }
+}
+
+export async function getTasksByMemberId(memberId: string): Promise<TasksResponse> {
+  try {
+    return await unwrap<TasksResponse>(
+      authApi.get(`/api/v1/tasks/member/${encodeURIComponent(memberId)}`),
+    );
+  } catch (error) {
+    return getApiError(error) as TasksResponse;
+  }
+}
+
+export async function getTaskStatsByMemberId(memberId: string): Promise<TaskStatsResponse> {
+  try {
+    return await unwrap<TaskStatsResponse>(
+      authApi.get(`/api/v1/tasks/member/${encodeURIComponent(memberId)}/stats`),
+    );
+  } catch (error) {
+    return getApiError(error) as TaskStatsResponse;
   }
 }
 

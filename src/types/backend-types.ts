@@ -551,6 +551,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tasks/member/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch current tasks assigned to a member
+         * @description Returns non-completed tasks assigned to an organization member. Admin and Manager members can inspect team assignments; other roles can inspect only their own assignments.
+         */
+        get: operations["getTasksByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks/member/{memberId}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch task statistics for a member
+         * @description Returns independent total, active, completed, and overdue task counts for an organization member. Overdue tasks are a subset of active tasks.
+         */
+        get: operations["getTaskStatsByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tasks/{taskId}": {
         parameters: {
             query?: never;
@@ -628,7 +668,7 @@ export interface paths {
         };
         /**
          * Fetch task comments
-         * @description Returns task comments in chronological order for a task visible to the current member.
+         * @description Returns task comments newest first for a task visible to the current member.
          */
         get: operations["getTaskComments"];
         put?: never;
@@ -1650,6 +1690,22 @@ export interface components {
         TasksResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Task"][];
         };
+        TaskStats: {
+            /** @example 18 */
+            total: number;
+            /** @example 6 */
+            active: number;
+            /** @example 12 */
+            completed: number;
+            /**
+             * @description Active tasks whose due date is earlier than the current time.
+             * @example 2
+             */
+            overdue: number;
+        };
+        TaskStatsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["TaskStats"];
+        };
         RequestPasswordResetRequest: {
             /**
              * Format: email
@@ -1875,6 +1931,8 @@ export interface components {
         TaskProjectId: string;
         /** @example clx0000000000000000000030 */
         TaskId: string;
+        /** @example seed-member-member */
+        TaskMemberId: string;
         /** @example clx0000000000000000000060 */
         TaskCommentId: string;
         /** @example clx0000000000000000000040 */
@@ -3371,6 +3429,92 @@ export interface operations {
             };
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+        };
+    };
+    getTasksByMemberId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example seed-member-member */
+                memberId: components["parameters"]["TaskMemberId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Member tasks fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TasksResponse"];
+                };
+            };
+            /** @description Invalid member id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Organization member was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getTaskStatsByMemberId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example seed-member-member */
+                memberId: components["parameters"]["TaskMemberId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Member task statistics fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskStatsResponse"];
+                };
+            };
+            /** @description Invalid member id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Organization member was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
         };
     };
     updateTaskById: {

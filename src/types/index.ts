@@ -173,6 +173,8 @@ export type {
   TaskAssignee,
   TaskPriority,
   TaskResponse,
+  TaskStats,
+  TaskStatsResponse,
   TasksResponse,
   TaskStatus,
   UpdateAddOnTaskRequest,
