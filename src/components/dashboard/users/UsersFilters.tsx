@@ -106,7 +106,8 @@ export function UsersFilters() {
 
         <Button
           type="button"
-          variant="outline"
+          variant="default"
+          size="lg"
           onClick={handleReset}
           className="w-full md:w-auto"
         >
