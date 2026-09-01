@@ -2,7 +2,6 @@
 
 import { DashboardBrand } from '@/components/dashboard/shell/DashboardBrand';
 import { NavMain } from '@/components/dashboard/shell/NavMain';
-import { NavUser } from '@/components/dashboard/shell/NavUser';
 import { getAccessibleDashboardRouteGroups } from '@/components/dashboard/shell/nav-utils';
 import {
   Sidebar,
@@ -11,6 +10,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import packageJson from '../../../../package.json';
 
 type DashboardSidebarProps = React.ComponentProps<typeof Sidebar> & {
   role?: string | null;
@@ -40,8 +40,10 @@ export function DashboardSidebar({ role, ...props }: DashboardSidebarProps) {
       <SidebarContent className="relative z-10 py-2">
         <NavMain groups={routeGroups} />
       </SidebarContent>
-      <SidebarFooter className="relative z-10 border-t border-sidebar-border/60 p-3 group-data-[collapsible=icon]:p-2">
-        <NavUser />
+      <SidebarFooter className="relative z-10 px-3 py-2 group-data-[collapsible=icon]:p-0">
+        <p className="text-center font-mono text-xs text-sidebar-foreground/55 group-data-[collapsible=icon]:hidden">
+          v{packageJson.version}
+        </p>
       </SidebarFooter>
       <SidebarRail className="hover:after:bg-sidebar-primary/50" />
     </Sidebar>
