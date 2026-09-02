@@ -2,8 +2,10 @@
 
 import type { ReactNode } from 'react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { SWRConfig } from 'swr';
 import { AppToaster } from '@/components/shared/app-toaster';
 import { ThemeProvider } from '@/components/theme-provider';
+import { swrConfig } from '@/lib/swr-fetcher';
 import { AuthProvider } from '@/providers/AuthProvider';
 
 type PublicProviderProps = {
@@ -20,7 +22,9 @@ export function PublicProvider({ children }: PublicProviderProps) {
         disableTransitionOnChange
       >
         <AuthProvider>
-          <NuqsAdapter>{children}</NuqsAdapter>
+          <SWRConfig value={swrConfig}>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </SWRConfig>
         </AuthProvider>
         <AppToaster />
       </ThemeProvider>

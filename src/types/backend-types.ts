@@ -441,6 +441,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch project options
+         * @description Returns lightweight value and label options for projects visible to the current member.
+         */
+        get: operations["getProjectOptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{id}": {
         parameters: {
             query?: never;
@@ -598,7 +618,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Fetch a task by id
+         * @description Returns one task visible to the current member without requiring project context. Members can fetch only tasks assigned to them.
+         */
+        get: operations["getTaskById"];
         /**
          * Update a task
          * @description Updates an accessible task. Members can update assigned tasks but cannot change task assignments.
@@ -1386,6 +1410,12 @@ export interface components {
              */
             updatedAt: string;
         };
+        ProjectOption: {
+            /** @example clx0000000000000000000010 */
+            value: string;
+            /** @example Website redesign */
+            label: string;
+        };
         Project: {
             /** @example clx0000000000000000000010 */
             id: string;
@@ -1851,6 +1881,9 @@ export interface components {
                 items: components["schemas"]["Payment"][];
                 pagination: components["schemas"]["PaginationMeta"];
             };
+        };
+        ProjectOptionsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["ProjectOption"][];
         };
         ProjectsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["PaginatedProjects"];
@@ -3033,6 +3066,28 @@ export interface operations {
             };
         };
     };
+    getProjectOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Project options fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectOptionsResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
     getProjectById: {
         parameters: {
             query?: never;
@@ -3507,6 +3562,49 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             /** @description Organization member was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getTaskById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Task fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Invalid task id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
             404: {
                 headers: {
                     [name: string]: unknown;

@@ -100,7 +100,7 @@ export function MemberCurrentAssignments({
               >
                 <div className="flex min-w-0 items-start justify-between gap-3">
                   <Link
-                    href={getTaskDetailPath(task.projectId, task.id)}
+                    href={getTaskDetailPath(task.id)}
                     className="min-w-0 font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {task.title}
@@ -152,7 +152,7 @@ export function MemberCurrentAssignments({
                   <TableRow key={task.id}>
                     <TableCell className="max-w-72 pl-6 whitespace-normal">
                       <Link
-                        href={getTaskDetailPath(task.projectId, task.id)}
+                        href={getTaskDetailPath(task.id)}
                         className="font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         {task.title}

@@ -53,10 +53,7 @@ export function TaskAttachmentsTab({
               </Button>
             }
           >
-            <TaskMediaUploader
-              projectId={task.projectId}
-              taskId={task.id}
-            />
+            <TaskMediaUploader taskId={task.id} />
           </ActionDialog>
         ) : undefined
       }
@@ -64,7 +61,6 @@ export function TaskAttachmentsTab({
     >
       {attachments.length ? (
         <TaskAttachmentsPanel
-          projectId={task.projectId}
           taskId={task.id}
           attachments={attachments}
         />

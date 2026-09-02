@@ -9,7 +9,6 @@ import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 import type { Media } from '@/types';
 
 type TaskAttachmentsPanelProps = {
-  projectId: string;
   taskId: string;
   attachments: Media[];
 };
@@ -19,15 +18,11 @@ function getDownloadHref(href: string, resourceType: Media['resourceType']) {
   return href.replace(uploadSegment, `${uploadSegment}fl_attachment/`);
 }
 
-export function TaskAttachmentsPanel({
-  projectId,
-  taskId,
-  attachments,
-}: TaskAttachmentsPanelProps) {
+export function TaskAttachmentsPanel({ taskId, attachments }: TaskAttachmentsPanelProps) {
   const { canUpdate } = useTaskPermissions();
 
   async function handleDelete(mediaId: string) {
-    const response = await deleteTaskMedia(projectId, taskId, mediaId);
+    const response = await deleteTaskMedia(taskId, mediaId);
     if (!response.success) {
       toast.error(response.message || 'Could not delete attachment.');
       throw new Error(response.message || 'Could not delete attachment.');

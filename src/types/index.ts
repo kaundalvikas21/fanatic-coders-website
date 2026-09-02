@@ -137,6 +137,8 @@ export type {
   PaginatedProjects,
   Project,
   ProjectMember,
+  ProjectOption,
+  ProjectOptionsResponse,
   ProjectResponse,
   ProjectsResponse,
   UpdateProjectByIdParams,

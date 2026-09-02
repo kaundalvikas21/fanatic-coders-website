@@ -213,7 +213,7 @@ export function TaskKanbanCard({ task, preview = false }: { task: Task; preview?
             className="absolute top-2 right-10 z-10"
           >
             <Link
-              href={getTaskDetailPath(task.projectId, task.id)}
+              href={getTaskDetailPath(task.id)}
               aria-label={`View ${task.title} details`}
               title="View task details"
             >

@@ -18,7 +18,6 @@ import type {
 } from '@/types';
 
 export async function createTaskComment(
-  projectId: string,
   taskId: string,
   payload: CreateTaskCommentRequest,
 ): Promise<TaskCommentResponse> {
@@ -26,7 +25,7 @@ export async function createTaskComment(
     const response = await unwrap<TaskCommentResponse>(
       authApi.post(`/api/v1/tasks/${encodeURIComponent(taskId)}/comments`, payload),
     );
-    revalidatePath(getTaskDetailPath(projectId, taskId));
+    revalidatePath(getTaskDetailPath(taskId));
     return response;
   } catch (error) {
     return getApiError(error) as TaskCommentResponse;
@@ -34,7 +33,6 @@ export async function createTaskComment(
 }
 
 export async function updateTaskComment(
-  projectId: string,
   taskId: string,
   commentId: string,
   payload: UpdateTaskCommentRequest,
@@ -46,7 +44,7 @@ export async function updateTaskComment(
         payload,
       ),
     );
-    revalidatePath(getTaskDetailPath(projectId, taskId));
+    revalidatePath(getTaskDetailPath(taskId));
     return response;
   } catch (error) {
     return getApiError(error) as TaskCommentResponse;
@@ -54,7 +52,6 @@ export async function updateTaskComment(
 }
 
 export async function deleteTaskComment(
-  projectId: string,
   taskId: string,
   commentId: string,
 ): Promise<TaskCommentResponse> {
@@ -64,7 +61,7 @@ export async function deleteTaskComment(
         `/api/v1/tasks/${encodeURIComponent(taskId)}/comments/${encodeURIComponent(commentId)}`,
       ),
     );
-    revalidatePath(getTaskDetailPath(projectId, taskId));
+    revalidatePath(getTaskDetailPath(taskId));
     return response;
   } catch (error) {
     return getApiError(error) as TaskCommentResponse;
@@ -83,6 +80,7 @@ export async function createTaskAddOn(
 
     revalidatePath(`/dashboard/projects/${projectId}`);
     revalidatePath('/dashboard/tasks');
+    revalidatePath(getTaskDetailPath(taskId));
 
     return response;
   } catch (error) {
@@ -118,6 +116,7 @@ export async function updateTaskById(
 
     revalidatePath(`/dashboard/projects/${projectId}`);
     revalidatePath('/dashboard/tasks');
+    revalidatePath(getTaskDetailPath(taskId));
 
     return response;
   } catch (error) {
@@ -134,6 +133,7 @@ export async function deleteTaskById(
 
     revalidatePath(`/dashboard/projects/${projectId}`);
     revalidatePath('/dashboard/tasks');
+    revalidatePath(getTaskDetailPath(taskId));
 
     return response;
   } catch (error) {
@@ -154,6 +154,7 @@ export async function updateTaskAddOnById(
 
     revalidatePath(`/dashboard/projects/${projectId}`);
     revalidatePath('/dashboard/tasks');
+    revalidatePath(getTaskDetailPath(taskId));
 
     return response;
   } catch (error) {
@@ -173,6 +174,7 @@ export async function deleteTaskAddOnById(
 
     revalidatePath(`/dashboard/projects/${projectId}`);
     revalidatePath('/dashboard/tasks');
+    revalidatePath(getTaskDetailPath(taskId));
 
     return response;
   } catch (error) {

@@ -1,41 +1,36 @@
 'use client';
 
 import { useTransition } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
+import { parseAsString, useQueryState } from 'nuqs';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { SelectField } from '@/components/shared/forms/SelectField';
-import type { Project, UserListItem } from '@/types';
+import { useProjectOptions } from '@/modules/projects/hooks';
+import type { UserListItem } from '@/types';
 import { TaskForm } from './forms';
 import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 const ALL_PROJECTS_VALUE = 'all';
 
 type TasksProjectToolbarProps = {
-  projects: Project[];
   assignableMembers: UserListItem[];
 };
 
-export function TasksProjectToolbar({ projects, assignableMembers }: TasksProjectToolbarProps) {
+export function TasksProjectToolbar({ assignableMembers }: TasksProjectToolbarProps) {
   const { canCreate } = useTaskPermissions();
-  const router = useRouter();
-  const pathname = usePathname();
+  const { projectOptions, isLoading } = useProjectOptions();
   const [isPending, startTransition] = useTransition();
-  const selectedProjectId = projects.find(
-    (project) => pathname === `/dashboard/tasks/${project.id}`,
-  )?.id;
-  const options = [
-    { value: ALL_PROJECTS_VALUE, label: 'All projects' },
-    ...projects.map((project) => ({ value: project.id, label: project.name })),
-  ];
+  const [projectId, setProjectId] = useQueryState(
+    'projectId',
+    parseAsString.withOptions({ shallow: false, startTransition }),
+  );
+  const selectedProjectId = projectOptions.some((project) => project.value === projectId)
+    ? projectId
+    : null;
+  const options = [{ value: ALL_PROJECTS_VALUE, label: 'All projects' }, ...projectOptions];
 
   function handleProjectChange(projectId: string) {
-    const href =
-      projectId === ALL_PROJECTS_VALUE
-        ? '/dashboard/tasks'
-        : `/dashboard/tasks/${encodeURIComponent(projectId)}`;
-
-    startTransition(() => router.replace(href));
+    void setProjectId(projectId === ALL_PROJECTS_VALUE ? null : projectId);
   }
 
   return (
@@ -46,7 +41,7 @@ export function TasksProjectToolbar({ projects, assignableMembers }: TasksProjec
         options={options}
         onChange={handleProjectChange}
         ariaLabel="Filter tasks by project"
-        disabled={isPending}
+        disabled={isPending || isLoading}
         size="lg"
         className="w-full sm:w-80"
       />

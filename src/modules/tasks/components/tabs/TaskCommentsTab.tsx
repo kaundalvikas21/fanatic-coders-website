@@ -49,7 +49,7 @@ export function TaskCommentsTab({
   const moderator = isCommentModerator(role);
 
   async function create(payload: CreateTaskCommentRequest) {
-    const response = await createTaskComment(task.projectId, task.id, payload);
+    const response = await createTaskComment(task.id, payload);
     if (!response.success) {
       toast.error(response.message || 'Could not post comment.');
       return false;
@@ -64,7 +64,7 @@ export function TaskCommentsTab({
   }
 
   async function update(commentId: string, payload: UpdateTaskCommentRequest) {
-    const response = await updateTaskComment(task.projectId, task.id, commentId, payload);
+    const response = await updateTaskComment(task.id, commentId, payload);
     if (!response.success) {
       toast.error(response.message || 'Could not update comment.');
       return false;
@@ -76,7 +76,7 @@ export function TaskCommentsTab({
   }
 
   async function remove(commentId: string) {
-    const response = await deleteTaskComment(task.projectId, task.id, commentId);
+    const response = await deleteTaskComment(task.id, commentId);
     if (!response.success) {
       toast.error(response.message || 'Could not delete comment.');
       return false;
