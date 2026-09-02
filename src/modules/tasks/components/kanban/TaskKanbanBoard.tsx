@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useClient } from '@/hooks/useClient';
 import { updateTaskById } from '@/modules/tasks/data/mutations';
 import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
-import type { Task, TaskStatus, UserListItem } from '@/types';
+import type { Task, TaskStatus } from '@/types';
 import { TASK_STATUS_OPTIONS } from '@/types';
 import { TaskKanbanCard } from './TaskKanbanCard';
 import { TaskKanbanColumn } from './TaskKanbanColumn';
@@ -17,13 +17,11 @@ import { TaskKanbanProvider } from '@/modules/tasks/context/task-kanban-context'
 type TaskKanbanBoardProps = {
   tasks: Task[];
   showProjects?: boolean;
-  assignableMembers?: UserListItem[];
 };
 
 export function TaskKanbanBoard({
   tasks: initialTasks,
   showProjects = true,
-  assignableMembers = [],
 }: TaskKanbanBoardProps) {
   const isClient = useClient();
   const router = useRouter();
@@ -85,7 +83,6 @@ export function TaskKanbanBoard({
         canDelete,
         showProjects,
         pendingTaskIds,
-        assignableMembers,
       }}
     >
       <DndContext

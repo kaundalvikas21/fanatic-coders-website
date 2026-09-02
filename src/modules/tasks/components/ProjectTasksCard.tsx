@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { ListChecks, Plus } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
-import type { Task, UserListItem } from '@/types';
+import type { Task } from '@/types';
 import { TaskKanbanBoard } from './kanban';
 import { getTaskKanbanKey } from '../utils/task-kanban-key';
 import { useTaskPermissions } from '../hooks/use-task-permissions';
@@ -19,14 +19,9 @@ const TaskForm = dynamic(() => import('./forms').then((module) => module.TaskFor
 type ProjectTasksCardProps = {
   projectId?: string;
   tasks: Task[];
-  assignableMembers?: UserListItem[];
 };
 
-export function ProjectTasksCard({
-  projectId,
-  tasks,
-  assignableMembers = [],
-}: ProjectTasksCardProps) {
+export function ProjectTasksCard({ projectId, tasks }: ProjectTasksCardProps) {
   const permissions = useTaskPermissions();
   const safeTasks = tasks ?? [];
 
@@ -49,10 +44,7 @@ export function ProjectTasksCard({
             }
           >
             <div className="min-h-0 flex-1 p-3">
-              <TaskForm
-                projectId={projectId}
-                assignableMembers={assignableMembers}
-              />
+              <TaskForm projectId={projectId} />
             </div>
           </ActionSheet>
         ) : undefined
@@ -62,7 +54,6 @@ export function ProjectTasksCard({
         key={getTaskKanbanKey(safeTasks)}
         tasks={safeTasks}
         showProjects={false}
-        assignableMembers={assignableMembers}
       />
     </WidgetCard>
   );

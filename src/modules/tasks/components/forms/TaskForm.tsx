@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useOrganizationMemberOptions } from '@/hooks/useOrganizationMemberOptions';
 import {
   taskCreateSchema,
   type TaskFormInput,
@@ -24,10 +25,10 @@ import {
 import { createProjectTask, updateTaskById } from '@/modules/tasks/data/mutations';
 import type {
   CreateTaskRequest,
+  OrganizationMemberRole,
   Task,
   TaskPriority,
   UpdateTaskRequest,
-  UserListItem,
 } from '@/types';
 import { TASK_PRIORITY_OPTIONS } from '@/types';
 import { startOfToday } from '@/utils/date';
@@ -35,13 +36,22 @@ import { TaskCreateAddOnFields } from './TaskCreateAddOnFields';
 
 type TaskFormProps = {
   projectId: string;
-  assignableMembers: UserListItem[];
   task?: Task;
 };
 
-export function TaskForm({ projectId, assignableMembers, task }: TaskFormProps) {
+const TASK_ASSIGNMENT_ROLES = [
+  'MANAGER',
+  'MEMBER',
+] as const satisfies readonly OrganizationMemberRole[];
+
+export function TaskForm({ projectId, task }: TaskFormProps) {
   const router = useRouter();
   const sheet = useSheet();
+  const {
+    memberOptions: assigneeOptions,
+    error: assigneeOptionsError,
+    isLoading: isLoadingAssigneeOptions,
+  } = useOrganizationMemberOptions(TASK_ASSIGNMENT_ROLES);
   const isEditing = Boolean(task);
   const [message, setMessage] = useState<string | null>(null);
   const form = useForm<TaskFormInput, unknown, TaskFormValues>({
@@ -60,13 +70,6 @@ export function TaskForm({ projectId, assignableMembers, task }: TaskFormProps) 
   const titleError = form.formState.errors.title?.message;
   const estimatedHoursError = form.formState.errors.estimatedHours?.message;
   const today = startOfToday();
-  const assigneeOptions = assignableMembers.map((member) => ({
-    label: member.user.name || member.user.email,
-    value: member.id,
-    name: member.user.name,
-    email: member.user.email,
-    image: member.user.image,
-  }));
 
   async function handleSubmit(values: TaskFormValues) {
     setMessage(null);
@@ -186,18 +189,24 @@ export function TaskForm({ projectId, assignableMembers, task }: TaskFormProps) 
               control={form.control}
               name="assigneeMemberIds"
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid || Boolean(assigneeOptionsError)}>
                   <FieldLabel htmlFor="task-assignees">Assignees</FieldLabel>
                   <MultiSelectField
                     id="task-assignees"
                     options={assigneeOptions}
                     value={field.value}
                     onChange={field.onChange}
-                    placeholder="Select assignees"
-                    noOptionsMessage="No internal members available for assignment."
+                    placeholder={
+                      isLoadingAssigneeOptions ? 'Loading assignees...' : 'Select assignees'
+                    }
+                    noOptionsMessage={
+                      assigneeOptionsError
+                        ? 'Could not load assignable members.'
+                        : 'No internal members available for assignment.'
+                    }
                     ariaLabel="Task assignees"
-                    invalid={fieldState.invalid}
-                    disabled={isSubmitting || assigneeOptions.length === 0}
+                    invalid={fieldState.invalid || Boolean(assigneeOptionsError)}
+                    disabled={isSubmitting || isLoadingAssigneeOptions}
                     renderOption={(option, context) =>
                       context === 'value' ? (
                         option.label
@@ -215,6 +224,9 @@ export function TaskForm({ projectId, assignableMembers, task }: TaskFormProps) 
                     }
                   />
                   {fieldState.error && <FieldError errors={[fieldState.error]} />}
+                  {assigneeOptionsError && (
+                    <FieldError errors={[{ message: 'Could not load assignable members.' }]} />
+                  )}
                 </Field>
               )}
             />
