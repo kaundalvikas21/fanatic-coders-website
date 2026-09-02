@@ -1,21 +1,9 @@
 import { notFound } from 'next/navigation';
 import { ErrorState } from '@/components/shared/error-state';
-import {
-  TaskKanbanBoard,
-  TasksInformation,
-  createTaskPermissions,
-  getTaskKanbanKey,
-} from '@/modules/tasks';
+import { TaskKanbanBoard, TasksInformation, getTaskKanbanKey } from '@/modules/tasks';
 import { getProjectById } from '@/modules/projects/data/queries';
 import { getProjectTasks, getTasks } from '@/modules/tasks/data/queries';
-import { getCurrentAccess } from '@/lib/auth/current-access';
-import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
-import type { OrganizationMemberRole, Project, Task } from '@/types';
-
-const TASK_ASSIGNMENT_ROLES = [
-  'MANAGER',
-  'MEMBER',
-] as const satisfies readonly OrganizationMemberRole[];
+import type { Project, Task } from '@/types';
 
 export const metadata = {
   title: 'Tasks | fanaticCoders',
@@ -30,9 +18,8 @@ type TasksPageProps = {
 export default async function TasksPage({ searchParams }: TasksPageProps) {
   const query = await searchParams;
   const projectId = typeof query.projectId === 'string' ? query.projectId : undefined;
-  const [response, access, projectResponse] = await Promise.all([
+  const [response, projectResponse] = await Promise.all([
     projectId ? getProjectTasks(projectId) : getTasks(),
-    getCurrentAccess(),
     projectId ? getProjectById(projectId) : Promise.resolve(null),
   ]);
 
@@ -60,9 +47,6 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
 
   const tasks = Array.isArray(response.data) ? (response.data as Task[]) : [];
   const project = projectResponse?.success ? (projectResponse.data as Project) : undefined;
-  const assignableMembers = createTaskPermissions(access).canUpdate
-    ? await getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
-    : [];
 
   return (
     <div className="flex flex-col gap-5">
@@ -74,7 +58,6 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
         key={`${projectId ?? 'all'}:${getTaskKanbanKey(tasks)}`}
         tasks={tasks}
         showProjects={!projectId}
-        assignableMembers={assignableMembers}
       />
     </div>
   );

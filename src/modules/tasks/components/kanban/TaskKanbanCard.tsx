@@ -164,7 +164,7 @@ function TaskCardDetails({
 }
 
 export function TaskKanbanCard({ task, preview = false }: { task: Task; preview?: boolean }) {
-  const { canUpdate, canDelete, pendingTaskIds, showProjects, assignableMembers } = useTaskKanban();
+  const { canUpdate, canDelete, pendingTaskIds, showProjects } = useTaskKanban();
   const disabled = preview || !canUpdate || pendingTaskIds.has(task.id);
   const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -247,7 +247,6 @@ export function TaskKanbanCard({ task, preview = false }: { task: Task; preview?
               <div className="min-h-0 flex-1 p-3">
                 <TaskForm
                   projectId={task.projectId}
-                  assignableMembers={assignableMembers}
                   task={task}
                 />
               </div>

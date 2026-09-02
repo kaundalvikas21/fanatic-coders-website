@@ -1,19 +1,17 @@
 'use client';
 
 import { createContext, useContext, type ReactNode } from 'react';
-import type { UserListItem } from '@/types';
 
 type TaskKanbanContextValue = {
   canUpdate: boolean;
   canDelete: boolean;
   showProjects: boolean;
   pendingTaskIds: Set<string>;
-  assignableMembers: UserListItem[];
 };
 
 /**
  * Shares Kanban-only interaction state: task permissions, project-label mode,
- * assignable members, and pending task IDs used during board updates.
+ * and pending task IDs used during board updates.
  */
 const TaskKanbanContext = createContext<TaskKanbanContextValue | null>(null);
 

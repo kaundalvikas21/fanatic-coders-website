@@ -11,13 +11,12 @@ import {
   ProjectProgressCard,
   createProjectPermissions,
 } from '@/modules/projects';
-import { ProjectTasksCard, createTaskPermissions } from '@/modules/tasks';
+import { ProjectTasksCard } from '@/modules/tasks';
 import { getProjectById } from '@/modules/projects/data/queries';
 import { getProjectMedia } from '@/modules/projects/data/media';
 import { getProjectTasks } from '@/modules/tasks/data/queries';
 import { getCurrentAccess } from '@/lib/auth/current-access';
-import { getOrganizationMembersByRole } from '@/lib/data/users/queries';
-import type { Media, OrganizationMemberRole, Project, Task } from '@/types';
+import type { Media, Project, Task } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,16 +24,10 @@ type ProjectDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
-const TASK_ASSIGNMENT_ROLES = [
-  'MANAGER',
-  'MEMBER',
-] as const satisfies readonly OrganizationMemberRole[];
-
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { id } = await params;
   const [access, projectResponse] = await Promise.all([getCurrentAccess(), getProjectById(id)]);
   const projectPermissions = createProjectPermissions(access);
-  const taskPermissions = createTaskPermissions(access);
   const { success, data: project } = projectResponse as {
     success: boolean;
     data?: Project | null;
@@ -44,12 +37,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     notFound();
   }
 
-  const [tasksResponse, mediaResponse, assignableMembers] = await Promise.all([
+  const [tasksResponse, mediaResponse] = await Promise.all([
     getProjectTasks(project.id),
     getProjectMedia(project.id, { page: 1, pageSize: 20 }),
-    taskPermissions.canCreate || taskPermissions.canUpdate
-      ? getOrganizationMembersByRole(TASK_ASSIGNMENT_ROLES)
-      : Promise.resolve([]),
   ]);
   const tasks: Task[] =
     tasksResponse.success && Array.isArray(tasksResponse.data)
@@ -75,7 +65,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         <ProjectTasksCard
           projectId={project.id}
           tasks={tasks}
-          assignableMembers={assignableMembers}
         />
 
         <ProjectMediaPanel

@@ -6,17 +6,12 @@ import { parseAsString, useQueryState } from 'nuqs';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import { useProjectOptions } from '@/modules/projects/hooks';
-import type { UserListItem } from '@/types';
 import { TaskForm } from './forms';
 import { useTaskPermissions } from '../hooks/use-task-permissions';
 
 const ALL_PROJECTS_VALUE = 'all';
 
-type TasksProjectToolbarProps = {
-  assignableMembers: UserListItem[];
-};
-
-export function TasksProjectToolbar({ assignableMembers }: TasksProjectToolbarProps) {
+export function TasksProjectToolbar() {
   const { canCreate } = useTaskPermissions();
   const { projectOptions, isLoading } = useProjectOptions();
   const [isPending, startTransition] = useTransition();
@@ -58,10 +53,7 @@ export function TasksProjectToolbar({ assignableMembers }: TasksProjectToolbarPr
           }
         >
           <div className="min-h-0 flex-1 p-3">
-            <TaskForm
-              projectId={selectedProjectId}
-              assignableMembers={assignableMembers}
-            />
+            <TaskForm projectId={selectedProjectId} />
           </div>
         </ActionSheet>
       ) : null}

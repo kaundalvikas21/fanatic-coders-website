@@ -206,6 +206,8 @@ export type {
   GetUserMemberResponse,
   GetUsersInput,
   GetUsersResponse,
+  OrganizationMemberOption,
+  OrganizationMemberOptionsResponse,
   OrganizationMemberRole,
   ProfileUser,
   UpdateAvatarResponse,

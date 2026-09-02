@@ -30,6 +30,14 @@ export type UserListItem = {
   };
 };
 
+export type OrganizationMemberOption = {
+  value: string;
+  label: string;
+  name: string;
+  email: string;
+  image: string | null;
+};
+
 export type UsersData = {
   members: UserListItem[];
   total: number;
@@ -37,3 +45,4 @@ export type UsersData = {
 
 export type GetUsersResponse = Response<UsersData>;
 export type GetUserMemberResponse = Response<UserListItem>;
+export type OrganizationMemberOptionsResponse = Response<OrganizationMemberOption[]>;
