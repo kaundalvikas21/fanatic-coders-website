@@ -1,3 +1,4 @@
+import { Settings2 } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
 import type { Project } from '@/types';
 import { ProjectStatusForm } from './form/ProjectStatusForm';
@@ -9,11 +10,10 @@ type ProjectActionsCardProps = {
 export function ProjectActionsCard({ project }: ProjectActionsCardProps) {
   return (
     <WidgetCard
-      title="Actions"
-      description="Manage this project."
+      icon={Settings2}
+      title="Project status"
+      description="Move this project through its delivery stages."
       className="overflow-visible"
-      titleClassName="text-xl font-semibold"
-      descriptionClassName="text-sm"
     >
       <ProjectStatusForm
         projectId={project.id}

@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Controller, Watch, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import { Badge } from '@/components/ui/badge';
+import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import { updateProjectById } from '@/modules/projects/data/mutations';
 import {
@@ -26,6 +28,7 @@ type ProjectStatusFormValues = {
 
 export function ProjectStatusForm({ projectId, initialStatus }: ProjectStatusFormProps) {
   const router = useRouter();
+  const [isUpdating, setIsUpdating] = useState(false);
   const form = useForm<ProjectStatusFormValues>({
     mode: 'onChange',
     defaultValues: {
@@ -50,6 +53,7 @@ export function ProjectStatusForm({ projectId, initialStatus }: ProjectStatusFor
 
     onChange(nextStatus);
     form.clearErrors('status');
+    setIsUpdating(true);
 
     try {
       // Persist the delivery stage so project views and dashboards stay aligned.
@@ -67,38 +71,52 @@ export function ProjectStatusForm({ projectId, initialStatus }: ProjectStatusFor
       router.refresh();
     } catch {
       rollbackStatus(previousStatus, 'Could not update project status.');
+    } finally {
+      setIsUpdating(false);
     }
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <Watch
-        control={form.control}
-        name="status"
-        render={(status) => (
-          <Badge
-            variant={PROJECT_STATUS_BADGE_VARIANTS[status]}
-            color={PROJECT_STATUS_COLORS[status]}
-            className="w-fit"
-          >
-            {PROJECT_STATUS_LABELS[status]}
-          </Badge>
-        )}
-      />
-      <Controller
-        control={form.control}
-        name="status"
-        render={({ field }) => (
-          <SelectField
-            id="project-status"
-            value={field.value}
-            options={PROJECT_STATUS_OPTIONS}
-            onChange={(value) => updateStatus(value, field.onChange)}
-            placeholder="Select status"
-            ariaLabel="Project status"
-          />
-        )}
-      />
+    <div className="grid gap-4">
+      <div className="flex items-center justify-between gap-3 border-b border-border/70 pb-3">
+        <span className="text-sm text-muted-foreground">Current status</span>
+        <Watch
+          control={form.control}
+          name="status"
+          render={(status) => (
+            <Badge
+              variant={PROJECT_STATUS_BADGE_VARIANTS[status]}
+              color={PROJECT_STATUS_COLORS[status]}
+            >
+              {PROJECT_STATUS_LABELS[status]}
+            </Badge>
+          )}
+        />
+      </div>
+
+      <Field>
+        <FieldLabel htmlFor="project-status">Change status</FieldLabel>
+        <Controller
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <SelectField
+              id="project-status"
+              value={field.value}
+              options={PROJECT_STATUS_OPTIONS}
+              onChange={(value) => updateStatus(value, field.onChange)}
+              placeholder="Select status"
+              ariaLabel="Change project status"
+              disabled={isUpdating}
+              error={statusError}
+            />
+          )}
+        />
+        <FieldDescription aria-live="polite">
+          {isUpdating ? 'Updating project status…' : 'Changes save automatically.'}
+        </FieldDescription>
+      </Field>
+
       {statusError && (
         <p
           className="text-sm text-destructive"

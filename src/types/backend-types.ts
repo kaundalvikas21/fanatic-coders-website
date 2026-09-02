@@ -441,6 +441,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch project options
+         * @description Returns lightweight value and label options for projects visible to the current member.
+         */
+        get: operations["getProjectOptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{id}": {
         parameters: {
             query?: never;
@@ -551,6 +571,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tasks/member/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch current tasks assigned to a member
+         * @description Returns non-completed tasks assigned to an organization member. Admin and Manager members can inspect team assignments; other roles can inspect only their own assignments.
+         */
+        get: operations["getTasksByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks/member/{memberId}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch task statistics for a member
+         * @description Returns independent total, active, completed, and overdue task counts for an organization member. Overdue tasks are a subset of active tasks.
+         */
+        get: operations["getTaskStatsByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tasks/{taskId}": {
         parameters: {
             query?: never;
@@ -558,7 +618,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Fetch a task by id
+         * @description Returns one task visible to the current member without requiring project context. Members can fetch only tasks assigned to them.
+         */
+        get: operations["getTaskById"];
         /**
          * Update a task
          * @description Updates an accessible task. Members can update assigned tasks but cannot change task assignments.
@@ -628,7 +692,7 @@ export interface paths {
         };
         /**
          * Fetch task comments
-         * @description Returns task comments in chronological order for a task visible to the current member.
+         * @description Returns task comments newest first for a task visible to the current member.
          */
         get: operations["getTaskComments"];
         put?: never;
@@ -1346,6 +1410,12 @@ export interface components {
              */
             updatedAt: string;
         };
+        ProjectOption: {
+            /** @example clx0000000000000000000010 */
+            value: string;
+            /** @example Website redesign */
+            label: string;
+        };
         Project: {
             /** @example clx0000000000000000000010 */
             id: string;
@@ -1650,6 +1720,22 @@ export interface components {
         TasksResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Task"][];
         };
+        TaskStats: {
+            /** @example 18 */
+            total: number;
+            /** @example 6 */
+            active: number;
+            /** @example 12 */
+            completed: number;
+            /**
+             * @description Active tasks whose due date is earlier than the current time.
+             * @example 2
+             */
+            overdue: number;
+        };
+        TaskStatsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["TaskStats"];
+        };
         RequestPasswordResetRequest: {
             /**
              * Format: email
@@ -1796,6 +1882,9 @@ export interface components {
                 pagination: components["schemas"]["PaginationMeta"];
             };
         };
+        ProjectOptionsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["ProjectOption"][];
+        };
         ProjectsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["PaginatedProjects"];
         };
@@ -1875,6 +1964,8 @@ export interface components {
         TaskProjectId: string;
         /** @example clx0000000000000000000030 */
         TaskId: string;
+        /** @example seed-member-member */
+        TaskMemberId: string;
         /** @example clx0000000000000000000060 */
         TaskCommentId: string;
         /** @example clx0000000000000000000040 */
@@ -2975,6 +3066,28 @@ export interface operations {
             };
         };
     };
+    getProjectOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Project options fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectOptionsResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
     getProjectById: {
         parameters: {
             query?: never;
@@ -3371,6 +3484,135 @@ export interface operations {
             };
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+        };
+    };
+    getTasksByMemberId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example seed-member-member */
+                memberId: components["parameters"]["TaskMemberId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Member tasks fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TasksResponse"];
+                };
+            };
+            /** @description Invalid member id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Organization member was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getTaskStatsByMemberId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example seed-member-member */
+                memberId: components["parameters"]["TaskMemberId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Member task statistics fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskStatsResponse"];
+                };
+            };
+            /** @description Invalid member id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Organization member was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getTaskById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example clx0000000000000000000030 */
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Task fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Invalid task id. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            /** @description Task was not found or is unavailable to the current member. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
         };
     };
     updateTaskById: {

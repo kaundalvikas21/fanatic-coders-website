@@ -1,10 +1,9 @@
-import { BreadCrumb } from '@/components/shared/BreadCrumb';
 import { ThemeToggle } from '@/components/shared/Toggle';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { getRoleLabel } from '@/lib/auth/roles';
 import { NotificationMenu } from '@/modules/notifications';
+import { DashboardCommandSearch } from './DashboardCommandSearch';
+import { NavUser } from './NavUser';
 
 type DashboardHeaderProps = {
   organizationSlug?: string | null;
@@ -14,27 +13,22 @@ type DashboardHeaderProps = {
 export function DashboardHeader({ role }: DashboardHeaderProps) {
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b border-primary/15 bg-background/85 px-4 backdrop-blur-xl transition-[left,height] duration-200 ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:left-(--sidebar-width) md:px-6 group-has-data-[collapsible=icon]/sidebar-wrapper:md:left-(--sidebar-width-icon)">
-        <SidebarTrigger className="-ml-1" />
+      <header className="fixed top-3 right-3 left-3 z-30 mx-auto flex h-14 w-auto max-w-[105rem] shrink-0 items-center gap-2 rounded-xl border border-border/80 bg-card/90 px-3 shadow-[0_6px_8px_rgb(0_0_0/0.08)] backdrop-blur-xl transition-[left] duration-200 ease-out md:left-[calc(var(--sidebar-width)+0.75rem)] group-has-data-[collapsible=icon]/sidebar-wrapper:md:left-[calc(var(--sidebar-width-icon)+0.75rem)] motion-reduce:transition-none">
+        <SidebarTrigger />
         <Separator
           orientation="vertical"
-          className="mr-2 data-vertical:h-4 data-vertical:self-auto"
+          className="mx-1 data-vertical:h-4 data-vertical:self-auto"
         />
-        <BreadCrumb />
-        <div className="ml-auto flex items-center gap-2">
-          <Badge
-            variant="outline"
-            className="hidden border-primary/25 bg-primary/8 font-mono text-[0.6875rem] text-primary sm:inline-flex"
-          >
-            {getRoleLabel(role)}
-          </Badge>
+        <DashboardCommandSearch role={role} />
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <NotificationMenu />
-          <ThemeToggle />
+          <ThemeToggle variant="default" />
+          <NavUser variant="header" />
         </div>
       </header>
       <div
         aria-hidden="true"
-        className="h-16 shrink-0 transition-[height] duration-200 ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12"
+        className="h-20 shrink-0"
       />
     </>
   );

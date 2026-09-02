@@ -7,11 +7,10 @@ import { uploadTaskMedia } from '@/modules/tasks/data/media';
 import type { Media } from '@/types';
 
 type TaskMediaUploaderProps = {
-  projectId: string;
   taskId: string;
 };
 
-export function TaskMediaUploader({ projectId, taskId }: TaskMediaUploaderProps) {
+export function TaskMediaUploader({ taskId }: TaskMediaUploaderProps) {
   const dialog = useActionDialog();
 
   return (
@@ -29,7 +28,7 @@ export function TaskMediaUploader({ projectId, taskId }: TaskMediaUploaderProps)
       onUpload={async (file) => {
         const formData = new FormData();
         formData.append('media', file);
-        const response = await uploadTaskMedia(projectId, taskId, formData);
+        const response = await uploadTaskMedia(taskId, formData);
 
         if (!response.success || !response.data) {
           throw new Error(response.message || 'Could not upload task attachment.');

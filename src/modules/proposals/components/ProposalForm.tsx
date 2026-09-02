@@ -1,13 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
-import { FilePenLine, Send, Trash2 } from 'lucide-react';
+import { FilePenLine, LoaderCircle, Send, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { SelectField } from '@/components/shared/forms/SelectField';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -42,6 +43,7 @@ export function ProposalForm({
   onProposalChange,
 }: ProposalFormProps) {
   const router = useRouter();
+  const [submittingAction, setSubmittingAction] = useState<'draft' | 'send'>('draft');
   const form = useForm<ProposalFormValues>({
     defaultValues: {
       description: proposal?.description ?? '',
@@ -51,8 +53,11 @@ export function ProposalForm({
   });
   const amountError = form.formState.errors.amount?.message;
   const descriptionError = form.formState.errors.description?.message;
+  const isSubmitting = form.formState.isSubmitting;
 
   async function saveProposal(values: ProposalFormValues, send: boolean) {
+    setSubmittingAction(send ? 'send' : 'draft');
+
     const payload = {
       description: values.description.trim(),
       amount: Number(values.amount),
@@ -115,98 +120,139 @@ export function ProposalForm({
         onSubmit={form.handleSubmit((values) => saveProposal(values, false))}
         className="grid gap-5"
       >
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="proposal-description">Scope and deliverables</FieldLabel>
-            <Textarea
-              id="proposal-description"
-              rows={6}
-              placeholder="Describe the agreed work, deliverables, and commercial terms."
-              aria-invalid={Boolean(descriptionError)}
-              {...form.register('description', {
-                required: 'Enter the proposal scope.',
-                validate: (value) => Boolean(value.trim()) || 'Enter the proposal scope.',
-                maxLength: {
-                  value: 10000,
-                  message: 'Keep the proposal under 10,000 characters.',
-                },
-              })}
-            />
-            {descriptionError && <FieldError errors={[{ message: descriptionError }]} />}
-          </Field>
-
-          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem]">
+        <FieldSet
+          loading={isSubmitting}
+          className="gap-5"
+        >
+          <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="proposal-amount">Amount</FieldLabel>
-              <Input
-                id="proposal-amount"
-                type="number"
-                min="0.01"
-                step="0.01"
-                placeholder="5000"
-                aria-invalid={Boolean(amountError)}
-                {...form.register('amount', {
-                  required: 'Enter the proposal amount.',
-                  validate: {
-                    positive: (value) => {
-                      const amount = Number(value);
-                      return (
-                        (Number.isFinite(amount) && amount > 0) || 'Enter an amount greater than 0.'
-                      );
-                    },
-                    decimalPlaces: (value) =>
-                      /^\d+(\.\d{1,2})?$/.test(value) || 'Use no more than 2 decimal places.',
+              <FieldLabel htmlFor="proposal-description">Scope and deliverables</FieldLabel>
+              <Textarea
+                id="proposal-description"
+                rows={6}
+                placeholder="Describe the agreed work, deliverables, and commercial terms."
+                aria-invalid={Boolean(descriptionError)}
+                {...form.register('description', {
+                  required: 'Enter the proposal scope.',
+                  validate: (value) => Boolean(value.trim()) || 'Enter the proposal scope.',
+                  maxLength: {
+                    value: 10000,
+                    message: 'Keep the proposal under 10,000 characters.',
                   },
                 })}
               />
-              {amountError && <FieldError errors={[{ message: amountError }]} />}
+              {descriptionError && <FieldError errors={[{ message: descriptionError }]} />}
             </Field>
 
-            <Field>
-              <FieldLabel>Currency</FieldLabel>
-              <Controller
-                control={form.control}
-                name="currency"
-                render={({ field }) => (
-                  <SelectField
-                    id="proposal-currency"
-                    value={field.value}
-                    options={PROJECT_CURRENCY_OPTIONS}
-                    onChange={(value) => field.onChange(value as ProjectCurrency)}
-                    ariaLabel="Proposal currency"
+            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem]">
+              <Field>
+                <FieldLabel htmlFor="proposal-amount">Amount</FieldLabel>
+                <Input
+                  id="proposal-amount"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="5000"
+                  aria-invalid={Boolean(amountError)}
+                  {...form.register('amount', {
+                    required: 'Enter the proposal amount.',
+                    validate: {
+                      positive: (value) => {
+                        const amount = Number(value);
+                        return (
+                          (Number.isFinite(amount) && amount > 0) ||
+                          'Enter an amount greater than 0.'
+                        );
+                      },
+                      decimalPlaces: (value) =>
+                        /^\d+(\.\d{1,2})?$/.test(value) || 'Use no more than 2 decimal places.',
+                    },
+                  })}
+                />
+                {amountError && <FieldError errors={[{ message: amountError }]} />}
+              </Field>
+
+              <Field>
+                <FieldLabel>Currency</FieldLabel>
+                <Controller
+                  control={form.control}
+                  name="currency"
+                  render={({ field }) => (
+                    <SelectField
+                      id="proposal-currency"
+                      value={field.value}
+                      options={PROJECT_CURRENCY_OPTIONS}
+                      onChange={(value) => field.onChange(value as ProjectCurrency)}
+                      ariaLabel="Proposal currency"
+                    />
+                  )}
+                />
+              </Field>
+            </div>
+          </FieldGroup>
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="submit"
+              variant="outline"
+              aria-busy={isSubmitting && submittingAction === 'draft'}
+            >
+              {isSubmitting && submittingAction === 'draft' ? (
+                <>
+                  <LoaderCircle
+                    className="animate-spin motion-reduce:animate-none"
+                    aria-hidden="true"
                   />
-                )}
-              />
-            </Field>
-          </div>
-        </FieldGroup>
-
-        <div className="flex flex-wrap gap-2">
-          <Button
-            type="submit"
-            variant="outline"
-          >
-            {proposal ? 'Save draft' : 'Create draft'}
-          </Button>
-          <Button
-            type="button"
-            onClick={form.handleSubmit((values) => saveProposal(values, true))}
-          >
-            <Send data-icon="inline-start" />
-            Send proposal
-          </Button>
-          {proposal && canDelete && (
+                  {proposal ? 'Saving draft…' : 'Creating draft…'}
+                </>
+              ) : proposal ? (
+                'Save draft'
+              ) : (
+                'Create draft'
+              )}
+            </Button>
             <Button
               type="button"
-              variant="destructive"
-              onClick={removeProposal}
-              className="sm:ml-auto"
+              aria-busy={isSubmitting && submittingAction === 'send'}
+              onClick={form.handleSubmit((values) => saveProposal(values, true))}
             >
-              <Trash2 data-icon="inline-start" />
-              Delete
+              {isSubmitting && submittingAction === 'send' ? (
+                <LoaderCircle
+                  className="animate-spin motion-reduce:animate-none"
+                  aria-hidden="true"
+                />
+              ) : (
+                <Send data-icon="inline-start" />
+              )}
+              {isSubmitting && submittingAction === 'send' ? 'Sending proposal…' : 'Send proposal'}
             </Button>
-          )}
-        </div>
+            {proposal && canDelete && (
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={removeProposal}
+                className="sm:ml-auto"
+              >
+                <Trash2 data-icon="inline-start" />
+                Delete
+              </Button>
+            )}
+          </div>
+
+          <span
+            className="sr-only"
+            role="status"
+            aria-live="polite"
+          >
+            {isSubmitting
+              ? submittingAction === 'send'
+                ? 'Sending proposal…'
+                : proposal
+                  ? 'Saving draft…'
+                  : 'Creating draft…'
+              : ''}
+          </span>
+        </FieldSet>
       </form>
     </WidgetCard>
   );

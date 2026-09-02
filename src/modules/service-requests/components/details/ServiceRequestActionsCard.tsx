@@ -1,3 +1,4 @@
+import { Settings2 } from 'lucide-react';
 import { WidgetCard } from '@/components/shared/widget-card';
 import type { ServiceRequest } from '@/types';
 import { ServiceRequestStatusForm } from './ServiceRequestStatusForm';
@@ -9,11 +10,10 @@ type ServiceRequestActionsCardProps = {
 export function ServiceRequestActionsCard({ request }: ServiceRequestActionsCardProps) {
   return (
     <WidgetCard
-      title="Actions"
-      description="Manage this service request."
+      icon={Settings2}
+      title="Request status"
+      description="Move this request through its review stages."
       className="overflow-visible"
-      titleClassName="text-xl font-semibold"
-      descriptionClassName="text-sm"
     >
       <ServiceRequestStatusForm
         requestId={request.id}

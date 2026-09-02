@@ -82,3 +82,126 @@
   content: '';
   pointer-events: none;
 }
+
+@utility dashboard-glow-surface {
+  isolation: isolate;
+  border: 1px solid color-mix(in oklch, var(--border) 80%, transparent);
+  background-color: color-mix(in oklch, var(--card) 95%, transparent);
+  box-shadow: 0 6px 8px rgb(0 0 0 / 0.12);
+  backdrop-filter: blur(24px);
+}
+
+.dashboard-glow-surface::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: radial-gradient(
+    circle at top right,
+    color-mix(in oklch, var(--primary) 10%, transparent),
+    transparent 42%
+  );
+  background-position: 100% 0%;
+  background-size: 180% 180%;
+  content: '';
+  pointer-events: none;
+}
+
+.dashboard-glow-surface:not([data-state]) {
+  position: relative;
+}
+
+.dashboard-glow-surface:is(:focus-within, [data-state='open'])::before {
+  animation: dashboard-glow-orbit 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dashboard-glow-orbit {
+  0% {
+    background-position: 100% 0%;
+  }
+
+  33% {
+    background-position: 0% 0%;
+  }
+
+  66% {
+    background-position: 0% 100%;
+  }
+
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.dashboard-not-found-enter {
+  animation: dashboard-not-found-enter 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-not-found-visual {
+  contain: paint;
+}
+
+.dashboard-not-found-seeker {
+  will-change: transform;
+  animation: dashboard-not-found-seek 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.dashboard-not-found-scan {
+  will-change: transform, opacity;
+  animation: dashboard-not-found-scan 3.8s cubic-bezier(0.22, 1, 0.36, 1) 400ms infinite;
+}
+
+@keyframes dashboard-not-found-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes dashboard-not-found-seek {
+  0%,
+  100% {
+    transform: translate3d(-2px, 2px, 0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translate3d(3px, -3px, 0) rotate(3deg);
+  }
+}
+
+@keyframes dashboard-not-found-scan {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -9rem, 0);
+  }
+
+  18% {
+    opacity: 0.75;
+  }
+
+  76% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 9rem, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-glow-surface:is(:focus-within, [data-state='open'])::before {
+    animation: none;
+  }
+
+  .dashboard-not-found-enter,
+  .dashboard-not-found-seeker,
+  .dashboard-not-found-scan {
+    animation: none;
+  }
+}

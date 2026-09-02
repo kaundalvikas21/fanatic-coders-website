@@ -2,6 +2,7 @@ import type { operations } from './backend-types';
 import type { Response, Schemas } from './api';
 
 export type Project = Schemas['Project'];
+export type ProjectOption = Schemas['ProjectOption'];
 export type ProjectMember = Schemas['ProjectMember'];
 export type CreateProjectInput = Schemas['CreateProjectRequest'];
 export type CreateProjectFromServiceRequestInput =
@@ -11,6 +12,7 @@ export type UpdateProjectInput = Schemas['UpdateProjectRequest'];
 export type PaginatedProjects = Schemas['PaginatedProjects'];
 export type ProjectsResponse = Response<PaginatedProjects>;
 export type ProjectResponse = Response<Project>;
+export type ProjectOptionsResponse = Response<ProjectOption[]>;
 export type GetProjectsInput = NonNullable<operations['getProjects']['parameters']['query']>;
 export type GetProjectsResponse = ProjectsResponse;
 export type CreateProjectRequest = CreateProjectInput;

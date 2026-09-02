@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, Pencil, Trash2, X } from 'lucide-react';
+import { Check, ListChecks, Pencil, Trash2, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { ActionDialog, useActionDialog } from '@/components/shared/action-dialog';
@@ -170,7 +170,7 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
   }
 
   return (
-    <div className="group/addon flex items-center gap-1.5">
+    <div className="group/addon flex min-h-10 items-center gap-2 rounded-md px-2 transition-colors hover:bg-muted/50 focus-within:bg-muted/50">
       <button
         type="button"
         aria-label={`${addOnTask.isCompleted ? 'Mark incomplete' : 'Mark complete'}: ${addOnTask.name}`}
@@ -193,14 +193,14 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
       </button>
       <span
         className={cn(
-          'min-w-0 flex-1 truncate text-xs',
+          'min-w-0 flex-1 break-words text-sm leading-5',
           addOnTask.isCompleted && 'text-muted-foreground line-through',
         )}
       >
         {addOnTask.name}
       </span>
       {canUpdate || canDelete ? (
-        <div className="flex">
+        <div className="flex shrink-0">
           {canUpdate ? (
             <Button
               type="button"
@@ -295,10 +295,13 @@ export function TaskAddOnList() {
 
       {addOnTasks.length > 0 ? (
         <div className="space-y-3">
-          <p className="text-sm font-medium text-foreground">
-            {addOnTasks.filter((item) => item.isCompleted).length} of {addOnTasks.length} complete
-          </p>
-          <div className="space-y-2.5">
+          <div className="flex items-center justify-between gap-3 border-b border-border/70 pb-3">
+            <p className="text-sm font-medium text-foreground">Progress</p>
+            <p className="text-xs tabular-nums text-muted-foreground">
+              {addOnTasks.filter((item) => item.isCompleted).length} of {addOnTasks.length} complete
+            </p>
+          </div>
+          <div className="space-y-1">
             {addOnTasks.map((addOnTask) => (
               <TaskAddOnRow
                 key={`${addOnTask.id}:${addOnTask.updatedAt}`}
@@ -308,9 +311,18 @@ export function TaskAddOnList() {
           </div>
         </div>
       ) : (
-        <p className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
-          No checklist items yet.
-        </p>
+        <div className="flex min-h-40 flex-col items-center justify-center px-4 py-8 text-center">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            <ListChecks
+              className="size-4"
+              aria-hidden="true"
+            />
+          </div>
+          <p className="mt-3 text-sm font-medium text-foreground">No checklist items yet</p>
+          <p className="mt-1 max-w-sm text-sm leading-5 text-muted-foreground">
+            Break this task into small, trackable steps.
+          </p>
+        </div>
       )}
     </div>
   );

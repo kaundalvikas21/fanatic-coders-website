@@ -160,7 +160,9 @@ export function NotificationMenu() {
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-[min(24rem,calc(100vw-2rem))] gap-0 overflow-hidden p-0"
+        className={cn(
+          'dashboard-glow-surface relative w-[min(24rem,calc(100vw-2rem))] gap-0 overflow-hidden rounded-xl p-0 ring-0',
+        )}
       >
         <PopoverHeader className="flex-row items-center justify-between gap-3 px-3 py-3">
           <div>

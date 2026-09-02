@@ -16,13 +16,11 @@ export function ServiceRequestProjectAcknowledgement({
       title="Project created"
       description="Your request is now linked to a project."
       className="border-primary/30 bg-primary/[0.04]"
-      titleClassName="text-xl font-semibold"
-      descriptionClassName="text-sm"
     >
       <div className="grid gap-4">
         <div className="grid gap-1">
           <span className="text-xs font-medium text-muted-foreground">Project reference</span>
-          <code className="overflow-wrap-anywhere text-sm font-semibold text-foreground">
+          <code className="text-sm font-semibold text-foreground [overflow-wrap:anywhere]">
             {projectId}
           </code>
         </div>

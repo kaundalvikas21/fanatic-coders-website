@@ -19,7 +19,7 @@ import type {
   UpdateTaskCommentRequest,
 } from '@/types';
 import { TaskCommentItem } from './TaskCommentItem';
-import { TaskDetailTabPanel } from './TaskDetailTabPanel';
+import { TaskDetailTabPanel, TaskTabEmptyState } from './TaskDetailTabPanel';
 import type { TaskDetailTab } from './types';
 
 const PAGE_SIZE = 20;
@@ -49,7 +49,7 @@ export function TaskCommentsTab({
   const moderator = isCommentModerator(role);
 
   async function create(payload: CreateTaskCommentRequest) {
-    const response = await createTaskComment(task.projectId, task.id, payload);
+    const response = await createTaskComment(task.id, payload);
     if (!response.success) {
       toast.error(response.message || 'Could not post comment.');
       return false;
@@ -64,7 +64,7 @@ export function TaskCommentsTab({
   }
 
   async function update(commentId: string, payload: UpdateTaskCommentRequest) {
-    const response = await updateTaskComment(task.projectId, task.id, commentId, payload);
+    const response = await updateTaskComment(task.id, commentId, payload);
     if (!response.success) {
       toast.error(response.message || 'Could not update comment.');
       return false;
@@ -76,7 +76,7 @@ export function TaskCommentsTab({
   }
 
   async function remove(commentId: string) {
-    const response = await deleteTaskComment(task.projectId, task.id, commentId);
+    const response = await deleteTaskComment(task.id, commentId);
     if (!response.success) {
       toast.error(response.message || 'Could not delete comment.');
       return false;
@@ -143,16 +143,11 @@ export function TaskCommentsTab({
             })}
           </div>
         ) : (
-          <div className="py-6 text-center">
-            <MessageSquare
-              className="mx-auto size-8 text-muted-foreground/60"
-              aria-hidden="true"
-            />
-            <p className="mt-3 text-sm font-medium">No comments yet</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Start the conversation with a progress update or question.
-            </p>
-          </div>
+          <TaskTabEmptyState
+            icon={MessageSquare}
+            title="No comments yet"
+            description="Start the conversation with a progress update or question."
+          />
         )}
 
         {pagination.page < pagination.totalPages ? (

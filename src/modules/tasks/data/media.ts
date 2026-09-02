@@ -7,7 +7,6 @@ import { getTaskDetailPath } from '@/modules/tasks/utils/task-path';
 import type { GetTaskMediaInput, TaskMediaListResponse, TaskMediaResponse } from '@/types';
 
 export async function uploadTaskMedia(
-  projectId: string,
   taskId: string,
   formData: FormData,
 ): Promise<TaskMediaResponse> {
@@ -17,7 +16,7 @@ export async function uploadTaskMedia(
         timeout: 60_000,
       }),
     );
-    revalidatePath(getTaskDetailPath(projectId, taskId));
+    revalidatePath(getTaskDetailPath(taskId));
     return response;
   } catch (error) {
     return getApiError(error) as TaskMediaResponse;
@@ -37,11 +36,7 @@ export async function getTaskMedia(
   }
 }
 
-export async function deleteTaskMedia(
-  projectId: string,
-  taskId: string,
-  mediaId: string,
-): Promise<TaskMediaResponse> {
+export async function deleteTaskMedia(taskId: string, mediaId: string): Promise<TaskMediaResponse> {
   try {
     const response = await unwrap<TaskMediaResponse>(
       authApi.delete(
@@ -49,7 +44,7 @@ export async function deleteTaskMedia(
         { timeout: 60_000 },
       ),
     );
-    revalidatePath(getTaskDetailPath(projectId, taskId));
+    revalidatePath(getTaskDetailPath(taskId));
     return response;
   } catch (error) {
     return getApiError(error) as TaskMediaResponse;

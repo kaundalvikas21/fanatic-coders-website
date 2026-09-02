@@ -21,9 +21,9 @@ export function ListsLayout({ header, children }: ListsLayoutProps) {
 
 export function FilterLayout({ filters, children }: FilterLayoutProps) {
   return (
-    <div className="flex flex-col gap-0">
+    <div className="flex flex-col gap-4">
       {filters}
-      <div className="-mt-px [&_.overflow-hidden]:rounded-t-none">{children}</div>
+      <div>{children}</div>
     </div>
   );
 }

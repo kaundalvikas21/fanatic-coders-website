@@ -67,7 +67,7 @@ export function ActionSheet({
         <SheetTrigger asChild>{trigger}</SheetTrigger>
         <SheetContent
           className={cn(
-            'rounded-l-lg duration-100 [[data-slot=sheet-overlay]:has(~_&)]:duration-100 motion-reduce:duration-0',
+            'dashboard-glow-surface data-[side=right]:inset-y-3 data-[side=right]:right-3 data-[side=right]:h-auto data-[side=right]:w-[calc(100%-1.5rem)] data-[side=right]:rounded-xl ease-[cubic-bezier(0.22,1,0.36,1)] sm:data-[side=right]:w-3/4 data-[side=right]:data-open:slide-in-from-right-full data-[side=right]:data-closed:slide-out-to-right-full data-open:duration-300 data-closed:duration-200 [[data-slot=sheet-overlay]:has(~_&)]:duration-100 motion-reduce:duration-0',
             contentClassName,
           )}
         >

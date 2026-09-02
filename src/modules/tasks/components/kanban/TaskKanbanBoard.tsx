@@ -5,14 +5,12 @@ import { useRouter } from 'next/navigation';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { toast } from 'sonner';
-import { Card } from '@/components/ui/card';
 import { useClient } from '@/hooks/useClient';
 import { updateTaskById } from '@/modules/tasks/data/mutations';
 import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 import type { Task, TaskStatus, UserListItem } from '@/types';
 import { TASK_STATUS_OPTIONS } from '@/types';
-import { TaskKanbanCardContent } from './TaskKanbanCard';
-import { TaskCardProvider } from '@/modules/tasks/context/task-card-context';
+import { TaskKanbanCard } from './TaskKanbanCard';
 import { TaskKanbanColumn } from './TaskKanbanColumn';
 import { TaskKanbanProvider } from '@/modules/tasks/context/task-kanban-context';
 
@@ -87,6 +85,7 @@ export function TaskKanbanBoard({
         canDelete,
         showProjects,
         pendingTaskIds,
+        assignableMembers,
       }}
     >
       <DndContext
@@ -102,23 +101,15 @@ export function TaskKanbanBoard({
               key={status.value}
               status={status.value}
               tasks={tasks.filter((task) => task.status === status.value)}
-              assignableMembers={assignableMembers}
             />
           ))}
         </div>
         <DragOverlay>
           {activeTask ? (
-            <TaskCardProvider task={activeTask}>
-              <Card
-                size="sm"
-                className="w-72 shadow-lg"
-              >
-                <TaskKanbanCardContent
-                  preview
-                  showProjects={showProjects}
-                />
-              </Card>
-            </TaskCardProvider>
+            <TaskKanbanCard
+              task={activeTask}
+              preview
+            />
           ) : null}
         </DragOverlay>
       </DndContext>

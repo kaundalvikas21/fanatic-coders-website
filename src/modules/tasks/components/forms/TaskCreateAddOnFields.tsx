@@ -13,7 +13,6 @@ export function TaskCreateAddOnFields() {
     control: form.control,
     name: 'addOnTasks',
   });
-  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Field>
@@ -28,7 +27,7 @@ export function TaskCreateAddOnFields() {
           type="button"
           variant="outline"
           size="sm"
-          disabled={isSubmitting || addOnTasks.fields.length >= 5}
+          disabled={addOnTasks.fields.length >= 5}
           onClick={() => addOnTasks.append({ name: '' })}
         >
           <Plus data-icon="inline-start" />
@@ -49,7 +48,6 @@ export function TaskCreateAddOnFields() {
                 <Input
                   aria-label={`Add-on item ${index + 1}`}
                   placeholder="Add checklist item"
-                  disabled={isSubmitting}
                   aria-invalid={Boolean(error)}
                   {...form.register(`addOnTasks.${index}.name`)}
                 />
@@ -60,7 +58,6 @@ export function TaskCreateAddOnFields() {
                 variant="ghost"
                 size="icon"
                 aria-label={`Remove add-on item ${index + 1}`}
-                disabled={isSubmitting}
                 onClick={() => addOnTasks.remove(index)}
               >
                 <Trash2 aria-hidden="true" />

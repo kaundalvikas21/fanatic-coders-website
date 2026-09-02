@@ -2,7 +2,6 @@ export { ProjectTaskStats, ProjectTaskStatsLoader } from './components/ProjectTa
 export { ProjectTasksCard } from './components/ProjectTasksCard';
 export { TaskForm } from './components/forms';
 export { TaskStatusSelect } from './components/TaskStatusSelect';
-export { TaskDetailView } from './components/TaskDetailView';
 export { TaskDetailDialog } from './components/TaskDetailDialog';
 export { TasksInformation } from './components/TasksInformation';
 export { TasksProjectToolbar } from './components/TasksProjectToolbar';

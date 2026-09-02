@@ -6,7 +6,12 @@ import { useTheme } from 'next-themes';
 import { Toggle } from '@/components/ui/toggle';
 import { useClient } from '@/hooks/useClient';
 
-export function ThemeToggle() {
+type ThemeToggleProps = {
+  variant?: 'default' | 'outline';
+  className?: string;
+};
+
+export function ThemeToggle({ variant = 'outline', className }: ThemeToggleProps = {}) {
   const isClient = useClient();
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
@@ -14,8 +19,9 @@ export function ThemeToggle() {
   if (!isClient) {
     return (
       <Toggle
-        variant="outline"
+        variant={variant}
         size="lg"
+        className={className}
         pressed={false}
         aria-label="Toggle theme"
         disabled
@@ -28,8 +34,9 @@ export function ThemeToggle() {
 
   return (
     <Toggle
-      variant="outline"
+      variant={variant}
       size="lg"
+      className={className}
       pressed={isDark}
       aria-label="Toggle theme"
       onPressedChange={(pressed) => setTheme(pressed ? 'dark' : 'light')}
