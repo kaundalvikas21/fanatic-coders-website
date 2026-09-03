@@ -20,6 +20,7 @@ type AuthMode = 'login' | 'signup';
 
 type AuthFormProps = {
   mode: AuthMode;
+  redirectPath?: string | null;
 };
 
 type AuthFormValues = {
@@ -53,7 +54,7 @@ const content = {
   },
 } satisfies Record<AuthMode, AuthCopy>;
 
-export function AuthForm({ mode }: AuthFormProps) {
+export function AuthForm({ mode, redirectPath }: AuthFormProps) {
   const [message, setMessage] = useState<string | null>(null);
   const {
     register,
@@ -68,7 +69,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   });
   const copy = content[mode];
 
-  async function redirectToDashboard() {
+  async function redirectAfterAuthentication() {
     await setFcopOrganizationActive().catch(() => null);
     const { data } = await authClient.organization.getActiveMemberRole({
       query: {
@@ -76,7 +77,11 @@ export function AuthForm({ mode }: AuthFormProps) {
       },
     });
 
-    window.location.replace(getRoleHomePath(data?.role));
+    const fallbackPath = getRoleHomePath(data?.role);
+    const destination = redirectPath ? `${redirectPath}${window.location.hash}` : fallbackPath;
+
+    // Resume the protected task after organization context is ready.
+    window.location.replace(destination);
   }
 
   async function onSubmit(values: AuthFormValues) {
@@ -119,7 +124,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         await storeFrontendBearerToken(bearerToken);
       }
 
-      await redirectToDashboard();
+      await redirectAfterAuthentication();
     } catch {
       setMessage('Authentication failed. Please try again.');
     }

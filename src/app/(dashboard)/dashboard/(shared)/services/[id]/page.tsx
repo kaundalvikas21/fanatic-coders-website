@@ -32,10 +32,14 @@ const PROJECT_MANAGER_ASSIGNMENT_ROLES = [
 
 type ServiceRequestDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ focus?: string | string[] }>;
 };
 
-export default async function ServiceRequestDetailPage({ params }: ServiceRequestDetailPageProps) {
-  const { id } = await params;
+export default async function ServiceRequestDetailPage({
+  params,
+  searchParams,
+}: ServiceRequestDetailPageProps) {
+  const [{ id }, { focus }] = await Promise.all([params, searchParams]);
   const [permissions, access, requestResponse] = await Promise.all([
     getServiceRequestPermissions(),
     getCurrentAccess(),
@@ -120,6 +124,7 @@ export default async function ServiceRequestDetailPage({ params }: ServiceReques
               title={chatTitle}
               description="Discuss requirements, scope, timing, and next steps."
               triggerLabel={chatTitle}
+              deepLinkTargetId={focus === 'request-chat' ? 'request-chat' : undefined}
             >
               <div className="min-h-0 flex-1 overflow-hidden border-y border-border">
                 <ServiceRequestConversation
