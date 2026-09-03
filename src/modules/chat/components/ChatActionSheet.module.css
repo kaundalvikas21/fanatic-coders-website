@@ -1,0 +1,76 @@
+.deepLinkTarget {
+  isolation: isolate;
+}
+
+.deepLinkTarget::before,
+.deepLinkTarget::after {
+  position: absolute;
+  inset: -0.5rem;
+  z-index: -1;
+  border: 2px solid color-mix(in oklch, var(--primary) 62%, transparent);
+  border-radius: 9999px;
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+}
+
+.deepLinkTarget {
+  animation: focus-float 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms 5;
+}
+
+.deepLinkTarget::before,
+.deepLinkTarget::after {
+  animation: focus-wave 1.4s cubic-bezier(0.22, 1, 0.36, 1) 5;
+}
+
+.deepLinkTarget::before {
+  animation-delay: 600ms;
+}
+
+.deepLinkTarget::after {
+  animation-delay: 880ms;
+}
+
+@keyframes focus-wave {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  18% {
+    opacity: 0.78;
+  }
+
+  55% {
+    opacity: 0.32;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+@keyframes focus-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deepLinkTarget {
+    animation: none;
+    outline: 3px solid color-mix(in oklch, var(--primary) 35%, transparent);
+    outline-offset: 3px;
+  }
+
+  .deepLinkTarget::before,
+  .deepLinkTarget::after {
+    animation: none;
+  }
+}

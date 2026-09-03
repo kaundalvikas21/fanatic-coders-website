@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
 import { cn } from '@/lib/utils';
 import { useChat } from './ChatProvider';
+import styles from './ChatActionSheet.module.css';
 
 const MAX_VISIBLE_UNREAD_COUNT = 99;
 
@@ -13,6 +14,7 @@ type ChatActionSheetProps = {
   title: string;
   description: string;
   triggerLabel: string;
+  deepLinkTargetId?: string;
   children: ReactNode;
 };
 
@@ -20,6 +22,7 @@ export function ChatActionSheet({
   title,
   description,
   triggerLabel,
+  deepLinkTargetId,
   children,
 }: ChatActionSheetProps) {
   const { unreadCount, isAttentionActive, handleOpenChange } = useChat();
@@ -33,8 +36,10 @@ export function ChatActionSheet({
       onOpenChange={handleOpenChange}
       trigger={
         <ActionSheetButton
+          id={deepLinkTargetId}
           className={cn(
             'fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 transition-[box-shadow,transform] duration-200 ease-out sm:right-6 sm:bottom-6',
+            deepLinkTargetId && styles.deepLinkTarget,
             isAttentionActive &&
               'scale-[1.03] shadow-[0_0_0_5px_color-mix(in_oklch,var(--primary)_18%,transparent)]',
           )}

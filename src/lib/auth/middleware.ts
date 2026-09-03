@@ -23,7 +23,9 @@ export async function authMiddleware(request: NextRequest) {
   // Dashboard routes require a valid session before checking permissions.
   if (isDashboardPath && !sessionExists) {
     const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('next', pathname);
+
+    // Preserve the protected destination so login can resume the user's task.
+    loginUrl.searchParams.set('next', `${pathname}${request.nextUrl.search}`);
 
     return NextResponse.redirect(loginUrl);
   }
