@@ -35,6 +35,7 @@ const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
 const OVERVIEW_ROLES = [Role.ADMIN] as const;
 const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
+const TASK_DETAIL_ROLES = [...TASK_ROLES, Role.CLIENT] as const;
 const PAYMENT_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SERVICE_REQUEST_ROLES = [Role.ADMIN, Role.MANAGER, Role.CLIENT] as const;
 const SETTINGS_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
@@ -139,6 +140,11 @@ function matchesDashboardPath(pathname: string, routeUrl: string) {
 }
 
 export function getDashboardRouteRoles(pathname: string) {
+  // Let clients open project task details without exposing the staff task board.
+  if (/^\/dashboard\/tasks\/[^/]+\/?$/.test(pathname)) {
+    return TASK_DETAIL_ROLES;
+  }
+
   const routes = [
     ...dashboardUtilityRoutes,
     ...dashboardRouteGroups.flatMap((group) =>
