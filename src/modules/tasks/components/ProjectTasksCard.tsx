@@ -37,7 +37,7 @@ export function ProjectTasksCard({ projectId, tasks }: ProjectTasksCardProps) {
             title="Create task"
             description="Add delivery work to this project and optionally assign team members."
             trigger={
-              <ActionSheetButton>
+              <ActionSheetButton size="lg">
                 <Plus data-icon="inline-start" />
                 New task
               </ActionSheetButton>

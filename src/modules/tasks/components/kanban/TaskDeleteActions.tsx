@@ -38,6 +38,7 @@ export function TaskDeleteActions() {
       <Button
         type="button"
         variant="outline"
+        size="lg"
         disabled={isDeleting}
         onClick={close}
       >
@@ -46,6 +47,7 @@ export function TaskDeleteActions() {
       <Button
         type="button"
         variant="destructive"
+        size="lg"
         disabled={isDeleting}
         onClick={() => void handleDelete()}
       >

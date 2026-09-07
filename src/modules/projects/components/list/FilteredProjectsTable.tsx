@@ -170,6 +170,7 @@ const columns: ColumnDef<ProjectDeliverySummary>[] = [
             <div className="border-t border-border/70 p-4">
               <Button
                 asChild
+                size="lg"
                 className="w-full"
               >
                 <Link href={`/dashboard/projects/${project.id}`}>

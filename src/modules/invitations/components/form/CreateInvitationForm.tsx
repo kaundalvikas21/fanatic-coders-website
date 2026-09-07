@@ -94,6 +94,7 @@ export function CreateInvitationForm() {
       <SheetFooter>
         <Button
           type="submit"
+          size="lg"
           disabled={isSubmitting || organizationPending}
         >
           {isSubmitting ? 'Sending invitation' : 'Send invitation'}

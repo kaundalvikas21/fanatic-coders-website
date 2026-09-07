@@ -213,6 +213,7 @@ export function ProposalForm({
             </Button>
             <Button
               type="button"
+              size="lg"
               aria-busy={isSubmitting && submittingAction === 'send'}
               onClick={form.handleSubmit((values) => saveProposal(values, true))}
             >

@@ -61,7 +61,10 @@ export function ProjectMediaPanel({ projectId, media = [] }: ProjectMediaPanelPr
             description="Add one image or PDF to this project."
             contentClassName="sm:max-w-lg"
             trigger={
-              <Button type="button">
+              <Button
+                type="button"
+                size="lg"
+              >
                 <Plus data-icon="inline-start" />
                 Add media
               </Button>

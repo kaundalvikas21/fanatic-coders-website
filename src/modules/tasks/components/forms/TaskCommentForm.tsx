@@ -84,7 +84,7 @@ export function TaskCommentForm({
         ) : null}
         <Button
           type="submit"
-          size={mode === 'edit' ? 'sm' : 'default'}
+          size={mode === 'edit' ? 'sm' : 'lg'}
           disabled={isSubmitting || !content.trim()}
         >
           {mode === 'create' ? (

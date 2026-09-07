@@ -275,12 +275,15 @@ export function TaskAddOnList() {
             <Input
               aria-label="New checklist item"
               placeholder="Add a checklist item"
+              size="lg"
+              className="md:text-base"
               disabled={isCreating || reachedLimit}
               aria-invalid={Boolean(nameError)}
               {...form.register('name')}
             />
             <Button
               type="submit"
+              size="lg"
               disabled={isCreating || reachedLimit}
             >
               {isCreating ? 'Adding...' : 'Add'}

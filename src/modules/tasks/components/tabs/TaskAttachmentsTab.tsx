@@ -45,7 +45,7 @@ export function TaskAttachmentsTab({
             contentClassName="sm:max-w-lg"
             trigger={
               <Button
-                size="sm"
+                size="lg"
                 type="button"
               >
                 <Plus data-icon="inline-start" />
