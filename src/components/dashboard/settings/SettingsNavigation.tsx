@@ -1,18 +1,8 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Bell, UserRound } from 'lucide-react';
 import { SectionTabs } from '@/components/shared/section-tabs';
-
-const SETTINGS_TABS = [
-  { value: 'profile', label: 'Profile', href: '/dashboard/settings/profile', Icon: UserRound },
-  {
-    value: 'notifications',
-    label: 'Notifications',
-    href: '/dashboard/settings/notifications',
-    Icon: Bell,
-  },
-] as const;
+import { SETTINGS_TABS } from './config';
 
 export function SettingsNavigation() {
   const pathname = usePathname();
@@ -23,6 +13,7 @@ export function SettingsNavigation() {
       value={activeTab}
       items={SETTINGS_TABS}
       ariaLabel="Settings sections"
+      variant="iconFocus"
     />
   );
 }

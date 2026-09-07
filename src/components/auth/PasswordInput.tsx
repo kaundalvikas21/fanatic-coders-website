@@ -5,6 +5,7 @@ import { Eye, EyeOff, LockKeyhole } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
 
 type PasswordInputProps = Omit<ComponentProps<typeof Input>, 'type'>;
 
@@ -15,7 +16,7 @@ export function PasswordInput({ className, disabled, ...props }: PasswordInputPr
   return (
     <div className="relative">
       <LockKeyhole
-        className="pointer-events-none absolute bottom-4 left-3.5 z-10 size-4 text-slate-500"
+        className="pointer-events-none absolute bottom-4 left-3.5 z-10 size-4 text-muted-foreground"
         aria-hidden
       />
       <Input
@@ -24,9 +25,10 @@ export function PasswordInput({ className, disabled, ...props }: PasswordInputPr
         disabled={disabled}
         {...props}
       />
-      <button
+      <Button
         type="button"
-        className="absolute right-0 bottom-0 flex h-11 w-11 items-center justify-center rounded-r-lg text-slate-400 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300/60 disabled:pointer-events-none disabled:opacity-50"
+        variant="link"
+        className="absolute right-0 bottom-0 flex h-11 w-11 items-center justify-center rounded-r-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/60 disabled:pointer-events-none disabled:opacity-50"
         aria-label={label}
         aria-pressed={isPasswordVisible}
         title={label}
@@ -44,7 +46,7 @@ export function PasswordInput({ className, disabled, ...props }: PasswordInputPr
             className="size-4"
           />
         )}
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,12 +1,12 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { LoaderCircle, Save } from 'lucide-react';
+import { LoaderCircle, Mail, Save, UserRound } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { InputWithIcon } from '@/components/shared/forms/InputWithIcon';
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth/client';
 import { useAuth } from '@/providers/AuthProvider';
 
@@ -56,7 +56,8 @@ export function ProfileDetails() {
     >
       <Field data-invalid={Boolean(nameError)}>
         <FieldLabel htmlFor="profile-name">Name</FieldLabel>
-        <Input
+        <InputWithIcon
+          icon={UserRound}
           id="profile-name"
           disabled={isSubmitting}
           aria-invalid={Boolean(nameError)}
@@ -75,7 +76,8 @@ export function ProfileDetails() {
 
       <Field>
         <FieldLabel htmlFor="profile-email">Email</FieldLabel>
-        <Input
+        <InputWithIcon
+          icon={Mail}
           id="profile-email"
           type="email"
           disabled
