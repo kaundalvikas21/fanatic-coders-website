@@ -244,6 +244,7 @@ export function TaskForm({ projectId, task }: TaskFormProps) {
 
             <Button
               type="button"
+              size="lg"
               aria-busy={isSubmitting}
               onClick={() => form.handleSubmit(handleSubmit)()}
             >

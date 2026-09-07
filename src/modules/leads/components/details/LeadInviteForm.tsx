@@ -46,6 +46,7 @@ export function LeadInviteForm({ leadEmail, serviceInterest }: LeadInviteFormPro
     <form onSubmit={form.handleSubmit(sendInvite)}>
       <Button
         type="submit"
+        size="lg"
         className="w-full"
         disabled={form.formState.isSubmitting}
       >

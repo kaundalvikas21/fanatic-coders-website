@@ -17,7 +17,7 @@ export default function AdminInvitationsLayout({ children }: { children: ReactNo
               title="Send invitation"
               description="Invite user in our organization."
               trigger={
-                <ActionSheetButton>
+                <ActionSheetButton size="lg">
                   <MailPlus data-icon="inline-start" />
                   Send invitation
                 </ActionSheetButton>
