@@ -54,6 +54,7 @@ export function TaskDetailTabs({
       onValueChange={(value) => setActiveTab(value as TaskDetailTab)}
       items={tabs}
       ariaLabel="Task detail sections"
+      variant="iconFocus"
       fill
     >
       <TaskOverviewTab

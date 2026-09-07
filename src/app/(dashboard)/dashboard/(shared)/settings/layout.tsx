@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { SettingsNavigation } from '@/components/dashboard/settings/SettingsNavigation';
+import { SettingsProfileSummary } from '@/components/dashboard/settings/SettingsProfileSummary';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { PageHeader } from '@/components/shared/page-header';
 
@@ -9,9 +10,10 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
       <DetailPageLayout.Main>
         <PageHeader
           title="Settings"
-          description="Manage your profile, notifications, security, and appearance."
+          description="Manage your profile, account security, and workspace notifications."
           showBackButton
         />
+        <SettingsProfileSummary />
         <SettingsNavigation />
         {children}
       </DetailPageLayout.Main>
