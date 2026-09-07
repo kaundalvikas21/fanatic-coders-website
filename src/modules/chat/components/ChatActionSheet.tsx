@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageSquareText } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
@@ -37,8 +37,10 @@ export function ChatActionSheet({
       trigger={
         <ActionSheetButton
           id={deepLinkTargetId}
+          size="icon-lg"
+          title={triggerLabel}
           className={cn(
-            'fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 rounded-full px-4 transition-[box-shadow,transform] duration-200 ease-out sm:right-6 sm:bottom-6',
+            'fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 size-14 overflow-visible rounded-full p-0 transition-[background-color,box-shadow,transform] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:right-6 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]',
             deepLinkTargetId && styles.deepLinkTarget,
             isAttentionActive &&
               'scale-[1.03] shadow-[0_0_0_5px_color-mix(in_oklch,var(--primary)_18%,transparent)]',
@@ -47,10 +49,15 @@ export function ChatActionSheet({
             unreadCount > 0 ? `${triggerLabel}, ${unreadCount} unread messages` : triggerLabel
           }
         >
-          <MessageSquareText data-icon="inline-start" />
-          {triggerLabel}
+          <MessageCircle
+            className="size-6"
+            aria-hidden="true"
+          />
           {unreadCount > 0 && (
-            <span className="ml-1 flex min-w-5 items-center justify-center rounded-full bg-primary-foreground px-1 text-[10px] leading-5 font-semibold text-primary">
+            <span
+              className="pointer-events-none absolute -top-1 -right-1 z-10 flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1.5 text-xs leading-none font-semibold text-white ring-2 ring-background tabular-nums"
+              aria-hidden="true"
+            >
               {unreadLabel}
             </span>
           )}
