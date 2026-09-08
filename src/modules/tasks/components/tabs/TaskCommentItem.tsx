@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getInitials } from '@/utils/string';
 import { formatDistanceToNow } from 'date-fns';
 import { Pencil, Trash2 } from 'lucide-react';
 import { ActionDialog, useActionDialog } from '@/components/shared/action-dialog';
@@ -10,15 +11,6 @@ import { Button } from '@/components/ui/button';
 import { TaskCommentForm } from '@/modules/tasks/components/forms/TaskCommentForm';
 import { useTaskCommentPermissions } from '@/modules/tasks/hooks/use-task-comment-permissions';
 import type { TaskComment, UpdateTaskCommentRequest } from '@/types';
-
-function getInitials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase();
-}
 
 function DeleteTaskCommentActions({
   commentId,
