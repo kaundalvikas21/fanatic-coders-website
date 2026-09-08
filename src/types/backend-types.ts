@@ -1035,26 +1035,23 @@ export interface components {
         ProfileUserResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["ProfileUser"];
         };
-        /**
-         * @description Role permission statements keyed by resource. The values are allowed CRUD or domain actions.
-         * @example {
-         *       "ac": [
-         *         "read"
-         *       ],
-         *       "serviceRequest": [
-         *         "create",
-         *         "read"
-         *       ],
-         *       "project": [
-         *         "read"
-         *       ],
-         *       "dashboard": [
-         *         "read"
-         *       ]
-         *     }
-         */
+        /** @description Allowed actions from the backend resource catalog. Application resources use CRUD; Better Auth resources retain their native actions. */
         PermissionStatements: {
-            [key: string]: string[];
+            organization?: ("update" | "delete")[];
+            member?: ("create" | "update" | "delete")[];
+            invitation?: ("create" | "cancel")[];
+            team?: ("create" | "update" | "delete")[];
+            ac?: ("create" | "read" | "update" | "delete")[];
+            lead?: ("create" | "read" | "update" | "delete")[];
+            serviceRequest?: ("create" | "read" | "update" | "delete")[];
+            proposal?: ("create" | "read" | "update" | "delete")[];
+            project?: ("create" | "read" | "update" | "delete")[];
+            task?: ("create" | "read" | "update" | "delete")[];
+            chat?: ("create" | "read")[];
+            taskComment?: ("create" | "read" | "update" | "delete")[];
+            payment?: "read"[];
+            dashboard?: "read"[];
+            notification?: ("read" | "update")[];
         };
         Me: {
             user: components["schemas"]["MeUser"];
@@ -1062,7 +1059,8 @@ export interface components {
             organizationId: string;
             /** @example seed-member-client */
             memberId: string;
-            role: components["schemas"]["OrganizationRole"];
+            /** @description Organization role names, comma-separated when multiple roles are assigned. */
+            role: string;
             permissions: components["schemas"]["PermissionStatements"];
         };
         MeResponse: components["schemas"]["ApiResponse"] & {
@@ -1410,12 +1408,6 @@ export interface components {
              */
             updatedAt: string;
         };
-        ProjectOption: {
-            /** @example clx0000000000000000000010 */
-            value: string;
-            /** @example Website redesign */
-            label: string;
-        };
         Project: {
             /** @example clx0000000000000000000010 */
             id: string;
@@ -1650,7 +1642,19 @@ export interface components {
             createdAt: string;
             member: components["schemas"]["TaskMember"];
         };
+        AddOnTask: {
+            id: string;
+            taskId: string;
+            projectId: string;
+            name: string;
+            isCompleted: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
         Task: {
+            addOnTasks: components["schemas"]["AddOnTask"][];
             /** @example clx0000000000000000000030 */
             id: string;
             /** @example clx0000000000000000000010 */
@@ -1881,6 +1885,12 @@ export interface components {
                 items: components["schemas"]["Payment"][];
                 pagination: components["schemas"]["PaginationMeta"];
             };
+        };
+        ProjectOption: {
+            /** @example clx0000000000000000000010 */
+            value: string;
+            /** @example Website redesign */
+            label: string;
         };
         ProjectOptionsResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["ProjectOption"][];

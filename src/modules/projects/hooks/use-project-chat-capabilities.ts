@@ -7,7 +7,7 @@ export function useProjectChatCapabilities(): LiveChatCapabilities {
   const { can } = usePermissions();
 
   return {
-    canSend: can('comment', 'create'),
+    canSend: can('project', 'read') && can('chat', 'read') && can('chat', 'create'),
     canSendInternal: can('project', 'update'),
   };
 }

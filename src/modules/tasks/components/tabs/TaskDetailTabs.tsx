@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useTaskCommentPermissions } from '@/modules/tasks/hooks/use-task-comment-permissions';
 import { ClipboardList, FileText, MessageSquare, Paperclip } from 'lucide-react';
-import { SectionTabs } from '@/components/shared/section-tabs';
+import { SectionTabs, type SectionTabItem } from '@/components/shared/section-tabs';
 import type { Media, Task, TaskCommentList } from '@/types';
 import { TaskAttachmentsTab } from './TaskAttachmentsTab';
 import { TaskChecklistTab } from './TaskChecklistTab';
@@ -19,11 +20,12 @@ export function TaskDetailTabs({
   attachments: Media[];
   comments: TaskCommentList;
 }) {
+  const { canRead: canReadComments } = useTaskCommentPermissions();
   const [activeTab, setActiveTab] = useState<TaskDetailTab>('overview');
   const [commentCount, setCommentCount] = useState(comments.pagination.totalItems);
   const addOnTasks = task.addOnTasks ?? [];
   const completedAddOns = addOnTasks.filter((item) => item.isCompleted).length;
-  const tabs = [
+  const tabs: SectionTabItem[] = [
     { value: 'overview', label: 'Overview', Icon: FileText },
     {
       value: 'checklist',
@@ -33,24 +35,29 @@ export function TaskDetailTabs({
       compactLabel: true,
     },
     {
-      value: 'comments',
-      label: 'Comments',
-      Icon: MessageSquare,
-      count: commentCount,
-      compactLabel: true,
-    },
-    {
       value: 'attachments',
       label: 'Attachments',
       Icon: Paperclip,
       count: attachments.length,
       compactLabel: true,
     },
-  ] as const;
+  ];
+
+  if (canReadComments) {
+    tabs.splice(2, 0, {
+      value: 'comments',
+      label: 'Comments',
+      Icon: MessageSquare,
+      count: commentCount,
+      compactLabel: true,
+    });
+  }
+
+  const visibleTab = activeTab === 'comments' && !canReadComments ? 'overview' : activeTab;
 
   return (
     <SectionTabs
-      value={activeTab}
+      value={visibleTab}
       onValueChange={(value) => setActiveTab(value as TaskDetailTab)}
       items={tabs}
       ariaLabel="Task detail sections"
@@ -59,19 +66,21 @@ export function TaskDetailTabs({
     >
       <TaskOverviewTab
         task={task}
-        activeTab={activeTab}
+        activeTab={visibleTab}
       />
-      <TaskChecklistTab activeTab={activeTab} />
-      <TaskCommentsTab
-        task={task}
-        comments={comments}
-        activeTab={activeTab}
-        onCountChange={setCommentCount}
-      />
+      <TaskChecklistTab activeTab={visibleTab} />
+      {canReadComments && (
+        <TaskCommentsTab
+          task={task}
+          comments={comments}
+          activeTab={visibleTab}
+          onCountChange={setCommentCount}
+        />
+      )}
       <TaskAttachmentsTab
         task={task}
         attachments={attachments}
-        activeTab={activeTab}
+        activeTab={visibleTab}
       />
     </SectionTabs>
   );

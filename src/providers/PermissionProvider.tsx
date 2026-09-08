@@ -1,13 +1,13 @@
 'use client';
 
 import { createContext, useContext, type ReactNode } from 'react';
-import type { AccessModel, AccessOperation, AccessPermissions } from '@/types';
+import type { CurrentAccess, AccessPermissions } from '@/types';
 
 type PermissionContextValue = {
   permissions: AccessPermissions;
   memberId: string;
   role: string;
-  can: (model: AccessModel, operation: AccessOperation) => boolean;
+  can: CurrentAccess['can'];
 };
 
 const PermissionContext = createContext<PermissionContextValue | null>(null);
@@ -30,7 +30,7 @@ export function PermissionProvider({
     memberId,
     role,
     can(model, operation) {
-      return permissions[model]?.includes(operation) ?? false;
+      return (permissions[model] as readonly string[] | undefined)?.includes(operation) ?? false;
     },
   };
 

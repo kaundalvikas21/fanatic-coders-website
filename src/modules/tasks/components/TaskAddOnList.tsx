@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 import {
   createTaskAddOn,
   deleteTaskAddOnById,
@@ -24,7 +25,6 @@ import {
   type TaskAddOnUpdateFormInput,
   type TaskAddOnUpdateFormValues,
 } from '@/modules/tasks/schemas/task';
-import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 import type { AddOnTask } from '@/types';
 import { useTaskCard } from '@/modules/tasks/context/task-card-context';
 
@@ -78,7 +78,7 @@ function DeleteAddOnActions({ addOnTask }: { addOnTask: AddOnTask }) {
 function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
   const task = useTaskCard();
   const router = useRouter();
-  const { canUpdate, canDelete } = useTaskPermissions();
+  const { canManageAddOns, canUpdateAddOnCompletion } = useTaskPermissions(task);
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const form = useForm<TaskAddOnUpdateFormInput, unknown, TaskAddOnUpdateFormValues>({
@@ -175,7 +175,7 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
         type="button"
         aria-label={`${addOnTask.isCompleted ? 'Mark incomplete' : 'Mark complete'}: ${addOnTask.name}`}
         aria-pressed={addOnTask.isCompleted}
-        disabled={!canUpdate || isPending}
+        disabled={!canUpdateAddOnCompletion || isPending}
         onClick={() => void toggleCompletion()}
         className={cn(
           'flex size-5 shrink-0 items-center justify-center rounded border transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
@@ -199,9 +199,9 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
       >
         {addOnTask.name}
       </span>
-      {canUpdate || canDelete ? (
+      {canManageAddOns ? (
         <div className="flex shrink-0">
-          {canUpdate ? (
+          {canManageAddOns ? (
             <Button
               type="button"
               variant="ghost"
@@ -213,7 +213,7 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
               <Pencil aria-hidden="true" />
             </Button>
           ) : null}
-          {canDelete ? (
+          {canManageAddOns ? (
             <ActionDialog
               title="Delete this add-on?"
               description="This checklist item will be removed from the task."
@@ -241,7 +241,7 @@ function TaskAddOnRow({ addOnTask }: { addOnTask: AddOnTask }) {
 export function TaskAddOnList() {
   const task = useTaskCard();
   const router = useRouter();
-  const { canCreate } = useTaskPermissions();
+  const { canManageAddOns } = useTaskPermissions(task);
   const addOnTasks = task.addOnTasks ?? [];
   const form = useForm<TaskAddOnCreateFormInput, unknown, TaskAddOnCreateFormValues>({
     resolver: zodResolver(taskAddOnCreateSchema),
@@ -266,7 +266,7 @@ export function TaskAddOnList() {
 
   return (
     <div className="space-y-5">
-      {canCreate ? (
+      {canManageAddOns ? (
         <form
           className="space-y-2"
           onSubmit={form.handleSubmit(createAddOn)}

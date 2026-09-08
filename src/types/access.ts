@@ -1,39 +1,12 @@
-import type { Response } from './api';
+import type { Response, Schemas } from './api';
 
-export type AccessOperation = 'create' | 'read' | 'update' | 'delete';
-
-export type AccessModel =
-  | 'ac'
-  | 'comment'
-  | 'dashboard'
-  | 'lead'
-  | 'member'
-  | 'organization'
-  | 'payment'
-  | 'project'
-  | 'proposal'
-  | 'serviceRequest'
-  | 'task'
-  | 'taskComment'
-  | 'team';
-
-export type AccessPermissions = Partial<Record<AccessModel, readonly AccessOperation[]>>;
-
-export type CurrentAccessData = {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    image: string | null;
-  };
-  organizationId: string;
-  memberId: string;
-  role: string;
-  permissions: AccessPermissions;
-};
-
+export type AccessPermissions = Schemas['PermissionStatements'];
+export type AccessModel = keyof AccessPermissions;
+export type AccessOperation<R extends AccessModel = AccessModel> = NonNullable<
+  AccessPermissions[R]
+>[number];
+export type CurrentAccessData = Schemas['Me'];
 export type CurrentAccess = CurrentAccessData & {
-  can: (model: AccessModel, operation: AccessOperation) => boolean;
+  can: <R extends AccessModel>(model: R, operation: AccessOperation<R>) => boolean;
 };
-
 export type GetCurrentAccessResponse = Response<CurrentAccessData>;
