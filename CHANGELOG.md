@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.10.2...v0.11.0) (2026-09-08)
+
+### Features
+
+- **api:** added server functions for managing api endpoints ([12c6ac1](https://github.com/kaundalvikas21/fanatic-coders-website/commit/12c6ac1753e96d11ad6feb5609e7f40521aad980))
+- **button:** apply xl variant to all action button ([15b6286](https://github.com/kaundalvikas21/fanatic-coders-website/commit/15b6286c8bba7ce85886156958828a5b681fe1e8))
+- **component:** added task comments components items ([bbec9ef](https://github.com/kaundalvikas21/fanatic-coders-website/commit/bbec9ef2ed7a397257a39312146a171c0ebe34ee))
+- **form:** added fieldset component for managing form states ([6dfdf90](https://github.com/kaundalvikas21/fanatic-coders-website/commit/6dfdf90d96006e54d784d606c38e4d2f5445b7eb))
+- **member:** display member details with their work ([b313af9](https://github.com/kaundalvikas21/fanatic-coders-website/commit/b313af9f724e9decd0f3a3282680437b0d1a11b5))
+- **members:** add now swr based hook for members data ([3a3cba3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3a3cba3661be28b89c62a22c2e2a7ae6f5c535e2))
+- **service:** added a ripple effect on when user come from email on every new request ([3ec6db6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3ec6db67c66e884fec9cc2656ba388ccd6642e2b))
+- **settings:** redesign setting page profile, seucity and notificaiotn ([27a9518](https://github.com/kaundalvikas21/fanatic-coders-website/commit/27a95185756c43ef8587611ebde43d065b9b2115))
+- **sidebar:** added versioning and remove my account from sidebar footer ([d52b020](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d52b020012b8ae0499444440be50e8294a9f563f))
+- **style:** enhance dashboard background apply gradient and other stuff ([2af3b27](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2af3b27f7f45e30f695e193c1f6ba1a3519467c4))
+- **types:** added types for task comments ([e973fc7](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e973fc7a917f75657a88c4a987a649b3948336db))
+
+### Bug Fixes
+
+- **project:** enhanced project components ([61fa89b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/61fa89bdf2bd859189d2179568ebf938e9bc6f20))
+- **task:** enable authorization for user to seeing task and also can comment on task ([3d1bd96](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3d1bd969054811beb9c6c575134a69fa257292c4))
+
+### Code Refactoring
+
+- **filter:** applied variant default on all filter reset button ([58ff925](https://github.com/kaundalvikas21/fanatic-coders-website/commit/58ff9251f17909509cff1340f8d4095496d1975e))
+- **not found:** redesign not found component ([9d2833e](https://github.com/kaundalvikas21/fanatic-coders-website/commit/9d2833e71d8fdad8418c044322e4139d9fb02803))
+- **service:** enhance ui for single service request page and its component ([32f40fe](https://github.com/kaundalvikas21/fanatic-coders-website/commit/32f40fec6808cc45de2df85a6db86c37b6acc2a7))
+- **tabs:** refactor code and change style of each task tab component ([38069e6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/38069e6146b9a39c54c596527c69322db1c69a2e))
+- **task:** refactor and enhance code ([314f83b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/314f83b0e9a1dbf158f411fd7c17ad3d82371935))
+- **task:** regorganized full structure for managing task ([15963d7](https://github.com/kaundalvikas21/fanatic-coders-website/commit/15963d7290128ea9398e047ee4fd8a09cff95b15))
+- **ui:** refactor ui design for chat module make it more rich and optimized ([82c35b2](https://github.com/kaundalvikas21/fanatic-coders-website/commit/82c35b2c25d30fa80fc96c1237fbd848bf70f913))
+
 ### [0.10.2](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.10.1...v0.10.2) (2026-08-26)
 
 ### Features
