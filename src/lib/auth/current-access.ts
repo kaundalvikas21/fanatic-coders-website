@@ -5,8 +5,6 @@ import { cache } from 'react';
 import { authApi } from '@/lib/axios/client';
 import { getApiError, unwrap } from '@/lib/axios/utils';
 import type {
-  AccessModel,
-  AccessOperation,
   ApiResponse,
   CurrentAccess,
   CurrentAccessData,
@@ -16,8 +14,10 @@ import type {
 export function createCurrentAccess(access: CurrentAccessData): CurrentAccess {
   return {
     ...access,
-    can(model: AccessModel, operation: AccessOperation) {
-      return access.permissions[model]?.includes(operation) ?? false;
+    can(model, operation) {
+      return (
+        (access.permissions[model] as readonly string[] | undefined)?.includes(operation) ?? false
+      );
     },
   };
 }

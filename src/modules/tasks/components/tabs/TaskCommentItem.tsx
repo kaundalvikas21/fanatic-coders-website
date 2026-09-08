@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getInitials } from '@/utils/string';
 import { formatDistanceToNow } from 'date-fns';
 import { Pencil, Trash2 } from 'lucide-react';
 import { ActionDialog, useActionDialog } from '@/components/shared/action-dialog';
@@ -8,16 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { TaskCommentForm } from '@/modules/tasks/components/forms/TaskCommentForm';
+import { useTaskCommentPermissions } from '@/modules/tasks/hooks/use-task-comment-permissions';
 import type { TaskComment, UpdateTaskCommentRequest } from '@/types';
-
-function getInitials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase();
-}
 
 function DeleteTaskCommentActions({
   commentId,
@@ -62,19 +55,12 @@ function DeleteTaskCommentActions({
 
 type TaskCommentItemProps = {
   comment: TaskComment;
-  canUpdate: boolean;
-  canDelete: boolean;
   onUpdate: (commentId: string, payload: UpdateTaskCommentRequest) => Promise<boolean>;
   onDelete: (commentId: string) => Promise<boolean>;
 };
 
-export function TaskCommentItem({
-  comment,
-  canUpdate,
-  canDelete,
-  onUpdate,
-  onDelete,
-}: TaskCommentItemProps) {
+export function TaskCommentItem({ comment, onUpdate, onDelete }: TaskCommentItemProps) {
+  const { canUpdate, canDelete } = useTaskCommentPermissions(comment);
   const [isEditing, setIsEditing] = useState(false);
   const authorName = comment.member?.user.name ?? 'Former member';
 

@@ -8,5 +8,6 @@ export { TasksProjectToolbar } from './components/TasksProjectToolbar';
 export { TaskKanbanBoard } from './components/kanban';
 export { getTaskKanbanKey } from './utils/task-kanban-key';
 export { useTaskPermissions } from './hooks/use-task-permissions';
+export { useTaskCommentPermissions } from './hooks/use-task-comment-permissions';
 export { createTaskPermissions } from './utils/permissions';
 export type { TaskPermissions } from './utils/permissions';

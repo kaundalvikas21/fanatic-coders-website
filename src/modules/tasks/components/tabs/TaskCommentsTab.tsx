@@ -11,7 +11,7 @@ import {
   updateTaskComment,
 } from '@/modules/tasks/data/mutations';
 import { getTaskComments } from '@/modules/tasks/data/queries';
-import { usePermissions } from '@/providers/PermissionProvider';
+import { useTaskCommentPermissions } from '@/modules/tasks/hooks/use-task-comment-permissions';
 import type {
   CreateTaskCommentRequest,
   Task,
@@ -23,11 +23,6 @@ import { TaskDetailTabPanel, TaskTabEmptyState } from './TaskDetailTabPanel';
 import type { TaskDetailTab } from './types';
 
 const PAGE_SIZE = 20;
-
-const isCommentModerator = (role: string) => {
-  const roles = role.split(',').map((item) => item.trim());
-  return roles.includes('ADMIN') || roles.includes('MANAGER');
-};
 
 type TaskCommentsTabProps = {
   task: Task;
@@ -42,11 +37,10 @@ export function TaskCommentsTab({
   activeTab,
   onCountChange,
 }: TaskCommentsTabProps) {
-  const { can, memberId, role } = usePermissions();
+  const { canCreate } = useTaskCommentPermissions();
   const [items, setItems] = useState(comments.items);
   const [pagination, setPagination] = useState(comments.pagination);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const moderator = isCommentModerator(role);
 
   async function create(payload: CreateTaskCommentRequest) {
     const response = await createTaskComment(task.id, payload);
@@ -119,7 +113,7 @@ export function TaskCommentsTab({
       lazy
     >
       <div className="space-y-5">
-        {can('taskComment', 'create') ? (
+        {canCreate ? (
           <div className="border-b border-border pb-5">
             <TaskCommentForm onSubmit={create} />
           </div>
@@ -127,20 +121,14 @@ export function TaskCommentsTab({
 
         {items.length ? (
           <div className="divide-y divide-border">
-            {items.map((comment) => {
-              const ownsComment = comment.memberId === memberId;
-
-              return (
-                <TaskCommentItem
-                  key={comment.id}
-                  comment={comment}
-                  canUpdate={can('taskComment', 'update') && (ownsComment || moderator)}
-                  canDelete={can('taskComment', 'delete') && (ownsComment || moderator)}
-                  onUpdate={update}
-                  onDelete={remove}
-                />
-              );
-            })}
+            {items.map((comment) => (
+              <TaskCommentItem
+                key={comment.id}
+                comment={comment}
+                onUpdate={update}
+                onDelete={remove}
+              />
+            ))}
           </div>
         ) : (
           <TaskTabEmptyState
