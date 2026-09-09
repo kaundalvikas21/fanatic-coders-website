@@ -26,6 +26,7 @@ type ActionSheetProps = {
   trigger: ReactNode;
   title: string;
   description?: string;
+  showHeader?: boolean;
   children: ReactNode;
   onOpenChange?: (open: boolean) => void;
   contentClassName?: string;
@@ -35,6 +36,7 @@ export function ActionSheet({
   trigger,
   title,
   description,
+  showHeader = false,
   children,
   onOpenChange,
   contentClassName,
@@ -68,10 +70,17 @@ export function ActionSheet({
         <SheetContent
           className={cn(
             'dashboard-glow-surface data-[side=right]:inset-y-3 data-[side=right]:right-3 data-[side=right]:h-auto data-[side=right]:w-[calc(100%-1.5rem)] data-[side=right]:rounded-xl ease-[cubic-bezier(0.22,1,0.36,1)] sm:data-[side=right]:w-3/4 data-[side=right]:data-open:slide-in-from-right-full data-[side=right]:data-closed:slide-out-to-right-full data-open:duration-300 data-closed:duration-200 [[data-slot=sheet-overlay]:has(~_&)]:duration-100 motion-reduce:duration-0',
+            showHeader && 'gap-0 py-0',
             contentClassName,
           )}
         >
-          <SheetHeader className="sr-only">
+          <SheetHeader
+            className={
+              showHeader
+                ? 'rounded-t-xl border-b border-l-4 border-l-primary bg-primary/5 px-3 py-2 pr-12'
+                : 'sr-only'
+            }
+          >
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}
           </SheetHeader>

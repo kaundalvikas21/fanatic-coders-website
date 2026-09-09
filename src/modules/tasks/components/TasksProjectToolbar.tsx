@@ -44,6 +44,7 @@ export function TasksProjectToolbar() {
       {canCreate && selectedProjectId ? (
         <ActionSheet
           title="Create task"
+          showHeader
           description="Add delivery work to the selected project."
           trigger={
             <ActionSheetButton size="lg">
