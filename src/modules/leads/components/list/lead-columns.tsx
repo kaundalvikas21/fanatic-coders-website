@@ -144,6 +144,7 @@ export const leadColumns: ColumnDef<Lead>[] = [
       return (
         <div className="flex justify-center">
           <ActionSheet
+            showHeader
             title={lead.name}
             description={lead.companyName || 'Lead details'}
             contentClassName="sm:max-w-2xl"
@@ -158,7 +159,7 @@ export const leadColumns: ColumnDef<Lead>[] = [
               </ActionSheetButton>
             }
           >
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-5 text-left">
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 pt-3 pb-5 text-left">
               <div className="space-y-4">
                 <div className="flex items-center gap-2 px-1">
                   <span className="text-sm text-muted-foreground">Status</span>

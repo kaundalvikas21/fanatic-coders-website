@@ -142,6 +142,7 @@ const columns: ColumnDef<ProjectDeliverySummary>[] = [
       return (
         <div className="flex justify-center">
           <ActionSheet
+            showHeader
             title={projectName}
             description={project.description?.trim() || 'Project delivery details.'}
             contentClassName="sm:max-w-2xl"
@@ -156,7 +157,7 @@ const columns: ColumnDef<ProjectDeliverySummary>[] = [
               </ActionSheetButton>
             }
           >
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-5 text-left">
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 pt-3 pb-5 text-left">
               <div className="space-y-4">
                 <ProjectProgressCard
                   project={project}

@@ -35,6 +35,7 @@ export function ProjectTasksCard({ projectId, tasks }: ProjectTasksCardProps) {
         permissions.canCreate && projectId ? (
           <ActionSheet
             title="Create task"
+            showHeader
             description="Add delivery work to this project and optionally assign team members."
             trigger={
               <ActionSheetButton size="lg">

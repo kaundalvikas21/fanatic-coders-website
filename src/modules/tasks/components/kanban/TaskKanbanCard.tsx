@@ -230,6 +230,7 @@ export function TaskKanbanCard({ task, preview = false }: { task: Task; preview?
           >
             <ActionSheet
               title="Edit task"
+              showHeader
               description="Update this task's details and assignees."
               trigger={
                 <Button
