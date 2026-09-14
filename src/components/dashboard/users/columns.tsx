@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Eye } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { UserListItem } from '@/types';
 import { formatDate } from '@/utils/date';
 import { getInitials } from '@/utils/string';
+import { UserRowActions } from './UserRowActions';
 import { getUserRoleBadgeVariant } from '@/utils/user-formatters';
 
 export const userColumns: ColumnDef<UserListItem>[] = [
@@ -83,28 +84,11 @@ export const userColumns: ColumnDef<UserListItem>[] = [
   {
     id: 'actions',
     enableSorting: false,
-    header: () => <div className="text-center">Action</div>,
-    cell: ({ row }) => {
-      const member = row.original;
-
-      return (
-        <div className="flex justify-center">
-          <Button
-            asChild
-            variant="ghost"
-            size="icon"
-          >
-            <Link
-              href={`/dashboard/admin/user/${member.id}`}
-              prefetch={false}
-              aria-label={`View details for ${member.user.name}`}
-              title={`View details for ${member.user.name}`}
-            >
-              <Eye />
-            </Link>
-          </Button>
-        </div>
-      );
-    },
+    header: () => <div className="text-center">Actions</div>,
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        <UserRowActions member={row.original} />
+      </div>
+    ),
   },
 ];

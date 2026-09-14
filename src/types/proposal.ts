@@ -7,7 +7,7 @@ export type ProposalPaymentStatus = 'UNPAID' | 'PAID';
 export type Proposal = {
   id: string;
   serviceRequestId: string;
-  createdByMemberId: string;
+  createdByMemberId: string | null;
   description: string;
   amount: number | string;
   currency: ProjectCurrency;

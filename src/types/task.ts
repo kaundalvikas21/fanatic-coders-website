@@ -69,7 +69,7 @@ export type AddOnTask = {
 export type Task = {
   id: string;
   projectId: string;
-  createdByMemberId: string;
+  createdByMemberId: string | null;
   title: string;
   description?: string | null;
   status: TaskStatus;
@@ -80,7 +80,7 @@ export type Task = {
   updatedAt: string;
   assignees: TaskAssignee[];
   addOnTasks: AddOnTask[];
-  createdBy?: UserListItem;
+  createdBy?: UserListItem | null;
   project?: {
     id: string;
     name: string;

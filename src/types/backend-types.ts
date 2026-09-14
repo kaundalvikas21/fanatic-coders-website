@@ -1286,7 +1286,7 @@ export interface components {
             /** @example clx0000000000000000000006 */
             serviceRequestId: string;
             /** @example seed-member-manager */
-            createdByMemberId: string;
+            createdByMemberId: string | null;
             /** @example Design and develop the agreed business website. */
             description: string;
             /**
@@ -1416,7 +1416,7 @@ export interface components {
             /** @example clx0000000000000000000006 */
             serviceRequestId?: string | null;
             /** @example seed-member-admin */
-            createdByMemberId: string;
+            createdByMemberId: string | null;
             /** @example Acme website redesign */
             name: string;
             /** @example Website redesign project created from the client service request. */
@@ -1660,7 +1660,7 @@ export interface components {
             /** @example clx0000000000000000000010 */
             projectId: string;
             /** @example seed-member-manager */
-            createdByMemberId: string;
+            createdByMemberId: string | null;
             /** @example Build homepage wireframe */
             title: string;
             /** @example Create the desktop and mobile homepage wireframes. */
@@ -1684,7 +1684,7 @@ export interface components {
              */
             updatedAt: string;
             project: components["schemas"]["TaskProjectReference"];
-            createdBy: components["schemas"]["TaskMember"];
+            createdBy: components["schemas"]["TaskMember"] | null;
             assignees: components["schemas"]["TaskAssignee"][];
         };
         CreateTaskRequest: {
