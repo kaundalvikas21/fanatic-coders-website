@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { parseRoles, isOrganizationMemberRole } from '@/lib/auth/roles';
-import { getUsers } from '@/lib/data/users/queries';
+import { getUserMemberById, getUsers } from '@/lib/data/users/queries';
 import type { OrganizationMemberOption, OrganizationMemberRole } from '@/types';
 import { ApiResponse, HttpStatus } from '@/utils/api-response';
 
@@ -32,24 +32,29 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const response = await getUsers({
-    limit: 100,
-    sortBy: 'createdAt',
-    sortDirection: 'asc',
-  });
+  const memberId = request.nextUrl.searchParams.get('memberId')?.trim();
+  const response = memberId
+    ? await getUserMemberById(memberId)
+    : await getUsers({
+        limit: 100,
+        sortBy: 'createdAt',
+        sortDirection: 'asc',
+      });
 
   if (!response.success) {
     return NextResponse.json(response, { status: response.status });
   }
 
   const allowedRoles = new Set(requestedRoles);
-  const options: OrganizationMemberOption[] = response.data.members
+  const members = 'members' in response.data ? response.data.members : [response.data];
+  const options: OrganizationMemberOption[] = members
     .filter(
       (member) =>
         allowedRoles.size === 0 || parseRoles(member.role).some((role) => allowedRoles.has(role)),
     )
     .map((member) => ({
       value: member.id,
+      role: member.role,
       label: member.user.name || member.user.email,
       name: member.user.name,
       email: member.user.email,

@@ -3,3 +3,4 @@ export { MemberAccountCard } from './MemberAccountCard';
 export { MemberActivityPlaceholder } from './MemberActivityPlaceholder';
 export { MemberAssignmentStats } from './MemberAssignmentStats';
 export { MemberCurrentAssignments } from './MemberCurrentAssignments';
+export { MemberDetailTabs } from './MemberDetailTabs';

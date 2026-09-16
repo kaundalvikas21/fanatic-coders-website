@@ -9,9 +9,8 @@ export async function authMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isDashboardPath = pathname.startsWith('/dashboard');
   const isDashboardHomePath = pathname === '/dashboard' || pathname === '/dashboard/';
-  const isAuthOnlyPath = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(
-    pathname,
-  );
+  // Allow password reset links even when the user still has an active session.
+  const isAuthOnlyPath = ['/login', '/signup', '/forgot-password'].includes(pathname);
   const sessionExists = await hasSession(request.headers);
 
   if (isAuthOnlyPath && sessionExists) {

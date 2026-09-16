@@ -9,7 +9,13 @@ import { Button } from '@/components/ui/button';
 import { useActionDialog } from '@/components/shared/action-dialog';
 import type { UserListItem } from '@/types';
 
-export function DeleteUserActions({ member }: { member: UserListItem }) {
+export function DeleteUserActions({
+  member,
+  redirectTo,
+}: {
+  member: UserListItem;
+  redirectTo?: string;
+}) {
   const { close } = useActionDialog();
   const { mutate } = useSWRConfig();
   const router = useRouter();
@@ -32,7 +38,9 @@ export function DeleteUserActions({ member }: { member: UserListItem }) {
         (key) => typeof key === 'string' && key.startsWith('/api/organization/members/options'),
       ).catch(() => undefined);
       close();
-      router.refresh();
+      // Leave the detail page after deletion so it does not reload a missing account.
+      if (redirectTo) router.replace(redirectTo);
+      else router.refresh();
     } catch {
       toast.error('Request failed. Refresh before retrying.');
     } finally {
