@@ -1,0 +1,64 @@
+.root {
+  gap: 0;
+  --folder-radius: 12px;
+}
+
+.root .list {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 4px 12px 0;
+  border: 0;
+}
+
+.root .tab {
+  height: 48px;
+  overflow: visible;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: var(--folder-radius) var(--folder-radius) 0 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  box-shadow: none;
+}
+
+.root .tab[data-state='active'] {
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--primary);
+}
+
+.root .tab::after {
+  display: none;
+}
+
+.root .tab[data-state='active']::before {
+  content: '';
+  position: absolute;
+  inset: auto -13px -1px;
+  height: 13px;
+  background:
+    radial-gradient(circle at 0 0, transparent 12px, var(--border) 12px 13px, var(--card) 13px)
+      left / 13px 13px no-repeat,
+    radial-gradient(circle at 100% 0, transparent 12px, var(--border) 12px 13px, var(--card) 13px)
+      right / 13px 13px no-repeat,
+    linear-gradient(var(--card), var(--card)) center bottom / calc(100% - 26px) 2px no-repeat;
+  pointer-events: none;
+}
+
+.panel {
+  min-width: 0;
+  margin-top: -1px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--folder-radius);
+  background: var(--card);
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 12px;
+  }
+}

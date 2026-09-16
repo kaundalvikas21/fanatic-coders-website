@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import folderStyles from './tabs/folder/styles.module.css';
 import type { ComponentProps, ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -20,7 +21,7 @@ type SectionTabsProps = Omit<ComponentProps<typeof Tabs>, 'children'> & {
   ariaLabel: string;
   children?: ReactNode;
   fill?: boolean;
-  variant?: 'default' | 'iconFocus';
+  variant?: 'default' | 'iconFocus' | 'folder';
 };
 
 function SectionTabContent({
@@ -68,7 +69,11 @@ export function SectionTabs({
 }: SectionTabsProps) {
   return (
     <Tabs
-      className={cn('min-w-0 max-w-full gap-5', className)}
+      className={cn(
+        'min-w-0 max-w-full gap-5',
+        variant === 'folder' && folderStyles.root,
+        className,
+      )}
       {...props}
     >
       <TabsList
@@ -77,6 +82,7 @@ export function SectionTabs({
           'scrollbar-none h-auto max-w-full overflow-x-auto overscroll-x-contain',
           variant === 'iconFocus' ? 'w-fit items-end gap-0.5 border-b-0 pt-1' : 'gap-1 border-b-0',
           fill && 'grid w-full',
+          variant === 'folder' && folderStyles.list,
         )}
         style={
           fill ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` } : undefined
@@ -85,6 +91,7 @@ export function SectionTabs({
         {items.map((item) => {
           const triggerClassName = cn(
             'group px-3',
+            variant === 'folder' && folderStyles.tab,
             variant === 'iconFocus'
               ? 'h-13 rounded-t-[10px] rounded-b-none border-b-2 border-border pl-2.5 pr-4 text-muted-foreground transition-[color,background-color,border-color,transform] duration-150 hover:-translate-y-px hover:bg-primary/5 hover:text-foreground data-[state=active]:border-x-2 data-[state=active]:border-t-2 data-[state=active]:border-b-0 data-[state=active]:bg-transparent data-[state=active]:font-semibold data-[state=active]:text-primary data-[state=active]:shadow-none data-[state=active]:after:hidden dark:data-[state=active]:text-[color-mix(in_oklch,var(--primary)_35%,white)]'
               : 'rounded-md data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground data-[state=active]:after:hidden',
@@ -118,7 +125,7 @@ export function SectionTabs({
           );
         })}
       </TabsList>
-      {children}
+      {variant === 'folder' ? <div className={folderStyles.panel}>{children}</div> : children}
     </Tabs>
   );
 }
