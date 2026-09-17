@@ -5,7 +5,8 @@ import { createProjectDeliverySummary } from '@/modules/projects/utils/progress'
 import type { GetProjectsInput, PaginatedProjects, Project, Task } from '@/types';
 import { getProjects } from '../../data/queries';
 import { getProjectTasks } from '@/modules/tasks/data/queries';
-import { FilteredProjectsTable } from './FilteredProjectsTable';
+import { DataTable } from '@/components/ui/data-table';
+import { projectColumns } from './FilteredProjectsTableColumns';
 
 export async function FilteredProjectsLoader({ filters }: { filters: GetProjectsInput }) {
   const response = await getProjects(filters);
@@ -52,7 +53,12 @@ export async function FilteredProjectsLoader({ filters }: { filters: GetProjects
 
   return (
     <div className="space-y-4">
-      <FilteredProjectsTable summaries={summaries} />
+      <DataTable
+        columns={projectColumns}
+        data={summaries}
+        emptyMessage="No projects match the selected filters."
+        tableClassName="min-w-190"
+      />
       {pagination && (
         <Pagination
           pagination={pagination}

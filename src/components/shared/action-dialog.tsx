@@ -85,3 +85,7 @@ export function useActionDialog() {
 
   return context;
 }
+
+export function useOptionalActionDialog() {
+  return useContext(DialogContext);
+}

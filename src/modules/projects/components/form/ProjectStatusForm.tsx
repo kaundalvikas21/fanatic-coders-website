@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import { updateProjectById } from '@/modules/projects/data/mutations';
+import { useOptionalActionDialog } from '@/components/shared/action-dialog';
 import {
   PROJECT_STATUS_BADGE_VARIANTS,
   PROJECT_STATUS_COLORS,
@@ -28,6 +29,7 @@ type ProjectStatusFormValues = {
 
 export function ProjectStatusForm({ projectId, initialStatus }: ProjectStatusFormProps) {
   const router = useRouter();
+  const dialog = useOptionalActionDialog();
   const [isUpdating, setIsUpdating] = useState(false);
   const form = useForm<ProjectStatusFormValues>({
     mode: 'onChange',
@@ -69,6 +71,7 @@ export function ProjectStatusForm({ projectId, initialStatus }: ProjectStatusFor
       form.setValue('status', project?.status ?? nextStatus);
       toast.success('Project status updated.');
       router.refresh();
+      dialog?.close();
     } catch {
       rollbackStatus(previousStatus, 'Could not update project status.');
     } finally {

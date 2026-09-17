@@ -1,22 +1,24 @@
 'use client';
 
+import { useRef } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpRight, Eye } from 'lucide-react';
+import { Eye, Plus, Settings2 } from 'lucide-react';
 import Link from 'next/link';
-
-import { ActionSheet, ActionSheetButton } from '@/components/shared/action-sheet';
+import { ActionSheet } from '@/components/shared/action-sheet';
+import { ActionDialog } from '@/components/shared/action-dialog';
+import { ActionDropdown } from '@/components/shared/action-dropdown';
 import { UserAvatar } from '@/components/shared/user-avatar';
 import { AvatarGroup, AvatarGroupCount } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/ui/data-table';
 import { Progress } from '@/components/ui/progress';
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { PROJECT_STATUS_LABELS } from '@/modules/projects/config/labels';
 import { PROJECT_STATUS_COLORS, type Project } from '@/types';
 import type { ProjectDeliverySummary } from '@/modules/projects/utils/progress';
-import { ProjectInfoCard } from '../ProjectInfoCard';
-import { ProjectMembersCard } from '../ProjectMembersCard';
-import { ProjectProgressCard } from '../ProjectProgressCard';
+import { ProjectStatusForm } from '../form/ProjectStatusForm';
+import { TaskForm } from '@/modules/tasks/components/forms';
+import { useProjectPermissions } from '@/modules/projects/hooks/use-project-permissions';
+import { useTaskPermissions } from '@/modules/tasks/hooks/use-task-permissions';
 
 type ProjectMemberWithUser = NonNullable<Project['memberProjects']>[number] & {
   member?: {
@@ -65,7 +67,81 @@ function ProjectTeam({ project }: { project: Project }) {
   );
 }
 
-const columns: ColumnDef<ProjectDeliverySummary>[] = [
+function ProjectRowActions({ summary }: { summary: ProjectDeliverySummary }) {
+  const { project } = summary;
+  const projectName = project.name?.trim() || 'Untitled project';
+  const { canUpdate: canUpdateProject } = useProjectPermissions();
+  const { canCreate: canCreateTask } = useTaskPermissions();
+  const taskTriggerRef = useRef<HTMLButtonElement>(null);
+  const statusTriggerRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <>
+      <ActionDropdown ariaLabel={`Open actions for ${projectName}`}>
+        <DropdownMenuItem asChild>
+          <Link href={`/dashboard/projects/${project.id}`}>
+            <Eye />
+            View project
+          </Link>
+        </DropdownMenuItem>
+
+        {canCreateTask ? (
+          <DropdownMenuItem onSelect={() => taskTriggerRef.current?.click()}>
+            <Plus />
+            Add task
+          </DropdownMenuItem>
+        ) : null}
+
+        {canUpdateProject ? (
+          <DropdownMenuItem onSelect={() => statusTriggerRef.current?.click()}>
+            <Settings2 />
+            Change status
+          </DropdownMenuItem>
+        ) : null}
+      </ActionDropdown>
+
+      <ActionSheet
+        title="Add task"
+        showHeader
+        description={`Add delivery work to ${projectName}.`}
+        trigger={
+          <button
+            ref={taskTriggerRef}
+            type="button"
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden="true"
+          />
+        }
+      >
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          <TaskForm projectId={project.id} />
+        </div>
+      </ActionSheet>
+
+      <ActionDialog
+        title="Change project status"
+        description={`Update the delivery stage for ${projectName}.`}
+        trigger={
+          <button
+            ref={statusTriggerRef}
+            type="button"
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden="true"
+          />
+        }
+      >
+        <ProjectStatusForm
+          projectId={project.id}
+          initialStatus={project.status}
+        />
+      </ActionDialog>
+    </>
+  );
+}
+
+export const projectColumns: ColumnDef<ProjectDeliverySummary>[] = [
   {
     id: 'project',
     header: 'Project',
@@ -135,65 +211,6 @@ const columns: ColumnDef<ProjectDeliverySummary>[] = [
   {
     id: 'action',
     header: () => <div className="text-center">Action</div>,
-    cell: ({ row }) => {
-      const { project, tasks } = row.original;
-      const projectName = project.name?.trim() || 'Untitled project';
-
-      return (
-        <div className="flex justify-center">
-          <ActionSheet
-            showHeader
-            title={projectName}
-            description={project.description?.trim() || 'Project delivery details.'}
-            contentClassName="sm:max-w-2xl"
-            trigger={
-              <ActionSheetButton
-                variant="ghost"
-                size="icon"
-                aria-label={`View ${projectName}`}
-                title={`View ${projectName}`}
-              >
-                <Eye />
-              </ActionSheetButton>
-            }
-          >
-            <div className="min-h-0 flex-1 overflow-y-auto px-3 pt-3 pb-5 text-left">
-              <div className="space-y-4">
-                <ProjectProgressCard
-                  project={project}
-                  tasks={tasks}
-                />
-                <ProjectInfoCard project={project} />
-                <ProjectMembersCard project={project} />
-              </div>
-            </div>
-
-            <div className="border-t border-border/70 p-4">
-              <Button
-                asChild
-                size="lg"
-                className="w-full"
-              >
-                <Link href={`/dashboard/projects/${project.id}`}>
-                  Open full project
-                  <ArrowUpRight data-icon="inline-end" />
-                </Link>
-              </Button>
-            </div>
-          </ActionSheet>
-        </div>
-      );
-    },
+    cell: ({ row }) => <ProjectRowActions summary={row.original} />,
   },
 ];
-
-export function FilteredProjectsTable({ summaries }: { summaries: ProjectDeliverySummary[] }) {
-  return (
-    <DataTable
-      columns={columns}
-      data={summaries ?? []}
-      emptyMessage="No projects match the selected filters."
-      tableClassName="min-w-190"
-    />
-  );
-}

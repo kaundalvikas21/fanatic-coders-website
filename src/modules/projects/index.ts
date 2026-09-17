@@ -5,7 +5,6 @@ export {
   DashboardProjectsSectionSkeleton,
 } from './components/DashboardProjectsSection';
 export { FilteredProjectsLoader } from './components/list/FilteredProjectsLoader';
-export { FilteredProjectsTable } from './components/list/FilteredProjectsTable';
 export { ProjectActionsCard } from './components/ProjectActionsCard';
 export { ProjectConversation } from './components/ProjectConversation';
 export { ProjectInfoCard } from './components/ProjectInfoCard';
