@@ -14,8 +14,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
           showBackButton
         />
         <SettingsProfileSummary />
-        <SettingsNavigation />
-        {children}
+        <SettingsNavigation>{children}</SettingsNavigation>
       </DetailPageLayout.Main>
     </DetailPageLayout>
   );

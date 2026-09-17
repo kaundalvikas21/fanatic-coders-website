@@ -1,4 +1,4 @@
-import { AlertCircle, ListChecks } from 'lucide-react';
+import { AlertCircle, ArrowUpRight, ListChecks } from 'lucide-react';
 import Link from 'next/link';
 
 import { WidgetCard } from '@/components/shared/widget-card';
@@ -14,7 +14,14 @@ import {
 } from '@/components/ui/table';
 import { getTaskDetailPath } from '@/modules/tasks/utils/task-path';
 import type { Task } from '@/types';
-import { TASK_STATUS_BADGE_VARIANTS, TASK_STATUS_COLORS, TASK_STATUS_OPTIONS } from '@/types';
+import {
+  TASK_STATUS_BADGE_VARIANTS,
+  TASK_STATUS_COLORS,
+  TASK_STATUS_OPTIONS,
+  TASK_PRIORITY_BADGE_VARIANTS,
+  TASK_PRIORITY_COLORS,
+  TASK_PRIORITY_OPTIONS,
+} from '@/types';
 import { formatDate } from '@/utils/date';
 
 type MemberCurrentAssignmentsProps = {
@@ -40,10 +47,43 @@ function TaskProjectLink({ task }: { task: Task }) {
   return (
     <Link
       href={`/dashboard/projects/${task.projectId}`}
-      className="block truncate text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="block truncate text-xs text-muted-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {task.project.name}
     </Link>
+  );
+}
+
+function TaskPriority({ task }: { task: Task }) {
+  return (
+    <Badge
+      variant={TASK_PRIORITY_BADGE_VARIANTS[task.priority]}
+      color={TASK_PRIORITY_COLORS[task.priority]}
+    >
+      {TASK_PRIORITY_OPTIONS.find((option) => option.value === task.priority)?.label ??
+        task.priority}
+    </Badge>
+  );
+}
+
+function TaskOpenLink({ task }: { task: Task }) {
+  return (
+    <Button
+      asChild
+      variant="ghost"
+      size="icon"
+      className="shrink-0 text-muted-foreground hover:text-primary"
+    >
+      <Link
+        href={getTaskDetailPath(task.id)}
+        aria-label={`View task: ${task.title}`}
+      >
+        <ArrowUpRight
+          aria-hidden="true"
+          className="size-4"
+        />
+      </Link>
+    </Button>
   );
 }
 
@@ -99,12 +139,19 @@ export function MemberCurrentAssignments({
                 className="grid gap-3 px-4 py-4 sm:px-6"
               >
                 <div className="flex min-w-0 items-start justify-between gap-3">
-                  <Link
-                    href={getTaskDetailPath(task.id)}
-                    className="min-w-0 font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    {task.title}
-                  </Link>
+                  <div className="min-w-0 space-y-1">
+                    <Link
+                      href={getTaskDetailPath(task.id)}
+                      className="min-w-0 font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      {task.title}
+                    </Link>
+                    <TaskProjectLink task={task} />
+                  </div>
+                  <TaskOpenLink task={task} />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {' '}
                   <Badge
                     variant={TASK_STATUS_BADGE_VARIANTS[task.status]}
                     color={TASK_STATUS_COLORS[task.status]}
@@ -112,14 +159,9 @@ export function MemberCurrentAssignments({
                   >
                     {getStatusLabel(task)}
                   </Badge>
+                  <TaskPriority task={task} />
                 </div>
                 <dl className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="min-w-0">
-                    <dt className="text-xs text-muted-foreground">Project</dt>
-                    <dd className="mt-1 min-w-0">
-                      <TaskProjectLink task={task} />
-                    </dd>
-                  </div>
                   <div className="min-w-0">
                     <dt className="text-xs text-muted-foreground">Due date</dt>
                     <dd
@@ -142,24 +184,27 @@ export function MemberCurrentAssignments({
               <TableHeader className="bg-muted/30">
                 <TableRow>
                   <TableHead className="pl-6">Task</TableHead>
-                  <TableHead>Project</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="pr-6">Due date</TableHead>
+                  <TableHead>Priority</TableHead>
+                  <TableHead>Due date</TableHead>
+                  <TableHead className="pr-6">
+                    <span className="sr-only">Open task</span>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {tasks.map((task) => (
                   <TableRow key={task.id}>
-                    <TableCell className="max-w-72 pl-6 whitespace-normal">
+                    <TableCell className="max-w-72 py-4 pl-6 whitespace-normal">
                       <Link
                         href={getTaskDetailPath(task.id)}
                         className="font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         {task.title}
                       </Link>
-                    </TableCell>
-                    <TableCell className="max-w-56">
-                      <TaskProjectLink task={task} />
+                      <div className="mt-1">
+                        <TaskProjectLink task={task} />
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Badge
@@ -169,10 +214,16 @@ export function MemberCurrentAssignments({
                         {getStatusLabel(task)}
                       </Badge>
                     </TableCell>
+                    <TableCell>
+                      <TaskPriority task={task} />
+                    </TableCell>
                     <TableCell
                       className={isTaskOverdue(task) ? 'pr-6 font-medium text-destructive' : 'pr-6'}
                     >
                       {task.dueDate ? formatDate(task.dueDate) : 'Not set'}
+                    </TableCell>
+                    <TableCell className="pr-6 text-right">
+                      <TaskOpenLink task={task} />
                     </TableCell>
                   </TableRow>
                 ))}

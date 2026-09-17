@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Link from 'next/link';
-import { Eye, Trash2 } from 'lucide-react';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { ActionDialog } from '@/components/shared/action-dialog';
 import { ActionDropdown } from '@/components/shared/action-dropdown';
 import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
@@ -10,11 +10,15 @@ import { parseRoles, Role } from '@/lib/auth/roles';
 import { usePermissions } from '@/providers/PermissionProvider';
 import type { UserListItem } from '@/types';
 import { DeleteUserActions } from './DeleteUserActions';
+import { EditMemberRoleForm } from './EditMemberRoleForm';
 
 export function UserRowActions({ member }: { member: UserListItem }) {
   const { role, memberId } = usePermissions();
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
+  const canEdit =
+    parseRoles(role).includes(Role.ADMIN) && !parseRoles(member.role).includes(Role.ADMIN);
   const canDelete = parseRoles(role).includes(Role.ADMIN) && memberId !== member.id;
 
   return (
@@ -23,7 +27,7 @@ export function UserRowActions({ member }: { member: UserListItem }) {
         triggerRef={trigger}
         ariaLabel={`Actions for ${member.user.name}`}
         onCloseAutoFocus={(event) => {
-          if (deleteOpen) event.preventDefault();
+          if (deleteOpen || editOpen) event.preventDefault();
         }}
       >
         <DropdownMenuItem asChild>
@@ -34,6 +38,11 @@ export function UserRowActions({ member }: { member: UserListItem }) {
             <Eye /> View details
           </Link>
         </DropdownMenuItem>
+        {canEdit && (
+          <DropdownMenuItem onSelect={() => setEditOpen(true)}>
+            <Pencil /> Edit role
+          </DropdownMenuItem>
+        )}
         {canDelete ? (
           <>
             <DropdownMenuSeparator />
@@ -46,6 +55,19 @@ export function UserRowActions({ member }: { member: UserListItem }) {
           </>
         ) : null}
       </ActionDropdown>
+      {canEdit && (
+        <ActionDialog
+          open={editOpen}
+          onOpenChange={(open) => {
+            setEditOpen(open);
+            if (!open) trigger.current?.focus();
+          }}
+          title="Edit role"
+          description="Change this member's organization role."
+        >
+          <EditMemberRoleForm memberId={member.id} />
+        </ActionDialog>
+      )}
       {canDelete ? (
         <ActionDialog
           open={deleteOpen}

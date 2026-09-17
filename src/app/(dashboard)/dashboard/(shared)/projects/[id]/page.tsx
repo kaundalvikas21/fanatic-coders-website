@@ -53,8 +53,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         <PageHeader
           title={project.name}
           description={project.description ?? 'Project delivery workspace.'}
-          showBackButton
-          backLabel="Projects"
         />
 
         <ProjectProgressCard

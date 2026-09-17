@@ -31,6 +31,7 @@ export type UserListItem = {
 };
 
 export type OrganizationMemberOption = {
+  role: string;
   value: string;
   label: string;
   name: string;
