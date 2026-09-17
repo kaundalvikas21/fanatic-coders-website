@@ -20,7 +20,7 @@ type SectionTabsProps = Omit<ComponentProps<typeof Tabs>, 'children'> & {
   ariaLabel: string;
   children?: ReactNode;
   fill?: boolean;
-  variant?: 'default' | 'iconFocus';
+  variant?: 'default' | 'iconFocus' | 'folder';
 };
 
 function SectionTabContent({
