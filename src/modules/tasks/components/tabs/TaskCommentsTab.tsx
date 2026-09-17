@@ -19,7 +19,7 @@ import type {
   UpdateTaskCommentRequest,
 } from '@/types';
 import { TaskCommentItem } from './TaskCommentItem';
-import { TaskDetailTabPanel, TaskTabEmptyState } from './TaskDetailTabPanel';
+import { TaskDetailTabPanel } from './TaskDetailTabPanel';
 import type { TaskDetailTab } from './types';
 
 const PAGE_SIZE = 20;
@@ -96,7 +96,10 @@ export function TaskCommentsTab({
         return;
       }
 
-      setItems((current) => [...current, ...response.data.items]);
+      setItems((current) => {
+        const existingIds = new Set(current.map((item) => item.id));
+        return [...current, ...response.data.items.filter((item) => !existingIds.has(item.id))];
+      });
       setPagination(response.data.pagination);
     } finally {
       setIsLoadingMore(false);
@@ -112,42 +115,54 @@ export function TaskCommentsTab({
       description="Share progress, questions, and review notes with everyone on this task."
       lazy
     >
-      <div className="space-y-5">
+      <div className="flex max-h-[28rem] flex-col">
+        <div className="max-h-[20rem] overflow-y-auto overscroll-contain [overflow-anchor:none]">
+          {pagination.page < pagination.totalPages ? (
+            <div className="flex justify-center pb-4">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isLoadingMore}
+                onClick={() => void loadMore()}
+              >
+                {isLoadingMore ? 'Loading…' : 'Load older comments'}
+              </Button>
+            </div>
+          ) : null}
+          <div
+            role="log"
+            aria-label="Task comments"
+            aria-live="polite"
+            className="space-y-4 py-4 pr-2"
+          >
+            {items.length ? (
+              [...items].reverse().map((comment) => (
+                <TaskCommentItem
+                  key={comment.id}
+                  comment={comment}
+                  onUpdate={update}
+                  onDelete={remove}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center px-4 py-8 text-center">
+                <div className="flex size-9 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                  <MessageSquare
+                    className="size-4"
+                    aria-hidden="true"
+                  />
+                </div>
+                <p className="mt-2 text-sm font-medium text-foreground">No comments yet</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Start with a progress update or question.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
         {canCreate ? (
-          <div className="border-b border-border pb-5">
+          <div className="shrink-0 border-t border-border bg-background pt-4">
             <TaskCommentForm onSubmit={create} />
-          </div>
-        ) : null}
-
-        {items.length ? (
-          <div className="divide-y divide-border">
-            {items.map((comment) => (
-              <TaskCommentItem
-                key={comment.id}
-                comment={comment}
-                onUpdate={update}
-                onDelete={remove}
-              />
-            ))}
-          </div>
-        ) : (
-          <TaskTabEmptyState
-            icon={MessageSquare}
-            title="No comments yet"
-            description="Start the conversation with a progress update or question."
-          />
-        )}
-
-        {pagination.page < pagination.totalPages ? (
-          <div className="flex justify-center border-t border-border pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isLoadingMore}
-              onClick={() => void loadMore()}
-            >
-              {isLoadingMore ? 'Loading…' : 'Load older comments'}
-            </Button>
           </div>
         ) : null}
       </div>
