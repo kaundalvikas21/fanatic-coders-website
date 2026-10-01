@@ -21,12 +21,15 @@ import type { Media, Project, Task } from '@/types';
 export const dynamic = 'force-dynamic';
 
 type ProjectDetailPageProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ projectId: string }>;
 };
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const { id } = await params;
-  const [access, projectResponse] = await Promise.all([getCurrentAccess(), getProjectById(id)]);
+  const { projectId } = await params;
+  const [access, projectResponse] = await Promise.all([
+    getCurrentAccess(),
+    getProjectById(projectId),
+  ]);
   const projectPermissions = createProjectPermissions(access);
   const { success, data: project } = projectResponse as {
     success: boolean;

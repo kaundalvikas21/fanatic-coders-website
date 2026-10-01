@@ -15,9 +15,9 @@ import { formatDate } from '@/utils/date';
 
 export const dynamic = 'force-dynamic';
 
-export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const response = await getLeadById(id);
+export default async function LeadDetailPage({ params }: { params: Promise<{ leadId: string }> }) {
+  const { leadId } = await params;
+  const response = await getLeadById(leadId);
   const lead = response.success && response.data ? (response.data as Lead) : null;
 
   if (!lead) {

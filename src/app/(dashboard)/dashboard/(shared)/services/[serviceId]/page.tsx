@@ -31,7 +31,7 @@ const PROJECT_MANAGER_ASSIGNMENT_ROLES = [
 ] as const satisfies readonly OrganizationMemberRole[];
 
 type ServiceRequestDetailPageProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ serviceId: string }>;
   searchParams: Promise<{ focus?: string | string[] }>;
 };
 
@@ -39,11 +39,11 @@ export default async function ServiceRequestDetailPage({
   params,
   searchParams,
 }: ServiceRequestDetailPageProps) {
-  const [{ id }, { focus }] = await Promise.all([params, searchParams]);
+  const [{ serviceId }, { focus }] = await Promise.all([params, searchParams]);
   const [permissions, access, requestResponse] = await Promise.all([
     getServiceRequestPermissions(),
     getCurrentAccess(),
-    getServiceRequestById(id),
+    getServiceRequestById(serviceId),
   ]);
   const { success, data: request } = requestResponse as {
     success: boolean;
