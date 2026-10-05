@@ -313,6 +313,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/newsletter/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Subscribe an email address to the newsletter
+         * @description Accepts unauthenticated newsletter signups. Repeat submissions receive the same response and do not create duplicate rows.
+         */
+        post: operations["createNewsletterSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/leads/{id}": {
         parameters: {
             query?: never;
@@ -1219,6 +1239,18 @@ export interface components {
             /** @example AED 10,000 - AED 25,000 */
             budgetRange?: string | null;
         };
+        CreateNewsletterSubscriptionRequest: {
+            /**
+             * Format: email
+             * @example reader@example.com
+             */
+            email: string;
+            /**
+             * @description Honeypot field. Browsers should leave this empty.
+             * @example
+             */
+            website?: string;
+        };
         UpdateLeadRequest: {
             /** @example Akshay Kumar */
             name?: string;
@@ -1866,6 +1898,12 @@ export interface components {
             data: components["schemas"]["Lead"];
         };
         LeadSubmissionResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                /** @enum {boolean} */
+                accepted: true;
+            };
+        };
+        NewsletterSubscriptionResponse: components["schemas"]["ApiResponse"] & {
             data: {
                 /** @enum {boolean} */
                 accepted: true;
@@ -2541,6 +2579,49 @@ export interface operations {
             /** @description Invalid lead payload. */
             400: {
                 headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    createNewsletterSubscription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNewsletterSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscription received. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsletterSubscriptionResponse"];
+                };
+            };
+            /** @description Invalid newsletter subscription payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Too many subscription attempts. */
+            429: {
+                headers: {
+                    "Retry-After"?: number;
                     [name: string]: unknown;
                 };
                 content: {

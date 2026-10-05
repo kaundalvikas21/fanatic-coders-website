@@ -96,6 +96,11 @@ export type {
   UpdateLeadInput,
 } from './lead';
 export type {
+  CreateNewsletterSubscriptionRequest,
+  CreateNewsletterSubscriptionResponse,
+  NewsletterSubscriptionInput,
+} from './newsletter';
+export type {
   CreateProposalRequest,
   Proposal,
   ProposalPaymentStatus,
