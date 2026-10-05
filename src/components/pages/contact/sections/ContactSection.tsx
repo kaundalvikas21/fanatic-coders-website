@@ -8,6 +8,7 @@ import { RevealSection } from '@/components/ui/RevealSection';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Select, type SelectOption } from '@/components/shared/forms/AuroraSelect';
 import { IconGithub, IconLinkedin } from '@/components/ui/SocialIcons';
+import { env } from '@/config/env';
 import { cn } from '@/lib/utils';
 import { createLead } from '@/modules/leads';
 import { SERVICE_INTEREST_OPTIONS, type CreateLeadRequest, type ServiceInterest } from '@/types';
@@ -55,18 +56,8 @@ function validate(values: FormState): FormErrors {
   return errors;
 }
 
-const infoCards = [
-  {
-    Icon: Mail,
-    label: 'email',
-    value: 'hello@fanaticcoders.com',
-    href: 'mailto:hello@fanaticcoders.com',
-  },
-  { Icon: MapPin, label: 'location', value: 'Remote-first · GMT+5:30 core hours', href: null },
-  { Icon: Clock, label: 'response_time', value: 'Within 1 business day', href: null },
-];
-
 export function ContactSection() {
+  const adminEmail = env.ADMIN_EMAIL;
   const [values, setValues] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
@@ -108,13 +99,18 @@ export function ContactSection() {
 
       setSubmitted(true);
     } catch {
-      setSubmitError('Something went wrong. Please try again or email hello@fanaticcoders.com.');
+      setSubmitError(`Something went wrong. Please try again or email ${adminEmail}.`);
     } finally {
       setIsSubmitting(false);
     }
   }
 
   const messageLength = values.message.trim().length;
+  const infoCards = [
+    { Icon: Mail, label: 'email', value: adminEmail, href: `mailto:${adminEmail}` },
+    { Icon: MapPin, label: 'location', value: 'Remote-first · GMT+5:30 core hours', href: null },
+    { Icon: Clock, label: 'response_time', value: 'Within 1 business day', href: null },
+  ];
 
   return (
     <section
@@ -161,10 +157,10 @@ export function ContactSection() {
                     Thanks, {values.name.split(' ')[0] || 'there'}. Your message reached us and a
                     senior team member replies within a business day. You can also email{' '}
                     <a
-                      href="mailto:hello@fanaticcoders.com"
+                      href={`mailto:${adminEmail}`}
                       className="text-indigo-300 hover:text-indigo-200"
                     >
-                      hello@fanaticcoders.com
+                      {adminEmail}
                     </a>
                     .
                   </p>
