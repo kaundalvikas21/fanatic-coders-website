@@ -22,6 +22,7 @@ const segmentLabels: Record<string, string> = {
   admin: 'Admin',
   dashboard: 'Dashboard',
   leads: 'Leads',
+  newsletter: 'Newsletter',
   settings: 'Settings',
   team: 'Team',
   user: 'User',

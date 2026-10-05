@@ -28,6 +28,7 @@ interface DataTableProps<TData, TValue> {
   pageSize?: number;
   tableClassName?: string;
   rowClassName?: string;
+  cellClassName?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -37,6 +38,7 @@ export function DataTable<TData, TValue>({
   pageSize = 10,
   tableClassName,
   rowClassName,
+  cellClassName,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -89,7 +91,7 @@ export function DataTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="px-4 py-5 align-top"
+                      className={cn('px-4 py-5 align-top', cellClassName)}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
