@@ -14,6 +14,7 @@ type DataTableSkeltonProps = {
   cols?: number;
   showPagination?: boolean;
   tableClassName?: string;
+  cellClassName?: string;
 };
 
 export function DataTableSkeleton({
@@ -21,6 +22,7 @@ export function DataTableSkeleton({
   cols = 5,
   showPagination = false,
   tableClassName,
+  cellClassName,
 }: DataTableSkeltonProps) {
   return (
     <div className="flex flex-col gap-4">
@@ -44,7 +46,7 @@ export function DataTableSkeleton({
                 {Array.from({ length: cols }).map((__, colIndex) => (
                   <TableCell
                     key={colIndex}
-                    className="px-4 py-5 align-top"
+                    className={cn('px-4 py-5 align-top', cellClassName)}
                   >
                     <Skeleton className="h-5 w-full max-w-40" />
                   </TableCell>

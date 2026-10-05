@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import { Send, Check } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
 import { CtaPanel } from '@/components/ui/CtaPanel';
+import { createNewsletterSubscription } from '@/modules/newsletter';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -11,18 +12,39 @@ export function BlogNewsletterSection() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!EMAIL_RE.test(email.trim())) {
+    const normalizedEmail = email.trim();
+
+    if (!EMAIL_RE.test(normalizedEmail)) {
       setError('Enter a valid email, like name@company.com.');
       return;
     }
+
     setError(null);
-    // Interim guard: no backend yet. Route the signup to our inbox via the visitor's mail client
-    // so it isn't lost. Replace with a provider/Supabase call in a later phase.
-    window.location.href = `mailto:hello@fanaticcoders.com?subject=${encodeURIComponent('Newsletter signup')}&body=${encodeURIComponent(`Please add ${email.trim()} to the newsletter list.`)}`;
-    setDone(true);
+    setIsSubmitting(true);
+
+    const website = String(new FormData(e.currentTarget).get('website') ?? '');
+
+    try {
+      const response = await createNewsletterSubscription({
+        email: normalizedEmail,
+        website,
+      });
+
+      if (!response.success) {
+        throw new Error('Newsletter subscription failed.');
+      }
+
+      setDone(true);
+      setEmail('');
+    } catch {
+      setError('Could not subscribe right now. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -32,7 +54,7 @@ export function BlogNewsletterSection() {
       variant="muted"
       badge="./subscribe.sh"
       heading="New posts, no noise"
-      body="One thoughtful email when we publish. No spam, unsubscribe anytime."
+      body="One thoughtful email when we publish. No spam."
     >
       {done ? (
         <div className="inline-flex items-center gap-2 rounded-lg bg-green-500/15 px-5 py-3 text-sm text-green-300">
@@ -40,7 +62,7 @@ export function BlogNewsletterSection() {
             size={16}
             aria-hidden
           />
-          Your email app should open. Send the message to finish subscribing.
+          {"You're subscribed. We'll email you when a new post is published."}
         </div>
       ) : (
         <form
@@ -48,6 +70,19 @@ export function BlogNewsletterSection() {
           noValidate
           className="mx-auto flex w-full max-w-md flex-col sm:flex-row gap-3"
         >
+          <div
+            className="absolute -left-[10000px] h-px w-px overflow-hidden"
+            aria-hidden="true"
+          >
+            <label htmlFor="newsletter-website">Website</label>
+            <input
+              id="newsletter-website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
           <div className="flex-1 text-left">
             <label
               htmlFor="newsletter-email"
@@ -58,6 +93,7 @@ export function BlogNewsletterSection() {
             <input
               id="newsletter-email"
               type="email"
+              name="email"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -66,6 +102,7 @@ export function BlogNewsletterSection() {
               placeholder="you@company.com"
               aria-invalid={Boolean(error)}
               aria-describedby={error ? 'newsletter-email-error' : undefined}
+              disabled={isSubmitting}
               className={`w-full rounded-lg bg-white/5 px-4 py-3 text-sm text-white placeholder:text-blue-100/50 border outline-none transition-colors focus:border-indigo-400/60 ${error ? 'border-red-400/60' : 'border-white/10'}`}
             />
             {error && (
@@ -78,8 +115,12 @@ export function BlogNewsletterSection() {
               </p>
             )}
           </div>
-          <GradientButton type="submit">
-            subscribe
+          <GradientButton
+            type="submit"
+            disabled={isSubmitting}
+            className="disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting ? 'subscribing...' : 'subscribe'}
             <Send
               size={16}
               className="ml-2 group-hover:translate-x-1 transition-transform"

@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   ListChecks,
   MailPlus,
+  Newspaper,
   Settings,
   UsersRound,
 } from 'lucide-react';
@@ -32,6 +33,7 @@ export type DashboardRouteGroup = {
 };
 
 const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
+const NEWSLETTER_ROLES = [Role.ADMIN] as const;
 const OVERVIEW_ROLES = [Role.ADMIN] as const;
 const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
 const TASK_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER] as const;
@@ -120,6 +122,12 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         url: '/dashboard/admin/user',
         icon: UsersRound,
         roles: [Role.ADMIN],
+      },
+      {
+        title: 'Newsletter',
+        url: '/dashboard/admin/newsletter',
+        icon: Newspaper,
+        roles: NEWSLETTER_ROLES,
       },
       {
         title: 'Invitations',

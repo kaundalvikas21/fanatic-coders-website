@@ -313,6 +313,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/newsletter/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch newsletter subscriptions
+         * @description Requires newsletter:read permission in the active organization.
+         */
+        get: operations["getNewsletterSubscriptions"];
+        put?: never;
+        /**
+         * Subscribe an email address to the newsletter
+         * @description Accepts unauthenticated newsletter signups. Repeat submissions receive the same response and do not create duplicate rows.
+         */
+        post: operations["createNewsletterSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/leads/{id}": {
         parameters: {
             query?: never;
@@ -1043,6 +1067,7 @@ export interface components {
             team?: ("create" | "update" | "delete")[];
             ac?: ("create" | "read" | "update" | "delete")[];
             lead?: ("create" | "read" | "update" | "delete")[];
+            newsletter?: "read"[];
             serviceRequest?: ("create" | "read" | "update" | "delete")[];
             proposal?: ("create" | "read" | "update" | "delete")[];
             project?: ("create" | "read" | "update" | "delete")[];
@@ -1218,6 +1243,37 @@ export interface components {
             serviceInterest: components["schemas"]["ServiceInterest"];
             /** @example AED 10,000 - AED 25,000 */
             budgetRange?: string | null;
+        };
+        CreateNewsletterSubscriptionRequest: {
+            /**
+             * Format: email
+             * @example reader@example.com
+             */
+            email: string;
+            /**
+             * @description Honeypot field. Browsers should leave this empty.
+             * @example
+             */
+            website?: string;
+        };
+        NewsletterSubscriber: {
+            /** @example clx0000000000000000000050 */
+            id: string;
+            /**
+             * Format: email
+             * @example reader@example.com
+             */
+            email: string;
+            /**
+             * Format: date-time
+             * @example 2026-10-05T10:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2026-10-05T10:30:00.000Z
+             */
+            updatedAt: string;
         };
         UpdateLeadRequest: {
             /** @example Akshay Kumar */
@@ -1869,6 +1925,18 @@ export interface components {
             data: {
                 /** @enum {boolean} */
                 accepted: true;
+            };
+        };
+        NewsletterSubscriptionResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                /** @enum {boolean} */
+                accepted: true;
+            };
+        };
+        NewsletterSubscriptionsResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["NewsletterSubscriber"][];
+                pagination: components["schemas"]["PaginationMeta"];
             };
         };
         ServiceRequestsResponse: components["schemas"]["ApiResponse"] & {
@@ -2541,6 +2609,87 @@ export interface operations {
             /** @description Invalid lead payload. */
             400: {
                 headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+        };
+    };
+    getNewsletterSubscriptions: {
+        parameters: {
+            query?: {
+                /** @description Filter by full or partial subscriber email. */
+                email?: string;
+                /** @description One-based page number. */
+                page?: number;
+                /** @description Number of newsletter subscriptions per page. */
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Newsletter subscriptions fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsletterSubscriptionsResponse"];
+                };
+            };
+            /** @description Invalid newsletter subscription filters. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createNewsletterSubscription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNewsletterSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscription received. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsletterSubscriptionResponse"];
+                };
+            };
+            /** @description Invalid newsletter subscription payload. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponse"];
+                };
+            };
+            /** @description Too many subscription attempts. */
+            429: {
+                headers: {
+                    "Retry-After"?: number;
                     [name: string]: unknown;
                 };
                 content: {
