@@ -421,6 +421,80 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch categories */
+        get: operations["getCategories"];
+        put?: never;
+        /** Create a category */
+        post: operations["createCategory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/categories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a category by id */
+        get: operations["getCategoryById"];
+        /** Update a category by id */
+        put: operations["updateCategoryById"];
+        post?: never;
+        /** Delete a category by id */
+        delete: operations["deleteCategoryById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch tags */
+        get: operations["getTags"];
+        put?: never;
+        /** Create a tag */
+        post: operations["createTag"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tags/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a tag by id */
+        get: operations["getTagById"];
+        /** Update a tag by id */
+        put: operations["updateTagById"];
+        post?: never;
+        /** Delete a tag by id */
+        delete: operations["deleteTagById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/newsletter/subscriptions": {
         parameters: {
             query?: never;
@@ -1378,6 +1452,10 @@ export interface components {
             featureImage?: string | null;
             excerpt?: string | null;
             isPublished?: boolean;
+            /** @description When provided, replaces all categories attached to the blog. An empty array clears them. */
+            categoryIds?: string[];
+            /** @description When provided, replaces all tags attached to the blog. An empty array clears them. */
+            tagIds?: string[];
         };
         UpsertBlogSeoRequest: {
             metaTitle: string;
@@ -1392,6 +1470,56 @@ export interface components {
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+        };
+        CreateCategoryRequest: {
+            name: string;
+            slug: string;
+        };
+        UpdateCategoryRequest: {
+            name?: string;
+            slug?: string;
+        };
+        Category: {
+            id: string;
+            name: string;
+            slug: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        CreateTagRequest: {
+            name: string;
+            slug: string;
+        };
+        UpdateTagRequest: {
+            name?: string;
+            slug?: string;
+        };
+        Tag: {
+            id: string;
+            name: string;
+            slug: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        BlogCategory: {
+            id: string;
+            blogId: string;
+            categoryId: string;
+            /** Format: date-time */
+            createdAt: string;
+            category: components["schemas"]["Category"];
+        };
+        BlogTag: {
+            id: string;
+            blogId: string;
+            tagId: string;
+            /** Format: date-time */
+            createdAt: string;
+            tag: components["schemas"]["Tag"];
         };
         BlogSummary: {
             id: string;
@@ -1410,12 +1538,38 @@ export interface components {
             content: components["schemas"]["TiptapDocument"];
             /** @description Included when fetching a blog by ID or published slug. */
             blogSeo?: components["schemas"]["BlogSeo"] | null;
+            /** @description Included when fetching a blog by ID or published slug. */
+            blogCategories?: components["schemas"]["BlogCategory"][];
+            /** @description Included when fetching a blog by ID or published slug. */
+            blogTags?: components["schemas"]["BlogTag"][];
         };
         BlogSeoResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["BlogSeo"];
         };
+        CategoryResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Category"];
+        };
+        TagResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Tag"];
+        };
+        CategoriesResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["Category"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
+        };
+        TagsResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["Tag"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
+        };
         BlogResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Blog"];
+        };
+        BlogDetail: components["schemas"]["Blog"] & Record<string, never>;
+        BlogDetailResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["BlogDetail"];
         };
         BlogsResponse: components["schemas"]["ApiResponse"] & {
             data: {
@@ -2864,7 +3018,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BlogResponse"];
+                    "application/json": components["schemas"]["BlogDetailResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
@@ -2943,7 +3097,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BlogResponse"];
+                    "application/json": components["schemas"]["BlogDetailResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
@@ -2973,7 +3127,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BlogResponse"];
+                    "application/json": components["schemas"]["BlogDetailResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
@@ -3143,6 +3297,280 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BlogSeoResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    getCategories: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Categories fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoriesResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createCategory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCategoryRequest"];
+            };
+        };
+        responses: {
+            /** @description Category created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    getCategoryById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Category fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    updateCategoryById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCategoryRequest"];
+            };
+        };
+        responses: {
+            /** @description Category updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    deleteCategoryById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Category deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    getTags: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tags fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagsResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createTag: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTagRequest"];
+            };
+        };
+        responses: {
+            /** @description Tag created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    getTagById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tag fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    updateTagById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTagRequest"];
+            };
+        };
+        responses: {
+            /** @description Tag updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    deleteTagById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tag deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
