@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { LogIn, type LucideIcon, UserPlus } from 'lucide-react';
+import { ArrowLeft, LogIn, type LucideIcon, UserPlus } from 'lucide-react';
 
 type AuthLayoutProps = {
   title: string;
@@ -15,6 +15,16 @@ export function AuthLayout({ title, description, children }: AuthLayoutProps) {
 
   return (
     <div className="mx-auto w-full max-w-md">
+      <Link
+        href="/"
+        className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-slate-400 transition-colors duration-200 hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
+      >
+        <ArrowLeft
+          className="size-4"
+          aria-hidden
+        />
+        Back to website
+      </Link>
       <section className="overflow-hidden rounded-xl border border-white/10 bg-[#0d0d1f]">
         <div className="p-6 sm:p-8">
           <div className="mb-8">

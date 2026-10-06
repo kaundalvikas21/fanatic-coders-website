@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import Link from 'next/link';
 import { UsersRound } from 'lucide-react';
 import { AuthCodeProductMotion } from './AuthCodeProductMotion';
 import styles from './AuthBrandingPanel.module.css';
@@ -24,6 +25,18 @@ export function AuthBrandingPanel() {
       />
 
       <AuthCodeProductMotion />
+
+      <div className="relative z-20 px-10 pt-10 xl:px-16">
+        <Link
+          href="/"
+          aria-label="fanaticCoders home"
+          className="shrink-0 text-[1.2rem] font-bold no-underline transition-opacity hover:opacity-80 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
+        >
+          <span className="text-white">{'{'}</span>
+          <span className="logo-gradient">fanaticCoders</span>
+          <span className="text-white">{'}'}</span>
+        </Link>
+      </div>
 
       <div className="relative z-10 flex flex-1 flex-col justify-center px-10 py-12 xl:px-16">
         <div>
