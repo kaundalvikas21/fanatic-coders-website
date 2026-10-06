@@ -1,13 +1,17 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { BlogPostPage } from '@/components/pages/blog/BlogPostPage';
-import { posts } from '@/components/pages/blog/data';
+import { BlogNewsletterSection } from '@/components/pages/blog/sections/BlogNewsletterSection';
+import {
+  PublishedBlogContent,
+  PublishedBlogHero,
+  PublishedBlogRelated,
+  getBlogReadTime,
+  getPublishedBlogBySlug,
+  getPublishedBlogs,
+} from '@/modules/blogs';
+import type { Blog, PaginatedBlogs } from '@/types';
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -15,14 +19,52 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
-  if (!post) return {};
-  return { title: `${post.title} | fanaticCoders Blog`, description: post.excerpt };
+  const response = await getPublishedBlogBySlug(slug);
+  if (!response.success || !response.data) notFound();
+
+  const blog = response.data as Blog;
+  const title = blog.blogSeo?.metaTitle || `${blog.title} | fanaticCoders Blog`;
+  const description = blog.blogSeo?.metaDescription || blog.excerpt || undefined;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: blog.featureImage ? [blog.featureImage] : undefined,
+    },
+  };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
-  if (!post) notFound();
-  return <BlogPostPage post={post} />;
+  const response = await getPublishedBlogBySlug(slug);
+  if (!response.success || !response.data) notFound();
+
+  const blog = response.data as Blog;
+  const relatedResponse = await getPublishedBlogs({ page: 1, pageSize: 4 });
+  const related = relatedResponse.success
+    ? ((relatedResponse.data as PaginatedBlogs | null)?.items ?? [])
+        .filter((item) => item.id !== blog.id)
+        .slice(0, 3)
+    : [];
+
+  return (
+    <>
+      <PublishedBlogHero
+        title={blog.title}
+        excerpt={blog.excerpt}
+        featureImage={blog.featureImage}
+        createdAt={blog.createdAt}
+        readTime={getBlogReadTime(blog.content)}
+      />
+      <PublishedBlogContent
+        content={blog.content}
+        title={blog.title}
+      />
+      <PublishedBlogRelated blogs={related} />
+      <BlogNewsletterSection />
+    </>
+  );
 }
