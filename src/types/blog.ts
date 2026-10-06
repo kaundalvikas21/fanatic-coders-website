@@ -29,3 +29,11 @@ export type UpdateBlogByIdRequest = UpdateBlogInput;
 export type UpdateBlogByIdResponse = BlogResponse;
 export type DeleteBlogByIdParams = operations['deleteBlogById']['parameters']['path'];
 export type DeleteBlogByIdResponse = BlogResponse;
+export type UpdateBlogFeatureImageByIdParams =
+  operations['updateBlogFeatureImageById']['parameters']['path'];
+export type UpdateBlogFeatureImageByIdRequest =
+  operations['updateBlogFeatureImageById']['requestBody']['content']['multipart/form-data'];
+export type UpdateBlogFeatureImageByIdResponse = BlogResponse;
+export type DeleteBlogFeatureImageByIdParams =
+  operations['deleteBlogFeatureImageById']['parameters']['path'];
+export type DeleteBlogFeatureImageByIdResponse = BlogResponse;

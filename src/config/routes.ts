@@ -3,6 +3,7 @@ import {
   BriefcaseBusiness,
   ClipboardList,
   CreditCard,
+  FilePenLine,
   House,
   Inbox,
   LayoutDashboard,
@@ -33,6 +34,7 @@ export type DashboardRouteGroup = {
 };
 
 const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
+const BLOG_ROLES = [Role.ADMIN, Role.MANAGER] as const;
 const NEWSLETTER_ROLES = [Role.ADMIN] as const;
 const OVERVIEW_ROLES = [Role.ADMIN] as const;
 const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
@@ -77,6 +79,12 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         url: '/dashboard/services',
         icon: ClipboardList,
         roles: SERVICE_REQUEST_ROLES,
+      },
+      {
+        title: 'Create blog',
+        url: '/dashboard/blogs/new',
+        icon: FilePenLine,
+        roles: BLOG_ROLES,
       },
     ],
   },

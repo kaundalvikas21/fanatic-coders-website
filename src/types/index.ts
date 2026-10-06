@@ -29,6 +29,8 @@ export type {
   CreateBlogResponse,
   DeleteBlogByIdParams,
   DeleteBlogByIdResponse,
+  DeleteBlogFeatureImageByIdParams,
+  DeleteBlogFeatureImageByIdResponse,
   GetBlogByIdParams,
   GetBlogByIdResponse,
   GetBlogsInput,
@@ -42,6 +44,9 @@ export type {
   UpdateBlogByIdParams,
   UpdateBlogByIdRequest,
   UpdateBlogByIdResponse,
+  UpdateBlogFeatureImageByIdParams,
+  UpdateBlogFeatureImageByIdRequest,
+  UpdateBlogFeatureImageByIdResponse,
   UpdateBlogInput,
 } from './blog';
 
