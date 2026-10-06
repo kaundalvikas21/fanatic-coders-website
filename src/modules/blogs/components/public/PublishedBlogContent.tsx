@@ -60,6 +60,7 @@ export function PublishedBlogContent({
               value={content as RichTextDocument}
               editable={false}
               showToolbar={false}
+              headingLevels={[2, 3]}
               ariaLabel="Blog article"
               className="!border-0 !bg-transparent !text-inherit [&_.tiptap]:!min-h-0 [&_.tiptap]:!p-0"
             />

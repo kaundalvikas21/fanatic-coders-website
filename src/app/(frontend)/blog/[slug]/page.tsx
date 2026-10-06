@@ -23,10 +23,17 @@ export async function generateMetadata({
   if (!response.success || !response.data) notFound();
 
   const blog = response.data as Blog;
+  const title = blog.blogSeo?.metaTitle || `${blog.title} | fanaticCoders Blog`;
+  const description = blog.blogSeo?.metaDescription || blog.excerpt || undefined;
+
   return {
-    title: `${blog.title} | fanaticCoders Blog`,
-    description: blog.excerpt ?? undefined,
-    openGraph: blog.featureImage ? { images: [blog.featureImage] } : undefined,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: blog.featureImage ? [blog.featureImage] : undefined,
+    },
   };
 }
 

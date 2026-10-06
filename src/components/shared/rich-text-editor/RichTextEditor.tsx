@@ -22,6 +22,7 @@ export type RichTextEditorProps = {
   placeholder?: string;
   ariaLabel?: string;
   className?: string;
+  headingLevels?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 };
 
 type ToolbarAction = {
@@ -133,6 +134,7 @@ export function RichTextEditor({
   placeholder = 'Start writing...',
   ariaLabel = 'Rich text editor',
   className,
+  headingLevels,
 }: RichTextEditorProps) {
   const onChangeRef = useRef(onChange);
 
@@ -141,7 +143,10 @@ export function RichTextEditor({
   }, [onChange]);
 
   const editor = useEditor({
-    extensions: [StarterKit, Placeholder.configure({ placeholder })],
+    extensions: [
+      headingLevels ? StarterKit.configure({ heading: { levels: headingLevels } }) : StarterKit,
+      Placeholder.configure({ placeholder }),
+    ],
     content: value ?? defaultValue ?? EMPTY_DOCUMENT,
     editable,
     immediatelyRender: false,

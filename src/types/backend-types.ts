@@ -402,6 +402,25 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/blogs/{id}/seo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch SEO metadata for a blog */
+        get: operations["getBlogSeoByBlogId"];
+        /** Create or update SEO metadata for a blog */
+        put: operations["upsertBlogSeoByBlogId"];
+        post?: never;
+        /** Delete SEO metadata for a blog */
+        delete: operations["deleteBlogSeoByBlogId"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/newsletter/subscriptions": {
         parameters: {
             query?: never;
@@ -1360,6 +1379,20 @@ export interface components {
             excerpt?: string | null;
             isPublished?: boolean;
         };
+        UpsertBlogSeoRequest: {
+            metaTitle: string;
+            metaDescription: string;
+        };
+        BlogSeo: {
+            id: string;
+            blogId: string;
+            metaTitle: string;
+            metaDescription: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
         BlogSummary: {
             id: string;
             title: string;
@@ -1375,6 +1408,11 @@ export interface components {
         };
         Blog: components["schemas"]["BlogSummary"] & {
             content: components["schemas"]["TiptapDocument"];
+            /** @description Included when fetching a blog by ID or published slug. */
+            blogSeo?: components["schemas"]["BlogSeo"] | null;
+        };
+        BlogSeoResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["BlogSeo"];
         };
         BlogResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Blog"];
@@ -3026,6 +3064,88 @@ export interface operations {
                     "application/json": components["schemas"]["BlogResponse"];
                 };
             };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    getBlogSeoByBlogId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Blog SEO fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSeoResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    upsertBlogSeoByBlogId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertBlogSeoRequest"];
+            };
+        };
+        responses: {
+            /** @description Blog SEO saved successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSeoResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    deleteBlogSeoByBlogId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Blog SEO deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSeoResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["NotFound"];

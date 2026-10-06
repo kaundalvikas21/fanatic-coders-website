@@ -22,6 +22,7 @@ export type {
 export type {
   Blog,
   BlogResponse,
+  BlogSeo,
   BlogSummary,
   BlogsResponse,
   CreateBlogInput,
@@ -31,8 +32,12 @@ export type {
   DeleteBlogByIdResponse,
   DeleteBlogFeatureImageByIdParams,
   DeleteBlogFeatureImageByIdResponse,
+  DeleteBlogSeoByBlogIdParams,
+  DeleteBlogSeoByBlogIdResponse,
   GetBlogByIdParams,
   GetBlogByIdResponse,
+  GetBlogSeoByBlogIdParams,
+  GetBlogSeoByBlogIdResponse,
   GetBlogsInput,
   GetBlogsResponse,
   GetPublishedBlogBySlugParams,
@@ -48,6 +53,10 @@ export type {
   UpdateBlogFeatureImageByIdRequest,
   UpdateBlogFeatureImageByIdResponse,
   UpdateBlogInput,
+  UpsertBlogSeoByBlogIdParams,
+  UpsertBlogSeoByBlogIdRequest,
+  UpsertBlogSeoByBlogIdResponse,
+  UpsertBlogSeoInput,
 } from './blog';
 
 export {

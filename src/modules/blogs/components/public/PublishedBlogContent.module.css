@@ -1,9 +1,5 @@
-.article :global(.tiptap) :global(h1),
 .article :global(.tiptap) :global(h2),
-.article :global(.tiptap) :global(h3),
-.article :global(.tiptap) :global(h4),
-.article :global(.tiptap) :global(h5),
-.article :global(.tiptap) :global(h6) {
+.article :global(.tiptap) :global(h3) {
   color: #fff;
   font-family: var(--font-mono);
   font-weight: 700;
@@ -11,7 +7,6 @@
   text-wrap: balance;
 }
 
-.article :global(.tiptap) :global(h1),
 .article :global(.tiptap) :global(h2) {
   margin: 3rem 0 1.25rem;
   padding-top: 2.25rem;
@@ -26,15 +21,6 @@
   line-height: 1.35;
 }
 
-.article :global(.tiptap) :global(h4),
-.article :global(.tiptap) :global(h5),
-.article :global(.tiptap) :global(h6) {
-  margin: 1.75rem 0 0.75rem;
-  font-size: 1.125rem;
-  line-height: 1.4;
-}
-
-.article :global(.tiptap) > :global(h1:first-child),
 .article :global(.tiptap) > :global(h2:first-child) {
   margin-top: 0;
   padding-top: 0;

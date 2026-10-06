@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { FilePenLine, ImageIcon, Send } from 'lucide-react';
+import { FilePenLine, ImageIcon, Search, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
 import { RichTextEditor, type RichTextDocument } from '@/components/shared/rich-text-editor';
@@ -14,10 +14,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createBlog, updateBlogById } from '@/modules/blogs/data/mutations';
 import { uploadBlogFeatureImageById } from '@/modules/blogs/data/media';
+import { deleteBlogSeoByBlogId, upsertBlogSeoByBlogId } from '@/modules/blogs/data/seo';
 import { blogFormSchema, type BlogFormValues } from '@/modules/blogs/schemas/blog';
 import { getBlogFormValues } from '@/modules/blogs/utils/blog-form-values';
 import { titleToSlug } from '@/modules/blogs/utils/title-to-slug';
-import type { Blog, CreateBlogRequest, UpdateBlogFeatureImageByIdRequest } from '@/types';
+import type { Blog, BlogSeo, CreateBlogRequest, UpdateBlogFeatureImageByIdRequest } from '@/types';
 import { BlogFeatureImageUploader } from './BlogFeatureImageUploader';
 
 type BlogFormProps = {
@@ -41,6 +42,7 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
 
   async function handleSubmit(values: BlogFormValues) {
     setMessage(null);
+    const wasEditing = Boolean(savedBlog);
 
     const payload: CreateBlogRequest = {
       title: values.title,
@@ -72,7 +74,7 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
         return;
       }
 
-      let nextBlog = response.data as Blog;
+      let nextBlog: Blog = { ...(response.data as Blog), blogSeo: savedBlog?.blogSeo ?? null };
       setSavedBlog(nextBlog);
 
       if (pendingImage) {
@@ -81,18 +83,40 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
         const imageResponse = await uploadBlogFeatureImageById(nextBlog.id, imageData);
 
         if (!imageResponse.success || !imageResponse.data) {
-          form.reset(getBlogFormValues(nextBlog));
           setMessage(imageResponse.message || 'Blog saved, but the feature image upload failed.');
           return;
         }
 
-        nextBlog = imageResponse.data as Blog;
+        nextBlog = { ...(imageResponse.data as Blog), blogSeo: nextBlog.blogSeo };
         setSavedBlog(nextBlog);
         setPendingImage(null);
       }
 
+      if (values.metaTitle && values.metaDescription) {
+        const seoResponse = await upsertBlogSeoByBlogId(nextBlog.id, {
+          metaTitle: values.metaTitle,
+          metaDescription: values.metaDescription,
+        });
+
+        if (!seoResponse.success || !seoResponse.data) {
+          setMessage(seoResponse.message || 'Blog saved, but SEO details could not be saved.');
+          return;
+        }
+
+        nextBlog = { ...nextBlog, blogSeo: seoResponse.data as BlogSeo };
+      } else if (nextBlog.blogSeo) {
+        const seoResponse = await deleteBlogSeoByBlogId(nextBlog.id);
+        if (!seoResponse.success) {
+          setMessage(seoResponse.message || 'Blog saved, but SEO details could not be removed.');
+          return;
+        }
+
+        nextBlog = { ...nextBlog, blogSeo: null };
+      }
+
+      setSavedBlog(nextBlog);
       form.reset(getBlogFormValues(nextBlog));
-      toast.success(savedBlog ? 'Blog updated.' : 'Blog created.');
+      toast.success(wasEditing ? 'Blog updated.' : 'Blog created.');
       onSaved?.(nextBlog);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Could not save blog.');
@@ -201,6 +225,7 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                       <RichTextEditor
                         value={field.value as RichTextDocument}
                         onChange={field.onChange}
+                        headingLevels={[2, 3]}
                         ariaLabel="Blog content, required"
                         placeholder="Write your blog..."
                         editable={!isSubmitting}
@@ -269,7 +294,10 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                       if (file) setImageError(null);
                     }}
                     onChange={(updatedBlog) => {
-                      setSavedBlog(updatedBlog);
+                      setSavedBlog((current) => ({
+                        ...updatedBlog,
+                        blogSeo: current?.blogSeo ?? null,
+                      }));
                       if (updatedBlog.featureImage) setImageError(null);
                     }}
                   />
@@ -294,6 +322,44 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                     <FieldError errors={[form.formState.errors.excerpt]} />
                   )}
                 </Field>
+              </FieldGroup>
+            </WidgetCard>
+
+            <WidgetCard
+              icon={Search}
+              title="Search appearance"
+              description="Set the title and description shown in search results."
+            >
+              <FieldGroup>
+                <Field data-invalid={Boolean(form.formState.errors.metaTitle)}>
+                  <FieldLabel htmlFor="blog-meta-title">Meta title</FieldLabel>
+                  <Input
+                    id="blog-meta-title"
+                    placeholder="Title for search results"
+                    aria-invalid={Boolean(form.formState.errors.metaTitle)}
+                    {...form.register('metaTitle')}
+                  />
+                  {form.formState.errors.metaTitle && (
+                    <FieldError errors={[form.formState.errors.metaTitle]} />
+                  )}
+                </Field>
+
+                <Field data-invalid={Boolean(form.formState.errors.metaDescription)}>
+                  <FieldLabel htmlFor="blog-meta-description">Meta description</FieldLabel>
+                  <Textarea
+                    id="blog-meta-description"
+                    rows={4}
+                    placeholder="Description for search results"
+                    aria-invalid={Boolean(form.formState.errors.metaDescription)}
+                    {...form.register('metaDescription')}
+                  />
+                  {form.formState.errors.metaDescription && (
+                    <FieldError errors={[form.formState.errors.metaDescription]} />
+                  )}
+                </Field>
+                <p className="text-xs text-muted-foreground">
+                  Leave both blank to use the blog title and excerpt.
+                </p>
               </FieldGroup>
             </WidgetCard>
           </DetailPageLayout.Aside>
