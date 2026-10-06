@@ -313,6 +313,77 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/blogs/published": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch published blogs */
+        get: operations["getPublishedBlogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/blogs/published/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a published blog by slug */
+        get: operations["getPublishedBlogBySlug"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/blogs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch blogs */
+        get: operations["getBlogs"];
+        put?: never;
+        /** Create a blog */
+        post: operations["createBlog"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/blogs/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a blog by id */
+        get: operations["getBlogById"];
+        /** Update a blog by id */
+        put: operations["updateBlogById"];
+        post?: never;
+        /** Delete a blog by id */
+        delete: operations["deleteBlogById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/newsletter/subscriptions": {
         parameters: {
             query?: never;
@@ -1068,6 +1139,7 @@ export interface components {
             ac?: ("create" | "read" | "update" | "delete")[];
             lead?: ("create" | "read" | "update" | "delete")[];
             newsletter?: "read"[];
+            blog?: ("create" | "read" | "update" | "delete")[];
             serviceRequest?: ("create" | "read" | "update" | "delete")[];
             proposal?: ("create" | "read" | "update" | "delete")[];
             project?: ("create" | "read" | "update" | "delete")[];
@@ -1243,6 +1315,57 @@ export interface components {
             serviceInterest: components["schemas"]["ServiceInterest"];
             /** @example AED 10,000 - AED 25,000 */
             budgetRange?: string | null;
+        };
+        TiptapDocument: {
+            /** @enum {string} */
+            type: "doc";
+            content?: unknown[];
+        } & {
+            [key: string]: unknown;
+        };
+        CreateBlogRequest: {
+            title: string;
+            content: components["schemas"]["TiptapDocument"];
+            slug: string;
+            /** Format: uri */
+            featureImage?: string | null;
+            excerpt?: string | null;
+            /** @description Defaults to false when omitted. */
+            isPublished?: boolean;
+        };
+        UpdateBlogRequest: {
+            title?: string;
+            content?: components["schemas"]["TiptapDocument"];
+            slug?: string;
+            /** Format: uri */
+            featureImage?: string | null;
+            excerpt?: string | null;
+            isPublished?: boolean;
+        };
+        BlogSummary: {
+            id: string;
+            title: string;
+            slug: string;
+            /** Format: uri */
+            featureImage: string | null;
+            excerpt: string | null;
+            isPublished: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        Blog: components["schemas"]["BlogSummary"] & {
+            content: components["schemas"]["TiptapDocument"];
+        };
+        BlogResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Blog"];
+        };
+        BlogsResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["BlogSummary"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
         };
         CreateNewsletterSubscriptionRequest: {
             /**
@@ -2004,6 +2127,33 @@ export interface components {
         };
     };
     responses: {
+        /** @description Invalid request. */
+        BadRequest: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ApiResponse"];
+            };
+        };
+        /** @description Resource not found. */
+        NotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ApiResponse"];
+            };
+        };
+        /** @description Resource already exists. */
+        Conflict: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ApiResponse"];
+            };
+        };
         /** @description Authentication is required. */
         Unauthorized: {
             headers: {
@@ -2615,6 +2765,191 @@ export interface operations {
                     "application/json": components["schemas"]["ApiResponse"];
                 };
             };
+        };
+    };
+    getPublishedBlogs: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Published blogs fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogsResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+        };
+    };
+    getPublishedBlogBySlug: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Blog fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    getBlogs: {
+        parameters: {
+            query?: {
+                isPublished?: boolean;
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Blogs fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogsResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createBlog: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateBlogRequest"];
+            };
+        };
+        responses: {
+            /** @description Blog created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    getBlogById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Blog fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    updateBlogById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateBlogRequest"];
+            };
+        };
+        responses: {
+            /** @description Blog updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    deleteBlogById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Blog deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
         };
     };
     getNewsletterSubscriptions: {

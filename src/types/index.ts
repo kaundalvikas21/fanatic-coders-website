@@ -19,6 +19,31 @@ export type {
   Schemas,
   SuccessResponse,
 } from './api';
+export type {
+  Blog,
+  BlogResponse,
+  BlogSummary,
+  BlogsResponse,
+  CreateBlogInput,
+  CreateBlogRequest,
+  CreateBlogResponse,
+  DeleteBlogByIdParams,
+  DeleteBlogByIdResponse,
+  GetBlogByIdParams,
+  GetBlogByIdResponse,
+  GetBlogsInput,
+  GetBlogsResponse,
+  GetPublishedBlogBySlugParams,
+  GetPublishedBlogBySlugResponse,
+  GetPublishedBlogsInput,
+  GetPublishedBlogsResponse,
+  PaginatedBlogs,
+  TiptapDocument,
+  UpdateBlogByIdParams,
+  UpdateBlogByIdRequest,
+  UpdateBlogByIdResponse,
+  UpdateBlogInput,
+} from './blog';
 
 export {
   DEFAULT_PROJECT_CURRENCY,
