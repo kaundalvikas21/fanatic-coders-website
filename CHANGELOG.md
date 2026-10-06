@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.11.0...v0.12.0) (2026-10-06)
+
+### Features
+
+- **api:** added api client for CRUD related blogs ([642bb17](https://github.com/kaundalvikas21/fanatic-coders-website/commit/642bb174ae6a65e7a4dbe65d0c6ca292726a23d6))
+- **api:** added form validation and api endpoint support ([d4d5644](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d4d56440fc865dbb5bb3b7220cd43e2277641eaf))
+- **dashboard:** display newsletter to admin route ([e670dbb](https://github.com/kaundalvikas21/fanatic-coders-website/commit/e670dbbb70d6311d17228a6ec21d411843db8e16))
+- **editor:** added tiptap editor package ([8726b0f](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8726b0f2e37e0c33332fdf63107e66515ddec601))
+- **member:** added support of member delete and managing their data ([961ff16](https://github.com/kaundalvikas21/fanatic-coders-website/commit/961ff1667f8db5f01eda1045a98b5591fbf64b06))
+- **newsletter:** added newsletter api endpoint support ([d19e6e2](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d19e6e249078f7339e8de878355a7cad78086a00))
+- **permisions:** added two separate hooks for managing task oreinted permissions ([a03aea6](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a03aea68da314791763c332fa73eded34c36383d))
+- **public:** added public blog route components ([46f66b3](https://github.com/kaundalvikas21/fanatic-coders-website/commit/46f66b3d7ea6fd869c3e9b3ad0c564f241c3bfc8))
+- **route:** added blogs filter, detail page inside dashboard ([2c85594](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2c85594e65ce0805d533f7966158fec00bf93f05))
+- **seo:** added seo support field to blog ([752dcae](https://github.com/kaundalvikas21/fanatic-coders-website/commit/752dcaead1cdac0844b89cd32ca30954fa4b6e62))
+- **tabs:** added new tab variant and apply to all instances ([31cd340](https://github.com/kaundalvikas21/fanatic-coders-website/commit/31cd3409861153ebdd77ede5034ebf5abe7d4386))
+- **types:** added types contracts regarding blogs ([40e5325](https://github.com/kaundalvikas21/fanatic-coders-website/commit/40e532590c4db0bf39824a796282c1abe0aff6ff))
+- **user:** redesign single user detail ([3290274](https://github.com/kaundalvikas21/fanatic-coders-website/commit/329027434955f4842659413924bb96eea36c7240))
+
+### Bug Fixes
+
+- **comment:** redesign comment form ui makde it modern using shadcn primitieves ([3a7a944](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3a7a9446e0881771e053385e16d626dc740565b1))
+- **email:** added email dynamically in env ([fc88477](https://github.com/kaundalvikas21/fanatic-coders-website/commit/fc88477d18c5234ad0fa1e6638cd15f8ad12c90f))
+- **project:** redesign project filter page ([44a2be9](https://github.com/kaundalvikas21/fanatic-coders-website/commit/44a2be92ecfed80910d8a4830c954fb2ea591cec))
+- **type:** fix type issue regarding variant ([93b0414](https://github.com/kaundalvikas21/fanatic-coders-website/commit/93b0414e3ba1f55b8092ddedfb3d05578e1619a2))
+
+### Code Refactoring
+
+- **formatter:** cleancode with reusing function ([98fb26b](https://github.com/kaundalvikas21/fanatic-coders-website/commit/98fb26b7b9fef47adb6ed6e24944e45a71732972))
+- **login:** added redirection to homepage button on login page ([2fb2a37](https://github.com/kaundalvikas21/fanatic-coders-website/commit/2fb2a37d801f72ca56c419ad7257f2371ff3ea5c))
+- **logo:** change brand logo inside dashboard sidebar ([a891594](https://github.com/kaundalvikas21/fanatic-coders-website/commit/a891594884e02bed7c2462bc6efd53f788a8b76a))
+- **member:** added new component for dipslaying member meta detail and remove raw html ([3472407](https://github.com/kaundalvikas21/fanatic-coders-website/commit/3472407b348a046ef9154df1fae0e6f33d3fc730))
+- **naming:** refactor code give proper naming to every entityt variable ([d1c586d](https://github.com/kaundalvikas21/fanatic-coders-website/commit/d1c586da7bec9e6295c9eef57c8bb7380cb6e3c9))
+- **sheet:** redesign sheet design add sheet title and header ([8f1281a](https://github.com/kaundalvikas21/fanatic-coders-website/commit/8f1281a73d7ff0ba196e26073ec1b51aa4d9caa7))
+
 ## [0.11.0](https://github.com/kaundalvikas21/fanatic-coders-website/compare/v0.10.2...v0.11.0) (2026-09-08)
 
 ### Features
