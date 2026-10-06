@@ -80,12 +80,6 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         icon: ClipboardList,
         roles: SERVICE_REQUEST_ROLES,
       },
-      {
-        title: 'Create blog',
-        url: '/dashboard/blogs/new',
-        icon: FilePenLine,
-        roles: BLOG_ROLES,
-      },
     ],
   },
   {
@@ -125,6 +119,12 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
   {
     label: 'Administration',
     items: [
+      {
+        title: 'Blogs',
+        url: '/dashboard/blogs',
+        icon: FilePenLine,
+        roles: BLOG_ROLES,
+      },
       {
         title: 'Users',
         url: '/dashboard/admin/user',
