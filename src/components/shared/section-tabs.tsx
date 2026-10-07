@@ -10,11 +10,10 @@ import { cn } from '@/lib/utils';
 export type SectionTabItem = {
   value: string;
   label: string;
-  Icon: LucideIcon;
   href?: string;
   count?: ReactNode;
   compactLabel?: boolean;
-};
+} & ({ Icon: LucideIcon; icon?: never } | { icon: ReactNode; Icon?: never });
 
 type SectionTabsProps = Omit<ComponentProps<typeof Tabs>, 'children'> & {
   items: readonly SectionTabItem[];
@@ -33,14 +32,18 @@ function SectionTabContent({
 }) {
   return (
     <>
-      <item.Icon
-        className={cn(
-          'size-4',
-          variant === 'iconFocus' &&
-            'size-7 rounded-md bg-muted p-1.5 text-muted-foreground transition-colors group-hover:bg-accent group-hover:text-accent-foreground group-data-[state=active]:bg-primary group-data-[state=active]:text-primary-foreground',
-        )}
-        aria-hidden="true"
-      />
+      {item.Icon ? (
+        <item.Icon
+          className={cn(
+            'size-4',
+            variant === 'iconFocus' &&
+              'size-7 rounded-md bg-muted p-1.5 text-muted-foreground transition-colors group-hover:bg-accent group-hover:text-accent-foreground group-data-[state=active]:bg-primary group-data-[state=active]:text-primary-foreground',
+          )}
+          aria-hidden="true"
+        />
+      ) : (
+        item.icon
+      )}
       <span className={cn(item.compactLabel && 'hidden sm:inline')}>{item.label}</span>
       {item.count !== undefined ? (
         <span
@@ -90,7 +93,7 @@ export function SectionTabs({
       >
         {items.map((item) => {
           const triggerClassName = cn(
-            'group px-3',
+            'group cursor-pointer px-3',
             variant === 'folder' && folderStyles.tab,
             variant === 'iconFocus'
               ? 'h-13 rounded-t-[10px] rounded-b-none border-b-2 border-border pl-2.5 pr-4 text-muted-foreground transition-[color,background-color,border-color,transform] duration-150 hover:-translate-y-px hover:bg-primary/5 hover:text-foreground data-[state=active]:border-x-2 data-[state=active]:border-t-2 data-[state=active]:border-b-0 data-[state=active]:bg-transparent data-[state=active]:font-semibold data-[state=active]:text-primary data-[state=active]:shadow-none data-[state=active]:after:hidden dark:data-[state=active]:text-[color-mix(in_oklch,var(--primary)_35%,white)]'
