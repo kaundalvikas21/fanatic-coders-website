@@ -402,6 +402,113 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/portfolios/published": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch published portfolios */
+        get: operations["getPublishedPortfolios"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/portfolios/published/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a published portfolio by slug */
+        get: operations["getPublishedPortfolioBySlug"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/portfolios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch portfolios */
+        get: operations["getPortfolios"];
+        put?: never;
+        /** Create a portfolio */
+        post: operations["createPortfolio"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/portfolios/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a portfolio by id */
+        get: operations["getPortfolioById"];
+        /** Update a portfolio by id */
+        put: operations["updatePortfolioById"];
+        post?: never;
+        /** Delete a portfolio by id */
+        delete: operations["deletePortfolioById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/portfolios/{id}/addons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a portfolio add-on */
+        post: operations["createPortfolioAddon"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/portfolios/{id}/addons/{addonId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch a portfolio add-on by id */
+        get: operations["getPortfolioAddon"];
+        /** Update a portfolio add-on by id */
+        put: operations["updatePortfolioAddon"];
+        post?: never;
+        /** Delete a portfolio add-on by id */
+        delete: operations["deletePortfolioAddon"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/categories": {
         parameters: {
             query?: never;
@@ -471,6 +578,26 @@ export interface paths {
         put?: never;
         /** Create a tag */
         post: operations["createTag"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tags/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fetch tag options
+         * @description Returns all tags as label and value options.
+         */
+        get: operations["getTagOptions"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1252,6 +1379,7 @@ export interface components {
             lead?: ("create" | "read" | "update" | "delete")[];
             newsletter?: "read"[];
             blog?: ("create" | "read" | "update" | "delete")[];
+            portfolio?: ("create" | "read" | "update" | "delete")[];
             serviceRequest?: ("create" | "read" | "update" | "delete")[];
             proposal?: ("create" | "read" | "update" | "delete")[];
             project?: ("create" | "read" | "update" | "delete")[];
@@ -1428,6 +1556,121 @@ export interface components {
             /** @example AED 10,000 - AED 25,000 */
             budgetRange?: string | null;
         };
+        PortfolioStepCard: {
+            title: string;
+            duration: string;
+            desc: string;
+        };
+        PortfolioMetricCard: {
+            label: string;
+            value: string;
+            caption?: string | null;
+            icon?: string | null;
+        };
+        PortfolioAddonInput: {
+            /** @enum {string} */
+            type: "CHALLENGE" | "APPROACH" | "DELIVERY" | "RESULTS";
+            title: string;
+            content?: string | null;
+            /** Format: uri */
+            imageUrl?: string | null;
+            /** @description DELIVERY cards: title, duration, desc. RESULTS cards: label, value, caption, icon. */
+            cards?: (components["schemas"]["PortfolioStepCard"] | components["schemas"]["PortfolioMetricCard"])[];
+        };
+        PortfolioAddon: {
+            /** @enum {string} */
+            type: "CHALLENGE" | "APPROACH" | "DELIVERY" | "RESULTS";
+            title: string;
+            content?: string | null;
+            /** Format: uri */
+            imageUrl?: string | null;
+            /** @description DELIVERY cards: title, duration, desc. RESULTS cards: label, value, caption, icon. */
+            cards?: (components["schemas"]["PortfolioStepCard"] | components["schemas"]["PortfolioMetricCard"])[];
+            id: string;
+            portfolioId: string;
+            sortOrder: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        PortfolioAddonResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["PortfolioAddon"];
+        };
+        CreatePortfolioRequest: {
+            slug: string;
+            title: string;
+            description: string;
+            overview?: string | null;
+            /** Format: uri */
+            imageUrl?: string | null;
+            client?: string | null;
+            year?: string | null;
+            industry?: string | null;
+            duration?: string | null;
+            tags?: string[];
+            services?: string[];
+            tech?: string[];
+            isPublished?: boolean;
+            isFeatured?: boolean;
+            sortOrder?: number;
+            /** @description Array order sets each addon sortOrder. */
+            addons?: components["schemas"]["PortfolioAddonInput"][];
+        };
+        /** @description All properties are optional. When addons is supplied it replaces the complete ordered addon list; [] clears it. */
+        UpdatePortfolioRequest: {
+            slug?: string;
+            title?: string;
+            description?: string;
+            overview?: string | null;
+            /** Format: uri */
+            imageUrl?: string | null;
+            client?: string | null;
+            year?: string | null;
+            industry?: string | null;
+            duration?: string | null;
+            tags?: string[];
+            services?: string[];
+            tech?: string[];
+            isPublished?: boolean;
+            isFeatured?: boolean;
+            sortOrder?: number;
+            /** @description Array order sets each addon sortOrder. */
+            addons?: components["schemas"]["PortfolioAddonInput"][];
+        };
+        Portfolio: {
+            slug: string;
+            title: string;
+            description: string;
+            overview?: string | null;
+            /** Format: uri */
+            imageUrl?: string | null;
+            client?: string | null;
+            year?: string | null;
+            industry?: string | null;
+            duration?: string | null;
+            tags: string[];
+            services?: string[];
+            tech?: string[];
+            isPublished: boolean;
+            isFeatured: boolean;
+            sortOrder: number;
+            addons: components["schemas"]["PortfolioAddon"][];
+            id: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        PortfolioResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["Portfolio"];
+        };
+        PortfoliosResponse: components["schemas"]["ApiResponse"] & {
+            data: {
+                items: components["schemas"]["Portfolio"][];
+                pagination: components["schemas"]["PaginationMeta"];
+            };
+        };
         TiptapDocument: {
             /** @enum {string} */
             type: "doc";
@@ -1556,6 +1799,13 @@ export interface components {
         };
         CategoryResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Category"];
+        };
+        TagOption: {
+            label: string;
+            value: string;
+        };
+        TagOptionsResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["TagOption"][];
         };
         TagResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["Tag"];
@@ -3235,6 +3485,305 @@ export interface operations {
             404: components["responses"]["NotFound"];
         };
     };
+    getPublishedPortfolios: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolios fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfoliosResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+        };
+    };
+    getPublishedPortfolioBySlug: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolio fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    getPortfolios: {
+        parameters: {
+            query?: {
+                isPublished?: boolean;
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolios fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfoliosResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createPortfolio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePortfolioRequest"];
+            };
+        };
+        responses: {
+            /** @description Portfolio created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    getPortfolioById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolio fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    updatePortfolioById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePortfolioRequest"];
+            };
+        };
+        responses: {
+            /** @description Portfolio updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    deletePortfolioById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolio deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    createPortfolioAddon: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PortfolioAddonInput"];
+            };
+        };
+        responses: {
+            /** @description Portfolio add-on created successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioAddonResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    getPortfolioAddon: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                addonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolio add-on fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioAddonResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    updatePortfolioAddon: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                addonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PortfolioAddonInput"];
+            };
+        };
+        responses: {
+            /** @description Portfolio add-on updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioAddonResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    deletePortfolioAddon: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                addonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolio add-on deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioAddonResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
     getCategories: {
         parameters: {
             query?: {
@@ -3444,6 +3993,26 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             409: components["responses"]["Conflict"];
+        };
+    };
+    getTagOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tag options fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagOptionsResponse"];
+                };
+            };
         };
     };
     getTagById: {

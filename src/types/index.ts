@@ -93,6 +93,36 @@ export type {
   UpdateTagByIdResponse,
   UpdateTagInput,
 } from './tag';
+export type {
+  CreatePortfolioInput,
+  CreatePortfolioRequest,
+  CreatePortfolioResponse,
+  DeletePortfolioByIdParams,
+  DeletePortfolioByIdResponse,
+  GetPortfolioByIdParams,
+  GetPortfolioByIdResponse,
+  GetPortfoliosInput,
+  GetPortfoliosResponse,
+  GetPublishedPortfolioBySlugParams,
+  GetPublishedPortfolioBySlugResponse,
+  GetPublishedPortfoliosInput,
+  GetPublishedPortfoliosResponse,
+  PaginatedPortfolios,
+  Portfolio,
+  PortfolioAddon,
+  PortfolioAddonInput,
+  PortfolioAddonResponse,
+  PortfolioMetricCard,
+  PortfolioResponse,
+  PortfolioSectionType,
+  PortfoliosResponse,
+  PortfolioAddonWriteRequest,
+  PortfolioStepCard,
+  UpdatePortfolioByIdParams,
+  UpdatePortfolioByIdRequest,
+  UpdatePortfolioByIdResponse,
+  UpdatePortfolioInput,
+} from './portfolio';
 
 export {
   DEFAULT_PROJECT_CURRENCY,
@@ -365,28 +395,6 @@ export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-}
-
-export interface PortfolioProject {
-  id: string;
-  title: string;
-  description: string;
-  tags: string[];
-  stats: Array<{ label: string; value: string; caption?: string; icon?: string }>;
-  imageUrl?: string;
-  client?: string;
-  year?: string;
-  industry?: string;
-  duration?: string;
-  services?: string[];
-  overview?: string;
-  /** Case-study body blocks (e.g. Challenge / Approach / Result). */
-  sections?: Array<{ heading: string; body: string }>;
-  /** Delivery steps for the case study: short title, rough duration, what we did. */
-  approach?: Array<{ title: string; duration: string; desc: string }>;
-  tech?: string[];
-  quote?: { text: string; author: string; role: string };
-  gallery?: string[];
 }
 
 export interface CoreValue {
