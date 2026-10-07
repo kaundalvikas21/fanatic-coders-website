@@ -13,6 +13,7 @@ import type {
 } from '@/types';
 
 function revalidateTags() {
+  revalidatePath('/dashboard/tags');
   revalidatePath('/dashboard/blogs', 'layout');
   revalidatePath('/blog', 'layout');
 }
