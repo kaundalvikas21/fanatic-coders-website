@@ -3,11 +3,11 @@ import type { Response, Schemas } from './api';
 
 export type Blog = Schemas['Blog'];
 export type BlogSeo = Schemas['BlogSeo'];
+export type BlogSeoInput = Pick<BlogSeo, 'metaTitle' | 'metaDescription'>;
 export type BlogSummary = Schemas['BlogSummary'];
 export type TiptapDocument = Schemas['TiptapDocument'];
-export type CreateBlogInput = Schemas['CreateBlogRequest'];
-export type UpdateBlogInput = Schemas['UpdateBlogRequest'];
-export type UpsertBlogSeoInput = Schemas['UpsertBlogSeoRequest'];
+export type CreateBlogInput = Schemas['CreateBlogRequest'] & { blogSeo?: BlogSeoInput };
+export type UpdateBlogInput = Schemas['UpdateBlogRequest'] & { blogSeo?: BlogSeoInput | null };
 
 export type PaginatedBlogs = Schemas['BlogsResponse']['data'];
 export type BlogsResponse = Response<PaginatedBlogs>;
@@ -39,10 +39,3 @@ export type UpdateBlogFeatureImageByIdResponse = BlogResponse;
 export type DeleteBlogFeatureImageByIdParams =
   operations['deleteBlogFeatureImageById']['parameters']['path'];
 export type DeleteBlogFeatureImageByIdResponse = BlogResponse;
-export type GetBlogSeoByBlogIdParams = operations['getBlogSeoByBlogId']['parameters']['path'];
-export type GetBlogSeoByBlogIdResponse = Response<BlogSeo>;
-export type UpsertBlogSeoByBlogIdParams = operations['upsertBlogSeoByBlogId']['parameters']['path'];
-export type UpsertBlogSeoByBlogIdRequest = UpsertBlogSeoInput;
-export type UpsertBlogSeoByBlogIdResponse = Response<BlogSeo>;
-export type DeleteBlogSeoByBlogIdParams = operations['deleteBlogSeoByBlogId']['parameters']['path'];
-export type DeleteBlogSeoByBlogIdResponse = Response<BlogSeo>;

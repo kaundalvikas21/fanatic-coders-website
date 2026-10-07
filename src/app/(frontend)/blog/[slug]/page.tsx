@@ -58,6 +58,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         featureImage={blog.featureImage}
         createdAt={blog.createdAt}
         readTime={getBlogReadTime(blog.content)}
+        categories={blog.blogCategories?.map(({ category }) => category) ?? []}
+        tags={blog.blogTags?.map(({ tag }) => tag) ?? []}
       />
       <PublishedBlogContent
         content={blog.content}

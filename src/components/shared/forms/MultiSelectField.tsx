@@ -47,6 +47,9 @@ export function MultiSelectField<TOption extends MultiSelectOption>({
       inputId={id}
       instanceId={id}
       isMulti
+      menuPortalTarget={typeof document === 'undefined' ? undefined : document.body}
+      menuPosition="fixed"
+      styles={{ menuPortal: (base) => ({ ...base, zIndex: 100 }) }}
       options={options}
       value={selectedOptions}
       onChange={handleChange}
@@ -63,7 +66,7 @@ export function MultiSelectField<TOption extends MultiSelectOption>({
           cn(
             'min-h-8 rounded-lg border border-input bg-transparent px-1 text-sm transition-colors',
             isFocused && 'border-ring ring-3 ring-ring/50',
-            isDisabled && 'cursor-not-allowed bg-input/50 opacity-50',
+            isDisabled ? 'cursor-not-allowed bg-input/50 opacity-50' : 'cursor-pointer',
             invalid && 'border-destructive ring-3 ring-destructive/20',
           ),
         valueContainer: () => 'gap-1 px-1.5 py-1',

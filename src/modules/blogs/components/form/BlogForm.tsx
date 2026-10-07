@@ -3,23 +3,32 @@
 import { useState, type ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { FilePenLine, ImageIcon, Search, Send } from 'lucide-react';
+import { FilePenLine, ImageIcon, Search, Send, Tag, Tags } from 'lucide-react';
 import { toast } from 'sonner';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
+import { MultiSelectField } from '@/components/shared/forms/MultiSelectField';
 import { RichTextEditor, type RichTextDocument } from '@/components/shared/rich-text-editor';
+import { SectionTabs, type SectionTabItem } from '@/components/shared/section-tabs';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { TabsContent } from '@/components/ui/tabs';
 import { createBlog, updateBlogById } from '@/modules/blogs/data/mutations';
 import { uploadBlogFeatureImageById } from '@/modules/blogs/data/media';
-import { deleteBlogSeoByBlogId, upsertBlogSeoByBlogId } from '@/modules/blogs/data/seo';
 import { blogFormSchema, type BlogFormValues } from '@/modules/blogs/schemas/blog';
 import { getBlogFormValues } from '@/modules/blogs/utils/blog-form-values';
-import { titleToSlug } from '@/modules/blogs/utils/title-to-slug';
-import type { Blog, BlogSeo, CreateBlogRequest, UpdateBlogFeatureImageByIdRequest } from '@/types';
+import { useCategories } from '@/modules/categories';
+import { useTags } from '@/modules/tags';
+import { slugify } from '@/utils/string';
+import type { Blog, CreateBlogRequest, UpdateBlogFeatureImageByIdRequest } from '@/types';
 import { BlogFeatureImageUploader } from './BlogFeatureImageUploader';
+
+const BLOG_TAXONOMY_TABS = [
+  { value: 'categories', label: 'Categories', Icon: Tags },
+  { value: 'tags', label: 'Tags', Icon: Tag },
+] as const satisfies readonly SectionTabItem[];
 
 type BlogFormProps = {
   blog?: Blog;
@@ -33,6 +42,12 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
   const [imageError, setImageError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [slugEdited, setSlugEdited] = useState(false);
+  const {
+    categories: categoryOptions,
+    isLoading: isLoadingCategories,
+    isUnavailable: categoriesUnavailable,
+  } = useCategories();
+  const { tags: tagOptions, isLoading: isLoadingTags, isUnavailable: tagsUnavailable } = useTags();
   const form = useForm<BlogFormValues>({
     resolver: zodResolver(blogFormSchema),
     defaultValues: getBlogFormValues(blog),
@@ -51,11 +66,20 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
       excerpt: values.excerpt || null,
       isPublished: values.isPublished,
     };
+    const blogSeo =
+      values.metaTitle && values.metaDescription
+        ? { metaTitle: values.metaTitle, metaDescription: values.metaDescription }
+        : null;
 
     try {
       const response = savedBlog
-        ? await updateBlogById(savedBlog.id, payload)
-        : await createBlog(payload);
+        ? await updateBlogById(savedBlog.id, {
+            ...payload,
+            blogSeo,
+            categoryIds: values.categoryIds,
+            tagIds: values.tagIds,
+          })
+        : await createBlog({ ...payload, ...(blogSeo ? { blogSeo } : {}) });
 
       if (!response.success || !response.data) {
         if (
@@ -74,8 +98,25 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
         return;
       }
 
-      let nextBlog: Blog = { ...(response.data as Blog), blogSeo: savedBlog?.blogSeo ?? null };
+      let nextBlog: Blog = response.data as Blog;
       setSavedBlog(nextBlog);
+
+      if (!wasEditing && (values.categoryIds.length > 0 || values.tagIds.length > 0)) {
+        // Attach selected taxonomy before treating the new blog as fully saved.
+        const taxonomyResponse = await updateBlogById(nextBlog.id, {
+          categoryIds: values.categoryIds,
+          tagIds: values.tagIds,
+        });
+        if (!taxonomyResponse.success || !taxonomyResponse.data) {
+          setMessage(
+            taxonomyResponse.message ||
+              'Blog created, but categories or tags could not be saved. Try saving again.',
+          );
+          return;
+        }
+        nextBlog = taxonomyResponse.data as Blog;
+        setSavedBlog(nextBlog);
+      }
 
       if (pendingImage) {
         const imageData = new FormData();
@@ -87,31 +128,9 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
           return;
         }
 
-        nextBlog = { ...(imageResponse.data as Blog), blogSeo: nextBlog.blogSeo };
+        nextBlog = { ...nextBlog, ...(imageResponse.data as Blog) };
         setSavedBlog(nextBlog);
         setPendingImage(null);
-      }
-
-      if (values.metaTitle && values.metaDescription) {
-        const seoResponse = await upsertBlogSeoByBlogId(nextBlog.id, {
-          metaTitle: values.metaTitle,
-          metaDescription: values.metaDescription,
-        });
-
-        if (!seoResponse.success || !seoResponse.data) {
-          setMessage(seoResponse.message || 'Blog saved, but SEO details could not be saved.');
-          return;
-        }
-
-        nextBlog = { ...nextBlog, blogSeo: seoResponse.data as BlogSeo };
-      } else if (nextBlog.blogSeo) {
-        const seoResponse = await deleteBlogSeoByBlogId(nextBlog.id);
-        if (!seoResponse.success) {
-          setMessage(seoResponse.message || 'Blog saved, but SEO details could not be removed.');
-          return;
-        }
-
-        nextBlog = { ...nextBlog, blogSeo: null };
       }
 
       setSavedBlog(nextBlog);
@@ -164,7 +183,7 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                     {...form.register('title', {
                       onChange: (event) => {
                         if (!slugEdited) {
-                          form.setValue('slug', titleToSlug(event.target.value), {
+                          form.setValue('slug', slugify(event.target.value), {
                             shouldDirty: true,
                             shouldValidate: true,
                           });
@@ -236,6 +255,44 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                 />
               </FieldGroup>
             </WidgetCard>
+
+            <WidgetCard
+              icon={Search}
+              title="Search appearance"
+              description="Set the title and description shown in search results."
+            >
+              <FieldGroup>
+                <Field data-invalid={Boolean(form.formState.errors.metaTitle)}>
+                  <FieldLabel htmlFor="blog-meta-title">Meta title</FieldLabel>
+                  <Input
+                    id="blog-meta-title"
+                    placeholder="Title for search results"
+                    aria-invalid={Boolean(form.formState.errors.metaTitle)}
+                    {...form.register('metaTitle')}
+                  />
+                  {form.formState.errors.metaTitle && (
+                    <FieldError errors={[form.formState.errors.metaTitle]} />
+                  )}
+                </Field>
+
+                <Field data-invalid={Boolean(form.formState.errors.metaDescription)}>
+                  <FieldLabel htmlFor="blog-meta-description">Meta description</FieldLabel>
+                  <Textarea
+                    id="blog-meta-description"
+                    rows={4}
+                    placeholder="Description for search results"
+                    aria-invalid={Boolean(form.formState.errors.metaDescription)}
+                    {...form.register('metaDescription')}
+                  />
+                  {form.formState.errors.metaDescription && (
+                    <FieldError errors={[form.formState.errors.metaDescription]} />
+                  )}
+                </Field>
+                <p className="text-xs text-muted-foreground">
+                  Leave both blank to use the blog title and excerpt.
+                </p>
+              </FieldGroup>
+            </WidgetCard>
           </DetailPageLayout.Main>
 
           <DetailPageLayout.Aside>
@@ -294,10 +351,7 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                       if (file) setImageError(null);
                     }}
                     onChange={(updatedBlog) => {
-                      setSavedBlog((current) => ({
-                        ...updatedBlog,
-                        blogSeo: current?.blogSeo ?? null,
-                      }));
+                      setSavedBlog((current) => ({ ...current, ...updatedBlog }));
                       if (updatedBlog.featureImage) setImageError(null);
                     }}
                   />
@@ -326,41 +380,77 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
             </WidgetCard>
 
             <WidgetCard
-              icon={Search}
-              title="Search appearance"
-              description="Set the title and description shown in search results."
+              icon={Tags}
+              title="Categories and tags"
+              description="Choose how to organize this blog."
             >
-              <FieldGroup>
-                <Field data-invalid={Boolean(form.formState.errors.metaTitle)}>
-                  <FieldLabel htmlFor="blog-meta-title">Meta title</FieldLabel>
-                  <Input
-                    id="blog-meta-title"
-                    placeholder="Title for search results"
-                    aria-invalid={Boolean(form.formState.errors.metaTitle)}
-                    {...form.register('metaTitle')}
+              <SectionTabs
+                defaultValue="categories"
+                items={BLOG_TAXONOMY_TABS}
+                ariaLabel="Blog taxonomy"
+                variant="folder"
+              >
+                <TabsContent value="categories">
+                  <Controller
+                    control={form.control}
+                    name="categoryIds"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid || categoriesUnavailable}>
+                        <FieldLabel htmlFor="blog-categories">Categories</FieldLabel>
+                        <MultiSelectField
+                          id="blog-categories"
+                          options={categoryOptions}
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder={
+                            isLoadingCategories ? 'Loading categories...' : 'Select categories'
+                          }
+                          noOptionsMessage={
+                            categoriesUnavailable
+                              ? 'Could not load categories.'
+                              : 'No categories available.'
+                          }
+                          ariaLabel="Blog categories"
+                          invalid={fieldState.invalid || categoriesUnavailable}
+                          disabled={isSubmitting || isLoadingCategories || categoriesUnavailable}
+                        />
+                        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+                        {categoriesUnavailable && (
+                          <FieldError errors={[{ message: 'Could not load categories.' }]} />
+                        )}
+                      </Field>
+                    )}
                   />
-                  {form.formState.errors.metaTitle && (
-                    <FieldError errors={[form.formState.errors.metaTitle]} />
-                  )}
-                </Field>
-
-                <Field data-invalid={Boolean(form.formState.errors.metaDescription)}>
-                  <FieldLabel htmlFor="blog-meta-description">Meta description</FieldLabel>
-                  <Textarea
-                    id="blog-meta-description"
-                    rows={4}
-                    placeholder="Description for search results"
-                    aria-invalid={Boolean(form.formState.errors.metaDescription)}
-                    {...form.register('metaDescription')}
+                </TabsContent>
+                <TabsContent value="tags">
+                  <Controller
+                    control={form.control}
+                    name="tagIds"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid || tagsUnavailable}>
+                        <FieldLabel htmlFor="blog-tags">Tags</FieldLabel>
+                        <MultiSelectField
+                          id="blog-tags"
+                          options={tagOptions}
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder={isLoadingTags ? 'Loading tags...' : 'Select tags'}
+                          noOptionsMessage={
+                            tagsUnavailable ? 'Could not load tags.' : 'No tags available.'
+                          }
+                          ariaLabel="Blog tags"
+                          invalid={fieldState.invalid || tagsUnavailable}
+                          disabled={isSubmitting || isLoadingTags || tagsUnavailable}
+                        />
+                        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+                        {tagsUnavailable && (
+                          <FieldError errors={[{ message: 'Could not load tags.' }]} />
+                        )}
+                      </Field>
+                    )}
                   />
-                  {form.formState.errors.metaDescription && (
-                    <FieldError errors={[form.formState.errors.metaDescription]} />
-                  )}
-                </Field>
-                <p className="text-xs text-muted-foreground">
-                  Leave both blank to use the blog title and excerpt.
-                </p>
-              </FieldGroup>
+                </TabsContent>
+              </SectionTabs>
             </WidgetCard>
           </DetailPageLayout.Aside>
         </DetailPageLayout>
