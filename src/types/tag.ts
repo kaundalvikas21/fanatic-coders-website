@@ -2,6 +2,8 @@ import type { operations } from './backend-types';
 import type { Response, Schemas } from './api';
 
 export type Tag = Schemas['Tag'];
+export type TagOption = { label: Tag['name']; value: Tag['id'] };
+export type TagOptionsResponse = Response<TagOption[]>;
 export type PaginatedTags = Schemas['TagsResponse']['data'];
 export type TagsResponse = Response<PaginatedTags>;
 export type TagResponse = Response<Tag>;

@@ -84,6 +84,8 @@ export type {
   GetTagsResponse,
   PaginatedTags,
   Tag,
+  TagOption,
+  TagOptionsResponse,
   TagResponse,
   TagsResponse,
   UpdateTagByIdParams,
