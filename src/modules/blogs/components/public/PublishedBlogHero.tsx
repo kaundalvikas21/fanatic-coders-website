@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { Clock } from 'lucide-react';
 import { CodeBreadcrumb } from '@/components/shared/CodeBreadcrumb';
 import { RevealSection } from '@/components/ui/RevealSection';
+import { CapsuleButton } from '@/components/shared/button-capsule';
 
 const dateFormatter = new Intl.DateTimeFormat('en', { dateStyle: 'medium' });
 
@@ -11,6 +12,8 @@ type PublishedBlogHeroProps = {
   featureImage: string | null;
   createdAt: string;
   readTime: string;
+  categories: { id: string; name: string }[];
+  tags: { id: string; name: string }[];
 };
 
 export function PublishedBlogHero({
@@ -19,6 +22,8 @@ export function PublishedBlogHero({
   featureImage,
   createdAt,
   readTime,
+  categories,
+  tags,
 }: PublishedBlogHeroProps) {
   const trimmedTitle = title.trim();
   const lastSpace = trimmedTitle.lastIndexOf(' ');
@@ -64,6 +69,32 @@ export function PublishedBlogHero({
             <p className="mx-auto mt-5 max-w-[58ch] text-pretty text-lg leading-relaxed text-blue-100/85 md:text-xl">
               {excerpt}
             </p>
+          )}
+          {(categories.length > 0 || tags.length > 0) && (
+            <div className="mx-auto mt-7 flex max-w-2xl flex-col items-center gap-3">
+              {categories.length > 0 && (
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {categories.map((category) => (
+                    <CapsuleButton
+                      key={category.id}
+                      name={category.name}
+                      kind="category"
+                    />
+                  ))}
+                </div>
+              )}
+              {tags.length > 0 && (
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {tags.map((tag) => (
+                    <CapsuleButton
+                      key={tag.id}
+                      name={tag.name}
+                      kind="tag"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           )}
           <div className="mt-8 flex items-center justify-center gap-4 font-mono text-sm tabular-nums text-blue-100/70">
             <time dateTime={createdAt}>{dateFormatter.format(new Date(createdAt))}</time>
