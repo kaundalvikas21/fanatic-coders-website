@@ -3,9 +3,10 @@
 import { useState, type ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { FilePenLine, ImageIcon, Search, Send } from 'lucide-react';
+import { FilePenLine, ImageIcon, Search, Send, Tags } from 'lucide-react';
 import { toast } from 'sonner';
 import { DetailPageLayout } from '@/components/shared/detail-page-layout';
+import { MultiSelectField } from '@/components/shared/forms/MultiSelectField';
 import { RichTextEditor, type RichTextDocument } from '@/components/shared/rich-text-editor';
 import { WidgetCard } from '@/components/shared/widget-card';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ import { createBlog, updateBlogById } from '@/modules/blogs/data/mutations';
 import { uploadBlogFeatureImageById } from '@/modules/blogs/data/media';
 import { blogFormSchema, type BlogFormValues } from '@/modules/blogs/schemas/blog';
 import { getBlogFormValues } from '@/modules/blogs/utils/blog-form-values';
+import { useCategories } from '@/modules/categories';
 import { slugify } from '@/utils/string';
 import type { Blog, CreateBlogRequest, UpdateBlogFeatureImageByIdRequest } from '@/types';
 import { BlogFeatureImageUploader } from './BlogFeatureImageUploader';
@@ -32,6 +34,11 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
   const [imageError, setImageError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [slugEdited, setSlugEdited] = useState(false);
+  const {
+    categories: categoryOptions,
+    isLoading: isLoadingCategories,
+    isUnavailable: categoriesUnavailable,
+  } = useCategories();
   const form = useForm<BlogFormValues>({
     resolver: zodResolver(blogFormSchema),
     defaultValues: getBlogFormValues(blog),
@@ -57,7 +64,11 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
 
     try {
       const response = savedBlog
-        ? await updateBlogById(savedBlog.id, { ...payload, blogSeo })
+        ? await updateBlogById(savedBlog.id, {
+            ...payload,
+            blogSeo,
+            categoryIds: values.categoryIds,
+          })
         : await createBlog({ ...payload, ...(blogSeo ? { blogSeo } : {}) });
 
       if (!response.success || !response.data) {
@@ -79,6 +90,22 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
 
       let nextBlog: Blog = response.data as Blog;
       setSavedBlog(nextBlog);
+
+      if (!wasEditing && values.categoryIds.length > 0) {
+        // Attach selected categories before treating the new blog as fully saved.
+        const categoryResponse = await updateBlogById(nextBlog.id, {
+          categoryIds: values.categoryIds,
+        });
+        if (!categoryResponse.success || !categoryResponse.data) {
+          setMessage(
+            categoryResponse.message ||
+              'Blog created, but categories could not be saved. Try saving again.',
+          );
+          return;
+        }
+        nextBlog = categoryResponse.data as Blog;
+        setSavedBlog(nextBlog);
+      }
 
       if (pendingImage) {
         const imageData = new FormData();
@@ -220,6 +247,43 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
           </DetailPageLayout.Main>
 
           <DetailPageLayout.Aside>
+            <WidgetCard
+              icon={Tags}
+              title="Categories"
+              description="Choose categories for this blog."
+            >
+              <Controller
+                control={form.control}
+                name="categoryIds"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid || categoriesUnavailable}>
+                    <FieldLabel htmlFor="blog-categories">Categories</FieldLabel>
+                    <MultiSelectField
+                      id="blog-categories"
+                      options={categoryOptions}
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder={
+                        isLoadingCategories ? 'Loading categories...' : 'Select categories'
+                      }
+                      noOptionsMessage={
+                        categoriesUnavailable
+                          ? 'Could not load categories.'
+                          : 'No categories available.'
+                      }
+                      ariaLabel="Blog categories"
+                      invalid={fieldState.invalid || categoriesUnavailable}
+                      disabled={isSubmitting || isLoadingCategories || categoriesUnavailable}
+                    />
+                    {fieldState.error && <FieldError errors={[fieldState.error]} />}
+                    {categoriesUnavailable && (
+                      <FieldError errors={[{ message: 'Could not load categories.' }]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </WidgetCard>
+
             <WidgetCard
               icon={Send}
               title="Publishing"

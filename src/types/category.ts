@@ -2,6 +2,8 @@ import type { operations } from './backend-types';
 import type { Response, Schemas } from './api';
 
 export type Category = Schemas['Category'];
+export type CategoryOption = Schemas['CategoryOption'];
+export type CategoryOptionsResponse = Response<Schemas['CategoryOptionsResponse']['data']>;
 export type PaginatedCategories = Schemas['CategoriesResponse']['data'];
 export type CategoriesResponse = Response<PaginatedCategories>;
 export type CategoryResponse = Response<Category>;

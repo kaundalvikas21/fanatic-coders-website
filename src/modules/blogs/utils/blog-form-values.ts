@@ -10,5 +10,6 @@ export function getBlogFormValues(blog?: Blog): BlogFormValues {
     metaTitle: blog?.blogSeo?.metaTitle ?? '',
     metaDescription: blog?.blogSeo?.metaDescription ?? '',
     isPublished: blog?.isPublished ?? false,
+    categoryIds: blog?.blogCategories?.map((item) => item.categoryId) ?? [],
   };
 }

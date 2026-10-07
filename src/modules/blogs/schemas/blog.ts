@@ -34,6 +34,7 @@ export const blogFormSchema = z
       .trim()
       .max(1000, 'Keep the meta description under 1000 characters.'),
     isPublished: z.boolean(),
+    categoryIds: z.array(z.string()).max(100, 'Select no more than 100 categories.'),
   })
   .superRefine(({ metaTitle, metaDescription }, context) => {
     if (metaDescription && !metaTitle) {

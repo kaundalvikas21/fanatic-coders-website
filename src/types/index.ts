@@ -54,6 +54,8 @@ export type {
 export type {
   CategoriesResponse,
   Category,
+  CategoryOption,
+  CategoryOptionsResponse,
   CategoryResponse,
   CreateCategoryInput,
   CreateCategoryRequest,
