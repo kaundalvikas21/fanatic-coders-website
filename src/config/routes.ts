@@ -124,6 +124,11 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
         url: '/dashboard/blogs',
         icon: FilePenLine,
         roles: BLOG_ROLES,
+        subItems: [
+          { title: 'All blogs', url: '/dashboard/blogs', roles: BLOG_ROLES },
+          { title: 'Categories', url: '/dashboard/categories', roles: BLOG_ROLES },
+          { title: 'Tags', url: '/dashboard/tags', roles: BLOG_ROLES },
+        ],
       },
       {
         title: 'Users',

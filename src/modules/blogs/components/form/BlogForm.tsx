@@ -14,11 +14,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createBlog, updateBlogById } from '@/modules/blogs/data/mutations';
 import { uploadBlogFeatureImageById } from '@/modules/blogs/data/media';
-import { deleteBlogSeoByBlogId, upsertBlogSeoByBlogId } from '@/modules/blogs/data/seo';
 import { blogFormSchema, type BlogFormValues } from '@/modules/blogs/schemas/blog';
 import { getBlogFormValues } from '@/modules/blogs/utils/blog-form-values';
-import { titleToSlug } from '@/modules/blogs/utils/title-to-slug';
-import type { Blog, BlogSeo, CreateBlogRequest, UpdateBlogFeatureImageByIdRequest } from '@/types';
+import { slugify } from '@/utils/string';
+import type { Blog, CreateBlogRequest, UpdateBlogFeatureImageByIdRequest } from '@/types';
 import { BlogFeatureImageUploader } from './BlogFeatureImageUploader';
 
 type BlogFormProps = {
@@ -51,11 +50,15 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
       excerpt: values.excerpt || null,
       isPublished: values.isPublished,
     };
+    const blogSeo =
+      values.metaTitle && values.metaDescription
+        ? { metaTitle: values.metaTitle, metaDescription: values.metaDescription }
+        : null;
 
     try {
       const response = savedBlog
-        ? await updateBlogById(savedBlog.id, payload)
-        : await createBlog(payload);
+        ? await updateBlogById(savedBlog.id, { ...payload, blogSeo })
+        : await createBlog({ ...payload, ...(blogSeo ? { blogSeo } : {}) });
 
       if (!response.success || !response.data) {
         if (
@@ -74,7 +77,7 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
         return;
       }
 
-      let nextBlog: Blog = { ...(response.data as Blog), blogSeo: savedBlog?.blogSeo ?? null };
+      let nextBlog: Blog = response.data as Blog;
       setSavedBlog(nextBlog);
 
       if (pendingImage) {
@@ -90,28 +93,6 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
         nextBlog = { ...(imageResponse.data as Blog), blogSeo: nextBlog.blogSeo };
         setSavedBlog(nextBlog);
         setPendingImage(null);
-      }
-
-      if (values.metaTitle && values.metaDescription) {
-        const seoResponse = await upsertBlogSeoByBlogId(nextBlog.id, {
-          metaTitle: values.metaTitle,
-          metaDescription: values.metaDescription,
-        });
-
-        if (!seoResponse.success || !seoResponse.data) {
-          setMessage(seoResponse.message || 'Blog saved, but SEO details could not be saved.');
-          return;
-        }
-
-        nextBlog = { ...nextBlog, blogSeo: seoResponse.data as BlogSeo };
-      } else if (nextBlog.blogSeo) {
-        const seoResponse = await deleteBlogSeoByBlogId(nextBlog.id);
-        if (!seoResponse.success) {
-          setMessage(seoResponse.message || 'Blog saved, but SEO details could not be removed.');
-          return;
-        }
-
-        nextBlog = { ...nextBlog, blogSeo: null };
       }
 
       setSavedBlog(nextBlog);
@@ -164,7 +145,7 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                     {...form.register('title', {
                       onChange: (event) => {
                         if (!slugEdited) {
-                          form.setValue('slug', titleToSlug(event.target.value), {
+                          form.setValue('slug', slugify(event.target.value), {
                             shouldDirty: true,
                             shouldValidate: true,
                           });

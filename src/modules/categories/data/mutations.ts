@@ -13,6 +13,7 @@ import type {
 } from '@/types';
 
 function revalidateCategories() {
+  revalidatePath('/dashboard/categories');
   revalidatePath('/dashboard/blogs', 'layout');
   revalidatePath('/blog', 'layout');
 }
