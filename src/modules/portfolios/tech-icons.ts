@@ -19,6 +19,9 @@ import {
   siGo,
   siKubernetes,
   siTrpc,
+  siWordpress,
+  siMysql,
+  siLaravel,
   type SimpleIcon,
 } from 'simple-icons';
 
@@ -44,4 +47,7 @@ export const techIcons: Record<string, SimpleIcon> = {
   Go: siGo,
   Kubernetes: siKubernetes,
   tRPC: siTrpc,
+  WordPress: siWordpress,
+  MySQL: siMysql,
+  Laravel: siLaravel,
 };

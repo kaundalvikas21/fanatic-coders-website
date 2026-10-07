@@ -4,8 +4,12 @@ import { ArrowRight } from 'lucide-react';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { RevealSection } from '@/components/ui/RevealSection';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { getProject } from '../../portfolio/data';
-import { type Accent, type ServiceGroup, type ServiceItem, iconColor, accentToken } from '../data';
+import type { Portfolio, PortfolioMetricCard } from '@/types';
+import { type Accent, type ServiceGroup, iconColor, accentToken } from '../data';
+
+function isMetricCard(card: object): card is PortfolioMetricCard {
+  return 'label' in card && 'value' in card;
+}
 
 function statBoxStyle(accent: Accent): CSSProperties {
   const c = accentToken[accent];
@@ -16,13 +20,16 @@ function statBoxStyle(accent: Accent): CSSProperties {
   };
 }
 
-export function ServiceProof({ service, group }: { service: ServiceItem; group: ServiceGroup }) {
-  const project = service.relatedCaseStudyIds.map(getProject).find(Boolean);
-  if (!project) return null;
+export function ServiceProof({ group, portfolio }: { group: ServiceGroup; portfolio?: Portfolio }) {
+  if (!portfolio) return null;
 
   const color = iconColor[group.accent];
-  const stats = project.stats.slice(0, 3);
-  const chips = (project.services ?? project.tags ?? []).slice(0, 3);
+  const stats =
+    portfolio.addons
+      .find((addon) => addon.type === 'RESULTS')
+      ?.cards?.filter(isMetricCard)
+      .slice(0, 3) ?? [];
+  const chips = (portfolio.services?.length ? portfolio.services : portfolio.tags).slice(0, 3);
 
   return (
     <section
@@ -50,18 +57,18 @@ export function ServiceProof({ service, group }: { service: ServiceItem; group: 
 
         <RevealSection className="mt-14">
           <Link
-            href="/login"
+            href={`/portfolio/${encodeURIComponent(portfolio.slug)}`}
             className="group/case block no-underline"
           >
             <GlassCard className="p-8 md:p-10 transition-transform duration-300 ease-out group-hover/case:scale-[1.02]">
               <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-10">
                 <div className="flex flex-col">
-                  <p className="text-xs font-mono uppercase tracking-wider text-blue-100/60">{`// ${project.client} ${project.industry}`}</p>
+                  <p className="text-xs font-mono uppercase tracking-wider text-blue-100/60">{`// ${portfolio.client ?? ''} ${portfolio.industry ?? ''}`}</p>
                   <h3 className="mt-4 text-2xl md:text-3xl font-bold text-white leading-snug">
-                    {project.title}
+                    {portfolio.title}
                   </h3>
                   <p className="mt-3 text-base text-blue-100/60 leading-relaxed max-w-[52ch]">
-                    {project.description}
+                    {portfolio.description}
                   </p>
 
                   <div className="mt-5 flex flex-wrap gap-2">
@@ -87,10 +94,6 @@ export function ServiceProof({ service, group }: { service: ServiceItem; group: 
                       aria-hidden
                     />
                   </span>
-
-                  <p className="mt-auto pt-8 text-xs font-mono text-blue-100/55">
-                    {'// figures are illustrative, shared with client permission on request'}
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 self-start">

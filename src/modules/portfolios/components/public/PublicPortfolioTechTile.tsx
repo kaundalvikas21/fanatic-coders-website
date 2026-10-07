@@ -1,9 +1,9 @@
 import { Box } from 'lucide-react';
-import { techIcons } from './techIcons';
+import { techIcons } from '@/modules/portfolios/tech-icons';
 
-/** Tech logo chip: brand-color simple-icons logo on a light tile; `Box` fallback. */
-export function TechTile({ name }: { name: string }) {
+export function PublicPortfolioTechTile({ name }: { name: string }) {
   const icon = techIcons[name];
+
   return (
     <span className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-medium text-gray-800 shadow-sm ring-1 ring-black/5 transition-transform duration-300 hover:-translate-y-0.5">
       {icon ? (

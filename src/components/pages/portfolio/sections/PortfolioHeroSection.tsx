@@ -3,20 +3,17 @@ import { ArrowRight, ChevronDown } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
 import { RevealSection } from '@/components/ui/RevealSection';
 import { SITE_STATS } from '@/lib/site-stats';
-import { projects } from '../data';
+import type { Portfolio } from '@/types';
 
-// Derived once at build time from the single sources, so the hero counts can never drift
-// from the case studies in data.ts or the headline numbers in site-stats.ts.
-const caseStudyCount = projects.length;
-const industryCount = new Set(projects.map((p) => p.industry).filter(Boolean)).size;
+export function PortfolioHeroSection({ portfolios }: { portfolios: Portfolio[] }) {
+  const industryCount = new Set(portfolios.map((portfolio) => portfolio.industry).filter(Boolean))
+    .size;
+  const heroMeta = [
+    { value: String(portfolios.length), label: 'case studies' },
+    { value: String(industryCount), label: 'industries' },
+    { value: SITE_STATS.yearsShipping, label: 'years shipping' },
+  ];
 
-const heroMeta: { value: string; label: string }[] = [
-  { value: String(caseStudyCount), label: 'case studies' },
-  { value: String(industryCount), label: 'industries' },
-  { value: SITE_STATS.yearsShipping, label: 'years shipping' },
-];
-
-export function PortfolioHeroSection() {
   return (
     <section
       className="relative overflow-hidden hero-shell [--hero-pt:7.5rem] pb-8 min-h-[100svh] flex flex-col"

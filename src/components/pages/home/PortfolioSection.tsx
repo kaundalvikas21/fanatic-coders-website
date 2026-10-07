@@ -5,22 +5,30 @@ import Image from 'next/image';
 import { ArrowLeft, ArrowRight, Code2, Play, Pause } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
 import { RevealSection } from '@/components/ui/RevealSection';
-import { projects as allProjects } from '@/components/pages/portfolio/data';
+import type { Portfolio, PortfolioMetricCard } from '@/types';
 
-// Home showcase pulls the first four real case studies from the single
-// portfolio source of truth so copy, imagery, and links never drift.
-const featured = allProjects.slice(0, 4).map((p) => ({
-  id: p.id,
-  title: p.title,
-  description: p.description,
-  image: p.imageUrl ?? '',
-  category: p.industry ?? p.tags[0] ?? '',
-  tech: (p.tech ?? p.tags).slice(0, 5),
-  stats: p.stats.slice(0, 3),
-  href: `/portfolio/${p.id}`,
-}));
+function isMetricCard(card: object): card is PortfolioMetricCard {
+  return 'label' in card && 'value' in card;
+}
 
-export default function PortfolioSection() {
+export default function PortfolioSection({ portfolios }: { portfolios: Portfolio[] }) {
+  const featuredPortfolios = portfolios.filter((portfolio) => portfolio.isFeatured);
+  const featured = (featuredPortfolios.length ? featuredPortfolios : portfolios)
+    .slice(0, 4)
+    .map((portfolio) => ({
+      id: portfolio.id,
+      title: portfolio.title,
+      description: portfolio.description,
+      image: portfolio.imageUrl,
+      category: portfolio.industry ?? portfolio.tags[0] ?? '',
+      tech: (portfolio.tech?.length ? portfolio.tech : portfolio.tags).slice(0, 5),
+      stats:
+        portfolio.addons
+          .find((addon) => addon.type === 'RESULTS')
+          ?.cards?.filter(isMetricCard)
+          .slice(0, 3) ?? [],
+      href: `/portfolio/${encodeURIComponent(portfolio.slug)}`,
+    }));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [slideKey, setSlideKey] = useState(0); // drives fade-in re-trigger
@@ -50,10 +58,12 @@ export default function PortfolioSection() {
   // Auto-advance, paused on hover, on manual pause, or under reduced motion.
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || isPaused || isHovered) return;
+    if (prefersReducedMotion || isPaused || isHovered || featured.length < 2) return;
     const id = setInterval(() => savedNext.current(), 5000);
     return () => clearInterval(id);
-  }, [isPaused, isHovered]);
+  }, [isPaused, isHovered, featured.length]);
+
+  if (featured.length === 0) return null;
 
   return (
     <section
@@ -148,15 +158,17 @@ export default function PortfolioSection() {
             {/* Project image */}
             <div className="relative overflow-hidden rounded-2xl h-56 sm:h-72 md:h-[500px]">
               <div className="absolute inset-0 bg-gradient-to-br from-[rgba(124,58,237,0.2)] to-transparent z-10" />
-              <Image
-                key={slideKey}
-                src={project.image}
-                alt={`${project.title}, ${project.category} project`}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                className="object-cover portfolio-img-fade"
-                loading="lazy"
-              />
+              {project.image && (
+                <Image
+                  key={slideKey}
+                  src={project.image}
+                  alt={`${project.title}, ${project.category} project`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                  className="object-cover portfolio-img-fade"
+                  loading="lazy"
+                />
+              )}
             </div>
 
             {/* Project info card */}
