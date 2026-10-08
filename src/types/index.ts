@@ -123,6 +123,7 @@ export type {
   UpdatePortfolioByIdResponse,
   UpdatePortfolioInput,
 } from './portfolio';
+export type { TeamMember, TeamResponse } from './team';
 
 export {
   DEFAULT_PROJECT_CURRENCY,
@@ -407,13 +408,4 @@ export interface CoreValue {
 export interface Partner {
   name: string;
   logoPath: string;
-}
-
-export interface TeamMember {
-  id: string;
-  name: string;
-  role: string;
-  bio: string;
-  avatarUrl: string;
-  socials?: { github?: string; linkedin?: string; twitter?: string };
 }

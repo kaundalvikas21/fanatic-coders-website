@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/api/v1/team": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch public team members */
+        get: operations["getPublicTeam"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -468,6 +485,24 @@ export interface paths {
         post?: never;
         /** Delete a portfolio by id */
         delete: operations["deletePortfolioById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/portfolios/{id}/cover-image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Upload or replace a portfolio cover image */
+        put: operations["updatePortfolioCoverImageById"];
+        post?: never;
+        /** Remove a portfolio cover image */
+        delete: operations["deletePortfolioCoverImageById"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1097,6 +1132,16 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        PublicTeamMember: {
+            id: string;
+            name: string;
+            image: string | null;
+            designation: string | null;
+            bio: string | null;
+        };
+        PublicTeamResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["PublicTeamMember"][];
+        };
         /**
          * @example NEW
          * @enum {string}
@@ -1349,6 +1394,10 @@ export interface components {
              * @example https://res.cloudinary.com/example/image/upload/v1/fcop/users/user-id/avatar.webp
              */
             image: string | null;
+            /** @example Product Designer */
+            designation: string | null;
+            /** @example I design digital products and work with cross-functional teams. */
+            bio: string | null;
         };
         ProfileUser: {
             /** @example clx0000000000000000000000 */
@@ -1365,6 +1414,10 @@ export interface components {
              * @example https://res.cloudinary.com/example/image/upload/v1/fcop/users/user-id/avatar.webp
              */
             image: string | null;
+            /** @example Product Designer */
+            designation: string | null;
+            /** @example I design digital products and work with cross-functional teams. */
+            bio: string | null;
         };
         ProfileUserResponse: components["schemas"]["ApiResponse"] & {
             data: components["schemas"]["ProfileUser"];
@@ -1417,6 +1470,10 @@ export interface components {
             emailVerified: boolean;
             /** @example https://example.com/avatar.png */
             image?: string | null;
+            /** @example Product Designer */
+            designation?: string | null;
+            /** @example I design digital products and work with cross-functional teams. */
+            bio?: string | null;
             /**
              * Format: date-time
              * @example 2026-06-29T06:30:00.000Z
@@ -1565,7 +1622,6 @@ export interface components {
             label: string;
             value: string;
             caption?: string | null;
-            icon?: string | null;
         };
         PortfolioAddonInput: {
             /** @enum {string} */
@@ -1574,7 +1630,7 @@ export interface components {
             content?: string | null;
             /** Format: uri */
             imageUrl?: string | null;
-            /** @description DELIVERY cards: title, duration, desc. RESULTS cards: label, value, caption, icon. */
+            /** @description DELIVERY cards: title, duration, desc. RESULTS cards: label, value, caption. */
             cards?: (components["schemas"]["PortfolioStepCard"] | components["schemas"]["PortfolioMetricCard"])[];
         };
         PortfolioAddon: {
@@ -1584,7 +1640,7 @@ export interface components {
             content?: string | null;
             /** Format: uri */
             imageUrl?: string | null;
-            /** @description DELIVERY cards: title, duration, desc. RESULTS cards: label, value, caption, icon. */
+            /** @description DELIVERY cards: title, duration, desc. RESULTS cards: label, value, caption. */
             cards?: (components["schemas"]["PortfolioStepCard"] | components["schemas"]["PortfolioMetricCard"])[];
             id: string;
             portfolioId: string;
@@ -2677,6 +2733,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getPublicTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Team fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicTeamResponse"];
+                };
+            };
+        };
+    };
     getHealth: {
         parameters: {
             query?: never;
@@ -3536,6 +3612,8 @@ export interface operations {
     getPortfolios: {
         parameters: {
             query?: {
+                /** @description Filter by portfolio title. */
+                title?: string;
                 isPublished?: boolean;
                 page?: number;
                 pageSize?: number;
@@ -3657,6 +3735,67 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Portfolio deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    updatePortfolioCoverImageById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description JPG, PNG, or WebP image up to 5 MB.
+                     */
+                    image: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Portfolio cover image updated successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    deletePortfolioCoverImageById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Portfolio cover image deleted successfully. */
             200: {
                 headers: {
                     [name: string]: unknown;
