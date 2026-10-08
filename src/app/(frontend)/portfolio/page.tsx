@@ -9,10 +9,15 @@ import {
 } from '@/components/pages/portfolio/sections';
 import { getAllPublishedPortfolios } from '@/modules/portfolios/data/queries';
 
+const title = 'Portfolio | fanaticCoders';
+const description =
+  "Selected work from fanaticCoders: products we've designed and built across web, mobile, SaaS, and e-commerce, with the results they delivered.";
+
 export const metadata: Metadata = {
-  title: 'Portfolio | fanaticCoders',
-  description:
-    "Selected work from fanaticCoders: products we've designed and built across web, mobile, SaaS, and e-commerce, with the results they delivered.",
+  title,
+  description,
+  openGraph: { title, description, type: 'website' },
+  twitter: { card: 'summary', title, description },
 };
 
 export const dynamic = 'force-dynamic';
