@@ -23,8 +23,11 @@ export async function generateMetadata({
   if (!response.success || !response.data) notFound();
 
   const blog = response.data as Blog;
-  const title = blog.blogSeo?.metaTitle || `${blog.title} | fanaticCoders Blog`;
-  const description = blog.blogSeo?.metaDescription || blog.excerpt || undefined;
+  const title = blog.blogSeo?.metaTitle?.trim() || `${blog.title} | fanaticCoders Blog`;
+  const description =
+    blog.blogSeo?.metaDescription?.trim() ||
+    blog.excerpt?.trim() ||
+    `Read ${blog.title} on the fanaticCoders blog.`;
 
   return {
     title,
