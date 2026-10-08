@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
+import { PortfolioScrollToTop } from '@/components/pages/portfolio/PortfolioScrollToTop';
 import { CtaBand } from '@/components/ui/CtaBand';
 import {
   PublicPortfolioApproach,
@@ -65,6 +66,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <>
+      <PortfolioScrollToTop />
       <PublicPortfolioHero portfolio={portfolio} />
       <PublicPortfolioChallenge addon={challenge} />
       <PublicPortfolioApproach addon={approach} />

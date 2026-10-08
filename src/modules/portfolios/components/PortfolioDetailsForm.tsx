@@ -40,7 +40,7 @@ export function PortfolioDetailsForm({ portfolio }: { portfolio?: Portfolio }) {
   const [savedPortfolio, setSavedPortfolio] = useState(portfolio);
   const [pendingImage, setPendingImage] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
-  const [slugEdited, setSlugEdited] = useState(false);
+  const [slugEdited, setSlugEdited] = useState(Boolean(portfolio));
   const [message, setMessage] = useState<string | null>(null);
   const form = useForm<DetailsValues>({
     resolver: zodResolver(formSchema),
@@ -87,6 +87,7 @@ export function PortfolioDetailsForm({ portfolio }: { portfolio?: Portfolio }) {
 
       let saved = response.data as Portfolio;
       setSavedPortfolio(saved);
+      setSlugEdited(true);
 
       if (pendingImage) {
         const imageData = new FormData();
@@ -237,6 +238,7 @@ export function PortfolioDetailsForm({ portfolio }: { portfolio?: Portfolio }) {
             {message && <FieldError errors={[{ message }]} />}
             <Button
               type="submit"
+              className="h-11 w-fit self-start px-6 text-base"
               disabled={form.formState.isSubmitting}
               aria-busy={form.formState.isSubmitting}
             >

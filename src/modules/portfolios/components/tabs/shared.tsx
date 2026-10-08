@@ -48,6 +48,7 @@ export function SectionFormCard({
           <div className="flex flex-wrap items-center gap-2">
             <Button
               type="submit"
+              className="h-11 w-fit px-6 text-base"
               disabled={submitting || removing}
               aria-busy={submitting}
             >
@@ -56,7 +57,8 @@ export function SectionFormCard({
             {onDelete && (
               <Button
                 type="button"
-                variant="outline"
+                variant="destructive"
+                className="h-11 w-fit px-6 text-base"
                 disabled={submitting || removing}
                 aria-busy={removing}
                 onClick={onDelete}
