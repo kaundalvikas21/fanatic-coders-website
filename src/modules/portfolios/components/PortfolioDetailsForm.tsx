@@ -238,6 +238,7 @@ export function PortfolioDetailsForm({ portfolio }: { portfolio?: Portfolio }) {
             {message && <FieldError errors={[{ message }]} />}
             <Button
               type="submit"
+              className="h-11 w-fit self-start px-6 text-base"
               disabled={form.formState.isSubmitting}
               aria-busy={form.formState.isSubmitting}
             >
