@@ -188,7 +188,7 @@ export function PortfolioGridSection({
   return (
     <section
       id="portfolio-grid"
-      className="section-y relative overflow-hidden"
+      className="scroll-mt-28 section-y relative overflow-hidden"
       style={{ background: 'var(--dark-2)' }}
     >
       <div className="aurora-bg-section absolute inset-0 pointer-events-none" />

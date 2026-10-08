@@ -89,7 +89,7 @@ export function AboutHeroSection() {
             />
           </GradientButton>
           <GradientButton
-            href="/portfolio"
+            href="/portfolio#portfolio-grid"
             variant="secondary"
             className="w-full sm:w-auto"
           >

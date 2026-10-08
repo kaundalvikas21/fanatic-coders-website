@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { Mail, MapPin, Clock, Send, Check, AlertCircle, User, Building2 } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -63,6 +63,26 @@ export function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+
+  useEffect(() => {
+    const normalizeFormHash = () => {
+      if (!/^#contact-form(?:#contact-form)+$/.test(window.location.hash)) return;
+
+      // Keep repeated form links at one valid anchor so the form remains reachable.
+      window.history.replaceState(
+        window.history.state,
+        '',
+        `${window.location.pathname}${window.location.search}#contact-form`,
+      );
+      document
+        .getElementById('contact-form')
+        ?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    };
+
+    normalizeFormHash();
+    window.addEventListener('hashchange', normalizeFormHash);
+    return () => window.removeEventListener('hashchange', normalizeFormHash);
+  }, []);
 
   function update<K extends keyof FormState>(key: K, value: string) {
     setValues((prev) => ({ ...prev, [key]: value }));
