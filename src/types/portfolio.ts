@@ -22,7 +22,9 @@ export type PortfoliosResponse = Response<PaginatedPortfolios>;
 export type PortfolioResponse = Response<Portfolio>;
 export type PortfolioAddonResponse = Response<PortfolioAddon>;
 
-export type GetPortfoliosInput = NonNullable<operations['getPortfolios']['parameters']['query']>;
+export type GetPortfoliosInput = NonNullable<operations['getPortfolios']['parameters']['query']> & {
+  title?: string;
+};
 export type GetPortfoliosResponse = PortfoliosResponse;
 export type GetPublishedPortfoliosInput = NonNullable<
   operations['getPublishedPortfolios']['parameters']['query']
