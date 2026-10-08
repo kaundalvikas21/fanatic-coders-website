@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import PartnersSection from '@/components/pages/home/PartnersSection';
-import { PortfolioScrollToTop } from '@/components/pages/portfolio/PortfolioScrollToTop';
 import {
   PortfolioCtaSection,
   PortfolioGridSection,
@@ -27,7 +26,6 @@ export default async function Page() {
 
   return (
     <>
-      <PortfolioScrollToTop />
       <PortfolioHeroSection portfolios={portfolios ?? []} />
       <PortfolioGridSection
         portfolios={portfolios ?? []}
