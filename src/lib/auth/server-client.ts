@@ -3,14 +3,15 @@ import 'server-only';
 
 import { cookies } from 'next/headers';
 import { createAuthClient } from 'better-auth/client';
-import { organizationClient } from 'better-auth/client/plugins';
+import { inferAdditionalFields, organizationClient } from 'better-auth/client/plugins';
 
 import { createBearerAuthorizationHeader, FCOP_AUTH_TOKEN_COOKIE } from '@/lib/auth/bearer-token';
 import { env } from '@/config/env';
+import { additionalUserFields } from '@/lib/auth/additional-fields';
 
 export const authServerClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_AUTH_URL,
-  plugins: [organizationClient()],
+  plugins: [organizationClient(), inferAdditionalFields(additionalUserFields)],
 });
 
 export async function getServerAuthFetchOptions() {
