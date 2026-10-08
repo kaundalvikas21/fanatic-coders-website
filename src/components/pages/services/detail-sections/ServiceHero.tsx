@@ -37,7 +37,7 @@ export function ServiceHero({ service, group }: { service: ServiceItem; group: S
           />
         </GradientButton>
         <GradientButton
-          href="/login"
+          href="/portfolio#portfolio-grid"
           variant="secondary"
         >
           see our work

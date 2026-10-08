@@ -119,7 +119,7 @@ export function ServicesOverviewSection() {
             return (
               <Link
                 key={card.slug}
-                href="/login"
+                href={`/services/${service.slug}`}
                 className="no-underline group/card block"
               >
                 <div

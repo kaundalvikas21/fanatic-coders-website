@@ -58,7 +58,7 @@ export function ServicesHeroSection() {
               />
             </GradientButton>
             <GradientButton
-              href="/login"
+              href="/portfolio#portfolio-grid"
               variant="secondary"
             >
               seeOurWork
