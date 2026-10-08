@@ -1,5 +1,6 @@
 import PartnersSection from '@/components/pages/home/PartnersSection';
 import AboutScrollFX from './AboutScrollFX';
+import type { TeamMember } from '@/types';
 import {
   AboutHeroSection,
   StorySection,
@@ -11,7 +12,7 @@ import {
   AboutCtaSection,
 } from './sections';
 
-export function AboutPage() {
+export function AboutPage({ team }: { team: TeamMember[] }) {
   return (
     <>
       <AboutScrollFX />
@@ -20,7 +21,7 @@ export function AboutPage() {
       <MissionSection />
       <AboutStatsSection />
       <AboutValuesSection />
-      <TeamSection />
+      {team.length > 0 && <TeamSection team={team} />}
       <ProcessSection />
       <PartnersSection />
       <AboutCtaSection />

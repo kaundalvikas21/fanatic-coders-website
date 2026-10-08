@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/api/v1/team": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch public team members */
+        get: operations["getPublicTeam"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -1115,6 +1132,16 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        PublicTeamMember: {
+            id: string;
+            name: string;
+            image: string | null;
+            designation: string | null;
+            bio: string | null;
+        };
+        PublicTeamResponse: components["schemas"]["ApiResponse"] & {
+            data: components["schemas"]["PublicTeamMember"][];
+        };
         /**
          * @example NEW
          * @enum {string}
@@ -2706,6 +2733,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getPublicTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Team fetched successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicTeamResponse"];
+                };
+            };
+        };
+    };
     getHealth: {
         parameters: {
             query?: never;
