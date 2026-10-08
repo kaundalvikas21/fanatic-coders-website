@@ -10,8 +10,12 @@ import TestimonialsSection from '@/components/pages/home/TestimonialsSection';
 import TechStackSection from '@/components/pages/home/TechStackSection';
 import FAQSection from '@/components/pages/home/FAQSection';
 import BlogSection from '@/components/pages/home/BlogSection';
+import { getAllPublishedPortfolios } from '@/modules/portfolios/data/queries';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const portfolios = await getAllPublishedPortfolios();
   return (
     <>
       <HeroSection />
@@ -19,7 +23,7 @@ export default function Home() {
       <TerminalAboutSection />
       <ServicesSection />
       <ServiceCarousel />
-      <PortfolioSection />
+      <PortfolioSection portfolios={portfolios ?? []} />
       <CtaSection />
       <CoreValuesSection />
       <TestimonialsSection />

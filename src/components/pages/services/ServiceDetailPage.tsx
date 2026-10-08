@@ -1,5 +1,6 @@
 import { CtaBand } from '@/components/ui/CtaBand';
 import TechStackSection from '@/components/pages/home/TechStackSection';
+import type { Portfolio } from '@/types';
 import type { ServiceGroup, ServiceItem } from './data';
 import { ServiceHero } from './detail-sections/ServiceHero';
 import { ServiceIncluded } from './detail-sections/ServiceIncluded';
@@ -13,9 +14,11 @@ import { ServiceFaq } from './detail-sections/ServiceFaq';
 export function ServiceDetailPage({
   service,
   group,
+  portfolio,
 }: {
   service: ServiceItem;
   group: ServiceGroup;
+  portfolio?: Portfolio;
 }) {
   return (
     <>
@@ -38,8 +41,8 @@ export function ServiceDetailPage({
       <ServiceDeliverables group={group} />
       <TechStackSection />
       <ServiceProof
-        service={service}
         group={group}
+        portfolio={portfolio}
       />
       <ServiceEngagement />
       <ServiceFaq service={service} />

@@ -5,6 +5,7 @@ import {
   CreditCard,
   FilePenLine,
   House,
+  Images,
   Inbox,
   LayoutDashboard,
   ListChecks,
@@ -35,6 +36,7 @@ export type DashboardRouteGroup = {
 
 const LEAD_ROLES = [Role.ADMIN, Role.MANAGER] as const;
 const BLOG_ROLES = [Role.ADMIN, Role.MANAGER] as const;
+const PORTFOLIO_ROLES = [Role.ADMIN, Role.MANAGER] as const;
 const NEWSLETTER_ROLES = [Role.ADMIN] as const;
 const OVERVIEW_ROLES = [Role.ADMIN] as const;
 const PROJECT_ROLES = [Role.ADMIN, Role.MANAGER, Role.MEMBER, Role.CLIENT] as const;
@@ -129,6 +131,12 @@ export const dashboardRouteGroups: DashboardRouteGroup[] = [
           { title: 'Categories', url: '/dashboard/categories', roles: BLOG_ROLES },
           { title: 'Tags', url: '/dashboard/tags', roles: BLOG_ROLES },
         ],
+      },
+      {
+        title: 'Portfolio',
+        url: '/dashboard/portfolios',
+        icon: Images,
+        roles: PORTFOLIO_ROLES,
       },
       {
         title: 'Users',

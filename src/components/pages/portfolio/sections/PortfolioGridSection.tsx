@@ -7,7 +7,7 @@ import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { RevealSection } from '@/components/ui/RevealSection';
-import { projects } from '../data';
+import type { Portfolio, PortfolioMetricCard } from '@/types';
 
 // Two-letter monogram for the image fallback (e.g. "Northwind Commerce" -> "Nc").
 function initials(title: string): string {
@@ -149,17 +149,27 @@ function FilterSelect({
   );
 }
 
-export function PortfolioGridSection() {
+function isMetricCard(card: object): card is PortfolioMetricCard {
+  return 'label' in card && 'value' in card;
+}
+
+export function PortfolioGridSection({
+  portfolios,
+  loadError,
+}: {
+  portfolios: Portfolio[];
+  loadError: boolean;
+}) {
   const serviceOptions = useMemo(
-    () => ['All', ...Array.from(new Set(projects.flatMap((p) => p.services ?? [])))],
-    [],
+    () => ['All', ...Array.from(new Set(portfolios.flatMap((p) => p.services ?? [])))],
+    [portfolios],
   );
   const industryOptions = useMemo(
     () => [
       'All',
-      ...Array.from(new Set(projects.map((p) => p.industry).filter(Boolean) as string[])),
+      ...Array.from(new Set(portfolios.map((p) => p.industry).filter(Boolean) as string[])),
     ],
-    [],
+    [portfolios],
   );
 
   const [service, setService] = useState('All');
@@ -167,12 +177,12 @@ export function PortfolioGridSection() {
 
   const filtered = useMemo(
     () =>
-      projects.filter(
+      portfolios.filter(
         (p) =>
           (service === 'All' || (p.services ?? []).includes(service)) &&
           (industry === 'All' || p.industry === industry),
       ),
-    [service, industry],
+    [portfolios, service, industry],
   );
 
   return (
@@ -234,19 +244,26 @@ export function PortfolioGridSection() {
           role="status"
           aria-live="polite"
         >
-          {filtered.length === 0
-            ? `No projects match ${service} and ${industry}.`
-            : `${filtered.length} project${filtered.length === 1 ? '' : 's'} shown.`}
+          {loadError
+            ? 'Could not load all projects right now.'
+            : filtered.length === 0
+              ? `No projects match ${service} and ${industry}.`
+              : `${filtered.length} project${filtered.length === 1 ? '' : 's'} shown.`}
         </p>
 
         {/* Project grid */}
         <RevealSection className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((project, i) => {
             const a = accents[i % accents.length];
+            const metrics =
+              project.addons
+                .find((addon) => addon.type === 'RESULTS')
+                ?.cards?.filter(isMetricCard)
+                .slice(0, 2) ?? [];
             return (
               <Link
                 key={project.id}
-                href={`/portfolio/${project.id}`}
+                href={`/portfolio/${encodeURIComponent(project.slug)}`}
                 scroll={false}
                 className="no-underline group/card"
               >
@@ -315,7 +332,7 @@ export function PortfolioGridSection() {
                     </div>
 
                     <div className="mt-auto flex gap-5 pt-4">
-                      {project.stats.slice(0, 2).map((stat) => (
+                      {metrics.map((stat) => (
                         <div key={stat.label}>
                           <div className="text-lg font-bold font-mono text-white tabular-nums">
                             {stat.value}
@@ -331,7 +348,13 @@ export function PortfolioGridSection() {
           })}
         </RevealSection>
 
-        {filtered.length === 0 && (
+        {loadError && (
+          <p className="mt-10 text-center text-sm font-mono text-blue-100/70">
+            Could not load all projects right now.
+          </p>
+        )}
+
+        {!loadError && filtered.length === 0 && (
           <p
             aria-hidden
             className="mt-10 text-center text-sm font-mono text-blue-100/50"

@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, startTransition } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Building2, Play, Pause } from 'lucide-react';
-import { projects } from '@/components/pages/portfolio/data';
 
 interface ClientQuote {
   name: string;
@@ -33,20 +32,44 @@ const initialsOf = (name: string) =>
     .join('')
     .toUpperCase();
 
-// Testimonials mirror the portfolio case studies (single source of truth) — real
-// quotes, no stock-photo faces. Identity shows as a mono initials monogram.
-const testimonials: ClientQuote[] = projects
-  .flatMap((p) => (p.quote ? [{ p, q: p.quote }] : []))
-  .slice(0, 4)
-  .map(({ p, q }, i) => ({
-    name: q.author,
-    role: q.role,
-    company: p.title,
-    quote: q.text,
-    result: { value: p.stats[0].value, caption: p.stats[0].caption ?? p.stats[0].label },
-    initials: initialsOf(q.author),
-    accent: ACCENTS[i % ACCENTS.length],
-  }));
+const testimonials: ClientQuote[] = [
+  {
+    name: 'Dana Ng',
+    role: 'VP Engineering, Northwind',
+    company: 'Northwind Commerce',
+    quote:
+      'They rebuilt our store in ten weeks and the numbers moved immediately. Checkout finally just works, and we ship changes ourselves now.',
+    result: { value: '+38%', caption: 'Higher checkout conversion' },
+  },
+  {
+    name: 'Marcus Bell',
+    role: 'CTO, Pulse',
+    company: 'Pulse Analytics',
+    quote:
+      'Speed is our product, and they treated it that way. The query budgets they set still hold two years later as we have grown.',
+    result: { value: '120ms', caption: 'Query time at p95' },
+  },
+  {
+    name: 'Priya Shah',
+    role: 'Founder, Wander',
+    company: 'Wander',
+    quote:
+      'Offline was the hard part and they nailed it. Travelers edit plans on a plane and everything is just there when they land.',
+    result: { value: '4.9', caption: 'App store rating' },
+  },
+  {
+    name: 'Leah Cohen',
+    role: 'Head of Product, Forge',
+    company: 'Forge Identity',
+    quote:
+      'Our product always shipped fast, our brand never kept up. Now new pages look right by default and we stopped arguing about hex codes.',
+    result: { value: '+64%', caption: 'Higher brand recall' },
+  },
+].map((testimonial, index) => ({
+  ...testimonial,
+  initials: initialsOf(testimonial.name),
+  accent: ACCENTS[index % ACCENTS.length],
+}));
 
 export default function TestimonialsSection() {
   const sectionRef = useRef<HTMLElement>(null);

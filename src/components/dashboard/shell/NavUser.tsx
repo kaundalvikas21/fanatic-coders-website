@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronsUpDown, LogOut, Settings, UserRound } from 'lucide-react';
+import { ChevronsUpDown, House, LogOut, Settings, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { UserAvatar } from '@/components/shared/user-avatar';
 import { Button } from '@/components/ui/button';
@@ -146,6 +146,15 @@ export function NavUser({ variant = 'sidebar' }: { variant?: 'sidebar' | 'header
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1.5" />
         <DropdownMenuGroup>
+          <DropdownMenuItem
+            asChild
+            className="cursor-pointer gap-2.5 px-2 py-2 transition-colors focus:bg-accent focus:text-accent-foreground"
+          >
+            <Link href="/">
+              <House />
+              Back to home
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem
             asChild
             className="cursor-pointer gap-2.5 px-2 py-2 transition-colors focus:bg-accent focus:text-accent-foreground"

@@ -3,6 +3,7 @@ import {
   siTypescript,
   siStripe,
   siPostgresql,
+  siPrisma,
   siVercel,
   siReact,
   siClickhouse,
@@ -18,20 +19,18 @@ import {
   siGo,
   siKubernetes,
   siTrpc,
+  siWordpress,
+  siMysql,
+  siLaravel,
   type SimpleIcon,
 } from 'simple-icons';
 
-/**
- * Maps a portfolio tech name to its simple-icons logo. Names with no brand icon
- * (AWS, WebSocket, Auth, Tokens Studio) are intentionally absent; the consumer
- * falls back to a neutral glyph. Logos render monochrome via currentColor, so a
- * brand's hex (Next.js / Vercel are #000) never matters here.
- */
 export const techIcons: Record<string, SimpleIcon> = {
   'Next.js': siNextdotjs,
   TypeScript: siTypescript,
   Stripe: siStripe,
   PostgreSQL: siPostgresql,
+  Prisma: siPrisma,
   Vercel: siVercel,
   React: siReact,
   'React Native': siReact,
@@ -48,4 +47,7 @@ export const techIcons: Record<string, SimpleIcon> = {
   Go: siGo,
   Kubernetes: siKubernetes,
   tRPC: siTrpc,
+  WordPress: siWordpress,
+  MySQL: siMysql,
+  Laravel: siLaravel,
 };
