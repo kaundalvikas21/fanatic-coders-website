@@ -26,3 +26,18 @@
   padding-top: 0;
   border-top: 0;
 }
+
+.article :global(.tiptap) :global(.tableWrapper) {
+  margin: 2rem 0;
+}
+
+.article :global(.tiptap) :global(th),
+.article :global(.tiptap) :global(td) {
+  border-color: rgb(255 255 255 / 18%);
+  color: rgb(219 234 254 / 85%);
+}
+
+.article :global(.tiptap) :global(th) {
+  background: rgb(255 255 255 / 8%);
+  color: #fff;
+}

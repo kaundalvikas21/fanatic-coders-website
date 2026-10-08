@@ -245,8 +245,9 @@ export function BlogForm({ blog, onSaved, header }: BlogFormProps) {
                         value={field.value as RichTextDocument}
                         onChange={field.onChange}
                         headingLevels={[2, 3]}
+                        markdownSource
                         ariaLabel="Blog content, required"
-                        placeholder="Write your blog..."
+                        placeholder="Write Markdown here. Use ## for section headings."
                         editable={!isSubmitting}
                       />
                       {fieldState.error && <FieldError errors={[fieldState.error]} />}
