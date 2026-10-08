@@ -2,9 +2,12 @@
 
 import type { Editor, JSONContent } from '@tiptap/core';
 import { Placeholder } from '@tiptap/extensions';
+import { Markdown } from '@tiptap/markdown';
 import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useRef } from 'react';
+import { TableKit } from '@tiptap/extension-table';
+import { useEffect, useRef, useState } from 'react';
+import { Textarea } from '@/components/ui/textarea';
 
 import styles from './RichTextEditor.module.css';
 
@@ -23,6 +26,7 @@ export type RichTextEditorProps = {
   ariaLabel?: string;
   className?: string;
   headingLevels?: Array<1 | 2 | 3 | 4 | 5 | 6>;
+  markdownSource?: boolean;
 };
 
 type ToolbarAction = {
@@ -135,8 +139,11 @@ export function RichTextEditor({
   ariaLabel = 'Rich text editor',
   className,
   headingLevels,
+  markdownSource = false,
 }: RichTextEditorProps) {
   const onChangeRef = useRef(onChange);
+  const [view, setView] = useState<'markdown' | 'visual'>(markdownSource ? 'markdown' : 'visual');
+  const [markdownDraft, setMarkdownDraft] = useState<string | null>(null);
 
   useEffect(() => {
     onChangeRef.current = onChange;
@@ -146,6 +153,8 @@ export function RichTextEditor({
     extensions: [
       headingLevels ? StarterKit.configure({ heading: { levels: headingLevels } }) : StarterKit,
       Placeholder.configure({ placeholder }),
+      TableKit.configure({ table: { renderWrapper: true } }),
+      ...(markdownSource ? [Markdown.configure({ markedOptions: { gfm: true } })] : []),
     ],
     content: value ?? defaultValue ?? EMPTY_DOCUMENT,
     editable,
@@ -174,10 +183,68 @@ export function RichTextEditor({
     editor?.setEditable(editable);
   }, [editor, editable]);
 
+  const markdownValue = markdownSource ? (markdownDraft ?? editor?.getMarkdown() ?? '') : '';
+
+  function showMarkdown() {
+    if (!editor) return;
+    setMarkdownDraft(editor.getMarkdown());
+    setView('markdown');
+  }
+
+  function showVisual() {
+    if (!editor) return;
+    editor.commands.setContent(markdownValue, {
+      contentType: 'markdown',
+      emitUpdate: false,
+    });
+    setView('visual');
+  }
+
+  function updateMarkdown(nextMarkdown: string) {
+    setMarkdownDraft(nextMarkdown);
+    const document = editor?.markdown?.parse(nextMarkdown);
+    if (document) onChangeRef.current?.(document);
+  }
+
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')}>
-      {editor && editable && showToolbar && <Toolbar editor={editor} />}
-      <EditorContent editor={editor} />
+      {editor && editable && markdownSource && (
+        <div
+          className={styles.viewSwitch}
+          aria-label="Blog editor view"
+        >
+          <button
+            type="button"
+            className={styles.toolbarButton}
+            aria-pressed={view === 'markdown'}
+            onClick={showMarkdown}
+          >
+            Markdown
+          </button>
+          <button
+            type="button"
+            className={styles.toolbarButton}
+            aria-pressed={view === 'visual'}
+            onClick={showVisual}
+          >
+            Preview
+          </button>
+        </div>
+      )}
+      {editor && editable && showToolbar && view === 'visual' && <Toolbar editor={editor} />}
+      {markdownSource && view === 'markdown' && editable && (
+        <Textarea
+          value={markdownValue}
+          onChange={(event) => updateMarkdown(event.target.value)}
+          aria-label={ariaLabel}
+          placeholder={placeholder}
+          spellCheck={false}
+          className={styles.markdownSource}
+        />
+      )}
+      <div hidden={markdownSource && view === 'markdown' && editable}>
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }
