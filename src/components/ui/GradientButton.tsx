@@ -68,6 +68,20 @@ export default function GradientButton(props: GradientButtonProps) {
 
   if (props.href !== undefined) {
     const { href, target, rel, onClick } = props as LinkProps;
+    if (/^(mailto|tel):/i.test(href)) {
+      return (
+        <a
+          href={href}
+          target={target}
+          rel={rel}
+          onClick={onClick}
+          className={baseClass}
+        >
+          <Inner variant={variant}>{children}</Inner>
+        </a>
+      );
+    }
+
     return (
       <Link
         href={href}

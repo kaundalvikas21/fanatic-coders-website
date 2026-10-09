@@ -25,6 +25,11 @@ export function formatCurrentDate(): string {
   return format(new Date(), 'EEEE, d MMMM');
 }
 
+/** Formats the current year for copyright notices. */
+export function formatCurrentYear(): string {
+  return format(new Date(), 'yyyy');
+}
+
 export function parseDateInputValue(value: string): Date | undefined {
   if (!value) {
     return undefined;

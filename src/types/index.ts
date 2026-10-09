@@ -124,6 +124,13 @@ export type {
   UpdatePortfolioInput,
 } from './portfolio';
 export type { TeamMember, TeamResponse } from './team';
+export type {
+  GetSiteSettingResponse,
+  SiteSetting,
+  SiteSettingResponse,
+  UpdateSiteSettingRequest,
+  UpdateSiteSettingResponse,
+} from './site-setting';
 
 export {
   DEFAULT_PROJECT_CURRENCY,
