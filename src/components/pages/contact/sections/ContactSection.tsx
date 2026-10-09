@@ -1,14 +1,26 @@
 'use client';
 
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
-import { Mail, MapPin, Clock, Send, Check, AlertCircle, User, Building2 } from 'lucide-react';
+import {
+  Mail,
+  MapPin,
+  Clock,
+  Send,
+  Check,
+  AlertCircle,
+  User,
+  Building2,
+  Phone,
+  MessageCircle,
+} from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { RevealSection } from '@/components/ui/RevealSection';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Select, type SelectOption } from '@/components/shared/forms/AuroraSelect';
-import { IconGithub, IconLinkedin } from '@/components/ui/SocialIcons';
-import { env } from '@/config/env';
+import { useSocialLinks } from '@/hooks/useSocialLinks';
+import { useSiteSetting } from '@/providers/SiteSettingsProvider';
+import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { createLead } from '@/modules/leads';
 import { SERVICE_INTEREST_OPTIONS, type CreateLeadRequest, type ServiceInterest } from '@/types';
@@ -57,7 +69,9 @@ function validate(values: FormState): FormErrors {
 }
 
 export function ContactSection() {
-  const adminEmail = env.ADMIN_EMAIL;
+  const setting = useSiteSetting();
+  const contactEmail = setting?.contactEmail ?? siteConfig.contactEmail;
+  const socialLinks = useSocialLinks();
   const [values, setValues] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
@@ -119,16 +133,42 @@ export function ContactSection() {
 
       setSubmitted(true);
     } catch {
-      setSubmitError(`Something went wrong. Please try again or email ${adminEmail}.`);
+      setSubmitError(`Something went wrong. Please try again or email ${contactEmail}.`);
     } finally {
       setIsSubmitting(false);
     }
   }
 
   const messageLength = values.message.trim().length;
+  const whatsappDigits = setting?.whatsapp?.replace(/\D/g, '') ?? '';
   const infoCards = [
-    { Icon: Mail, label: 'email', value: adminEmail, href: `mailto:${adminEmail}` },
-    { Icon: MapPin, label: 'location', value: 'Remote-first · GMT+5:30 core hours', href: null },
+    { Icon: Mail, label: 'email', value: contactEmail, href: `mailto:${contactEmail}` },
+    ...(setting?.phone
+      ? [
+          {
+            Icon: Phone,
+            label: 'phone',
+            value: setting.phone,
+            href: `tel:${setting.phone.replace(/[^\d+]/g, '')}`,
+          },
+        ]
+      : []),
+    ...(setting?.whatsapp && whatsappDigits
+      ? [
+          {
+            Icon: MessageCircle,
+            label: 'whatsapp',
+            value: setting.whatsapp,
+            href: `https://wa.me/${whatsappDigits}`,
+          },
+        ]
+      : []),
+    ...(setting?.address
+      ? [{ Icon: MapPin, label: 'location', value: setting.address, href: null }]
+      : []),
+    ...(setting?.businessHours
+      ? [{ Icon: Clock, label: 'hours', value: setting.businessHours, href: null }]
+      : []),
     { Icon: Clock, label: 'response_time', value: 'Within 1 business day', href: null },
   ];
 
@@ -177,10 +217,10 @@ export function ContactSection() {
                     Thanks, {values.name.split(' ')[0] || 'there'}. Your message reached us and a
                     senior team member replies within a business day. You can also email{' '}
                     <a
-                      href={`mailto:${adminEmail}`}
+                      href={`mailto:${contactEmail}`}
                       className="text-indigo-300 hover:text-indigo-200"
                     >
-                      {adminEmail}
+                      {contactEmail}
                     </a>
                     .
                   </p>
@@ -381,29 +421,45 @@ export function ContactSection() {
               </GlassCard>
             ))}
 
-            <GlassCard
-              accent="cyan"
-              style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}
-              className="p-5"
-            >
-              <div className="text-xs font-mono text-[var(--color-text-muted)] mb-3">
-                {'// find us'}
-              </div>
-              <div className="flex gap-3">
-                <SocialLink
-                  href="https://github.com"
-                  label="GitHub"
-                >
-                  <IconGithub size={18} />
-                </SocialLink>
-                <SocialLink
-                  href="https://linkedin.com"
-                  label="LinkedIn"
-                >
-                  <IconLinkedin size={18} />
-                </SocialLink>
-              </div>
-            </GlassCard>
+            {socialLinks.length > 0 && (
+              <GlassCard
+                accent="cyan"
+                style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}
+                className="p-5"
+              >
+                <div className="text-xs font-mono text-[var(--color-text-muted)] mb-3">
+                  {'// find us'}
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {socialLinks.map(({ href, label, icon }) => (
+                    <SocialLink
+                      key={label}
+                      href={href}
+                      label={label}
+                    >
+                      {icon ? (
+                        <svg
+                          aria-hidden
+                          viewBox="0 0 24 24"
+                          width={18}
+                          height={18}
+                          fill="currentColor"
+                        >
+                          <path d={icon.path} />
+                        </svg>
+                      ) : (
+                        <span
+                          aria-hidden
+                          className="text-xs font-bold"
+                        >
+                          in
+                        </span>
+                      )}
+                    </SocialLink>
+                  ))}
+                </div>
+              </GlassCard>
+            )}
           </RevealSection>
         </div>
       </div>

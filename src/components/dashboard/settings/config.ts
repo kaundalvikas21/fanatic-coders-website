@@ -1,4 +1,4 @@
-import { Bell, ShieldCheck, UserRound } from 'lucide-react';
+import { Bell, Globe2, ShieldCheck, UserRound } from 'lucide-react';
 
 export const SETTINGS_TABS = [
   { value: 'profile', label: 'Profile', href: '/dashboard/settings/profile', Icon: UserRound },
@@ -15,3 +15,10 @@ export const SETTINGS_TABS = [
     Icon: Bell,
   },
 ] as const;
+
+export const SITE_SETTINGS_TAB = {
+  value: 'site',
+  label: 'Site',
+  href: '/dashboard/settings/site',
+  Icon: Globe2,
+} as const;

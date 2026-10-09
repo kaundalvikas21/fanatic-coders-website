@@ -9,14 +9,21 @@ interface ComingSoonProps {
   /** Closing phrase of the heading swept in the aurora gradient (optional). */
   headingSweep?: string;
   note: string;
+  ctaHref?: string;
 }
 
 /**
  * Placeholder page for routes that are linked but not built yet (legal pages,
  * careers). Mirrors the site hero shell so it reads on-brand, not like a 404,
- * and points people at /contact in the meantime.
+ * and provides a configurable contact action.
  */
-export function ComingSoon({ eyebrow, heading, headingSweep, note }: ComingSoonProps) {
+export function ComingSoon({
+  eyebrow,
+  heading,
+  headingSweep,
+  note,
+  ctaHref = '/contact#contact-form',
+}: ComingSoonProps) {
   return (
     <section className="hero-shell relative flex min-h-[80svh] flex-col overflow-hidden pb-16">
       <div className="aurora-bg-hero absolute inset-0 pointer-events-none" />
@@ -41,7 +48,7 @@ export function ComingSoon({ eyebrow, heading, headingSweep, note }: ComingSoonP
             {note}
           </p>
           <div className="mt-8 flex justify-center">
-            <GradientButton href="/contact#contact-form">
+            <GradientButton href={ctaHref}>
               getInTouch
               <ArrowRight
                 size={16}

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
+import { getPublicSiteSetting } from '@/lib/data/site-settings/get-public-site-setting';
 
 export type LegalSection = {
   title: string;
@@ -15,7 +16,16 @@ type LegalPageProps = {
   sections: readonly LegalSection[];
 };
 
-export function LegalPage({ eyebrow, title, summary, effectiveDate, sections }: LegalPageProps) {
+export async function LegalPage({
+  eyebrow,
+  title,
+  summary,
+  effectiveDate,
+  sections,
+}: LegalPageProps) {
+  const setting = await getPublicSiteSetting();
+  const contactEmail = setting?.contactEmail ?? siteConfig.contactEmail;
+
   return (
     <>
       <section className="hero-shell relative overflow-hidden pb-16 pt-32 sm:pt-40">
@@ -76,10 +86,10 @@ export function LegalPage({ eyebrow, title, summary, effectiveDate, sections }: 
               <p className="mt-3 leading-7 text-blue-100/70">
                 Contact us at{' '}
                 <Link
-                  href={`mailto:${siteConfig.contactEmail}`}
+                  href={`mailto:${contactEmail}`}
                   className="text-indigo-300 underline decoration-indigo-400/40 underline-offset-4 hover:text-indigo-200"
                 >
-                  {siteConfig.contactEmail}
+                  {contactEmail}
                 </Link>
                 .
               </p>
